@@ -9,12 +9,14 @@ This reference provides comprehensive guidance on optimizing database performanc
 Indexes are data structures that improve query performance by allowing the database to find rows without scanning the entire table.
 
 **How Indexes Work:**
+
 - Create sorted data structure (usually B-tree)
 - Trade write performance for read performance
 - Consume additional storage
 - Maintained automatically on INSERT/UPDATE/DELETE
 
 **When to Index:**
+
 - Columns in WHERE clauses
 - Columns in JOIN conditions
 - Columns in ORDER BY clauses
@@ -22,6 +24,7 @@ Indexes are data structures that improve query performance by allowing the datab
 - Foreign key columns
 
 **When NOT to Index:**
+
 - Small tables (< 1000 rows)
 - Columns with low cardinality (few distinct values)
 - Columns rarely used in queries
@@ -34,18 +37,21 @@ Indexes are data structures that improve query performance by allowing the datab
 Most common index type. Good for equality and range queries.
 
 **PostgreSQL:**
+
 ```sql
 CREATE INDEX idx_users_email ON users(email);
 CREATE INDEX idx_posts_created_at ON posts(created_at);
 ```
 
 **MySQL:**
+
 ```sql
 CREATE INDEX idx_users_email ON users(email);
 CREATE INDEX idx_posts_created_at ON posts(created_at);
 ```
 
 **Best for:**
+
 - Equality comparisons: `WHERE email = 'user@example.com'`
 - Range queries: `WHERE created_at > '2024-01-01'`
 - Sorting: `ORDER BY created_at DESC`
@@ -56,15 +62,18 @@ CREATE INDEX idx_posts_created_at ON posts(created_at);
 Fast equality lookups, no range support.
 
 **PostgreSQL:**
+
 ```sql
 CREATE INDEX idx_users_email_hash ON users USING HASH (email);
 ```
 
 **Best for:**
+
 - Exact equality: `WHERE email = 'user@example.com'`
 - High cardinality columns
 
 **Not suitable for:**
+
 - Range queries
 - ORDER BY
 - Partial matches
@@ -74,11 +83,13 @@ CREATE INDEX idx_users_email_hash ON users USING HASH (email);
 Index on multiple columns. Column order matters.
 
 **PostgreSQL/MySQL:**
+
 ```sql
 CREATE INDEX idx_users_lastname_firstname ON users(last_name, first_name);
 ```
 
 **Usage Rules:**
+
 - Queries can use left-prefix of index
 - `WHERE last_name = 'Smith'` - Uses index
 - `WHERE last_name = 'Smith' AND first_name = 'John'` - Uses index
@@ -87,6 +98,7 @@ CREATE INDEX idx_users_lastname_firstname ON users(last_name, first_name);
 - `ORDER BY first_name, last_name` - Does NOT use index
 
 **Best Practices:**
+
 - Put most selective column first (highest cardinality)
 - Exception: If queries always filter on specific column, put it first
 - Consider query patterns when ordering columns
@@ -96,23 +108,27 @@ CREATE INDEX idx_users_lastname_firstname ON users(last_name, first_name);
 Index only subset of rows matching a condition.
 
 **PostgreSQL:**
+
 ```sql
 CREATE INDEX idx_orders_active ON orders(created_at)
 WHERE status = 'active';
 ```
 
 **MySQL (8.0+):**
+
 ```sql
 -- MySQL doesn't support partial indexes directly
 -- Use functional indexes or composite indexes instead
 ```
 
 **Best for:**
+
 - Queries on specific subset of data
 - Reducing index size
 - Improving write performance (fewer rows to index)
 
 **Example Use Case:**
+
 ```sql
 -- If 95% of orders are 'completed' and you only query 'active' orders
 CREATE INDEX idx_orders_active ON orders(user_id, created_at)
@@ -129,17 +145,20 @@ ORDER BY created_at DESC;
 Optimized for text search.
 
 **PostgreSQL:**
+
 ```sql
 CREATE INDEX idx_posts_content_fulltext ON posts
 USING GIN (to_tsvector('english', content));
 ```
 
 **MySQL:**
+
 ```sql
 CREATE FULLTEXT INDEX idx_posts_content ON posts(content);
 ```
 
 **Best for:**
+
 - Text search queries
 - Natural language search
 - Multiple word searches
@@ -147,12 +166,14 @@ CREATE FULLTEXT INDEX idx_posts_content ON posts(content);
 **Usage:**
 
 PostgreSQL:
+
 ```sql
 SELECT * FROM posts
 WHERE to_tsvector('english', content) @@ to_tsquery('english', 'database & performance');
 ```
 
 MySQL:
+
 ```sql
 SELECT * FROM posts
 WHERE MATCH(content) AGAINST('database performance' IN NATURAL LANGUAGE MODE);
@@ -179,6 +200,7 @@ SELECT * FROM users WHERE email = 'user@example.com';
 ```
 
 **Output Interpretation:**
+
 ```
 Seq Scan on users (cost=0.00..1000.00 rows=1) (actual time=0.025..15.234 rows=1 loops=1)
   Filter: (email = 'user@example.com'::text)
@@ -187,6 +209,7 @@ Execution Time: 15.456 ms
 ```
 
 **Without Index:**
+
 - "Seq Scan" = Full table scan (bad for large tables)
 - Execution time: 15.456 ms
 
@@ -198,6 +221,7 @@ Execution Time: 0.034 ms
 ```
 
 **With Index:**
+
 - "Index Scan" = Using index (good)
 - Execution time: 0.034 ms (450x faster!)
 
@@ -208,6 +232,7 @@ EXPLAIN SELECT * FROM users WHERE email = 'user@example.com';
 ```
 
 **Output Interpretation:**
+
 ```
 +----+-------------+-------+------+---------------+------+---------+------+------+-------------+
 | id | select_type | table | type | possible_keys | key  | key_len | ref  | rows | Extra       |
@@ -217,6 +242,7 @@ EXPLAIN SELECT * FROM users WHERE email = 'user@example.com';
 ```
 
 **Without Index:**
+
 - type: ALL = Full table scan
 - rows: 1000 = Scanning all rows
 
@@ -229,12 +255,14 @@ EXPLAIN SELECT * FROM users WHERE email = 'user@example.com';
 ```
 
 **With Index:**
+
 - type: ref = Index lookup (good)
 - rows: 1 = Only examining 1 row
 
 #### Finding Missing Indexes
 
 **PostgreSQL - Unused Indexes:**
+
 ```sql
 SELECT
   schemaname,
@@ -250,6 +278,7 @@ ORDER BY pg_relation_size(indexrelid) DESC;
 ```
 
 **PostgreSQL - Missing Indexes (Sequential Scans):**
+
 ```sql
 SELECT
   schemaname,
@@ -265,6 +294,7 @@ LIMIT 20;
 ```
 
 **MySQL - Slow Queries:**
+
 ```sql
 -- Enable slow query log
 SET GLOBAL slow_query_log = 'ON';
@@ -284,6 +314,7 @@ LIMIT 20;
 Common ORM anti-pattern causing excessive database queries.
 
 **Problem:**
+
 ```javascript
 // BAD: N+1 queries
 const users = await User.findAll(); // 1 query
@@ -296,10 +327,11 @@ for (const user of users) {
 ```
 
 **Solution 1: Eager Loading**
+
 ```javascript
 // GOOD: 2 queries with eager loading
 const users = await User.findAll({
-  include: [{ model: Post }]
+  include: [{ model: Post }],
 });
 
 for (const user of users) {
@@ -309,6 +341,7 @@ for (const user of users) {
 ```
 
 **Solution 2: Manual JOIN**
+
 ```sql
 -- Single query with JOIN
 SELECT
@@ -320,21 +353,24 @@ LEFT JOIN posts ON posts.user_id = users.id
 GROUP BY users.id, users.name;
 ```
 
-### SELECT * Anti-Pattern
+### SELECT \* Anti-Pattern
 
 **Problem:**
+
 ```sql
 -- BAD: Fetching unnecessary columns
 SELECT * FROM users;
 ```
 
 **Why Bad:**
+
 - Increases data transfer size
 - Slower query execution
 - More memory usage
 - Can't use covering indexes
 
 **Solution:**
+
 ```sql
 -- GOOD: Select only needed columns
 SELECT id, email, name FROM users;
@@ -345,6 +381,7 @@ SELECT id, email, name FROM users;
 Index that includes all columns needed by query. Database can answer query from index alone without accessing table.
 
 **Example:**
+
 ```sql
 -- Query
 SELECT user_id, created_at FROM orders
@@ -361,6 +398,7 @@ CREATE INDEX idx_orders_status_covering ON orders(status, created_at, user_id);
 ```
 
 **PostgreSQL INCLUDE (12+):**
+
 ```sql
 CREATE INDEX idx_orders_status_covering ON orders(status, created_at)
 INCLUDE (user_id);
@@ -369,12 +407,14 @@ INCLUDE (user_id);
 ### Avoid Functions on Indexed Columns
 
 **Problem:**
+
 ```sql
 -- BAD: Function on indexed column prevents index usage
 SELECT * FROM users WHERE LOWER(email) = 'user@example.com';
 ```
 
 **Solution 1: Store Lowercase**
+
 ```sql
 -- Store email in lowercase when inserting
 INSERT INTO users (email) VALUES (LOWER('User@Example.com'));
@@ -384,6 +424,7 @@ SELECT * FROM users WHERE email = 'user@example.com';
 ```
 
 **Solution 2: Functional/Expression Index**
+
 ```sql
 -- PostgreSQL
 CREATE INDEX idx_users_email_lower ON users(LOWER(email));
@@ -395,6 +436,7 @@ SELECT * FROM users WHERE LOWER(email) = 'user@example.com';
 ### Limit and Offset Performance
 
 **Problem:**
+
 ```sql
 -- BAD: Large offset is slow
 SELECT * FROM posts ORDER BY created_at DESC LIMIT 20 OFFSET 100000;
@@ -402,6 +444,7 @@ SELECT * FROM posts ORDER BY created_at DESC LIMIT 20 OFFSET 100000;
 ```
 
 **Solution: Cursor-Based Pagination**
+
 ```sql
 -- First page
 SELECT * FROM posts ORDER BY created_at DESC LIMIT 20;
@@ -416,12 +459,10 @@ LIMIT 20;
 ```
 
 **Implementation:**
+
 ```javascript
 // First page
-const firstPage = await db.query(
-  'SELECT * FROM posts ORDER BY created_at DESC LIMIT ?',
-  [20]
-);
+const firstPage = await db.query('SELECT * FROM posts ORDER BY created_at DESC LIMIT ?', [20]);
 const cursor = firstPage[firstPage.length - 1].created_at;
 
 // Next page
@@ -434,6 +475,7 @@ const nextPage = await db.query(
 ### Batch Operations
 
 **Problem:**
+
 ```javascript
 // BAD: N individual queries
 for (const user of users) {
@@ -442,16 +484,15 @@ for (const user of users) {
 ```
 
 **Solution:**
+
 ```javascript
 // GOOD: Single batch insert
 const values = users.map(u => [u.name, u.email]);
-await db.query(
-  'INSERT INTO users (name, email) VALUES ?',
-  [values]
-);
+await db.query('INSERT INTO users (name, email) VALUES ?', [values]);
 ```
 
 **PostgreSQL Bulk Insert:**
+
 ```sql
 INSERT INTO users (name, email) VALUES
   ('John Doe', 'john@example.com'),
@@ -460,6 +501,7 @@ INSERT INTO users (name, email) VALUES
 ```
 
 **PostgreSQL COPY (fastest for large datasets):**
+
 ```sql
 COPY users (name, email) FROM '/path/to/users.csv' CSV HEADER;
 ```
@@ -471,6 +513,7 @@ Reusing database connections instead of creating new ones for each query.
 ### Why Connection Pooling Matters
 
 **Without Pooling:**
+
 1. Application makes request
 2. Create new DB connection (TCP handshake, authentication) - ~50-100ms
 3. Execute query - ~10ms
@@ -478,6 +521,7 @@ Reusing database connections instead of creating new ones for each query.
 5. Total: ~60-110ms per request
 
 **With Pooling:**
+
 1. Application makes request
 2. Get existing connection from pool - ~1ms
 3. Execute query - ~10ms
@@ -487,6 +531,7 @@ Reusing database connections instead of creating new ones for each query.
 ### Node.js Connection Pooling
 
 **PostgreSQL (pg):**
+
 ```javascript
 const { Pool } = require('pg');
 
@@ -514,6 +559,7 @@ process.on('SIGTERM', () => {
 ```
 
 **MySQL (mysql2):**
+
 ```javascript
 const mysql = require('mysql2/promise');
 
@@ -526,7 +572,7 @@ const pool = mysql.createPool({
   connectionLimit: 10,
   queueLimit: 0,
   enableKeepAlive: true,
-  keepAliveInitialDelay: 0
+  keepAliveInitialDelay: 0,
 });
 
 async function getUser(id) {
@@ -538,6 +584,7 @@ async function getUser(id) {
 ### Python Connection Pooling
 
 **PostgreSQL (psycopg2):**
+
 ```python
 from psycopg2 import pool
 
@@ -561,6 +608,7 @@ def get_user(user_id):
 ```
 
 **Django (built-in):**
+
 ```python
 # settings.py
 DATABASES = {
@@ -581,16 +629,19 @@ DATABASES = {
 ### Pool Size Tuning
 
 **Formula:**
+
 ```
 connections = ((core_count * 2) + effective_spindle_count)
 ```
 
 **Example:**
+
 - 4 CPU cores
 - 1 disk (SSD = 1, HDD = actual spindles)
-- Optimal pool size: (4 * 2) + 1 = 9 connections
+- Optimal pool size: (4 \* 2) + 1 = 9 connections
 
 **Guidelines:**
+
 - Start conservative (10-20 connections)
 - Monitor pool exhaustion
 - Increase gradually if needed
@@ -604,6 +655,7 @@ connections = ((core_count * 2) + effective_spindle_count)
 Distribute read load across multiple database instances.
 
 **Architecture:**
+
 ```
 Primary DB (writes) ──┐
                       ├──> Replication ──> Replica 1 (reads)
@@ -611,6 +663,7 @@ Primary DB (writes) ──┐
 ```
 
 **Implementation:**
+
 ```javascript
 const primaryPool = new Pool({ host: 'primary.db.com', max: 10 });
 const replicaPool = new Pool({ host: 'replica.db.com', max: 20 });
@@ -628,6 +681,7 @@ async function updateUser(id, data) {
 ```
 
 **Considerations:**
+
 - Replication lag (eventual consistency)
 - Read-after-write consistency issues
 - Failover strategies
@@ -637,6 +691,7 @@ async function updateUser(id, data) {
 Partition data across multiple databases.
 
 **Horizontal Sharding (by user_id):**
+
 ```javascript
 function getShardForUser(userId) {
   const shardCount = 4;
@@ -647,7 +702,7 @@ const shards = [
   new Pool({ host: 'shard0.db.com' }),
   new Pool({ host: 'shard1.db.com' }),
   new Pool({ host: 'shard2.db.com' }),
-  new Pool({ host: 'shard3.db.com' })
+  new Pool({ host: 'shard3.db.com' }),
 ];
 
 async function getUser(userId) {
@@ -658,6 +713,7 @@ async function getUser(userId) {
 ```
 
 **Considerations:**
+
 - Cross-shard queries are expensive
 - Rebalancing difficulty
 - Increased complexity
@@ -667,12 +723,14 @@ async function getUser(userId) {
 ### Database-Level Query Caching
 
 **MySQL Query Cache (deprecated in 8.0):**
+
 ```sql
 -- Don't rely on this - removed in MySQL 8.0
 SET GLOBAL query_cache_size = 1048576;
 ```
 
 **PostgreSQL Shared Buffers:**
+
 ```sql
 -- postgresql.conf
 shared_buffers = 256MB  # Cache frequently accessed data
@@ -709,6 +767,7 @@ async function getUser(id) {
 ### PostgreSQL Statistics
 
 **Enable pg_stat_statements:**
+
 ```sql
 -- postgresql.conf
 shared_preload_libraries = 'pg_stat_statements'
@@ -729,6 +788,7 @@ LIMIT 20;
 ```
 
 **Table Statistics:**
+
 ```sql
 SELECT
   schemaname,
@@ -747,6 +807,7 @@ ORDER BY seq_tup_read DESC;
 ### MySQL Performance Schema
 
 **Enable Performance Schema:**
+
 ```sql
 -- my.cnf
 performance_schema = ON
@@ -765,6 +826,7 @@ LIMIT 20;
 ## Best Practices Summary
 
 **Indexing:**
+
 - Index columns used in WHERE, JOIN, ORDER BY
 - Use composite indexes thoughtfully (column order matters)
 - Monitor index usage, remove unused indexes
@@ -772,25 +834,29 @@ LIMIT 20;
 - Use covering indexes when possible
 
 **Query Optimization:**
-- Avoid SELECT *
+
+- Avoid SELECT \*
 - Prevent N+1 queries (eager loading)
 - Use batch operations
 - Avoid functions on indexed columns
 - Use cursor-based pagination for large offsets
 
 **Connection Management:**
+
 - Always use connection pooling
 - Tune pool size based on workload
 - Monitor pool exhaustion
 - Close connections on shutdown
 
 **Caching:**
+
 - Cache expensive queries at application level
 - Set appropriate TTLs
 - Invalidate cache on writes
 - Monitor cache hit rates
 
 **Monitoring:**
+
 - Enable query logging
 - Track slow queries
 - Monitor index usage

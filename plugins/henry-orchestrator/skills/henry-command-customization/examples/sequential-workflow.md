@@ -7,16 +7,18 @@ This example demonstrates changing execution from parallel to sequential. Useful
 ## Scenario
 
 **Standard henry-audit runs agents in parallel:**
+
 - All 5 agents launch simultaneously:
-  * security-engineer
-  * performance-engineer
-  * a11y-specialist
-  * seo-specialist
-  * devops-sre-architect
+  - security-engineer
+  - performance-engineer
+  - a11y-specialist
+  - seo-specialist
+  - devops-sre-architect
 - Results returned independently
 - No dependencies between audits
 
 **Problem with parallel execution:**
+
 - Security issues may affect performance baseline
 - Want to fix critical issues before proceeding
 - Need iterative improvement with validation
@@ -32,7 +34,7 @@ Create command where each audit phase completes before next begins, with opportu
 ```markdown
 ---
 description: Sequential audit with remediation between phases
-version: "1.0.0"
+version: '1.0.0'
 ---
 
 # Sequential Audit with Remediation
@@ -44,6 +46,7 @@ Step-by-step audit process with opportunity to address critical issues before pr
 **Goal**: Identify security vulnerabilities
 
 **Actions**:
+
 1. Launch security-engineer to scan for vulnerabilities
 2. Check for OWASP Top 10 issues
 3. Review authentication and authorization
@@ -56,6 +59,7 @@ Step-by-step audit process with opportunity to address critical issues before pr
 **Deliverables**: Security vulnerability report with severity ratings
 
 **Output Format**:
+
 - Critical (CVSS >= 9.0): [list]
 - High (CVSS 7.0-8.9): [list]
 - Medium (CVSS 4.0-6.9): [list]
@@ -68,6 +72,7 @@ Step-by-step audit process with opportunity to address critical issues before pr
 **Condition**: Only if critical (CVSS >= 9.0) issues found
 
 **Actions**:
+
 1. Review critical security findings with user
 2. Prioritize by exploitability and impact
 3. Implement fixes for critical issues
@@ -79,11 +84,13 @@ Step-by-step audit process with opportunity to address critical issues before pr
 **Deliverables**: Security fixes, verification scan results
 
 **User Interaction**:
+
 - Review critical findings
 - Confirm fixes before proceeding
 - Approve to move to performance phase
 
 **Decision Point**:
+
 - If critical issues remain → Stop and address
 - If critical issues fixed → Proceed to Phase 3
 
@@ -92,6 +99,7 @@ Step-by-step audit process with opportunity to address critical issues before pr
 **Goal**: Baseline performance on secure codebase
 
 **Actions**:
+
 1. Launch performance-engineer to measure metrics
 2. Measure Core Web Vitals:
    - LCP (Largest Contentful Paint)
@@ -115,12 +123,14 @@ Step-by-step audit process with opportunity to address critical issues before pr
 **Condition**: Only if performance targets not met
 
 **Performance Targets**:
+
 - LCP: < 2.5s
 - FID: < 100ms
 - CLS: < 0.1
 - TTFB: < 600ms
 
 **Actions**:
+
 1. Review performance findings with user
 2. Implement high-impact optimizations first
 3. Measure after each optimization
@@ -132,11 +142,13 @@ Step-by-step audit process with opportunity to address critical issues before pr
 **Deliverables**: Performance optimizations, updated metrics, security re-validation
 
 **User Interaction**:
+
 - Review performance targets
 - Approve optimizations
 - Decide when to stop iterating
 
 **Decision Point**:
+
 - If targets met → Proceed to Phase 5
 - If targets not met but close → User decision to proceed or iterate
 - If major issues remain → Continue optimization
@@ -146,6 +158,7 @@ Step-by-step audit process with opportunity to address critical issues before pr
 **Goal**: Ensure accessible experience
 
 **Actions**:
+
 1. Launch a11y-specialist to audit accessibility
 2. Check WCAG 2.1 compliance (Level AA minimum)
 3. Test with assistive technologies:
@@ -169,6 +182,7 @@ Step-by-step audit process with opportunity to address critical issues before pr
 **Condition**: Only if WCAG Level AA violations found
 
 **Actions**:
+
 1. Review accessibility findings
 2. Categorize by severity:
    - Critical: Blocks access for users
@@ -187,6 +201,7 @@ Step-by-step audit process with opportunity to address critical issues before pr
 **Goal**: Final checks for SEO and operational readiness
 
 **Actions**:
+
 1. Launch seo-specialist for SEO audit
 2. Check meta tags, structured data, robots.txt
 3. Validate sitemap, canonical URLs
@@ -204,22 +219,26 @@ Step-by-step audit process with opportunity to address critical issues before pr
 Sequential audit complete with iterative remediation:
 
 **Security:**
+
 - ✅ Critical vulnerabilities addressed
 - ✅ Security scan passed
 - Remaining issues: [list with priorities]
 
 **Performance:**
+
 - Baseline: LCP [X]s, FID [X]ms, CLS [X], TTFB [X]ms
 - After optimization: LCP [X]s, FID [X]ms, CLS [X], TTFB [X]ms
 - Improvement: [percentages]
 - Meets targets: [Yes/No with details]
 
 **Accessibility:**
+
 - ✅ WCAG 2.1 Level AA compliance
 - Critical issues: Fixed
 - Remaining minor issues: [list]
 
 **SEO & Operations:**
+
 - SEO score: [X]/100
 - Operational readiness: [Ready/Needs work]
 - Recommendations: [list]
@@ -227,6 +246,7 @@ Sequential audit complete with iterative remediation:
 **Overall Health:** [Excellent/Good/Needs Improvement]
 
 **Next Steps:**
+
 - Address remaining medium-priority issues
 - Monitor performance in production
 - Schedule follow-up audit in [timeframe]
@@ -237,18 +257,25 @@ Sequential audit complete with iterative remediation:
 
 **Full sequential audit:**
 ```
+
 /sequential-audit
+
 ```
 
 **Start from specific phase (if previous phases complete):**
 ```
+
 /sequential-audit "Start from performance audit"
+
 ```
 
 **Focus on specific areas:**
 ```
+
 /sequential-audit "Focus on security and performance only"
+
 ```
+
 ```
 
 ### Usage
@@ -265,13 +292,13 @@ Sequential audit complete with iterative remediation:
 
 ### Execution Model
 
-| Parallel (henry-audit) | Sequential (this example) |
-|------------------------|---------------------------|
-| All agents at once | One phase at a time |
-| 5-10 minute total | 30-60 minutes total |
-| No dependencies | Each builds on previous |
-| No intermediate fixes | Fix critical issues between phases |
-| Independent reports | Cumulative improvements |
+| Parallel (henry-audit) | Sequential (this example)          |
+| ---------------------- | ---------------------------------- |
+| All agents at once     | One phase at a time                |
+| 5-10 minute total      | 30-60 minutes total                |
+| No dependencies        | Each builds on previous            |
+| No intermediate fixes  | Fix critical issues between phases |
+| Independent reports    | Cumulative improvements            |
 
 ### Benefits of Sequential
 
@@ -290,6 +317,7 @@ Sequential audit complete with iterative remediation:
 ## When to Use Each Approach
 
 ### Use Sequential When:
+
 - ✅ Critical issues likely (new codebase, major changes)
 - ✅ Want to fix issues immediately
 - ✅ Team available to address findings
@@ -297,6 +325,7 @@ Sequential audit complete with iterative remediation:
 - ✅ Changes in one area affect others (security → performance)
 
 ### Use Parallel When:
+
 - ✅ Mature codebase with few critical issues expected
 - ✅ Want comprehensive overview quickly
 - ✅ Will address all issues after full audit
@@ -315,12 +344,14 @@ Combine both approaches:
 ## Phase 1: Parallel Audit
 
 **Actions**:
+
 - Launch all agents in parallel
 - Gather all findings quickly
 
 ## Phase 2: Prioritize Findings
 
 **Actions**:
+
 - Review all findings together
 - Prioritize cross-cutting issues
 - Create remediation plan
@@ -328,6 +359,7 @@ Combine both approaches:
 ## Phase 3: Sequential Fixes
 
 **Actions**:
+
 1. Fix security issues
 2. Re-validate security
 3. Fix performance issues
@@ -345,15 +377,16 @@ Sequential only when needed:
 ## Phase 1: Quick Parallel Scan
 
 **Actions**:
+
 - Run lightweight scans in parallel
 - Identify if critical issues exist
 
 ## Phase 2: Decision Point
 
 If critical issues found:
-  → Switch to sequential remediation
+→ Switch to sequential remediation
 Otherwise:
-  → Complete parallel audit and batch fixes
+→ Complete parallel audit and batch fixes
 ```
 
 ### Variation 3: Grouped Sequential
@@ -366,17 +399,20 @@ Group related phases:
 ## Phase 1: Security & Performance (Parallel)
 
 **Actions**:
+
 - Run security-engineer and performance-engineer together
 - Both work on same baseline
 
 ## Phase 2: Fix Technical Issues
 
 **Actions**:
+
 - Address security and performance together
 
 ## Phase 3: UX Audit (Parallel)
 
 **Actions**:
+
 - Run a11y-specialist and ux-ui-designer together
 - Work on technically-sound codebase
 
@@ -391,6 +427,7 @@ Make decision criteria explicit:
 
 ```markdown
 **Decision Point:**
+
 - If critical (CVSS >= 9.0) issues found → Must fix before proceeding
 - If high (CVSS 7.0-8.9) issues found → User decision
 - If only medium/low issues → Proceed with note
@@ -402,6 +439,7 @@ Specify when user input needed:
 
 ```markdown
 **User Interaction:**
+
 1. Review security findings
 2. Decide: Fix now or accept risk and proceed?
 3. If fixing: Implement fixes
@@ -429,6 +467,7 @@ Always re-validate after fixes:
 ## Phase 2: Security Fixes
 
 **Actions**:
+
 1. Implement fixes
 2. **Re-run security scan** ← Critical
 3. Verify no new issues introduced
@@ -451,6 +490,7 @@ Add phases sequentially:
 **Condition**: Only if all previous phases passed
 
 **Actions**:
+
 - Prepare deployment
 - Works on fully audited and optimized codebase
 ```
@@ -463,8 +503,11 @@ Run fewer phases sequentially:
 # Sequential Security and Performance
 
 ## Phase 1: Security Audit
+
 ## Phase 2: Fix Security
+
 ## Phase 3: Performance Audit
+
 ## Phase 4: Optimize Performance
 
 [Skip accessibility, SEO, ops]
@@ -482,6 +525,7 @@ Add explicit iteration:
 ## Phase 2: Optimization Cycle
 
 **Actions**:
+
 1. Implement optimization
 2. Measure impact
 3. If target not met → Repeat (max 3 cycles)

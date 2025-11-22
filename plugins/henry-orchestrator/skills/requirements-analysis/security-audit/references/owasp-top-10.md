@@ -28,6 +28,7 @@ def get_document(doc_id):
 ```
 
 Search for:
+
 - Routes or endpoints that accept IDs without checking ownership
 - Admin functionality without role checks
 - Database queries using user-supplied IDs directly
@@ -58,6 +59,7 @@ def get_document(doc_id):
 ```
 
 **Key principles:**
+
 - Deny by default
 - Implement access control checks at every endpoint
 - Verify ownership or permissions before operations
@@ -111,6 +113,7 @@ token = str(random.randint(1000000, 9999999))  # Predictable
 ```
 
 Search for:
+
 - Use of MD5, SHA1, DES, RC4, ECB mode
 - `random.random()` for security purposes
 - HTTP URLs for sensitive operations
@@ -178,6 +181,7 @@ conn = mysql.connector.connect(
 ```
 
 **Key principles:**
+
 - Use strong, modern algorithms (AES-256, RSA-2048+, SHA-256+)
 - Use bcrypt, scrypt, or Argon2 for password hashing
 - Never hard-code secrets
@@ -203,6 +207,7 @@ Injection flaws occur when untrusted data is sent to an interpreter as part of a
 ### SQL Injection
 
 **Vulnerable code:**
+
 ```python
 # String concatenation (NEVER DO THIS)
 query = "SELECT * FROM users WHERE username = '" + username + "'"
@@ -210,6 +215,7 @@ cursor.execute(query)
 ```
 
 **Exploitation:**
+
 ```
 Username: admin' OR '1'='1' --
 Resulting query: SELECT * FROM users WHERE username = 'admin' OR '1'='1' --'
@@ -217,6 +223,7 @@ Result: Bypasses authentication, returns all users
 ```
 
 **Advanced exploitation:**
+
 ```
 Username: admin'; DROP TABLE users; --
 Resulting query: SELECT * FROM users WHERE username = 'admin'; DROP TABLE users; --'
@@ -224,6 +231,7 @@ Result: Deletes entire users table
 ```
 
 **Remediation:**
+
 ```python
 # Parameterized query (ALWAYS USE THIS)
 query = "SELECT * FROM users WHERE username = ?"
@@ -236,21 +244,25 @@ user = User.objects.filter(username=username).first()
 ### NoSQL Injection
 
 **Vulnerable code:**
+
 ```python
 # Direct insertion of user input
 users.find({"username": username, "password": password})
 ```
 
 **Exploitation:**
+
 ```json
 {
-  "username": {"$ne": null},
-  "password": {"$ne": null}
+  "username": { "$ne": null },
+  "password": { "$ne": null }
 }
 ```
+
 Result: Returns all users (authentication bypass)
 
 **Remediation:**
+
 ```python
 # Sanitize input
 username = str(username)  # Ensure string type
@@ -263,6 +275,7 @@ users.find_one({"username": {"$eq": username}, "password": {"$eq": password}})
 ### Command Injection
 
 **Vulnerable code:**
+
 ```python
 # Shell command with user input (DANGEROUS)
 import os
@@ -271,6 +284,7 @@ os.system(f'cat {filename}')
 ```
 
 **Exploitation:**
+
 ```
 filename: file.txt; rm -rf /
 Resulting command: cat file.txt; rm -rf /
@@ -278,6 +292,7 @@ Result: Deletes entire filesystem
 ```
 
 **Remediation:**
+
 ```python
 # Avoid shell commands entirely
 with open(filename, 'r') as f:
@@ -298,6 +313,7 @@ subprocess.run(['cat', filename], shell=False, check=True)
 ### XML External Entity (XXE) Injection
 
 **Vulnerable code:**
+
 ```python
 import xml.etree.ElementTree as ET
 
@@ -306,6 +322,7 @@ tree = ET.fromstring(xml_data)  # Vulnerable to XXE
 ```
 
 **Exploitation:**
+
 ```xml
 <?xml version="1.0"?>
 <!DOCTYPE foo [
@@ -315,6 +332,7 @@ tree = ET.fromstring(xml_data)  # Vulnerable to XXE
 ```
 
 **Remediation:**
+
 ```python
 import defusedxml.ElementTree as ET
 
@@ -337,6 +355,7 @@ tree = ET.fromstring(xml_data, parser=parser)
 ### Detection Patterns
 
 Search codebase for:
+
 ```python
 # SQL injection risks
 execute(" + variable)
@@ -381,6 +400,7 @@ Insecure design represents missing or ineffective control design. It's different
 ### Examples and Remediation
 
 **Issue: Unlimited password attempts**
+
 ```python
 # Insecure design (no rate limiting)
 @app.route('/login', methods=['POST'])
@@ -394,6 +414,7 @@ def login():
 ```
 
 **Secure design:**
+
 ```python
 from flask_limiter import Limiter
 
@@ -421,6 +442,7 @@ def login():
 ```
 
 **Issue: Missing business logic validation**
+
 ```python
 # Client-side validation only
 # Frontend: if (quantity <= 100) submitOrder()
@@ -434,6 +456,7 @@ def place_order():
 ```
 
 **Secure design:**
+
 ```python
 @app.route('/order', methods=['POST'])
 def place_order():
@@ -480,6 +503,7 @@ Security misconfiguration can happen at any level of the application stack, incl
 ### Detection and Remediation
 
 **Issue: Debug mode in production**
+
 ```python
 # Insecure
 app = Flask(__name__)
@@ -488,6 +512,7 @@ app.run()
 ```
 
 **Secure:**
+
 ```python
 app = Flask(__name__)
 app.debug = False
@@ -499,6 +524,7 @@ if os.environ.get('FLASK_ENV') == 'development':
 ```
 
 **Issue: Verbose error messages**
+
 ```python
 # Insecure
 @app.errorhandler(Exception)
@@ -507,6 +533,7 @@ def handle_error(e):
 ```
 
 **Secure:**
+
 ```python
 import logging
 
@@ -520,6 +547,7 @@ def handle_error(e):
 ```
 
 **Issue: Missing security headers**
+
 ```python
 # Secure implementation
 @app.after_request
@@ -534,6 +562,7 @@ def set_security_headers(response):
 ```
 
 **Issue: Permissive CORS**
+
 ```python
 # Insecure
 from flask_cors import CORS
@@ -586,6 +615,7 @@ mvn versions:display-dependency-updates
 ### Remediation
 
 **Maintain inventory:**
+
 ```
 # requirements.txt with pinned versions
 Flask==2.3.0
@@ -594,6 +624,7 @@ requests==2.31.0
 ```
 
 **Regular updates:**
+
 ```bash
 # Update dependencies
 pip install --upgrade pip-audit
@@ -606,6 +637,7 @@ pip-audit --fix
 ```
 
 **Vulnerability scanning in CI/CD:**
+
 ```yaml
 # .github/workflows/security.yml
 name: Security Scan
@@ -648,6 +680,7 @@ Confirmation of user identity, authentication, and session management is critica
 ### Session Management
 
 **Insecure:**
+
 ```python
 # Predictable session ID
 session_id = str(int(time.time()))
@@ -657,6 +690,7 @@ session[user_id] = username
 ```
 
 **Secure:**
+
 ```python
 import secrets
 from datetime import datetime, timedelta
@@ -774,6 +808,7 @@ Code and infrastructure that does not protect against integrity violations, such
 ### Insecure Deserialization
 
 **Vulnerable:**
+
 ```python
 import pickle
 
@@ -782,6 +817,7 @@ user_data = pickle.loads(request.data)
 ```
 
 **Exploitation:**
+
 ```python
 import pickle
 import os
@@ -795,6 +831,7 @@ malicious_data = pickle.dumps(Exploit())
 ```
 
 **Secure:**
+
 ```python
 import json
 
@@ -823,8 +860,7 @@ jsonschema.validate(data, schema)
 # Use lock files to ensure integrity
 # Python: requirements.txt with hashes
 cryptography==41.0.0 \
-    --hash=sha256:7b3b3...
-
+--hash=sha256:7b3b3...
 # Node.js: package-lock.json (committed)
 # Ruby: Gemfile.lock (committed)
 ```
@@ -871,6 +907,7 @@ Insufficient logging and monitoring, coupled with missing or ineffective integra
 ### What to Log
 
 **Security events to log:**
+
 ```python
 import logging
 from datetime import datetime
@@ -905,6 +942,7 @@ security_logger.info(f"Admin action: action={action} by={admin.id}")
 ```
 
 **What NOT to log:**
+
 ```python
 # NEVER log sensitive data
 logging.info(f"Password: {password}")  # NO!
@@ -1078,18 +1116,18 @@ def fetch_url():
 
 ## Summary Table
 
-| Vulnerability | Key Prevention |
-|--------------|----------------|
-| Broken Access Control | Implement authorization checks everywhere |
-| Cryptographic Failures | Use strong algorithms, TLS, proper key management |
-| Injection | Parameterized queries, input validation |
-| Insecure Design | Security controls in design phase |
+| Vulnerability             | Key Prevention                                        |
+| ------------------------- | ----------------------------------------------------- |
+| Broken Access Control     | Implement authorization checks everywhere             |
+| Cryptographic Failures    | Use strong algorithms, TLS, proper key management     |
+| Injection                 | Parameterized queries, input validation               |
+| Insecure Design           | Security controls in design phase                     |
 | Security Misconfiguration | Secure defaults, minimal privileges, security headers |
-| Vulnerable Components | Keep dependencies updated, scan for CVEs |
-| Auth Failures | Strong passwords, MFA, secure session management |
-| Integrity Failures | Validate deseriali zation, verify dependencies |
-| Logging Failures | Log security events, protect logs, alert on anomalies |
-| SSRF | Validate URLs, blocklist internal IPs, use allowlists |
+| Vulnerable Components     | Keep dependencies updated, scan for CVEs              |
+| Auth Failures             | Strong passwords, MFA, secure session management      |
+| Integrity Failures        | Validate deseriali zation, verify dependencies        |
+| Logging Failures          | Log security events, protect logs, alert on anomalies |
+| SSRF                      | Validate URLs, blocklist internal IPs, use allowlists |
 
 ## Testing Tools
 

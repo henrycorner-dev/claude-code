@@ -50,9 +50,9 @@ export const useUserStore = create<UserState>()(
         loading: false,
         error: null,
 
-        setUser: (user) => set({ user }, false, 'setUser'),
+        setUser: user => set({ user }, false, 'setUser'),
 
-        setToken: (token) => set({ token }, false, 'setToken'),
+        setToken: token => set({ token }, false, 'setToken'),
 
         logout: () =>
           set(
@@ -66,7 +66,7 @@ export const useUserStore = create<UserState>()(
             'logout'
           ),
 
-        fetchUser: async (userId) => {
+        fetchUser: async userId => {
           set({ loading: true, error: null }, false, 'fetchUser/pending');
 
           try {
@@ -92,7 +92,7 @@ export const useUserStore = create<UserState>()(
           }
         },
 
-        updateUser: async (updates) => {
+        updateUser: async updates => {
           const currentUser = get().user;
           if (!currentUser) throw new Error('No user to update');
 
@@ -126,7 +126,7 @@ export const useUserStore = create<UserState>()(
       }),
       {
         name: 'user-store',
-        partialize: (state) => ({
+        partialize: state => ({
           token: state.token, // Only persist token
         }),
       }
@@ -154,8 +154,8 @@ export const useProductsStore = create<ProductsState>()(
       loading: false,
       error: null,
 
-      fetchProducts: async (categoryId) => {
-        set((state) => {
+      fetchProducts: async categoryId => {
+        set(state => {
           state.loading = true;
           state.error = null;
         });
@@ -168,20 +168,20 @@ export const useProductsStore = create<ProductsState>()(
 
           const products = await response.json();
 
-          set((state) => {
+          set(state => {
             state.products = products;
             state.loading = false;
           });
         } catch (error) {
-          set((state) => {
+          set(state => {
             state.error = (error as Error).message;
             state.loading = false;
           });
         }
       },
 
-      createProduct: async (product) => {
-        set((state) => {
+      createProduct: async product => {
+        set(state => {
           state.loading = true;
           state.error = null;
         });
@@ -197,12 +197,12 @@ export const useProductsStore = create<ProductsState>()(
 
           const newProduct = await response.json();
 
-          set((state) => {
+          set(state => {
             state.products.push(newProduct);
             state.loading = false;
           });
         } catch (error) {
-          set((state) => {
+          set(state => {
             state.error = (error as Error).message;
             state.loading = false;
           });
@@ -210,17 +210,17 @@ export const useProductsStore = create<ProductsState>()(
       },
 
       updateProduct: (id, updates) => {
-        set((state) => {
-          const product = state.products.find((p) => p.id === id);
+        set(state => {
+          const product = state.products.find(p => p.id === id);
           if (product) {
             Object.assign(product, updates);
           }
         });
       },
 
-      removeProduct: (id) => {
-        set((state) => {
-          state.products = state.products.filter((p) => p.id !== id);
+      removeProduct: id => {
+        set(state => {
+          state.products = state.products.filter(p => p.id !== id);
         });
       },
     })),
@@ -248,8 +248,8 @@ export const useCartStore = create<CartState>()(
         items: [],
 
         addItem: (productId, price) => {
-          set((state) => {
-            const existingItem = state.items.find((item) => item.productId === productId);
+          set(state => {
+            const existingItem = state.items.find(item => item.productId === productId);
 
             if (existingItem) {
               existingItem.quantity += 1;
@@ -264,15 +264,15 @@ export const useCartStore = create<CartState>()(
           });
         },
 
-        removeItem: (id) => {
-          set((state) => {
-            state.items = state.items.filter((item) => item.id !== id);
+        removeItem: id => {
+          set(state => {
+            state.items = state.items.filter(item => item.id !== id);
           });
         },
 
         updateQuantity: (id, quantity) => {
-          set((state) => {
-            const item = state.items.find((item) => item.id === id);
+          set(state => {
+            const item = state.items.find(item => item.id === id);
             if (item) {
               item.quantity = quantity;
             }
@@ -293,7 +293,7 @@ export const useCartStore = create<CartState>()(
       })),
       {
         name: 'cart-store',
-        partialize: (state) => ({ items: state.items }),
+        partialize: state => ({ items: state.items }),
       }
     ),
     { name: 'CartStore' }
@@ -303,30 +303,30 @@ export const useCartStore = create<CartState>()(
 // ===== Custom Hooks (Selectors) =====
 
 // User selectors
-export const useUser = () => useUserStore((state) => state.user);
-export const useIsAuthenticated = () => useUserStore((state) => state.user !== null);
-export const useIsAdmin = () => useUserStore((state) => state.user?.role === 'admin');
+export const useUser = () => useUserStore(state => state.user);
+export const useIsAuthenticated = () => useUserStore(state => state.user !== null);
+export const useIsAdmin = () => useUserStore(state => state.user?.role === 'admin');
 
 // Product selectors
-export const useProducts = () => useProductsStore((state) => state.products);
-export const useProductsLoading = () => useProductsStore((state) => state.loading);
+export const useProducts = () => useProductsStore(state => state.products);
+export const useProductsLoading = () => useProductsStore(state => state.loading);
 
 export const useExpensiveProducts = () =>
-  useProductsStore((state) => state.products.filter((p) => p.price > 100));
+  useProductsStore(state => state.products.filter(p => p.price > 100));
 
 export const useProductsByCategory = (categoryId: string) =>
-  useProductsStore((state) => state.products.filter((p) => p.categoryId === categoryId));
+  useProductsStore(state => state.products.filter(p => p.categoryId === categoryId));
 
 // Cart selectors
-export const useCartItems = () => useCartStore((state) => state.items);
-export const useCartTotal = () => useCartStore((state) => state.total);
-export const useCartItemCount = () => useCartStore((state) => state.itemCount);
+export const useCartItems = () => useCartStore(state => state.items);
+export const useCartTotal = () => useCartStore(state => state.total);
+export const useCartItemCount = () => useCartStore(state => state.itemCount);
 
 // ===== Store Subscriptions (for side effects) =====
 
 // Subscribe to user changes
 useUserStore.subscribe(
-  (state) => state.user,
+  state => state.user,
   (user, prevUser) => {
     if (user && !prevUser) {
       console.log('User logged in:', user);
@@ -338,8 +338,8 @@ useUserStore.subscribe(
 
 // Subscribe to cart changes to sync with server
 useCartStore.subscribe(
-  (state) => state.items,
-  (items) => {
+  state => state.items,
+  items => {
     // Sync cart to server for logged-in users
     const user = useUserStore.getState().user;
     if (user) {
@@ -347,7 +347,7 @@ useCartStore.subscribe(
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ items }),
-      }).catch((error) => {
+      }).catch(error => {
         console.error('Failed to sync cart:', error);
       });
     }

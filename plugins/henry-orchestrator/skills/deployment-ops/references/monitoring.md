@@ -7,6 +7,7 @@ Complete guide to Prometheus metrics, Grafana dashboards, alerting rules, and Pr
 ### Prometheus Configuration
 
 **prometheus.yml:**
+
 ```yaml
 global:
   scrape_interval: 15s
@@ -17,9 +18,9 @@ global:
 
 alerting:
   alertmanagers:
-  - static_configs:
-    - targets:
-      - alertmanager:9093
+    - static_configs:
+        - targets:
+            - alertmanager:9093
 
 rule_files:
   - /etc/prometheus/rules/*.yml
@@ -28,65 +29,65 @@ scrape_configs:
   # Prometheus itself
   - job_name: 'prometheus'
     static_configs:
-    - targets: ['localhost:9090']
+      - targets: ['localhost:9090']
 
   # Node exporter
   - job_name: 'node'
     static_configs:
-    - targets:
-      - 'node1:9100'
-      - 'node2:9100'
+      - targets:
+          - 'node1:9100'
+          - 'node2:9100'
 
   # Kubernetes pods
   - job_name: 'kubernetes-pods'
     kubernetes_sd_configs:
-    - role: pod
+      - role: pod
 
     relabel_configs:
-    # Only scrape pods with prometheus.io/scrape annotation
-    - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
-      action: keep
-      regex: true
+      # Only scrape pods with prometheus.io/scrape annotation
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+        action: keep
+        regex: true
 
-    # Use custom port if specified
-    - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_port]
-      action: replace
-      regex: (.+)
-      target_label: __address__
-      replacement: $1
+      # Use custom port if specified
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_port]
+        action: replace
+        regex: (.+)
+        target_label: __address__
+        replacement: $1
 
-    # Use custom path if specified
-    - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
-      action: replace
-      target_label: __metrics_path__
-      regex: (.+)
+      # Use custom path if specified
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+        action: replace
+        target_label: __metrics_path__
+        regex: (.+)
 
-    # Add pod labels
-    - action: labelmap
-      regex: __meta_kubernetes_pod_label_(.+)
+      # Add pod labels
+      - action: labelmap
+        regex: __meta_kubernetes_pod_label_(.+)
 
-    - source_labels: [__meta_kubernetes_namespace]
-      target_label: kubernetes_namespace
+      - source_labels: [__meta_kubernetes_namespace]
+        target_label: kubernetes_namespace
 
-    - source_labels: [__meta_kubernetes_pod_name]
-      target_label: kubernetes_pod_name
+      - source_labels: [__meta_kubernetes_pod_name]
+        target_label: kubernetes_pod_name
 
   # Service monitors
   - job_name: 'kubernetes-services'
     kubernetes_sd_configs:
-    - role: service
+      - role: service
 
     relabel_configs:
-    - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scrape]
-      action: keep
-      regex: true
-    - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_port]
-      action: replace
-      target_label: __address__
-      regex: ([^:]+)(?::\d+)?;(\d+)
-      replacement: $1:$2
-    - action: labelmap
-      regex: __meta_kubernetes_service_label_(.+)
+      - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scrape]
+        action: keep
+        regex: true
+      - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_port]
+        action: replace
+        target_label: __address__
+        regex: ([^:]+)(?::\d+)?;(\d+)
+        replacement: $1:$2
+      - action: labelmap
+        regex: __meta_kubernetes_service_label_(.+)
 ```
 
 ### Kubernetes Deployment
@@ -109,34 +110,34 @@ spec:
     spec:
       serviceAccountName: prometheus
       containers:
-      - name: prometheus
-        image: prom/prometheus:v2.45.0
-        args:
-        - --config.file=/etc/prometheus/prometheus.yml
-        - --storage.tsdb.path=/prometheus
-        - --storage.tsdb.retention.time=15d
-        - --web.enable-lifecycle
-        ports:
-        - containerPort: 9090
-        volumeMounts:
-        - name: config
-          mountPath: /etc/prometheus
-        - name: storage
-          mountPath: /prometheus
-        resources:
-          requests:
-            cpu: 500m
-            memory: 2Gi
-          limits:
-            cpu: 2
-            memory: 4Gi
+        - name: prometheus
+          image: prom/prometheus:v2.45.0
+          args:
+            - --config.file=/etc/prometheus/prometheus.yml
+            - --storage.tsdb.path=/prometheus
+            - --storage.tsdb.retention.time=15d
+            - --web.enable-lifecycle
+          ports:
+            - containerPort: 9090
+          volumeMounts:
+            - name: config
+              mountPath: /etc/prometheus
+            - name: storage
+              mountPath: /prometheus
+          resources:
+            requests:
+              cpu: 500m
+              memory: 2Gi
+            limits:
+              cpu: 2
+              memory: 4Gi
       volumes:
-      - name: config
-        configMap:
-          name: prometheus-config
-      - name: storage
-        persistentVolumeClaim:
-          claimName: prometheus-storage
+        - name: config
+          configMap:
+            name: prometheus-config
+        - name: storage
+          persistentVolumeClaim:
+            claimName: prometheus-storage
 ```
 
 ## Application Instrumentation
@@ -160,18 +161,18 @@ const httpRequestDuration = new promClient.Histogram({
   name: 'http_request_duration_seconds',
   help: 'Duration of HTTP requests in seconds',
   labelNames: ['method', 'route', 'status'],
-  buckets: [0.01, 0.05, 0.1, 0.5, 1, 5]
+  buckets: [0.01, 0.05, 0.1, 0.5, 1, 5],
 });
 
 const httpRequestTotal = new promClient.Counter({
   name: 'http_requests_total',
   help: 'Total number of HTTP requests',
-  labelNames: ['method', 'route', 'status']
+  labelNames: ['method', 'route', 'status'],
 });
 
 const activeConnections = new promClient.Gauge({
   name: 'active_connections',
-  help: 'Number of active connections'
+  help: 'Number of active connections',
 });
 
 register.registerMetric(httpRequestDuration);
@@ -189,7 +190,7 @@ app.use((req, res, next) => {
     const labels = {
       method: req.method,
       route: req.route?.path || req.path,
-      status: res.statusCode
+      status: res.statusCode,
     };
 
     httpRequestDuration.observe(labels, duration);
@@ -362,6 +363,7 @@ func main() {
 ### Basic Queries
 
 **Current value:**
+
 ```promql
 # Current CPU usage
 node_cpu_seconds_total
@@ -371,6 +373,7 @@ http_requests_total[5m]
 ```
 
 **Rate calculations:**
+
 ```promql
 # Requests per second
 rate(http_requests_total[5m])
@@ -380,6 +383,7 @@ rate(http_requests_total{status=~"5.."}[5m])
 ```
 
 **Aggregation:**
+
 ```promql
 # Sum across all instances
 sum(rate(http_requests_total[5m]))
@@ -394,6 +398,7 @@ count(up == 1)
 ### Advanced Queries
 
 **Percentiles:**
+
 ```promql
 # 95th percentile latency
 histogram_quantile(0.95,
@@ -409,6 +414,7 @@ histogram_quantile(0.99,
 ```
 
 **Alerting queries:**
+
 ```promql
 # High error rate
 rate(http_requests_total{status=~"5.."}[5m]) /
@@ -424,6 +430,7 @@ avg_over_time(up[5m]) < 0.99
 ```
 
 **Resource monitoring:**
+
 ```promql
 # Memory usage percentage
 100 * (1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)
@@ -437,6 +444,7 @@ node_filesystem_size_bytes
 ```
 
 **Application metrics:**
+
 ```promql
 # Request rate by status
 sum by (status) (rate(http_requests_total[5m]))
@@ -456,119 +464,119 @@ avg_over_time(rate(http_requests_total[5m])[1h:5m]) * 2
 
 ```yaml
 groups:
-- name: recording_rules
-  interval: 30s
-  rules:
-  # Request rate
-  - record: job:http_requests:rate5m
-    expr: sum by (job) (rate(http_requests_total[5m]))
+  - name: recording_rules
+    interval: 30s
+    rules:
+      # Request rate
+      - record: job:http_requests:rate5m
+        expr: sum by (job) (rate(http_requests_total[5m]))
 
-  # Error rate
-  - record: job:http_errors:rate5m
-    expr: sum by (job) (rate(http_requests_total{status=~"5.."}[5m]))
+      # Error rate
+      - record: job:http_errors:rate5m
+        expr: sum by (job) (rate(http_requests_total{status=~"5.."}[5m]))
 
-  # Latency percentiles
-  - record: job:http_request_duration:p95
-    expr: |
-      histogram_quantile(0.95,
-        sum by (job, le) (rate(http_request_duration_seconds_bucket[5m]))
-      )
+      # Latency percentiles
+      - record: job:http_request_duration:p95
+        expr: |
+          histogram_quantile(0.95,
+            sum by (job, le) (rate(http_request_duration_seconds_bucket[5m]))
+          )
 
-  - record: job:http_request_duration:p99
-    expr: |
-      histogram_quantile(0.99,
-        sum by (job, le) (rate(http_request_duration_seconds_bucket[5m]))
-      )
+      - record: job:http_request_duration:p99
+        expr: |
+          histogram_quantile(0.99,
+            sum by (job, le) (rate(http_request_duration_seconds_bucket[5m]))
+          )
 ```
 
 ### Alerting Rules
 
 ```yaml
 groups:
-- name: application_alerts
-  interval: 30s
-  rules:
-  # High error rate
-  - alert: HighErrorRate
-    expr: |
-      (
-        sum by (job) (rate(http_requests_total{status=~"5.."}[5m]))
-        /
-        sum by (job) (rate(http_requests_total[5m]))
-      ) > 0.05
-    for: 5m
-    labels:
-      severity: critical
-      team: backend
-    annotations:
-      summary: "High error rate detected"
-      description: "{{ $labels.job }} has error rate of {{ $value | humanizePercentage }}"
+  - name: application_alerts
+    interval: 30s
+    rules:
+      # High error rate
+      - alert: HighErrorRate
+        expr: |
+          (
+            sum by (job) (rate(http_requests_total{status=~"5.."}[5m]))
+            /
+            sum by (job) (rate(http_requests_total[5m]))
+          ) > 0.05
+        for: 5m
+        labels:
+          severity: critical
+          team: backend
+        annotations:
+          summary: 'High error rate detected'
+          description: '{{ $labels.job }} has error rate of {{ $value | humanizePercentage }}'
 
-  # High latency
-  - alert: HighLatency
-    expr: |
-      histogram_quantile(0.95,
-        sum by (job, le) (rate(http_request_duration_seconds_bucket[5m]))
-      ) > 1
-    for: 5m
-    labels:
-      severity: warning
-      team: backend
-    annotations:
-      summary: "High latency detected"
-      description: "{{ $labels.job }} p95 latency is {{ $value }}s"
+      # High latency
+      - alert: HighLatency
+        expr: |
+          histogram_quantile(0.95,
+            sum by (job, le) (rate(http_request_duration_seconds_bucket[5m]))
+          ) > 1
+        for: 5m
+        labels:
+          severity: warning
+          team: backend
+        annotations:
+          summary: 'High latency detected'
+          description: '{{ $labels.job }} p95 latency is {{ $value }}s'
 
-  # Service down
-  - alert: ServiceDown
-    expr: up == 0
-    for: 1m
-    labels:
-      severity: critical
-      team: sre
-    annotations:
-      summary: "Service is down"
-      description: "{{ $labels.job }} on {{ $labels.instance }} is down"
+      # Service down
+      - alert: ServiceDown
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical
+          team: sre
+        annotations:
+          summary: 'Service is down'
+          description: '{{ $labels.job }} on {{ $labels.instance }} is down'
 
-  # Low disk space
-  - alert: LowDiskSpace
-    expr: |
-      (
-        node_filesystem_avail_bytes{mountpoint="/"}
-        /
-        node_filesystem_size_bytes{mountpoint="/"}
-      ) < 0.1
-    for: 5m
-    labels:
-      severity: warning
-      team: sre
-    annotations:
-      summary: "Low disk space"
-      description: "{{ $labels.instance }} has less than 10% disk space available"
+      # Low disk space
+      - alert: LowDiskSpace
+        expr: |
+          (
+            node_filesystem_avail_bytes{mountpoint="/"}
+            /
+            node_filesystem_size_bytes{mountpoint="/"}
+          ) < 0.1
+        for: 5m
+        labels:
+          severity: warning
+          team: sre
+        annotations:
+          summary: 'Low disk space'
+          description: '{{ $labels.instance }} has less than 10% disk space available'
 
-  # High memory usage
-  - alert: HighMemoryUsage
-    expr: |
-      (
-        1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)
-      ) > 0.9
-    for: 5m
-    labels:
-      severity: warning
-      team: sre
-    annotations:
-      summary: "High memory usage"
-      description: "{{ $labels.instance }} memory usage is {{ $value | humanizePercentage }}"
+      # High memory usage
+      - alert: HighMemoryUsage
+        expr: |
+          (
+            1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)
+          ) > 0.9
+        for: 5m
+        labels:
+          severity: warning
+          team: sre
+        annotations:
+          summary: 'High memory usage'
+          description: '{{ $labels.instance }} memory usage is {{ $value | humanizePercentage }}'
 
-  # Pod crash looping
-  - alert: PodCrashLooping
-    expr: rate(kube_pod_container_status_restarts_total[15m]) > 0
-    for: 5m
-    labels:
-      severity: critical
-      team: sre
-    annotations:
-      summary: "Pod is crash looping"
-      description: "Pod {{ $labels.namespace }}/{{ $labels.pod }} is crash looping"
+      # Pod crash looping
+      - alert: PodCrashLooping
+        expr: rate(kube_pod_container_status_restarts_total[15m]) > 0
+        for: 5m
+        labels:
+          severity: critical
+          team: sre
+        annotations:
+          summary: 'Pod is crash looping'
+          description: 'Pod {{ $labels.namespace }}/{{ $labels.pod }} is crash looping'
 ```
 
 ## Alertmanager Configuration
@@ -586,57 +594,57 @@ route:
   repeat_interval: 12h
 
   routes:
-  # Critical alerts to PagerDuty
-  - match:
-      severity: critical
-    receiver: 'pagerduty'
-    continue: true
+    # Critical alerts to PagerDuty
+    - match:
+        severity: critical
+      receiver: 'pagerduty'
+      continue: true
 
-  # Backend team alerts
-  - match:
-      team: backend
-    receiver: 'backend-team'
-    group_by: ['alertname', 'job']
+    # Backend team alerts
+    - match:
+        team: backend
+      receiver: 'backend-team'
+      group_by: ['alertname', 'job']
 
-  # SRE team alerts
-  - match:
-      team: sre
-    receiver: 'sre-team'
+    # SRE team alerts
+    - match:
+        team: sre
+      receiver: 'sre-team'
 
 receivers:
-- name: 'default'
-  slack_configs:
-  - channel: '#alerts'
-    title: '{{ .GroupLabels.alertname }}'
-    text: '{{ range .Alerts }}{{ .Annotations.description }}{{ end }}'
+  - name: 'default'
+    slack_configs:
+      - channel: '#alerts'
+        title: '{{ .GroupLabels.alertname }}'
+        text: '{{ range .Alerts }}{{ .Annotations.description }}{{ end }}'
 
-- name: 'pagerduty'
-  pagerduty_configs:
-  - service_key: 'YOUR_PAGERDUTY_KEY'
+  - name: 'pagerduty'
+    pagerduty_configs:
+      - service_key: 'YOUR_PAGERDUTY_KEY'
 
-- name: 'backend-team'
-  slack_configs:
-  - channel: '#backend-alerts'
-    title: '{{ .GroupLabels.alertname }}'
-    text: '{{ range .Alerts }}{{ .Annotations.description }}{{ end }}'
+  - name: 'backend-team'
+    slack_configs:
+      - channel: '#backend-alerts'
+        title: '{{ .GroupLabels.alertname }}'
+        text: '{{ range .Alerts }}{{ .Annotations.description }}{{ end }}'
 
-- name: 'sre-team'
-  slack_configs:
-  - channel: '#sre-alerts'
-    title: '{{ .GroupLabels.alertname }}'
-    text: '{{ range .Alerts }}{{ .Annotations.description }}{{ end }}'
-  email_configs:
-  - to: 'sre@company.com'
-    from: 'alertmanager@company.com'
-    smarthost: 'smtp.company.com:587'
+  - name: 'sre-team'
+    slack_configs:
+      - channel: '#sre-alerts'
+        title: '{{ .GroupLabels.alertname }}'
+        text: '{{ range .Alerts }}{{ .Annotations.description }}{{ end }}'
+    email_configs:
+      - to: 'sre@company.com'
+        from: 'alertmanager@company.com'
+        smarthost: 'smtp.company.com:587'
 
 inhibit_rules:
-# Inhibit warning if critical is firing
-- source_match:
-    severity: 'critical'
-  target_match:
-    severity: 'warning'
-  equal: ['alertname', 'instance']
+  # Inhibit warning if critical is firing
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'instance']
 ```
 
 ## Grafana Dashboards
@@ -662,7 +670,7 @@ inhibit_rules:
             "legendFormat": "{{ job }}"
           }
         ],
-        "gridPos": {"x": 0, "y": 0, "w": 12, "h": 8}
+        "gridPos": { "x": 0, "y": 0, "w": 12, "h": 8 }
       },
       {
         "id": 2,
@@ -674,7 +682,7 @@ inhibit_rules:
             "legendFormat": "{{ job }}"
           }
         ],
-        "gridPos": {"x": 12, "y": 0, "w": 12, "h": 8}
+        "gridPos": { "x": 12, "y": 0, "w": 12, "h": 8 }
       }
     ]
   }
@@ -684,23 +692,28 @@ inhibit_rules:
 ### Panel Types
 
 **Time Series:**
+
 - Line graphs for trends
 - Area charts for cumulative metrics
 - Stacked for breakdowns
 
 **Gauge:**
+
 - Current value with thresholds
 - Good for percentages, ratios
 
 **Stat:**
+
 - Single value display
 - Show latest value or aggregate
 
 **Table:**
+
 - Multiple metrics side-by-side
 - Good for instance comparisons
 
 **Heatmap:**
+
 - Distribution over time
 - Good for latency histograms
 
@@ -722,8 +735,8 @@ inhibit_rules:
   labels:
     severity: critical
   annotations:
-    summary: "Availability SLO breached"
-    description: "30-day availability is {{ $value | humanizePercentage }}"
+    summary: 'Availability SLO breached'
+    description: '30-day availability is {{ $value | humanizePercentage }}'
 ```
 
 ### Latency SLO
@@ -738,8 +751,8 @@ inhibit_rules:
   labels:
     severity: critical
   annotations:
-    summary: "Latency SLO breached"
-    description: "p95 latency is {{ $value }}s over 30 days"
+    summary: 'Latency SLO breached'
+    description: 'p95 latency is {{ $value }}s over 30 days'
 ```
 
 ## Best Practices
@@ -747,11 +760,13 @@ inhibit_rules:
 ### Metric Naming
 
 **Follow conventions:**
+
 - Use underscores: `http_requests_total`
 - Include unit suffix: `_seconds`, `_bytes`, `_total`
 - Be descriptive: `http_request_duration_seconds` not `http_dur`
 
 **Metric types:**
+
 - Counters: `_total` suffix (monotonically increasing)
 - Gauges: current value that can go up/down
 - Histograms: `_bucket`, `_sum`, `_count` suffixes
@@ -760,10 +775,12 @@ inhibit_rules:
 ### Label Best Practices
 
 **Good labels:**
+
 - Low cardinality: `status`, `method`, `endpoint`
 - Meaningful: `environment`, `region`, `version`
 
 **Bad labels:**
+
 - High cardinality: user_id, request_id, timestamp
 - Redundant: information in metric name
 

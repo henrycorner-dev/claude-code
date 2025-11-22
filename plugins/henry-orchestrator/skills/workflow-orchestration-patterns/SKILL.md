@@ -36,6 +36,7 @@ Phase 1 → Phase 2 → Phase 3 → Phase 4
 **When to use**: Clear dependencies between phases, later work requires earlier outputs
 
 **Example workflows**:
+
 - Strategy → Design → Implementation → Launch
 - Research → Design → Development → Testing → Deployment
 - Audit → Optimize → Verify → Launch
@@ -53,6 +54,7 @@ Phase 1 → Phase 2 → Phase 3 → Phase 4
 **When to use**: Independent audits, multiple perspectives on same artifact, no sequential dependencies
 
 **Example workflows**:
+
 - Security audit + Performance audit + A11y audit (simultaneous)
 - Frontend development + Backend development (parallel tracks)
 - Multiple feature teams working independently
@@ -68,6 +70,7 @@ Phase 1 → [Phase 2a + Phase 2b] → Phase 3 → [Phase 4a + Phase 4b + Phase 4
 **When to use**: Complex projects with both dependencies and parallelizable work
 
 **Example workflows**:
+
 - Strategy → [Design + Technical Spec] → [Frontend + Backend] → [Testing + Docs] → Launch
 - Audit → [Fix Critical + Fix High Priority] → Verify → [Performance Optimize + SEO Optimize]
 
@@ -82,6 +85,7 @@ Plan → Build → Review → Refine → (repeat until done)
 **When to use**: Agile development, continuous improvement, user feedback loops
 
 **Example workflows**:
+
 - Sprint cycles: Plan → Develop → Review → Retrospective → Next Sprint
 - Design iterations: Research → Design → Test → Refine → Retest
 - Optimization loops: Baseline → Optimize → Benchmark → Iterate
@@ -143,6 +147,7 @@ Plan → Build → Review → Refine → (repeat until done)
    - **Deliverables**: Deployment plan, monitoring dashboards, launch checklist
 
 **Example**:
+
 ```
 User: "Build a user dashboard with real-time analytics"
 
@@ -197,6 +202,7 @@ Workflow:
    - **Deliverables**: Go/no-go decision, launch playbook
 
 **Example**:
+
 ```
 User: "We're launching to production next week, need to ensure readiness"
 
@@ -233,6 +239,7 @@ Workflow:
    - **Deliverables**: Sign-off for merge
 
 **Example**:
+
 ```
 User: "Design and build an accessible checkout flow"
 
@@ -267,6 +274,7 @@ Workflow:
    - **Deliverables**: Performance report, regression test results
 
 **Example**:
+
 ```
 User: "Our landing page is too slow, need to meet Core Web Vitals"
 
@@ -288,11 +296,13 @@ Workflow:
 **Purpose**: Maintain quality through development
 
 **Pattern**:
+
 ```
 Develop → Review → Fix → Develop → Review → Fix → ...
 ```
 
 **Example**:
+
 ```
 Sprint workflow:
 - Day 1: Implement feature A → /henry-orchestrator:henry-review
@@ -309,11 +319,13 @@ Sprint workflow:
 **Pattern**: Agent A → Agent B → Agent C (each uses previous output)
 
 **Use cases**:
+
 - product-strategist → ux-ui-designer → frontend-engineer (strategy informs design informs implementation)
 - ux-researcher → ux-ui-designer → a11y-specialist (research informs design, design validated for a11y)
 - performance-engineer (identify) → frontend-engineer (implement) → performance-engineer (verify)
 
 **Example**:
+
 ```
 1. product-strategist: Define dashboard requirements and metrics
    Output: PRD with KPIs, user segments, success criteria
@@ -332,11 +344,13 @@ Each agent builds on previous work.
 **Pattern**: [Agent A + Agent B + Agent C] → Synthesis
 
 **Use cases**:
+
 - Independent audits: [security-engineer + performance-engineer + a11y-specialist]
 - Multiple domain reviews: [qa-tester + security-engineer + performance-engineer]
 - Parallel development tracks: [frontend-engineer + backend-engineer]
 
 **Example**:
+
 ```
 Parallel security audit:
 ├─ security-engineer: Threat modeling, vulnerability scan
@@ -351,10 +365,12 @@ All agents work independently, outputs synthesized into comprehensive security r
 **Pattern**: Agent A → [Agent B + Agent C] → Agent D
 
 **Use cases**:
+
 - Strategy phase, then parallel design and technical spec, then implementation
 - Audit phase, then parallel fixes, then verification
 
 **Example**:
+
 ```
 1. product-strategist: Define feature requirements
    Output: PRD
@@ -371,11 +387,13 @@ All agents work independently, outputs synthesized into comprehensive security r
 **Pattern**: Agent A → Review → Agent A (refine) → Review → ...
 
 **Use cases**:
+
 - Design iterations with user feedback
 - Code optimization cycles
 - Progressive enhancement
 
 **Example**:
+
 ```
 Design iteration:
 1. ux-ui-designer: Initial wireframes
@@ -392,12 +410,14 @@ Design iteration:
 Implement synchronization points between phases to ensure quality:
 
 **Checkpoints**:
+
 - After strategy: Review and approve PRD before design
 - After design: Review and approve designs before implementation
 - After implementation: Review and approve code before deployment
 - Before launch: Final go/no-go decision
 
 **Example**:
+
 ```
 henry-product → [CHECKPOINT: Approve PRD] → henry-design → [CHECKPOINT: Approve designs] → henry-feature → [CHECKPOINT: Code review] → henry-launch
 ```
@@ -407,11 +427,13 @@ henry-product → [CHECKPOINT: Approve PRD] → henry-design → [CHECKPOINT: Ap
 Build feedback mechanisms for course correction:
 
 **Types**:
+
 - **Backward loops**: Implementation issues requiring design changes
 - **Forward loops**: Design insights informing strategy updates
 - **Lateral loops**: Peer reviews within same phase
 
 **Example**:
+
 ```
 henry-feature (implementation) → [Issue found: Design doesn't account for error states]
 → henry-design (add error states) → henry-feature (implement error handling)
@@ -422,12 +444,14 @@ henry-feature (implementation) → [Issue found: Design doesn't account for erro
 Document clean handoffs between agents/phases:
 
 **Required**:
+
 - Clear outputs from each phase
 - Documented decisions and rationale
 - Open questions and risks
 - Success criteria for next phase
 
 **Example**:
+
 ```
 product-strategist handoff to ux-ui-designer:
 ✓ PRD with user stories
@@ -443,16 +467,19 @@ product-strategist handoff to ux-ui-designer:
 ### By Project Size
 
 **Small projects** (< 1 week):
+
 - henry-team for focused tasks
 - henry-review for quality checks
 - Minimal ceremony, fast iteration
 
 **Medium projects** (1-4 weeks):
+
 - henry-product → henry-feature → henry-review
 - Or henry-design → henry-team → henry-review
 - Structured phases, clear milestones
 
 **Large projects** (1-3 months):
+
 - Full workflow: henry-product → henry-design → henry-feature → henry-review → henry-audit → henry-optimize → henry-launch
 - Multiple teams, parallel tracks
 - Comprehensive planning and reviews
@@ -460,31 +487,37 @@ product-strategist handoff to ux-ui-designer:
 ### By Project Type
 
 **New feature**:
+
 ```
 henry-product → henry-design → henry-feature → henry-review
 ```
 
 **Redesign**:
+
 ```
 henry-design → henry-team (frontend + a11y) → henry-review
 ```
 
 **Performance optimization**:
+
 ```
 henry-team (performance baseline) → henry-optimize → verification
 ```
 
 **Security hardening**:
+
 ```
 henry-team (security audit) → fixes → henry-review (security focus)
 ```
 
 **Product launch**:
+
 ```
 henry-audit → henry-optimize → henry-launch
 ```
 
 **Technical debt**:
+
 ```
 henry-team (identify issues) → iterative fixes with henry-review
 ```
@@ -492,16 +525,19 @@ henry-team (identify issues) → iterative fixes with henry-review
 ### By Team Size
 
 **Solo developer**:
+
 - Use henry commands for comprehensive guidance
 - Sequential workflows with clear phases
 - Let agents provide expertise you lack
 
 **Small team (2-5)**:
+
 - Parallel tracks where possible
 - Use henry-team for collaboration
 - Regular henry-review checkpoints
 
 **Large team (6+)**:
+
 - Multiple parallel workflows
 - Dedicated quality gates (henry-audit, henry-review)
 - Coordination via henry-launch for releases
@@ -515,6 +551,7 @@ henry-team (identify issues) → iterative fixes with henry-review
 **Consequence**: Building wrong thing, wasted effort, unclear success criteria
 
 **Fix**: Always start with henry-product or product-strategist for new features
+
 ```
 Wrong: henry-feature → [builds wrong thing]
 Right: henry-product → henry-design → henry-feature
@@ -527,6 +564,7 @@ Right: henry-product → henry-design → henry-feature
 **Consequence**: Expensive rework, missed issues, delayed launches
 
 **Fix**: Regular henry-review checkpoints throughout development
+
 ```
 Wrong: Develop for 2 weeks → henry-review (finds major issues)
 Right: Develop → henry-review → Fix → Develop → henry-review → ...
@@ -539,6 +577,7 @@ Right: Develop → henry-review → Fix → Develop → henry-review → ...
 **Consequence**: Poor UX, expensive redesigns, technical debt
 
 **Fix**: henry-design before henry-feature
+
 ```
 Wrong: henry-feature → [doesn't match user needs] → henry-design (redesign)
 Right: henry-design → henry-feature (implement designs)
@@ -551,6 +590,7 @@ Right: henry-design → henry-feature (implement designs)
 **Consequence**: Production incidents, security breaches, poor performance
 
 **Fix**: henry-audit → henry-optimize → henry-launch
+
 ```
 Wrong: henry-feature → Deploy → [production incident]
 Right: henry-feature → henry-audit → henry-optimize → henry-launch
@@ -563,6 +603,7 @@ Right: henry-feature → henry-audit → henry-optimize → henry-launch
 **Consequence**: Wasted effort, need to redo work
 
 **Fix**: Identify dependencies, sequence appropriately
+
 ```
 Wrong: [ux-researcher + ux-ui-designer] in parallel (designer needs research)
 Right: ux-researcher → ux-ui-designer (research informs design)
@@ -571,6 +612,7 @@ Right: ux-researcher → ux-ui-designer (research informs design)
 ## Workflow Templates
 
 ### Template 1: MVP Launch
+
 ```
 Goal: Launch minimum viable product
 
@@ -587,6 +629,7 @@ Team size: 2-5 people
 ```
 
 ### Template 2: Feature Addition
+
 ```
 Goal: Add feature to existing product
 
@@ -602,6 +645,7 @@ Team size: 1-3 people
 ```
 
 ### Template 3: Performance Sprint
+
 ```
 Goal: Improve site performance
 
@@ -615,6 +659,7 @@ Team size: 1-2 people
 ```
 
 ### Template 4: Security Hardening
+
 ```
 Goal: Improve security posture
 
@@ -629,6 +674,7 @@ Team size: 2-3 people
 ```
 
 ### Template 5: Accessibility Remediation
+
 ```
 Goal: Achieve WCAG 2.1 AA compliance
 
@@ -686,16 +732,19 @@ henry-launch → Deploy → [Issue detected]
 Monitor and track workflow effectiveness using these metrics:
 
 ### Cycle Time Metrics
+
 - Time from henry-product to production
 - Time in each phase
 - Bottleneck identification
 
 ### Quality Metrics
+
 - Issues found in henry-review per phase
 - Critical issues found in henry-audit
 - Production incidents post-launch
 
 ### Efficiency Metrics
+
 - Rework percentage (features requiring redesign)
 - Review pass rate (first-time approvals)
 - Launch success rate (smooth deployments)
@@ -714,6 +763,7 @@ Monitor and track workflow effectiveness using these metrics:
 ## Integration with Henry Commands
 
 Leverage Henry's 9 commands for all orchestration patterns:
+
 - Use dedicated commands (henry-feature, henry-design, etc.) for standard workflows
 - Use henry-team for custom agent combinations
 - Combine commands for complex multi-phase workflows
@@ -724,7 +774,9 @@ For detailed command documentation, agent capabilities, and examples, see `/henr
 ## Supporting Resources
 
 ### Examples
+
 See the `examples/` directory for practical workflow implementations demonstrating each pattern in action.
 
 ### Pattern Deep Dives
+
 For comprehensive pattern documentation, architectural details, and advanced techniques, see `references/pattern-details.md`.

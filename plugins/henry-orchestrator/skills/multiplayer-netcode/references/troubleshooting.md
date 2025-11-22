@@ -5,6 +5,7 @@ This guide helps diagnose and fix common multiplayer networking issues including
 ## Issue 1: Rubberbanding (Player Snapping Back)
 
 **Symptoms:**
+
 - Player moves forward, then suddenly teleports backwards
 - Happens frequently or occasionally
 - More common with higher latency
@@ -12,10 +13,12 @@ This guide helps diagnose and fix common multiplayer networking issues including
 **Causes:**
 
 ### Cause 1A: Client-Server Logic Mismatch
+
 - Client predicts movement using different physics than server
 - Server corrections constantly override client predictions
 
 **Diagnosis:**
+
 ```javascript
 // Add logging to reconciliation
 reconcile(serverState) {
@@ -29,15 +32,18 @@ reconcile(serverState) {
 ```
 
 **Solutions:**
+
 - Ensure client and server use **identical** movement speed, physics constants, timestep
 - Share movement code between client and server (use same JavaScript file)
 - Use fixed timestep on both sides
 - Log and compare client vs server calculations for same input
 
 ### Cause 1B: Reconciliation Threshold Too Sensitive
+
 - Threshold too low causes corrections for tiny floating-point differences
 
 **Diagnosis:**
+
 ```javascript
 // Check reconciliation frequency
 class ReconciliationStats {
@@ -62,15 +68,18 @@ class ReconciliationStats {
 ```
 
 **Solutions:**
+
 - Increase reconciliation threshold (e.g., 0.1m → 0.2m)
 - Add smoothing to corrections (lerp over 100ms instead of snapping)
 - Use epsilon comparisons for floating-point values
 
 ### Cause 1C: Packet Loss Causing Large Corrections
+
 - Missing server updates cause client prediction to diverge
 - When update finally arrives, large correction occurs
 
 **Diagnosis:**
+
 ```javascript
 class PacketLossDetector {
   constructor() {
@@ -82,7 +91,7 @@ class PacketLossDetector {
   onPacket(sequence) {
     const expectedSequence = this.lastSequence + 1;
     if (sequence > expectedSequence) {
-      this.packetsLost += (sequence - expectedSequence);
+      this.packetsLost += sequence - expectedSequence;
     }
     this.packetsReceived++;
     this.lastSequence = sequence;
@@ -97,6 +106,7 @@ class PacketLossDetector {
 ```
 
 **Solutions:**
+
 - Increase interpolation delay to tolerate packet loss
 - Implement packet loss recovery (request missed packets)
 - Use UDP-like behavior (don't block on lost packets)
@@ -105,6 +115,7 @@ class PacketLossDetector {
 ## Issue 2: Desync (Client and Server Disagree)
 
 **Symptoms:**
+
 - Client sees themselves at one position, server says they're elsewhere
 - Actions fail unexpectedly (server rejects them)
 - Game state inconsistent between players
@@ -112,11 +123,13 @@ class PacketLossDetector {
 **Causes:**
 
 ### Cause 2A: Non-Deterministic Game Logic
+
 - Random number generation differs between client/server
 - Floating-point operations produce different results
 - Race conditions in update order
 
 **Diagnosis:**
+
 ```javascript
 // Add determinism checks
 class DeterminismValidator {
@@ -134,16 +147,19 @@ class DeterminismValidator {
 ```
 
 **Solutions:**
+
 - Use deterministic random seeds shared between client/server
 - Use fixed-point math instead of floating-point for critical calculations
 - Ensure consistent update order (sort entities by ID before updating)
 - Avoid system time dependencies (use game time)
 
 ### Cause 2B: Missing Server Reconciliation
+
 - Client prediction exists but no reconciliation implemented
 - States diverge over time
 
 **Diagnosis:**
+
 ```javascript
 // Check if reconciliation is running
 onServerState(serverState) {
@@ -155,15 +171,18 @@ onServerState(serverState) {
 ```
 
 **Solutions:**
+
 - Implement server reconciliation (see `server-reconciliation.md`)
 - Ensure server sends last processed input sequence number
 - Client must replay unconfirmed inputs after reconciling
 
 ### Cause 2C: Inputs Not Reaching Server
+
 - Network issues or input loss
 - Server never processes some client inputs
 
 **Diagnosis:**
+
 ```javascript
 // Track input acknowledgment
 class InputTracker {
@@ -195,6 +214,7 @@ class InputTracker {
 ```
 
 **Solutions:**
+
 - Ensure reliable delivery for critical inputs
 - Resend unacknowledged inputs after timeout
 - Check Socket.io/WebSocket connection stability
@@ -202,6 +222,7 @@ class InputTracker {
 ## Issue 3: Hit Registration Problems
 
 **Symptoms:**
+
 - Shots that appear to hit don't register
 - Hits register when aiming off-target
 - Inconsistent hit detection
@@ -209,10 +230,12 @@ class InputTracker {
 **Causes:**
 
 ### Cause 3A: No Lag Compensation
+
 - Server validates hits at current time, but client sees past state
 - Client aims at delayed position
 
 **Diagnosis:**
+
 ```javascript
 // Check if lag compensation is enabled
 onShot(shotData) {
@@ -228,15 +251,18 @@ onShot(shotData) {
 ```
 
 **Solutions:**
+
 - Implement lag compensation (see `lag-compensation.md`)
 - Server must buffer historical states
 - Rewind state based on client latency before validating hits
 
 ### Cause 3B: Interpolation Delay Too High
+
 - Other players rendered too far in the past
 - Where client aims doesn't match server's rewind target
 
 **Diagnosis:**
+
 ```javascript
 // Compare interpolation delay to server compensation
 const clientInterpolationDelay = 150; // ms
@@ -248,15 +274,18 @@ console.log(`Total delay: ${totalDelay}ms`);
 ```
 
 **Solutions:**
+
 - Reduce interpolation delay (but not below 2x server update interval)
 - Ensure lag compensation accounts for interpolation delay
 - Test with `scripts/latency-simulator.py` at various latencies
 
 ### Cause 3C: Hitbox Mismatch
+
 - Client and server use different hitbox sizes/positions
 - Visual model doesn't match hitbox
 
 **Diagnosis:**
+
 ```javascript
 // Visualize hitboxes on both client and server
 class HitboxDebugger {
@@ -272,13 +301,14 @@ class HitboxDebugger {
 
     // Do they match?
     if (!this.boundsMatch(hitboxes, player.visualBounds)) {
-      console.warn('Hitbox doesn\'t match visual model!');
+      console.warn("Hitbox doesn't match visual model!");
     }
   }
 }
 ```
 
 **Solutions:**
+
 - Ensure client and server use identical hitbox definitions
 - Hitboxes should closely match visual model
 - Test hit detection in development with visible hitboxes
@@ -286,6 +316,7 @@ class HitboxDebugger {
 ## Issue 4: High Bandwidth Usage
 
 **Symptoms:**
+
 - Network usage exceeds budget (e.g., >100KB/s per client)
 - Bandwidth scales poorly with player count
 - Mobile clients struggle with data usage
@@ -293,10 +324,12 @@ class HitboxDebugger {
 **Causes:**
 
 ### Cause 4A: Sending Full State Every Update
+
 - No delta compression
 - Sending unchanged entities
 
 **Diagnosis:**
+
 ```javascript
 // Measure bandwidth per update type
 class BandwidthMonitor {
@@ -308,12 +341,8 @@ class BandwidthMonitor {
   onMessageSent(type, message) {
     const size = this.estimateSize(message);
 
-    this.messageSizes.set(type,
-      (this.messageSizes.get(type) || 0) + size
-    );
-    this.messageCounts.set(type,
-      (this.messageCounts.get(type) || 0) + 1
-    );
+    this.messageSizes.set(type, (this.messageSizes.get(type) || 0) + size);
+    this.messageCounts.set(type, (this.messageCounts.get(type) || 0) + 1);
   }
 
   getReport() {
@@ -324,7 +353,7 @@ class BandwidthMonitor {
         type: type,
         totalBytes: totalBytes,
         averageBytes: totalBytes / count,
-        count: count
+        count: count,
       });
     }
     return report.sort((a, b) => b.totalBytes - a.totalBytes);
@@ -333,16 +362,19 @@ class BandwidthMonitor {
 ```
 
 **Solutions:**
+
 - Implement delta compression (only send changes)
 - Quantize position/rotation to fewer bits
 - Use binary protocols instead of JSON
 - Only send entities that moved significantly
 
 ### Cause 4B: Too High Update Rate
+
 - Sending updates more frequently than necessary
 - Server tickrate too high for game type
 
 **Diagnosis:**
+
 ```javascript
 // Calculate actual bandwidth
 const updateRate = 60; // Hz
@@ -350,21 +382,24 @@ const bytesPerUpdate = 500;
 const playersInGame = 10;
 
 const bandwidthPerSecond = updateRate * bytesPerUpdate;
-const totalBandwidth = bandwidthPerSecond * playersInGame / 1024; // KB/s
+const totalBandwidth = (bandwidthPerSecond * playersInGame) / 1024; // KB/s
 
 console.log(`Bandwidth: ${bandwidthPerSecond} bytes/s per client`);
 console.log(`Total server: ${totalBandwidth} KB/s`);
 ```
 
 **Solutions:**
+
 - Reduce update rate (e.g., 60Hz → 20Hz for non-competitive games)
 - Use adaptive update rate based on entity importance
 - Nearby entities: high rate, far entities: low rate
 
 ### Cause 4C: No Interest Management
+
 - Sending all entities to all clients regardless of distance
 
 **Diagnosis:**
+
 ```javascript
 // Check entities per update
 onStateReceived(state) {
@@ -381,6 +416,7 @@ onStateReceived(state) {
 ```
 
 **Solutions:**
+
 - Implement interest management (only sync nearby entities)
 - Spatial culling based on player view radius
 - Priority system (player units > nearby entities > far entities)
@@ -388,6 +424,7 @@ onStateReceived(state) {
 ## Issue 5: Visual Stuttering
 
 **Symptoms:**
+
 - Other players' movement looks jerky
 - Entities freeze briefly then jump
 - Inconsistent frame times
@@ -395,10 +432,12 @@ onStateReceived(state) {
 **Causes:**
 
 ### Cause 5A: Interpolation Buffer Empty
+
 - Interpolation delay too short
 - Packet loss causing missing snapshots
 
 **Diagnosis:**
+
 ```javascript
 class InterpolationHealthCheck {
   checkBufferHealth(buffer, renderTime) {
@@ -422,15 +461,18 @@ class InterpolationHealthCheck {
 ```
 
 **Solutions:**
+
 - Increase interpolation delay
 - Implement adaptive interpolation (adjust delay based on buffer health)
 - Add extrapolation as fallback
 
 ### Cause 5B: Jitter (Variable Latency)
+
 - Network latency varies significantly
 - Snapshots arrive irregularly
 
 **Diagnosis:**
+
 ```javascript
 class JitterDetector {
   constructor() {
@@ -454,9 +496,9 @@ class JitterDetector {
     if (this.arrivalIntervals.length < 2) return 0;
 
     const mean = this.arrivalIntervals.reduce((a, b) => a + b) / this.arrivalIntervals.length;
-    const variance = this.arrivalIntervals.reduce((sum, interval) =>
-      sum + Math.pow(interval - mean, 2), 0
-    ) / this.arrivalIntervals.length;
+    const variance =
+      this.arrivalIntervals.reduce((sum, interval) => sum + Math.pow(interval - mean, 2), 0) /
+      this.arrivalIntervals.length;
 
     return Math.sqrt(variance);
   }
@@ -465,15 +507,18 @@ class JitterDetector {
 ```
 
 **Solutions:**
+
 - Increase interpolation delay to absorb jitter
 - Use adaptive interpolation delay
 - Implement jitter buffer (buffer snapshots before processing)
 
 ### Cause 5C: Server Update Rate Too Low
+
 - Server sends updates at 10Hz, client renders at 60fps
 - Not enough data to interpolate smoothly
 
 **Diagnosis:**
+
 ```javascript
 // Measure time between server updates
 class UpdateRateMonitor {
@@ -505,6 +550,7 @@ class UpdateRateMonitor {
 ```
 
 **Solutions:**
+
 - Increase server update rate (10Hz → 20-30Hz)
 - Use extrapolation to smooth between updates
 - Implement dead reckoning for predictable movement
@@ -512,12 +558,14 @@ class UpdateRateMonitor {
 ## Issue 6: High Latency Players
 
 **Symptoms:**
+
 - High-ping players experience poor gameplay
 - Other players complain about high-ping player's behavior
 
 **Solutions:**
 
 ### For the High-Latency Player
+
 ```javascript
 // Show latency indicator to player
 class LatencyIndicator {
@@ -545,6 +593,7 @@ if (clientLatency > 150) {
 ```
 
 ### For Other Players
+
 ```javascript
 // Server-side lag compensation limits
 if (player.latency > 200) {
@@ -591,7 +640,7 @@ class NetcodeDebugOverlay {
       interpolationDelay: this.client.interpolationDelay,
       reconciliationsPerSec: this.client.reconciliationRate * 60,
       packetLoss: this.client.packetLoss,
-      bandwidth: this.client.bytesPerSecond
+      bandwidth: this.client.bytesPerSecond,
     };
 
     this.drawOverlay(stats);
@@ -601,13 +650,13 @@ class NetcodeDebugOverlay {
 
 ## Common Combinations
 
-| Symptom | Likely Cause | Quick Fix |
-|---------|--------------|-----------|
-| Rubberbanding + high reconciliation rate | Client/server logic mismatch | Sync movement constants |
-| Hit misses + high latency | No lag compensation | Implement lag compensation |
-| Stuttering + low buffer | Interpolation delay too short | Increase delay to 100-150ms |
-| High bandwidth + many entities | No delta compression | Only send changed entities |
-| Desync + deterministic logic | Missing reconciliation | Add server reconciliation |
+| Symptom                                  | Likely Cause                  | Quick Fix                   |
+| ---------------------------------------- | ----------------------------- | --------------------------- |
+| Rubberbanding + high reconciliation rate | Client/server logic mismatch  | Sync movement constants     |
+| Hit misses + high latency                | No lag compensation           | Implement lag compensation  |
+| Stuttering + low buffer                  | Interpolation delay too short | Increase delay to 100-150ms |
+| High bandwidth + many entities           | No delta compression          | Only send changed entities  |
+| Desync + deterministic logic             | Missing reconciliation        | Add server reconciliation   |
 
 ## Testing Checklist
 

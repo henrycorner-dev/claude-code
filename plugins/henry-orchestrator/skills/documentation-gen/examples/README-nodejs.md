@@ -38,14 +38,14 @@ import { ApiClient } from '@company/api-client';
 // Create client
 const client = new ApiClient({
   baseURL: 'https://api.example.com',
-  timeout: 5000
+  timeout: 5000,
 });
 
 // Make requests
 const user = await client.get('/users/123');
 const newPost = await client.post('/posts', {
   title: 'Hello World',
-  body: 'This is my first post'
+  body: 'This is my first post',
 });
 ```
 
@@ -60,8 +60,8 @@ const client = new ApiClient({
   baseURL: 'https://api.example.com',
   timeout: 10000,
   headers: {
-    'X-API-Key': 'your-api-key'
-  }
+    'X-API-Key': 'your-api-key',
+  },
 });
 ```
 
@@ -75,12 +75,12 @@ const user = await client.get('/users/123');
 // POST request
 const newUser = await client.post('/users', {
   name: 'John Doe',
-  email: 'john@example.com'
+  email: 'john@example.com',
 });
 
 // PUT request
 const updated = await client.put('/users/123', {
-  name: 'Jane Doe'
+  name: 'Jane Doe',
 });
 
 // DELETE request
@@ -88,7 +88,7 @@ await client.delete('/users/123');
 
 // PATCH request
 const patched = await client.patch('/users/123', {
-  email: 'newemail@example.com'
+  email: 'newemail@example.com',
 });
 ```
 
@@ -114,7 +114,7 @@ const client = new ApiClient({ baseURL: 'https://api.example.com' });
 const user = await client.get<User>('/users/123');
 const newUser = await client.post<User, CreateUserRequest>('/users', {
   name: 'John Doe',
-  email: 'john@example.com'
+  email: 'john@example.com',
 });
 ```
 
@@ -125,7 +125,7 @@ const response = await client.get('/users', {
   params: { page: 1, limit: 10 },
   headers: { 'X-Custom-Header': 'value' },
   timeout: 5000,
-  retry: { attempts: 3, delay: 1000 }
+  retry: { attempts: 3, delay: 1000 },
 });
 ```
 
@@ -134,7 +134,7 @@ const response = await client.get('/users', {
 Add request interceptors:
 
 ```javascript
-client.interceptors.request.use((config) => {
+client.interceptors.request.use(config => {
   // Add authentication token
   config.headers.Authorization = `Bearer ${getToken()}`;
   return config;
@@ -145,11 +145,11 @@ Add response interceptors:
 
 ```javascript
 client.interceptors.response.use(
-  (response) => {
+  response => {
     // Transform response
     return response.data;
   },
-  (error) => {
+  error => {
     // Handle errors
     if (error.response?.status === 401) {
       // Refresh token or redirect to login
@@ -167,8 +167,8 @@ const client = new ApiClient({
   retry: {
     attempts: 3,
     delay: 1000,
-    statusCodes: [408, 429, 500, 502, 503, 504]
-  }
+    statusCodes: [408, 429, 500, 502, 503, 504],
+  },
 });
 
 // This request will retry up to 3 times on failure
@@ -182,7 +182,7 @@ import { ApiClient, MemoryCache } from '@company/api-client';
 
 const client = new ApiClient({
   baseURL: 'https://api.example.com',
-  cache: new MemoryCache({ ttl: 60000 }) // 60 seconds
+  cache: new MemoryCache({ ttl: 60000 }), // 60 seconds
 });
 
 // First request hits the API
@@ -202,8 +202,8 @@ const client = new ApiClient({
   auth: {
     type: 'apiKey',
     key: 'your-api-key',
-    header: 'X-API-Key'
-  }
+    header: 'X-API-Key',
+  },
 });
 ```
 
@@ -214,8 +214,8 @@ const client = new ApiClient({
   baseURL: 'https://api.example.com',
   auth: {
     type: 'bearer',
-    token: 'your-jwt-token'
-  }
+    token: 'your-jwt-token',
+  },
 });
 ```
 
@@ -227,12 +227,12 @@ import { ApiClient, OAuth2Provider } from '@company/api-client';
 const oauth = new OAuth2Provider({
   clientId: 'your-client-id',
   clientSecret: 'your-client-secret',
-  tokenUrl: 'https://auth.example.com/token'
+  tokenUrl: 'https://auth.example.com/token',
 });
 
 const client = new ApiClient({
   baseURL: 'https://api.example.com',
-  auth: oauth
+  auth: oauth,
 });
 ```
 
@@ -264,7 +264,7 @@ formData.append('file', fileBuffer, 'document.pdf');
 formData.append('title', 'My Document');
 
 const result = await client.post('/uploads', formData, {
-  headers: formData.getHeaders()
+  headers: formData.getHeaders(),
 });
 ```
 
@@ -273,7 +273,7 @@ const result = await client.post('/uploads', formData, {
 ```javascript
 const stream = await client.stream('/large-file');
 
-stream.on('data', (chunk) => {
+stream.on('data', chunk => {
   console.log('Received chunk:', chunk.length);
 });
 
@@ -307,14 +307,14 @@ See [full API documentation](https://api-client.docs.example.com) for details.
 
 ## Configuration Options
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `baseURL` | string | `''` | Base URL for all requests |
-| `timeout` | number | `30000` | Request timeout in ms |
-| `headers` | object | `{}` | Default headers |
-| `retry` | object | - | Retry configuration |
-| `cache` | Cache | - | Cache implementation |
-| `auth` | Auth | - | Authentication config |
+| Option    | Type   | Default | Description               |
+| --------- | ------ | ------- | ------------------------- |
+| `baseURL` | string | `''`    | Base URL for all requests |
+| `timeout` | number | `30000` | Request timeout in ms     |
+| `headers` | object | `{}`    | Default headers           |
+| `retry`   | object | -       | Retry configuration       |
+| `cache`   | Cache  | -       | Cache implementation      |
+| `auth`    | Auth   | -       | Authentication config     |
 
 ## Examples
 

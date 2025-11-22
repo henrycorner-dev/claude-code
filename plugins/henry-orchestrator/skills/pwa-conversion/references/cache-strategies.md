@@ -13,9 +13,9 @@ Service workers enable offline functionality through strategic caching. Choose t
 Best for: Static assets, fonts, images that rarely change
 
 ```javascript
-self.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.match(event.request).then((response) => {
+    caches.match(event.request).then(response => {
       return response || fetch(event.request);
     })
   );
@@ -23,15 +23,18 @@ self.addEventListener('fetch', (event) => {
 ```
 
 **Pros:**
+
 - Fastest response time
 - Works offline immediately
 - Reduces bandwidth usage
 
 **Cons:**
+
 - May serve stale content
 - Requires cache invalidation strategy
 
 **Use cases:**
+
 - Application shell
 - CSS/JS bundles with versioned filenames
 - Static images and fonts
@@ -41,13 +44,13 @@ self.addEventListener('fetch', (event) => {
 Best for: API requests, frequently updated content
 
 ```javascript
-self.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', event => {
   event.respondWith(
     fetch(event.request)
-      .then((response) => {
+      .then(response => {
         // Clone response to store in cache
         const responseToCache = response.clone();
-        caches.open(CACHE_NAME).then((cache) => {
+        caches.open(CACHE_NAME).then(cache => {
           cache.put(event.request, responseToCache);
         });
         return response;
@@ -61,15 +64,18 @@ self.addEventListener('fetch', (event) => {
 ```
 
 **Pros:**
+
 - Always tries to get fresh content
 - Falls back gracefully when offline
 - Automatically updates cache
 
 **Cons:**
+
 - Slower when online (network latency)
 - Uses more bandwidth
 
 **Use cases:**
+
 - API endpoints
 - User-generated content
 - News feeds and dynamic content
@@ -79,11 +85,11 @@ self.addEventListener('fetch', (event) => {
 Best for: Content that can be slightly stale but should update
 
 ```javascript
-self.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.match(event.request).then((cachedResponse) => {
-        const fetchPromise = fetch(event.request).then((networkResponse) => {
+    caches.open(CACHE_NAME).then(cache => {
+      return cache.match(event.request).then(cachedResponse => {
+        const fetchPromise = fetch(event.request).then(networkResponse => {
           cache.put(event.request, networkResponse.clone());
           return networkResponse;
         });
@@ -96,15 +102,18 @@ self.addEventListener('fetch', (event) => {
 ```
 
 **Pros:**
+
 - Fast initial response
 - Automatic background updates
 - Good balance of speed and freshness
 
 **Cons:**
+
 - May show outdated content briefly
 - Extra network requests in background
 
 **Use cases:**
+
 - Avatar images
 - Social media posts
 - Product listings
@@ -114,12 +123,13 @@ self.addEventListener('fetch', (event) => {
 Best for: Real-time data that should never be cached
 
 ```javascript
-self.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', event => {
   event.respondWith(fetch(event.request));
 });
 ```
 
 **Use cases:**
+
 - Analytics requests
 - Real-time stock prices
 - Live chat messages
@@ -129,12 +139,13 @@ self.addEventListener('fetch', (event) => {
 Best for: Pre-cached content that never changes
 
 ```javascript
-self.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', event => {
   event.respondWith(caches.match(event.request));
 });
 ```
 
 **Use cases:**
+
 - Offline fallback pages
 - Pre-installed application shell
 
@@ -145,7 +156,7 @@ self.addEventListener('fetch', (event) => {
 Apply different strategies based on URL patterns:
 
 ```javascript
-self.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
 
   // API requests: Network First
@@ -182,7 +193,7 @@ async function fetchWithTimeout(request, timeout = 3000) {
   }
 }
 
-self.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', event => {
   event.respondWith(
     fetchWithTimeout(event.request, 3000)
       .catch(() => caches.match(event.request))
@@ -196,13 +207,13 @@ self.addEventListener('fetch', (event) => {
 Cache based on response headers or status:
 
 ```javascript
-self.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', event => {
   event.respondWith(
-    fetch(event.request).then((response) => {
+    fetch(event.request).then(response => {
       // Only cache successful responses
       if (response.ok && event.request.method === 'GET') {
         const responseToCache = response.clone();
-        caches.open(CACHE_NAME).then((cache) => {
+        caches.open(CACHE_NAME).then(cache => {
           // Check cache-control header
           const cacheControl = response.headers.get('cache-control');
           if (!cacheControl || !cacheControl.includes('no-store')) {
@@ -226,26 +237,19 @@ Use versioned cache names to manage updates:
 const CACHE_VERSION = 'v1';
 const CACHE_NAME = `my-app-${CACHE_VERSION}`;
 
-self.addEventListener('install', (event) => {
+self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll([
-        '/',
-        '/styles.css',
-        '/script.js',
-        '/offline.html'
-      ]);
+    caches.open(CACHE_NAME).then(cache => {
+      return cache.addAll(['/', '/styles.css', '/script.js', '/offline.html']);
     })
   );
 });
 
-self.addEventListener('activate', (event) => {
+self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
+    caches.keys().then(cacheNames => {
       return Promise.all(
-        cacheNames
-          .filter((name) => name !== CACHE_NAME)
-          .map((name) => caches.delete(name))
+        cacheNames.filter(name => name !== CACHE_NAME).map(name => caches.delete(name))
       );
     })
   );
@@ -266,12 +270,12 @@ async function isCacheExpired(cache, request) {
   const cachedTime = new Date(cachedResponse.headers.get('date')).getTime();
   const currentTime = Date.now();
 
-  return (currentTime - cachedTime) > CACHE_EXPIRATION;
+  return currentTime - cachedTime > CACHE_EXPIRATION;
 }
 
-self.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.open(CACHE_NAME).then(async (cache) => {
+    caches.open(CACHE_NAME).then(async cache => {
       const expired = await isCacheExpired(cache, event.request);
 
       if (expired) {
@@ -305,10 +309,10 @@ async function limitCacheSize(cacheName, maxItems) {
   }
 }
 
-self.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.open(CACHE_NAME).then((cache) => {
-      return fetch(event.request).then((response) => {
+    caches.open(CACHE_NAME).then(cache => {
+      return fetch(event.request).then(response => {
         cache.put(event.request, response.clone());
         limitCacheSize(CACHE_NAME, 50); // Keep only 50 items
         return response;
@@ -333,10 +337,10 @@ const withPWA = require('next-pwa')({
         cacheName: 'api-cache',
         expiration: {
           maxEntries: 32,
-          maxAgeSeconds: 24 * 60 * 60 // 24 hours
+          maxAgeSeconds: 24 * 60 * 60, // 24 hours
         },
-        networkTimeoutSeconds: 10
-      }
+        networkTimeoutSeconds: 10,
+      },
     },
     {
       urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp)$/i,
@@ -345,18 +349,18 @@ const withPWA = require('next-pwa')({
         cacheName: 'image-cache',
         expiration: {
           maxEntries: 64,
-          maxAgeSeconds: 30 * 24 * 60 * 60 // 30 days
-        }
-      }
+          maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
+        },
+      },
     },
     {
       urlPattern: /\.(?:js|css)$/i,
       handler: 'StaleWhileRevalidate',
       options: {
-        cacheName: 'static-resources'
-      }
-    }
-  ]
+        cacheName: 'static-resources',
+      },
+    },
+  ],
 });
 ```
 
@@ -395,11 +399,11 @@ const withPWA = require('next-pwa')({
 
 ```javascript
 // Add logging to cache operations
-self.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', event => {
   console.log('[SW] Fetch:', event.request.url);
 
   event.respondWith(
-    caches.match(event.request).then((response) => {
+    caches.match(event.request).then(response => {
       if (response) {
         console.log('[SW] Cache hit:', event.request.url);
         return response;
@@ -420,11 +424,8 @@ Monitor cache effectiveness with Performance API:
 if ('performance' in window) {
   window.addEventListener('load', () => {
     const perfEntries = performance.getEntriesByType('resource');
-    perfEntries.forEach((entry) => {
-      console.log(
-        entry.name,
-        entry.transferSize === 0 ? '(from cache)' : '(from network)'
-      );
+    perfEntries.forEach(entry => {
+      console.log(entry.name, entry.transferSize === 0 ? '(from cache)' : '(from network)');
     });
   });
 }

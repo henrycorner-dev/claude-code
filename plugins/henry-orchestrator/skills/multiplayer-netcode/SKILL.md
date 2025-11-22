@@ -11,6 +11,7 @@ This skill provides specialized knowledge for implementing real-time multiplayer
 ## Purpose
 
 Multiplayer netcode is complex because it must handle:
+
 - Network latency (ping times) ranging from 20ms to 200ms+
 - Packet loss and jitter
 - The need for responsive local gameplay despite latency
@@ -24,6 +25,7 @@ This skill guides the implementation of robust netcode architectures using estab
 ### Client-Server Architecture
 
 Most real-time multiplayer games use an authoritative server architecture:
+
 - **Server**: Maintains the true game state, validates all actions, broadcasts updates
 - **Clients**: Send inputs to server, predict local state optimistically, reconcile with server updates
 
@@ -42,6 +44,7 @@ This prevents cheating since the server has final authority on all game events.
 ## When to Use This Skill
 
 Use this skill when:
+
 - Implementing real-time multiplayer functionality in games or applications
 - Setting up WebSocket or Socket.io communication infrastructure
 - Debugging lag, desync, or jitter in existing multiplayer systems
@@ -53,12 +56,14 @@ Use this skill when:
 ### Question 1: Real-Time or Turn-Based?
 
 **Turn-Based Games** (chess, card games):
+
 - Simple request-response patterns sufficient
 - No need for client prediction or interpolation
 - Use REST APIs or basic WebSockets
 - Focus on game logic validation
 
 **Real-Time Games** (shooters, racing, fighting):
+
 - Require advanced netcode techniques
 - Need high update rates (10-60Hz)
 - Implement client prediction and interpolation
@@ -67,6 +72,7 @@ Use this skill when:
 ### Question 2: Client-Server or Peer-to-Peer?
 
 **Client-Server (Recommended)**:
+
 - Authoritative server prevents cheating
 - Server validates all actions
 - Easier to maintain consistent state
@@ -74,6 +80,7 @@ Use this skill when:
 - Implementation: See `examples/websocket-basic/` and `examples/socketio-rooms/`
 
 **Peer-to-Peer**:
+
 - No server costs
 - Lower latency between peers
 - Vulnerable to cheating (no authority)
@@ -83,12 +90,14 @@ Use this skill when:
 ### Question 3: Which Transport?
 
 **WebSockets** (`ws` library):
+
 - Full-duplex TCP-based communication
 - Reliable ordered delivery
 - Good for turn-based or slower-paced games
 - Example: `examples/websocket-basic/`
 
 **Socket.io**:
+
 - Built on WebSockets with fallbacks
 - Built-in rooms and namespaces
 - Automatic reconnection
@@ -96,6 +105,7 @@ Use this skill when:
 - Example: `examples/socketio-rooms/`
 
 **UDP (not browser-native)**:
+
 - Lower latency, unreliable
 - Requires custom client (Unity, Unreal, native apps)
 - Best for fast-paced competitive games
@@ -110,6 +120,7 @@ For browser-based games, use WebSockets or Socket.io. For desktop games with hig
 **When to use**: For local player movement and actions to eliminate input lag
 
 **Basic flow**:
+
 1. Client receives input
 2. Apply input immediately to local state (predict)
 3. Send input to server with timestamp/sequence number
@@ -125,6 +136,7 @@ For browser-based games, use WebSockets or Socket.io. For desktop games with hig
 **When to use**: Always, when implementing client prediction
 
 **Basic flow**:
+
 1. Receive server state update with timestamp
 2. If client state matches server state, done
 3. If mismatch, revert to server state
@@ -138,6 +150,7 @@ For browser-based games, use WebSockets or Socket.io. For desktop games with hig
 **When to use**: For hitscan weapons, projectiles, or any action targeting other entities
 
 **Basic flow**:
+
 1. Client performs action (e.g., shoots), sends to server with timestamp
 2. Server rewinds game state to timestamp - client_latency
 3. Server validates action against rewound state
@@ -150,6 +163,7 @@ For browser-based games, use WebSockets or Socket.io. For desktop games with hig
 **When to use**: For rendering other players and network entities smoothly
 
 **Basic flow**:
+
 1. Server sends state snapshots at fixed rate (e.g., 20Hz = every 50ms)
 2. Client buffers recent snapshots
 3. Client renders entities at interpolation_delay in the past (e.g., 100ms ago)
@@ -163,12 +177,14 @@ For browser-based games, use WebSockets or Socket.io. For desktop games with hig
 ### State Synchronization
 
 **Snapshot Model** (recommended for most games):
+
 - Server sends full world state snapshots at regular intervals
 - Clients interpolate between snapshots
 - Predictable bandwidth, simple to reason about
 - Example: Most modern shooters (Overwatch, Valorant)
 
 **Delta Compression**:
+
 - Only send changes since last acknowledged state
 - Reduces bandwidth
 - More complex implementation
@@ -177,15 +193,18 @@ For browser-based games, use WebSockets or Socket.io. For desktop games with hig
 ### Update Rates
 
 **Server Tickrate**: 10-64Hz depending on game requirements
+
 - Fast competitive games: 60-128Hz
 - Standard action games: 20-30Hz
 - Casual games: 10-20Hz
 
 **Client Send Rate**: Often matches server tickrate
+
 - Send inputs every frame or at fixed intervals
 - Include sequence numbers for ordering
 
 **Interpolation Delay**: 2-3 server snapshots
+
 - If server sends 20Hz, use 100-150ms interpolation delay
 - Balance between smoothness and latency
 

@@ -85,15 +85,15 @@ src/routes/
 
 ```typescript
 // src/routes/blog/[slug]/+page.server.ts
-import type { PageServerLoad } from './$types'
+import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params }) => {
-  const post = await getPost(params.slug)
+  const post = await getPost(params.slug);
 
   return {
-    post
-  }
-}
+    post,
+  };
+};
 ```
 
 ### Multiple Parameters
@@ -108,17 +108,17 @@ src/routes/
 
 ```typescript
 // src/routes/shop/[category]/[product]/+page.server.ts
-import type { PageServerLoad } from './$types'
+import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params }) => {
-  const { category, product } = params
+  const { category, product } = params;
 
-  const productData = await getProduct(category, product)
+  const productData = await getProduct(category, product);
 
   return {
-    product: productData
-  }
-}
+    product: productData,
+  };
+};
 ```
 
 ### Rest Parameters
@@ -157,16 +157,16 @@ Runs on both server and client:
 
 ```typescript
 // src/routes/blog/+page.ts
-import type { PageLoad } from './$types'
+import type { PageLoad } from './$types';
 
 export const load: PageLoad = async ({ fetch }) => {
-  const response = await fetch('/api/posts')
-  const posts = await response.json()
+  const response = await fetch('/api/posts');
+  const posts = await response.json();
 
   return {
-    posts
-  }
-}
+    posts,
+  };
+};
 ```
 
 ```svelte
@@ -190,26 +190,28 @@ Runs only on server (can access database, secrets):
 
 ```typescript
 // src/routes/posts/+page.server.ts
-import type { PageServerLoad } from './$types'
-import { db } from '$lib/database'
+import type { PageServerLoad } from './$types';
+import { db } from '$lib/database';
 
 export const load: PageServerLoad = async () => {
-  const posts = await db.post.findMany()
+  const posts = await db.post.findMany();
 
   return {
-    posts
-  }
-}
+    posts,
+  };
+};
 ```
 
 ### When to Use Each
 
 **Use universal load (+page.ts) when:**
+
 - Data can be fetched from public API
 - Need to run on both server and client
 - Want to use client-side navigation
 
 **Use server load (+page.server.ts) when:**
+
 - Need to access database directly
 - Need to use environment variables/secrets
 - Want to keep logic server-only
@@ -221,36 +223,36 @@ export const load: PageServerLoad = async () => {
 
 ```typescript
 // src/routes/blog/[slug]/+page.server.ts
-import type { PageServerLoad } from './$types'
+import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params, parent }) => {
   // Access data from parent layout
-  const parentData = await parent()
+  const parentData = await parent();
 
-  const post = await getPost(params.slug)
+  const post = await getPost(params.slug);
 
   return {
     post,
-    categories: parentData.categories
-  }
-}
+    categories: parentData.categories,
+  };
+};
 ```
 
 #### Dependencies and Invalidation
 
 ```typescript
 // src/routes/posts/+page.ts
-import type { PageLoad } from './$types'
+import type { PageLoad } from './$types';
 
 export const load: PageLoad = async ({ fetch, depends }) => {
   // Mark dependencies for invalidation
-  depends('app:posts')
+  depends('app:posts');
 
-  const response = await fetch('/api/posts')
-  const posts = await response.json()
+  const response = await fetch('/api/posts');
+  const posts = await response.json();
 
-  return { posts }
-}
+  return { posts };
+};
 ```
 
 **Invalidate manually:**
@@ -271,7 +273,7 @@ export const load: PageLoad = async ({ fetch, depends }) => {
 
 ```typescript
 // src/routes/dashboard/+page.server.ts
-import type { PageServerLoad } from './$types'
+import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {
   return {
@@ -280,9 +282,9 @@ export const load: PageServerLoad = async () => {
 
     // Stream non-critical data
     stats: getStats(), // Returns Promise
-    activities: getRecentActivities() // Returns Promise
-  }
-}
+    activities: getRecentActivities(), // Returns Promise
+  };
+};
 ```
 
 ```svelte
@@ -316,30 +318,30 @@ Form actions enable progressive enhancement for forms without JavaScript.
 
 ```typescript
 // src/routes/login/+page.server.ts
-import type { Actions } from './$types'
-import { fail, redirect } from '@sveltejs/kit'
+import type { Actions } from './$types';
+import { fail, redirect } from '@sveltejs/kit';
 
 export const actions: Actions = {
   default: async ({ request, cookies }) => {
-    const data = await request.formData()
-    const email = data.get('email')
-    const password = data.get('password')
+    const data = await request.formData();
+    const email = data.get('email');
+    const password = data.get('password');
 
     if (!email || !password) {
-      return fail(400, { email, missing: true })
+      return fail(400, { email, missing: true });
     }
 
-    const user = await authenticateUser(email, password)
+    const user = await authenticateUser(email, password);
 
     if (!user) {
-      return fail(400, { email, incorrect: true })
+      return fail(400, { email, incorrect: true });
     }
 
-    cookies.set('session', user.sessionId, { path: '/' })
+    cookies.set('session', user.sessionId, { path: '/' });
 
-    throw redirect(303, '/dashboard')
-  }
-}
+    throw redirect(303, '/dashboard');
+  },
+};
 ```
 
 ```svelte
@@ -376,32 +378,32 @@ export const actions: Actions = {
 
 ```typescript
 // src/routes/todos/+page.server.ts
-import type { Actions } from './$types'
-import { fail } from '@sveltejs/kit'
+import type { Actions } from './$types';
+import { fail } from '@sveltejs/kit';
 
 export const actions: Actions = {
   create: async ({ request }) => {
-    const data = await request.formData()
-    const title = data.get('title')
+    const data = await request.formData();
+    const title = data.get('title');
 
     if (!title) {
-      return fail(400, { title, missing: true })
+      return fail(400, { title, missing: true });
     }
 
-    await createTodo({ title })
+    await createTodo({ title });
 
-    return { success: true }
+    return { success: true };
   },
 
   delete: async ({ request }) => {
-    const data = await request.formData()
-    const id = data.get('id')
+    const data = await request.formData();
+    const id = data.get('id');
 
-    await deleteTodo(id)
+    await deleteTodo(id);
 
-    return { success: true }
-  }
-}
+    return { success: true };
+  },
+};
 ```
 
 ```svelte
@@ -473,109 +475,109 @@ Hooks run before every request and can modify request/response.
 
 ```typescript
 // src/hooks.server.ts
-import type { Handle } from '@sveltejs/kit'
+import type { Handle } from '@sveltejs/kit';
 
 export const handle: Handle = async ({ event, resolve }) => {
   // Authentication
-  const session = event.cookies.get('session')
+  const session = event.cookies.get('session');
 
   if (session) {
-    event.locals.user = await getUserFromSession(session)
+    event.locals.user = await getUserFromSession(session);
   }
 
   // Resolve request
-  const response = await resolve(event)
+  const response = await resolve(event);
 
   // Add custom header
-  response.headers.set('x-custom-header', 'value')
+  response.headers.set('x-custom-header', 'value');
 
-  return response
-}
+  return response;
+};
 ```
 
 **Use in load functions:**
 
 ```typescript
 // src/routes/dashboard/+page.server.ts
-import type { PageServerLoad } from './$types'
-import { redirect } from '@sveltejs/kit'
+import type { PageServerLoad } from './$types';
+import { redirect } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ locals }) => {
   if (!locals.user) {
-    throw redirect(303, '/login')
+    throw redirect(303, '/login');
   }
 
   return {
-    user: locals.user
-  }
-}
+    user: locals.user,
+  };
+};
 ```
 
 ### Handle Fetch Hook
 
 ```typescript
 // src/hooks.server.ts
-import type { HandleFetch } from '@sveltejs/kit'
+import type { HandleFetch } from '@sveltejs/kit';
 
 export const handleFetch: HandleFetch = async ({ request, fetch }) => {
   // Modify outgoing fetch requests
   if (request.url.startsWith('https://api.example.com/')) {
-    request.headers.set('Authorization', `Bearer ${process.env.API_TOKEN}`)
+    request.headers.set('Authorization', `Bearer ${process.env.API_TOKEN}`);
   }
 
-  return fetch(request)
-}
+  return fetch(request);
+};
 ```
 
 ### Error Hook
 
 ```typescript
 // src/hooks.server.ts
-import type { HandleServerError } from '@sveltejs/kit'
+import type { HandleServerError } from '@sveltejs/kit';
 
 export const handleError: HandleServerError = ({ error, event }) => {
   // Log errors
-  console.error('Error:', error, 'Path:', event.url.pathname)
+  console.error('Error:', error, 'Path:', event.url.pathname);
 
   return {
     message: 'An error occurred',
-    code: error?.code ?? 'UNKNOWN'
-  }
-}
+    code: error?.code ?? 'UNKNOWN',
+  };
+};
 ```
 
 ### Client Hooks
 
 ```typescript
 // src/hooks.client.ts
-import type { HandleClientError } from '@sveltejs/kit'
+import type { HandleClientError } from '@sveltejs/kit';
 
 export const handleError: HandleClientError = ({ error, event }) => {
-  console.error('Client error:', error)
+  console.error('Client error:', error);
 
   return {
-    message: 'Something went wrong'
-  }
-}
+    message: 'Something went wrong',
+  };
+};
 ```
 
 ### Sequence Multiple Hooks
 
 ```typescript
 // src/hooks.server.ts
-import { sequence } from '@sveltejs/kit/hooks'
+import { sequence } from '@sveltejs/kit/hooks';
 
 const authentication = async ({ event, resolve }) => {
   // Auth logic
-  return resolve(event)
-}
+  return resolve(event);
+};
 
 const logging = async ({ event, resolve }) => {
-  console.log('Request:', event.url.pathname)
-  return resolve(event)
-}
+  console.log('Request:', event.url.pathname);
+  return resolve(event);
+};
 
-export const handle = sequence(authentication, logging)
+export const handle = sequence(authentication, logging);
 ```
 
 ## Server-Side Rendering
@@ -584,21 +586,21 @@ export const handle = sequence(authentication, logging)
 
 ```typescript
 // src/routes/+page.ts
-export const ssr = true // Default
+export const ssr = true; // Default
 ```
 
 **Disable SSR for specific routes:**
 
 ```typescript
 // src/routes/admin/+page.ts
-export const ssr = false // Client-side only
+export const ssr = false; // Client-side only
 ```
 
 ### Prerendering
 
 ```typescript
 // src/routes/about/+page.ts
-export const prerender = true // Generate at build time
+export const prerender = true; // Generate at build time
 ```
 
 **Configure in svelte.config.js:**
@@ -609,10 +611,10 @@ export default {
   kit: {
     prerender: {
       entries: ['*'],
-      crawl: true
-    }
-  }
-}
+      crawl: true,
+    },
+  },
+};
 ```
 
 ### Hydration
@@ -644,13 +646,13 @@ npm install -D @sveltejs/adapter-auto
 
 ```javascript
 // svelte.config.js
-import adapter from '@sveltejs/adapter-auto'
+import adapter from '@sveltejs/adapter-auto';
 
 export default {
   kit: {
-    adapter: adapter()
-  }
-}
+    adapter: adapter(),
+  },
+};
 ```
 
 ### Node Adapter
@@ -661,16 +663,16 @@ npm install -D @sveltejs/adapter-node
 
 ```javascript
 // svelte.config.js
-import adapter from '@sveltejs/adapter-node'
+import adapter from '@sveltejs/adapter-node';
 
 export default {
   kit: {
     adapter: adapter({
       out: 'build',
-      precompress: true
-    })
-  }
-}
+      precompress: true,
+    }),
+  },
+};
 ```
 
 ### Static Adapter
@@ -681,17 +683,17 @@ npm install -D @sveltejs/adapter-static
 
 ```javascript
 // svelte.config.js
-import adapter from '@sveltejs/adapter-static'
+import adapter from '@sveltejs/adapter-static';
 
 export default {
   kit: {
     adapter: adapter({
       pages: 'build',
       assets: 'build',
-      fallback: null
-    })
-  }
-}
+      fallback: null,
+    }),
+  },
+};
 ```
 
 ### Vercel Adapter
@@ -702,15 +704,15 @@ npm install -D @sveltejs/adapter-vercel
 
 ```javascript
 // svelte.config.js
-import adapter from '@sveltejs/adapter-vercel'
+import adapter from '@sveltejs/adapter-vercel';
 
 export default {
   kit: {
     adapter: adapter({
-      runtime: 'edge' // or 'nodejs'
-    })
-  }
-}
+      runtime: 'edge', // or 'nodejs'
+    }),
+  },
+};
 ```
 
 ### Netlify Adapter
@@ -721,16 +723,16 @@ npm install -D @sveltejs/adapter-netlify
 
 ```javascript
 // svelte.config.js
-import adapter from '@sveltejs/adapter-netlify'
+import adapter from '@sveltejs/adapter-netlify';
 
 export default {
   kit: {
     adapter: adapter({
       edge: false,
-      split: false
-    })
-  }
-}
+      split: false,
+    }),
+  },
+};
 ```
 
 ## Performance Optimization
@@ -798,19 +800,19 @@ npm install -D vite-bundle-visualizer
 
 ```javascript
 // svelte.config.js
-import { visualizer } from 'vite-bundle-visualizer'
+import { visualizer } from 'vite-bundle-visualizer';
 
 export default {
   kit: {
     vite: {
       plugins: [
         visualizer({
-          open: true
-        })
-      ]
-    }
-  }
-}
+          open: true,
+        }),
+      ],
+    },
+  },
+};
 ```
 
 This comprehensive guide covers SvelteKit patterns for building modern web applications with excellent performance and developer experience.

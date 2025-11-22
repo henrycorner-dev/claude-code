@@ -1,7 +1,7 @@
 ---
 description: Comprehensive project audit for security, performance, accessibility, SEO, ops
 argument-hint: Audit scope (full/project/files)
-allowed-tools: ["Glob", "Read", "Grep", "Bash", "Task", "TodoWrite"]
+allowed-tools: ['Glob', 'Read', 'Grep', 'Bash', 'Task', 'TodoWrite']
 ---
 
 # Henry Project Audit
@@ -444,7 +444,6 @@ You are orchestrating a comprehensive project audit using the Henry Orchestrator
    ```
 
 2. Detailed findings report:
-
    - Each dimension with full agent output
    - Issues categorized by severity
    - Remediation steps
@@ -453,7 +452,6 @@ You are orchestrating a comprehensive project audit using the Henry Orchestrator
    - Cost/effort estimates
 
 3. Compliance checklist:
-
    - OWASP Top 10 checklist
    - WCAG 2.1 AA checklist
    - Performance budget checklist

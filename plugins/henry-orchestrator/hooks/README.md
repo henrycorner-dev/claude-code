@@ -32,11 +32,13 @@ The security scan hook automatically validates dependencies for known vulnerabil
 The hook triggers on `Bash` tool calls that contain package installation commands:
 
 **npm/Node.js:**
+
 - `npm install <package>` or `npm i <package>`
 - `yarn add <package>`
 - `pnpm install <package>` or `pnpm add <package>`
 
 **Python:**
+
 - `pip install <package>`
 
 #### Validation Logic
@@ -62,6 +64,7 @@ The hook triggers on `Bash` tool calls that contain package installation command
 #### Output Examples
 
 **Blocked (Critical/High Vulnerabilities):**
+
 ```
 🔒 Security Alert: Blocked npm install due to vulnerabilities
 
@@ -73,6 +76,7 @@ Please review vulnerabilities with 'npm audit' or choose alternative packages.
 ```
 
 **Warning (Moderate Vulnerabilities):**
+
 ```
 ⚠️  Security Warning: Found 2 moderate vulnerabilities in npm packages
 
@@ -80,6 +84,7 @@ Consider running 'npm audit' to review. Installation allowed.
 ```
 
 **Passed:**
+
 ```
 ✅ npm packages passed security scan
 ```
@@ -89,10 +94,12 @@ Consider running 'npm audit' to review. Installation allowed.
 #### Prerequisites
 
 **For npm scanning** (automatic):
+
 - `npm` must be installed
 - `jq` for JSON parsing (pre-installed on macOS/Linux)
 
 **For Python scanning** (requires setup):
+
 ```bash
 pip install safety
 ```
@@ -102,6 +109,7 @@ pip install safety
 The hook is already configured in `.claude/hooks/hooks.json`. To activate:
 
 1. Restart Claude Code session:
+
    ```bash
    # Exit current session
    # Run: claude
@@ -116,12 +124,14 @@ The hook is already configured in `.claude/hooks/hooks.json`. To activate:
 To change which severity levels block installation, edit `.claude/hooks/scripts/security-scan.sh`:
 
 **Currently (blocks critical + high):**
+
 ```bash
 # Line 43-44
 total_severe=$((critical + high))
 ```
 
 **To block moderate too:**
+
 ```bash
 total_severe=$((critical + high + moderate))
 ```
@@ -170,11 +180,13 @@ Both databases are community-maintained and may have delays in reporting new CVE
 #### What Gets Blocked
 
 The hook blocks:
+
 - ✅ Known vulnerable versions of packages
 - ✅ Packages with critical/high severity CVEs
 - ✅ Transitive dependencies with vulnerabilities
 
 The hook does NOT block:
+
 - ❌ Zero-day vulnerabilities (not yet in databases)
 - ❌ Malicious packages without known CVEs
 - ❌ Typosquatting attacks (different package name)
@@ -182,6 +194,7 @@ The hook does NOT block:
 #### Additional Security Measures
 
 Consider combining with:
+
 - Manual code review of dependencies
 - Dependency license scanning
 - Regular `npm audit` / `safety check` in CI/CD
@@ -192,6 +205,7 @@ Consider combining with:
 #### Test Hook Manually
 
 **Test with npm install:**
+
 ```bash
 echo '{
   "tool_name": "Bash",
@@ -203,6 +217,7 @@ echo "Exit code: $?"
 ```
 
 **Test with pip install:**
+
 ```bash
 echo '{
   "tool_name": "Bash",
@@ -218,6 +233,7 @@ claude --debug
 ```
 
 This shows:
+
 - Hook triggering on Bash commands
 - Command parsing and package extraction
 - Audit results and vulnerability counts
@@ -226,15 +242,18 @@ This shows:
 #### Common Issues
 
 **"safety CLI not installed"**
+
 - Install Python safety: `pip install safety`
 - Or disable Python scanning (see Configuration)
 
 **"Could not verify packages"**
+
 - Network issues preventing npm/pip from connecting
 - Hook allows installation by default (fail-open)
 - Check internet connection or npm registry config
 
 **Hook not triggering:**
+
 - Verify hooks loaded: run `/hooks` in Claude Code
 - Restart Claude Code after hook changes
 - Check command format matches patterns (see Trigger Conditions)
@@ -250,6 +269,7 @@ This shows:
 ### Future Enhancements
 
 Potential improvements:
+
 - License compliance checking
 - Package age/maintenance status validation
 - Typosquatting detection
@@ -278,6 +298,7 @@ This hook ensures that your project maintains a minimum of 80% test coverage bef
 ### Trigger Conditions
 
 The hook triggers on:
+
 - `Write` tool calls (creating or overwriting files)
 - `Edit` tool calls (modifying existing files)
 
@@ -306,12 +327,14 @@ The hook triggers on:
 ### Output Examples
 
 **✓ Coverage Passing**
+
 ```
 ✓ Test coverage check passed (85.4% >= 80%)
   Lines: 87.2% | Statements: 85.4% | Functions: 88.1% | Branches: 86.5%
 ```
 
 **✗ Coverage Failing**
+
 ```
 ⚠️  Test coverage is below 80%!
 
@@ -345,16 +368,19 @@ If you're using this in the current project:
 To package this as a reusable plugin:
 
 1. Create a plugin directory:
+
    ```bash
    mkdir -p plugins/test-coverage-check
    ```
 
 2. Copy hook files:
+
    ```bash
    cp -r .claude/hooks/* plugins/test-coverage-check/
    ```
 
 3. Create `plugin.json`:
+
    ```json
    {
      "name": "test-coverage-check",
@@ -384,6 +410,7 @@ threshold=80  # Change to desired percentage
 The script uses **minimum coverage** (strictest). To use **average coverage** instead:
 
 Replace line 74-75:
+
 ```bash
 # Current (minimum):
 min_coverage=$(echo "$lines_pct $statements_pct $functions_pct $branches_pct" | \
@@ -399,10 +426,12 @@ And update variable references from `min_coverage` to `avg_coverage`.
 ### Disabling the Hook
 
 **Temporary (current session):**
+
 - The hook only loads at session start
 - Simply don't restart Claude Code if you want to skip it
 
 **Permanent:**
+
 1. Rename or delete `hooks.json`:
    ```bash
    mv .claude/hooks/hooks.json .claude/hooks/hooks.json.disabled
@@ -422,6 +451,7 @@ fi
 ```
 
 Then control via flag file:
+
 ```bash
 # Enable
 touch .enable-coverage-check
@@ -441,6 +471,7 @@ claude --debug
 ```
 
 This shows:
+
 - Hook registration on startup
 - Hook execution timing
 - Input/output JSON
@@ -487,6 +518,7 @@ echo "$output" | jq .
 ## Future Enhancements
 
 Potential improvements:
+
 - Support for other test runners (Vitest, Mocha, Pytest)
 - Configurable thresholds via `.claude/hooks/config.json`
 - Per-file coverage tracking
@@ -514,6 +546,7 @@ Potential improvements:
 ## Support
 
 For issues or questions:
+
 - Check Claude Code docs: https://docs.claude.com/en/docs/claude-code/hooks
 - Review script logs with `claude --debug`
 - Validate hook JSON with `jq .claude/hooks/hooks.json`
@@ -546,6 +579,7 @@ The Bundle Size Guard hook automatically monitors build commands and enforces bu
 The hook triggers on `Bash` tool calls containing build commands:
 
 **Web builds:**
+
 - `npm run build`, `yarn build`, `pnpm build`
 - `webpack`, `webpack --mode production`
 - `vite build`
@@ -553,12 +587,14 @@ The hook triggers on `Bash` tool calls containing build commands:
 - `react-scripts build`
 
 **Mobile builds:**
+
 - `react-native bundle`
 - `metro` bundler commands
 - `npx react-native run-android`, `npx react-native run-ios`
 - `expo build`
 
 **Game builds:**
+
 - Unity build commands
 - `Unity` or `unity-editor` commands
 - Custom Unity build scripts
@@ -579,16 +615,19 @@ The hook triggers on `Bash` tool calls containing build commands:
 #### Bundle Detection Paths
 
 **Web:**
+
 - `build/`, `dist/`, `.next/`, `out/`
 - Searches for `*.js` bundle files
 - Calculates total gzipped size
 
 **Mobile:**
+
 - `android/app/build/` → `index.android.bundle`
 - `ios/build/` → `main.jsbundle`
 - Calculates gzipped size of bundle
 
 **Game:**
+
 - `Build/`, `Builds/`, `build/`
 - Searches for `*.data`, `*.wasm`, `*.bundle` files
 - Calculates total gzipped size
@@ -596,17 +635,20 @@ The hook triggers on `Bash` tool calls containing build commands:
 #### Output Examples
 
 **Within Limit:**
+
 ```
 Bundle size check: web bundle is 0.85MB (gzipped), within limit of 1MB
 ```
 
 **Exceeds Limit (Enforcement Enabled):**
+
 ```
 Bundle size warning: Current web bundle is 1.5MB (gzipped), exceeds limit of 1MB.
 Build blocked by bundle-size-guard hook. Update bundle-size-config.json to adjust limits or disable enforcement.
 ```
 
 **Exceeds Limit (Enforcement Disabled):**
+
 ```
 Bundle size warning: Current web bundle is 1.5MB (gzipped), exceeds limit of 1MB.
 This is a warning only (enforcement disabled).
@@ -617,11 +659,13 @@ This is a warning only (enforcement disabled).
 #### Prerequisites
 
 **All platforms:**
+
 - `jq` for JSON parsing (pre-installed on macOS/Linux)
 - `bc` for floating-point calculations (pre-installed on macOS/Linux)
 - `gzip` for size calculation (pre-installed on macOS/Linux)
 
 **Platform-specific:**
+
 - **Web**: Build tools (webpack, vite, etc.) installed
 - **Mobile**: React Native or Expo environment
 - **Game**: Unity installed for Unity builds
@@ -631,11 +675,13 @@ This is a warning only (enforcement disabled).
 The hook is already configured in `.claude/hooks/hooks.json`. To activate:
 
 1. Verify configuration exists:
+
    ```bash
    cat .claude/hooks/bundle-size-config.json
    ```
 
 2. Restart Claude Code session:
+
    ```bash
    # Exit current session
    # Run: claude
@@ -679,6 +725,7 @@ The hook reads configuration from `.claude/hooks/bundle-size-config.json`:
 Edit `.claude/hooks/bundle-size-config.json`:
 
 **Example: Stricter web limit**
+
 ```json
 {
   "enabled": true,
@@ -692,6 +739,7 @@ Edit `.claude/hooks/bundle-size-config.json`:
 ```
 
 **Example: Warning-only mode**
+
 ```json
 {
   "enabled": true,
@@ -705,6 +753,7 @@ Edit `.claude/hooks/bundle-size-config.json`:
 ```
 
 **Example: Disable completely**
+
 ```json
 {
   "enabled": false,
@@ -722,17 +771,20 @@ Edit `.claude/hooks/bundle-size-config.json`:
 #### Recommended Limits
 
 **Web Applications:**
+
 - **Landing pages**: 0.5 MB gzipped
 - **Standard web apps**: 1 MB gzipped
 - **Complex dashboards**: 1.5-2 MB gzipped
 - **Enterprise apps**: 2-3 MB gzipped (consider code splitting)
 
 **Mobile Applications:**
+
 - **React Native**: 1.5-2 MB gzipped
 - **Expo apps**: 2-3 MB gzipped (includes Expo SDK)
 - **Production apps**: < 2 MB for optimal performance
 
 **Game Applications:**
+
 - **HTML5 web games**: 10-50 MB
 - **Unity WebGL**: 50-100 MB (can be larger)
 - **Mobile games**: 20-50 MB initial download
@@ -742,6 +794,7 @@ Edit `.claude/hooks/bundle-size-config.json`:
 If your bundle exceeds limits:
 
 **Web:**
+
 - Enable code splitting (dynamic imports)
 - Use tree shaking and dead code elimination
 - Lazy load routes and components
@@ -750,12 +803,14 @@ If your bundle exceeds limits:
 - Use webpack-bundle-analyzer to identify large modules
 
 **Mobile:**
+
 - Enable Hermes engine (React Native)
 - Remove unused native modules
 - Optimize image and asset sizes
 - Use ProGuard/R8 for code shrinking (Android)
 
 **Game:**
+
 - Use asset bundles for Unity
 - Compress textures and models
 - Enable Unity build compression
@@ -784,6 +839,7 @@ claude --debug
 ```
 
 This shows:
+
 - Hook triggering on build commands
 - Build type detection
 - Bundle size calculations
@@ -795,12 +851,14 @@ This shows:
 Manually check your current bundle size:
 
 **Web (webpack/vite):**
+
 ```bash
 # Find bundle files and calculate gzipped size
 find dist -name "*.js" -exec gzip -c {} \; | wc -c | awk '{print $1/1024/1024 " MB"}'
 ```
 
 **Mobile (React Native):**
+
 ```bash
 # Android bundle
 gzip -c android/app/build/generated/assets/react/release/index.android.bundle | wc -c | awk '{print $1/1024/1024 " MB"}'
@@ -812,21 +870,25 @@ gzip -c ios/build/main.jsbundle | wc -c | awk '{print $1/1024/1024 " MB"}'
 #### Common Issues
 
 **"Hook not triggering"**
+
 - Verify hooks loaded: run `/hooks` in Claude Code
 - Restart Claude Code after hook changes
 - Check if build command matches detection patterns
 
 **"No existing bundle found"**
+
 - The hook checks existing bundles before the build
 - Run a build first to create bundle artifacts
 - Or adjust the hook to run PostToolUse instead
 
 **"Configuration file not found"**
+
 - Create `.claude/hooks/bundle-size-config.json`
 - Copy from template in this documentation
 - Hook will allow builds if config missing (fail-open)
 
 **"Size calculation incorrect"**
+
 - Verify gzip is installed: `which gzip`
 - Check bundle paths in the script
 - Add custom paths for your build output
@@ -914,6 +976,7 @@ jobs:
 ### Future Enhancements
 
 Potential improvements:
+
 - PostToolUse hook for checking newly built bundles
 - Brotli compression support
 - Bundle size trends and history tracking
@@ -925,16 +988,19 @@ Potential improvements:
 ### Troubleshooting
 
 **Build blocked unexpectedly:**
+
 - Check current bundle size manually (see Debugging section)
 - Verify limits in configuration are appropriate
 - Consider switching to warning-only mode during development
 
 **Bundle size not detected:**
+
 - Check if build output directory matches script patterns
 - Add custom paths to `check_existing_bundle_size`
 - Ensure bundles exist from previous build
 
 **Hook adds too much latency:**
+
 - Reduce timeout in hooks.json (currently 90s)
 - Cache bundle size calculations
 - Disable during rapid development, enable in CI/CD
@@ -942,6 +1008,7 @@ Potential improvements:
 ## Support
 
 For issues or questions:
+
 - Check Claude Code docs: https://docs.claude.com/en/docs/claude-code/hooks
 - Review script logs with `claude --debug`
 - Validate hook JSON with `jq .claude/hooks/hooks.json`

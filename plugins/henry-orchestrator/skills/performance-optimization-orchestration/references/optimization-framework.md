@@ -15,6 +15,7 @@ This guide provides detailed workflows for performance optimization, security ha
 ### Phase 1: Baseline (performance-engineer)
 
 **Step 1: Measure Current Core Web Vitals**
+
 ```bash
 # Using Lighthouse CLI
 lighthouse https://example.com --output json --output-path ./baseline-report.json
@@ -28,6 +29,7 @@ lighthouse https://example.com --output json --output-path ./baseline-report.jso
 ```
 
 **Step 2: Identify Bottlenecks**
+
 - Analyze network waterfall for slow requests
 - Check bundle size and composition
 - Identify render-blocking resources
@@ -36,6 +38,7 @@ lighthouse https://example.com --output json --output-path ./baseline-report.jso
 - Analyze JavaScript execution time
 
 **Step 3: Set Optimization Targets**
+
 ```
 Current → Target
 LCP: 4.2s → 2.5s (41% improvement needed)
@@ -46,6 +49,7 @@ Bundle: 1.2MB → 500KB (58% reduction needed)
 
 **Step 4: Prioritize Improvements**
 Rank by impact × effort:
+
 1. Image optimization (high impact, low effort)
 2. Code splitting (high impact, medium effort)
 3. Font optimization (medium impact, low effort)
@@ -55,6 +59,7 @@ Rank by impact × effort:
 ### Phase 2: Implementation
 
 **Code Splitting and Lazy Loading**
+
 ```javascript
 // Before: Everything in one bundle
 import Dashboard from './Dashboard';
@@ -80,6 +85,7 @@ function App() {
 ```
 
 **Image Optimization**
+
 ```html
 <!-- Before: Large JPG images -->
 <img src="hero-4000x3000.jpg" alt="Hero" />
@@ -90,21 +96,13 @@ function App() {
     srcset="hero-800.webp 800w, hero-1200.webp 1200w, hero-1600.webp 1600w"
     type="image/webp"
   />
-  <source
-    srcset="hero-800.jpg 800w, hero-1200.jpg 1200w, hero-1600.jpg 1600w"
-    type="image/jpeg"
-  />
-  <img
-    src="hero-1200.jpg"
-    alt="Hero"
-    loading="lazy"
-    width="1200"
-    height="800"
-  />
+  <source srcset="hero-800.jpg 800w, hero-1200.jpg 1200w, hero-1600.jpg 1600w" type="image/jpeg" />
+  <img src="hero-1200.jpg" alt="Hero" loading="lazy" width="1200" height="800" />
 </picture>
 ```
 
 **API Optimization**
+
 ```javascript
 // Before: N+1 queries
 async function getUsers() {
@@ -130,10 +128,10 @@ async function getUsers() {
       users.push({
         id: row.id,
         name: row.name,
-        posts: row.post_id ? [{id: row.post_id, title: row.title}] : []
+        posts: row.post_id ? [{ id: row.post_id, title: row.title }] : [],
       });
     } else if (row.post_id) {
-      user.posts.push({id: row.post_id, title: row.title});
+      user.posts.push({ id: row.post_id, title: row.title });
     }
     return users;
   }, []);
@@ -141,36 +139,39 @@ async function getUsers() {
 ```
 
 **Caching Implementation**
+
 ```javascript
 // Service Worker caching strategy
-self.addEventListener('fetch', (event) => {
-  const {request} = event;
+self.addEventListener('fetch', event => {
+  const { request } = event;
   const url = new URL(request.url);
 
   // Cache-first for static assets
   if (url.pathname.match(/\.(js|css|woff2|png|jpg|webp)$/)) {
     event.respondWith(
-      caches.match(request).then((cached) => {
-        return cached || fetch(request).then((response) => {
-          return caches.open('static-v1').then((cache) => {
-            cache.put(request, response.clone());
-            return response;
-          });
-        });
+      caches.match(request).then(cached => {
+        return (
+          cached ||
+          fetch(request).then(response => {
+            return caches.open('static-v1').then(cache => {
+              cache.put(request, response.clone());
+              return response;
+            });
+          })
+        );
       })
     );
   }
 
   // Network-first for API calls
   else if (url.pathname.startsWith('/api/')) {
-    event.respondWith(
-      fetch(request).catch(() => caches.match(request))
-    );
+    event.respondWith(fetch(request).catch(() => caches.match(request)));
   }
 });
 ```
 
 **Third-Party Script Optimization**
+
 ```html
 <!-- Before: Blocking scripts -->
 <script src="https://analytics.example.com/script.js"></script>
@@ -192,7 +193,7 @@ self.addEventListener('fetch', (event) => {
   }
 
   // Load on scroll or after 5 seconds
-  window.addEventListener('scroll', loadChat, {once: true});
+  window.addEventListener('scroll', loadChat, { once: true });
   setTimeout(loadChat, 5000);
 </script>
 ```
@@ -200,6 +201,7 @@ self.addEventListener('fetch', (event) => {
 ### Phase 3: Verification (performance-engineer + qa-tester)
 
 **Step 1: Measure Improvements**
+
 ```bash
 # Run Lighthouse again
 lighthouse https://example.com --output json --output-path ./optimized-report.json
@@ -209,6 +211,7 @@ node compare-reports.js baseline-report.json optimized-report.json
 ```
 
 **Step 2: Validate Targets Met**
+
 ```
 Metric     Before   After    Target   Status
 LCP        4.2s     2.1s     <2.5s    ✓ Pass (50% improvement)
@@ -218,6 +221,7 @@ Bundle     1.2MB    450KB    <500KB   ✓ Pass (63% reduction)
 ```
 
 **Step 3: Ensure No Regressions**
+
 ```javascript
 // Automated regression tests
 describe('Performance Optimization', () => {
@@ -248,6 +252,7 @@ describe('Performance Optimization', () => {
 ```
 
 **Step 4: Update Performance Budget**
+
 ```json
 // performance-budget.json
 {
@@ -292,6 +297,7 @@ describe('Performance Optimization', () => {
 ### Phase 1: Assessment (security-engineer)
 
 **Step 1: Threat Modeling**
+
 ```
 Asset: User Authentication System
 
@@ -313,6 +319,7 @@ Attack Vectors:
 ```
 
 **Step 2: Vulnerability Scanning**
+
 ```bash
 # Dependency vulnerability scan
 npm audit
@@ -329,6 +336,7 @@ semgrep --config=auto .
 ```
 
 **Step 3: Code Security Review**
+
 ```javascript
 // VULNERABLE: SQL injection
 function login(username, password) {
@@ -345,14 +353,15 @@ function displayComment(comment) {
 app.post('/login', async (req, res) => {
   const user = await authenticateUser(req.body.username, req.body.password);
   if (user) {
-    res.json({success: true});
+    res.json({ success: true });
   } else {
-    res.json({success: false});
+    res.json({ success: false });
   }
 });
 ```
 
 **Step 4: Compliance Assessment**
+
 ```
 GDPR Compliance Checklist:
 □ Right to access - Users can download their data
@@ -380,6 +389,7 @@ OWASP Top 10 Compliance:
 ### Phase 2: Remediation
 
 **Fix SQL Injection**
+
 ```javascript
 // SECURE: Parameterized queries
 function login(username, password) {
@@ -390,6 +400,7 @@ function login(username, password) {
 ```
 
 **Fix XSS**
+
 ```javascript
 // SECURE: Proper output encoding
 function displayComment(comment) {
@@ -399,31 +410,33 @@ function displayComment(comment) {
 }
 
 // Or with React (automatic escaping)
-function Comment({comment}) {
+function Comment({ comment }) {
   return <p>{comment.text}</p>;
 }
 ```
 
 **Fix Session Fixation**
+
 ```javascript
 // SECURE: Regenerate session ID after login
 app.post('/login', async (req, res) => {
   const user = await authenticateUser(req.body.username, req.body.password);
   if (user) {
-    req.session.regenerate((err) => {
+    req.session.regenerate(err => {
       if (err) {
-        return res.status(500).json({error: 'Session error'});
+        return res.status(500).json({ error: 'Session error' });
       }
       req.session.userId = user.id;
-      res.json({success: true});
+      res.json({ success: true });
     });
   } else {
-    res.json({success: false});
+    res.json({ success: false });
   }
 });
 ```
 
 **Add Rate Limiting**
+
 ```javascript
 // SECURE: Rate limiting with redis
 const rateLimit = require('express-rate-limit');
@@ -446,6 +459,7 @@ app.post('/login', loginLimiter, async (req, res) => {
 ```
 
 **Implement Secure Password Storage**
+
 ```javascript
 const bcrypt = require('bcrypt');
 
@@ -454,18 +468,15 @@ async function registerUser(username, password) {
   const saltRounds = 12;
   const passwordHash = await bcrypt.hash(password, saltRounds);
 
-  await db.query(
-    'INSERT INTO users (username, password_hash) VALUES (?, ?)',
-    [username, passwordHash]
-  );
+  await db.query('INSERT INTO users (username, password_hash) VALUES (?, ?)', [
+    username,
+    passwordHash,
+  ]);
 }
 
 // Verify password on login
 async function authenticateUser(username, password) {
-  const user = await db.query(
-    'SELECT * FROM users WHERE username = ?',
-    [username]
-  );
+  const user = await db.query('SELECT * FROM users WHERE username = ?', [username]);
 
   if (!user) return null;
 
@@ -475,6 +486,7 @@ async function authenticateUser(username, password) {
 ```
 
 **Add Multi-Factor Authentication**
+
 ```javascript
 const speakeasy = require('speakeasy');
 
@@ -507,6 +519,7 @@ function verifyMFA(userId, token) {
 ### Phase 3: Validation
 
 **Security Test Execution**
+
 ```javascript
 describe('Security Tests', () => {
   describe('SQL Injection', () => {
@@ -514,7 +527,7 @@ describe('Security Tests', () => {
       const maliciousUsername = "admin' OR '1'='1";
       const response = await request(app)
         .post('/login')
-        .send({username: maliciousUsername, password: 'anything'});
+        .send({ username: maliciousUsername, password: 'anything' });
 
       expect(response.body.success).toBe(false);
     });
@@ -523,9 +536,7 @@ describe('Security Tests', () => {
   describe('XSS', () => {
     it('should sanitize user input in comments', async () => {
       const maliciousComment = '<script>alert("XSS")</script>';
-      await request(app)
-        .post('/comments')
-        .send({text: maliciousComment});
+      await request(app).post('/comments').send({ text: maliciousComment });
 
       const response = await request(app).get('/comments');
       expect(response.text).not.toContain('<script>');
@@ -537,15 +548,13 @@ describe('Security Tests', () => {
     it('should block after 5 failed login attempts', async () => {
       // Make 5 failed attempts
       for (let i = 0; i < 5; i++) {
-        await request(app)
-          .post('/login')
-          .send({username: 'test', password: 'wrong'});
+        await request(app).post('/login').send({ username: 'test', password: 'wrong' });
       }
 
       // 6th attempt should be blocked
       const response = await request(app)
         .post('/login')
-        .send({username: 'test', password: 'wrong'});
+        .send({ username: 'test', password: 'wrong' });
 
       expect(response.status).toBe(429);
       expect(response.body.message).toContain('Too many login attempts');
@@ -557,7 +566,7 @@ describe('Security Tests', () => {
       // Login with correct password but invalid MFA
       const response = await request(app)
         .post('/login')
-        .send({username: 'test', password: 'correct', mfaToken: '000000'});
+        .send({ username: 'test', password: 'correct', mfaToken: '000000' });
 
       expect(response.body.success).toBe(false);
       expect(response.body.error).toContain('MFA');
@@ -567,6 +576,7 @@ describe('Security Tests', () => {
 ```
 
 **Re-scan for Vulnerabilities**
+
 ```bash
 # After fixes, re-run security scans
 npm audit
@@ -583,6 +593,7 @@ semgrep --config=auto .
 ### Phase 1: Parallel Audits
 
 **Performance Baseline (performance-engineer)**
+
 ```bash
 # Run Lighthouse audit
 lighthouse https://example.com --output json html
@@ -604,6 +615,7 @@ Bundle Size: 890KB
 ```
 
 **Vulnerability Assessment (security-engineer)**
+
 ```bash
 # Critical vulnerabilities
 1. SQL Injection in search endpoint (CVSS: 9.8)
@@ -624,6 +636,7 @@ Bundle Size: 890KB
 ```
 
 **Test Coverage Analysis (qa-tester)**
+
 ```bash
 # Run coverage report
 npm test -- --coverage
@@ -653,10 +666,12 @@ Lines: 65%
 ### Phase 2: Synthesis
 
 **Consolidate Findings**
+
 ```markdown
 ## Quality Audit Summary
 
 ### Critical Issues (BLOCK LAUNCH)
+
 1. **SQL Injection in search** - Security - CVSS 9.8
    Impact: Complete database compromise
    Effort: 4 hours
@@ -666,6 +681,7 @@ Lines: 65%
    Effort: 6 hours
 
 ### High Priority (FIX BEFORE LAUNCH)
+
 3. **LCP optimization** - Performance - 3.2s → <2.5s
    Impact: Poor user experience, SEO penalty
    Effort: 12 hours
@@ -683,6 +699,7 @@ Lines: 65%
    Effort: 16 hours
 
 ### Medium Priority (POST-LAUNCH)
+
 7. Bundle size optimization (890KB → 500KB)
 8. Update vulnerable dependencies
 9. Implement session timeout
@@ -692,21 +709,26 @@ Lines: 65%
 ```
 
 **Create Action Plan**
+
 ```markdown
 ## Sprint 1 (Critical - Week 1)
+
 - Day 1-2: Fix SQL injection + comprehensive testing
 - Day 3-4: Fix XSS + comprehensive testing
 - Day 5: Security re-scan and validation
 
 ## Sprint 2 (High Priority - Week 2-3)
+
 - Week 2: LCP optimization (images, code splitting, caching)
 - Week 3 Day 1-2: Add rate limiting
 - Week 3 Day 3-5: Checkout E2E tests
 
 ## Sprint 3 (Coverage - Week 4)
+
 - Week 4: Increase test coverage to 80%
 
 ## Post-Launch Backlog
+
 - Bundle size optimization
 - Dependency updates
 - Session timeout
@@ -719,6 +741,7 @@ Lines: 65%
 ### Weekly/Sprint Cycle
 
 **Monday: Review Quality Metrics**
+
 ```bash
 # Check dashboards
 # - Performance: Core Web Vitals trends (RUM data)
@@ -743,20 +766,24 @@ Quality Metrics:
 ```
 
 **Tuesday: Identify Improvement Areas**
+
 ```markdown
 ## Sprint N Quality Issues
 
 ### Performance
+
 Issue: LCP regressed from 2.1s to 2.4s
 Root cause: New hero image added without optimization
 Fix: Optimize hero image, add performance budget check to CI
 
 ### Security
+
 Issue: 2 new medium-severity CVEs in dependencies
 Root cause: Dependencies not updated in 3 months
 Fix: Update lodash and react-dom, add automated dependency updates
 
 ### QA
+
 Issue: Test coverage dropped from 82% to 78%
 Root cause: New features added without tests
 Fix: Add tests for UserProfile and Settings components
@@ -767,6 +794,7 @@ Fix: Mock external API calls in tests
 ```
 
 **Wednesday-Thursday: Implement Improvements**
+
 ```bash
 # Wed: Performance optimization
 - Optimize hero image (WebP, responsive sizes)
@@ -780,6 +808,7 @@ Fix: Mock external API calls in tests
 ```
 
 **Friday: Validate and Update Baselines**
+
 ```bash
 # Run full quality check
 npm run test
@@ -805,6 +834,7 @@ Quality:
 ### Monthly: Comprehensive Audit
 
 **Month-end quality review**:
+
 1. Full security audit (OWASP Top 10)
 2. Performance audit (all pages, not just homepage)
 3. Test quality review (coverage, flaky tests, execution time)
@@ -812,6 +842,7 @@ Quality:
 5. Update quality targets based on trends
 
 **Adjust processes**:
+
 - Review what worked/didn't work
 - Update quality standards if needed
 - Adjust sprint allocation for quality work
@@ -824,6 +855,7 @@ Quality:
 #### Bundle Optimization
 
 **Code Splitting by Route**
+
 ```javascript
 // vite.config.js / webpack.config.js
 export default {
@@ -831,9 +863,9 @@ export default {
     rollupOptions: {
       output: {
         manualChunks: {
-          'vendor': ['react', 'react-dom'],
-          'charts': ['recharts', 'd3'],
-          'forms': ['formik', 'yup'],
+          vendor: ['react', 'react-dom'],
+          charts: ['recharts', 'd3'],
+          forms: ['formik', 'yup'],
         },
       },
     },
@@ -842,6 +874,7 @@ export default {
 ```
 
 **Tree Shaking**
+
 ```javascript
 // package.json - enable tree shaking
 {
@@ -858,6 +891,7 @@ import uniq from 'lodash/uniq';
 ```
 
 **Dynamic Imports**
+
 ```javascript
 // Load heavy components on demand
 function UserDashboard() {
@@ -882,13 +916,10 @@ function UserDashboard() {
 #### Image Optimization
 
 **Responsive Images with srcset**
+
 ```html
 <img
-  srcset="
-    image-320w.webp 320w,
-    image-640w.webp 640w,
-    image-1024w.webp 1024w
-  "
+  srcset="image-320w.webp 320w, image-640w.webp 640w, image-1024w.webp 1024w"
   sizes="
     (max-width: 320px) 280px,
     (max-width: 640px) 600px,
@@ -902,6 +933,7 @@ function UserDashboard() {
 ```
 
 **Next.js Image Optimization**
+
 ```javascript
 import Image from 'next/image';
 
@@ -922,12 +954,16 @@ function Hero() {
 #### Caching Strategies
 
 **HTTP Caching Headers**
+
 ```javascript
 // Express.js
-app.use('/static', express.static('public', {
-  maxAge: '1y', // Cache for 1 year
-  immutable: true, // File never changes
-}));
+app.use(
+  '/static',
+  express.static('public', {
+    maxAge: '1y', // Cache for 1 year
+    immutable: true, // File never changes
+  })
+);
 
 app.get('/api/data', (req, res) => {
   res.set('Cache-Control', 'public, max-age=300'); // 5 minutes
@@ -936,33 +972,27 @@ app.get('/api/data', (req, res) => {
 ```
 
 **Service Worker Caching**
+
 ```javascript
 const CACHE_VERSION = 'v2';
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const API_CACHE = `api-${CACHE_VERSION}`;
 
 // Cache static assets on install
-self.addEventListener('install', (event) => {
+self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(STATIC_CACHE).then((cache) => {
-      return cache.addAll([
-        '/',
-        '/styles.css',
-        '/script.js',
-        '/logo.png',
-      ]);
+    caches.open(STATIC_CACHE).then(cache => {
+      return cache.addAll(['/', '/styles.css', '/script.js', '/logo.png']);
     })
   );
 });
 
 // Clean old caches on activate
-self.addEventListener('activate', (event) => {
+self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then((keys) => {
+    caches.keys().then(keys => {
       return Promise.all(
-        keys
-          .filter((key) => key !== STATIC_CACHE && key !== API_CACHE)
-          .map((key) => caches.delete(key))
+        keys.filter(key => key !== STATIC_CACHE && key !== API_CACHE).map(key => caches.delete(key))
       );
     })
   );
@@ -974,6 +1004,7 @@ self.addEventListener('activate', (event) => {
 #### Input Validation
 
 **Whitelist Validation**
+
 ```javascript
 const validator = require('validator');
 
@@ -996,20 +1027,21 @@ function validateUserInput(data) {
     errors.push('Age must be between 13 and 120');
   }
 
-  return errors.length > 0 ? {valid: false, errors} : {valid: true};
+  return errors.length > 0 ? { valid: false, errors } : { valid: true };
 }
 ```
 
 **Output Encoding**
+
 ```javascript
 // HTML encoding to prevent XSS
 function escapeHtml(unsafe) {
   return unsafe
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 }
 
 // Usage in template
@@ -1021,45 +1053,49 @@ function renderComment(comment) {
 #### Defense in Depth
 
 **Content Security Policy**
+
 ```javascript
 // Express middleware
 app.use((req, res, next) => {
   res.setHeader(
     'Content-Security-Policy',
     "default-src 'self'; " +
-    "script-src 'self' 'unsafe-inline' https://trusted-cdn.com; " +
-    "style-src 'self' 'unsafe-inline'; " +
-    "img-src 'self' data: https:; " +
-    "font-src 'self' https://fonts.gstatic.com; " +
-    "connect-src 'self' https://api.example.com; " +
-    "frame-ancestors 'none';"
+      "script-src 'self' 'unsafe-inline' https://trusted-cdn.com; " +
+      "style-src 'self' 'unsafe-inline'; " +
+      "img-src 'self' data: https:; " +
+      "font-src 'self' https://fonts.gstatic.com; " +
+      "connect-src 'self' https://api.example.com; " +
+      "frame-ancestors 'none';"
   );
   next();
 });
 ```
 
 **Security Headers**
+
 ```javascript
 const helmet = require('helmet');
 
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+      },
     },
-  },
-  hsts: {
-    maxAge: 31536000, // 1 year
-    includeSubDomains: true,
-    preload: true,
-  },
-  frameguard: {
-    action: 'deny', // Prevent clickjacking
-  },
-  noSniff: true, // Prevent MIME sniffing
-  xssFilter: true, // Enable XSS filter
-}));
+    hsts: {
+      maxAge: 31536000, // 1 year
+      includeSubDomains: true,
+      preload: true,
+    },
+    frameguard: {
+      action: 'deny', // Prevent clickjacking
+    },
+    noSniff: true, // Prevent MIME sniffing
+    xssFilter: true, // Enable XSS filter
+  })
+);
 ```
 
 ### Quality Improvement Techniques
@@ -1067,6 +1103,7 @@ app.use(helmet({
 #### Test Strategy
 
 **Test Pyramid Implementation**
+
 ```javascript
 // Unit tests (70%) - Fast, isolated, many
 describe('calculateDiscount', () => {
@@ -1111,8 +1148,7 @@ describe('Checkout Flow', () => {
     await page.fill('[name="card"]', '4242424242424242');
     await page.click('[data-testid="submit-order"]');
 
-    await expect(page.locator('[data-testid="order-confirmation"]'))
-      .toBeVisible();
+    await expect(page.locator('[data-testid="order-confirmation"]')).toBeVisible();
   });
 });
 ```
@@ -1132,7 +1168,7 @@ test('modal should close', async () => {
 test('modal should close', async () => {
   await page.click('[data-testid="open-modal"]');
   await page.click('[data-testid="close-modal"]');
-  await page.waitForSelector('[data-testid="modal"]', {state: 'hidden'}); // ✓
+  await page.waitForSelector('[data-testid="modal"]', { state: 'hidden' }); // ✓
   expect(await page.isVisible('[data-testid="modal"]')).toBe(false);
 });
 
@@ -1144,7 +1180,7 @@ test('should fetch user data', async () => {
 
 // Good: Mock external dependencies
 test('should fetch user data', async () => {
-  mockApi.get('/users/123').reply(200, {name: 'John'});
+  mockApi.get('/users/123').reply(200, { name: 'John' });
   const data = await fetchFromApi('/users/123'); // ✓ Mocked
   expect(data.name).toBe('John');
 });

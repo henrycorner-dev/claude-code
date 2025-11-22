@@ -1,7 +1,7 @@
 ---
 description: Audits/optimizes SEO; generates sitemap, meta tags.
 argument-hint: Optional page/component path or 'all' for full site audit
-allowed-tools: ["Read", "Write", "Edit", "Grep", "Glob", "Bash", "TodoWrite", "AskUserQuestion"]
+allowed-tools: ['Read', 'Write', 'Edit', 'Grep', 'Glob', 'Bash', 'TodoWrite', 'AskUserQuestion']
 ---
 
 # SEO Audit & Optimization
@@ -100,6 +100,7 @@ Comprehensively audit and optimize SEO for web applications by analyzing existin
    - Robots.txt configuration
 
 5. Create audit summary:
+
    ```
    SEO Audit Summary:
 
@@ -157,8 +158,9 @@ Comprehensively audit and optimize SEO for web applications by analyzing existin
    - Use Next.js sitemap generation API
 
    Example sitemap.ts:
+
    ```typescript
-   import { MetadataRoute } from 'next'
+   import { MetadataRoute } from 'next';
 
    export default function sitemap(): MetadataRoute.Sitemap {
      return [
@@ -175,7 +177,7 @@ Comprehensively audit and optimize SEO for web applications by analyzing existin
          priority: 0.8,
        },
        // ... more routes
-     ]
+     ];
    }
    ```
 
@@ -197,6 +199,7 @@ Comprehensively audit and optimize SEO for web applications by analyzing existin
    ```
 
 6. Update or create robots.txt:
+
    ```
    User-agent: *
    Allow: /
@@ -226,9 +229,10 @@ Comprehensively audit and optimize SEO for web applications by analyzing existin
    **Framework-specific implementation**:
 
    **Next.js (App Router)** - Use Metadata API:
+
    ```typescript
    // app/[route]/page.tsx
-   import { Metadata } from 'next'
+   import { Metadata } from 'next';
 
    export const metadata: Metadata = {
      title: 'Page Title | Site Name',
@@ -272,10 +276,11 @@ Comprehensively audit and optimize SEO for web applications by analyzing existin
      alternates: {
        canonical: 'https://example.com/page',
      },
-   }
+   };
    ```
 
    **Next.js (Pages Router)** - Use next/head:
+
    ```typescript
    import Head from 'next/head'
 
@@ -308,6 +313,7 @@ Comprehensively audit and optimize SEO for web applications by analyzing existin
    ```
 
    **React/Vite** - Use react-helmet-async:
+
    ```typescript
    import { Helmet } from 'react-helmet-async'
 
@@ -327,6 +333,7 @@ Comprehensively audit and optimize SEO for web applications by analyzing existin
    ```
 
    **Astro**:
+
    ```astro
    ---
    // src/pages/page.astro
@@ -399,6 +406,7 @@ Comprehensively audit and optimize SEO for web applications by analyzing existin
 3. Generate JSON-LD structured data:
 
    **Homepage - Organization/Website**:
+
    ```json
    {
      "@context": "https://schema.org",
@@ -421,6 +429,7 @@ Comprehensively audit and optimize SEO for web applications by analyzing existin
    ```
 
    **Blog Post - Article**:
+
    ```json
    {
      "@context": "https://schema.org",
@@ -446,6 +455,7 @@ Comprehensively audit and optimize SEO for web applications by analyzing existin
    ```
 
    **Breadcrumbs**:
+
    ```json
    {
      "@context": "https://schema.org",
@@ -476,6 +486,7 @@ Comprehensively audit and optimize SEO for web applications by analyzing existin
 4. Implement structured data in framework:
 
    **Next.js (App Router)**:
+
    ```typescript
    export default function Page() {
      const jsonLd = {
@@ -557,12 +568,15 @@ Comprehensively audit and optimize SEO for web applications by analyzing existin
 1. Update TodoWrite: Mark "Generate SEO report with recommendations" as in_progress
 
 2. Create SEO_REPORT.md in project root:
+
    ```markdown
    # SEO Audit Report
+
    Generated: [date]
    Framework: [detected framework]
 
    ## Summary
+
    - Total pages audited: [count]
    - Critical issues fixed: [count]
    - Warnings addressed: [count]
@@ -571,22 +585,26 @@ Comprehensively audit and optimize SEO for web applications by analyzing existin
    ## Changes Made
 
    ### Sitemap
+
    - [✓] Created/Updated sitemap at [path]
    - [✓] Updated robots.txt with sitemap reference
    - [✓] Included [count] URLs
 
    ### Meta Tags
+
    - [✓] Added/Updated meta tags for [count] pages
    - [✓] Implemented Open Graph tags
    - [✓] Implemented Twitter Card tags
    - [✓] Added canonical URLs
 
    ### Structured Data
+
    - [✓] Added JSON-LD for [types]
    - [✓] Implemented breadcrumbs
    - [✓] Added organization schema
 
    ### Technical SEO
+
    - [✓] Optimized page titles (50-60 chars)
    - [✓] Optimized meta descriptions (150-160 chars)
    - [✓] Fixed heading hierarchy
@@ -595,18 +613,21 @@ Comprehensively audit and optimize SEO for web applications by analyzing existin
    ## Recommendations
 
    ### High Priority
+
    1. Submit sitemap to Google Search Console
    2. Test structured data with Google Rich Results Test
    3. Monitor Core Web Vitals
    4. Set up Google Analytics 4
 
    ### Medium Priority
+
    1. Create custom 404 page
    2. Implement pagination meta tags (if applicable)
    3. Add hreflang tags for multi-language sites
    4. Create XML sitemap index for large sites (>50k URLs)
 
    ### Low Priority
+
    1. Consider implementing AMP (if applicable)
    2. Add RSS feed for blog content
    3. Implement lazy loading for below-fold images
@@ -626,6 +647,7 @@ Comprehensively audit and optimize SEO for web applications by analyzing existin
    ## Monitoring
 
    Tools to use for ongoing SEO monitoring:
+
    - Google Search Console
    - Google Analytics 4
    - Lighthouse CI
@@ -640,6 +662,7 @@ Comprehensively audit and optimize SEO for web applications by analyzing existin
    ```
 
 3. Create .env.example with SEO-related variables:
+
    ```
    # SEO Configuration
    NEXT_PUBLIC_SITE_URL=https://example.com
@@ -648,6 +671,7 @@ Comprehensively audit and optimize SEO for web applications by analyzing existin
    ```
 
 4. Present summary to user:
+
    ```
    SEO Optimization Complete!
 
@@ -718,6 +742,7 @@ Comprehensively audit and optimize SEO for web applications by analyzing existin
 ### Maintenance
 
 After initial SEO setup:
+
 - Update sitemap when adding new pages
 - Review and update meta tags quarterly
 - Monitor Google Search Console for issues

@@ -8,7 +8,7 @@
  * - Tracks performance metrics
  */
 
-const FIXED_TIMESTEP = 1/60; // 60 updates per second
+const FIXED_TIMESTEP = 1 / 60; // 60 updates per second
 const MAX_UPDATES_PER_FRAME = 5;
 
 class PerformanceMonitor {
@@ -60,7 +60,7 @@ class PerformanceMonitor {
       fps: 1000 / this.average(this.frameTimes),
       avgFrameTime: this.average(this.frameTimes),
       avgUpdateTime: this.average(this.updateTimes),
-      avgRenderTime: this.average(this.renderTimes)
+      avgRenderTime: this.average(this.renderTimes),
     };
   }
 
@@ -100,7 +100,7 @@ class GameObject {
     // Linear interpolation between previous and current position
     return {
       x: this.previousPosition.x * (1 - alpha) + this.position.x * alpha,
-      y: this.previousPosition.y * (1 - alpha) + this.position.y * alpha
+      y: this.previousPosition.y * (1 - alpha) + this.position.y * alpha,
     };
   }
 
@@ -128,11 +128,11 @@ class Game {
   setupInput() {
     this.keys = {};
 
-    window.addEventListener('keydown', (e) => {
+    window.addEventListener('keydown', e => {
       this.keys[e.code] = true;
     });
 
-    window.addEventListener('keyup', (e) => {
+    window.addEventListener('keyup', e => {
       this.keys[e.code] = false;
     });
   }
@@ -145,10 +145,7 @@ class Game {
 
     // Create some moving entities
     for (let i = 0; i < 10; i++) {
-      const entity = new GameObject(
-        Math.random() * 800,
-        Math.random() * 600
-      );
+      const entity = new GameObject(Math.random() * 800, Math.random() * 600);
       entity.velocity.x = (Math.random() - 0.5) * 200;
       entity.velocity.y = (Math.random() - 0.5) * 200;
       entity.color = `hsl(${Math.random() * 360}, 70%, 50%)`;
@@ -252,13 +249,13 @@ class Game {
 
     this.perfMonitor.endFrame();
 
-    requestAnimationFrame((time) => this.gameLoop(time));
+    requestAnimationFrame(time => this.gameLoop(time));
   }
 
   start() {
     this.running = true;
     this.lastTime = performance.now();
-    requestAnimationFrame((time) => this.gameLoop(time));
+    requestAnimationFrame(time => this.gameLoop(time));
   }
 
   stop() {
@@ -274,7 +271,7 @@ if (typeof window !== 'undefined') {
     game.start();
 
     // Add stop/start controls
-    window.addEventListener('keydown', (e) => {
+    window.addEventListener('keydown', e => {
       if (e.code === 'Space') {
         if (game.running) {
           game.stop();

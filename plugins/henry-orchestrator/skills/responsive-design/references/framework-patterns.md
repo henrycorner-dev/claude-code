@@ -10,14 +10,14 @@ Default breakpoints in Tailwind:
 module.exports = {
   theme: {
     screens: {
-      'sm': '640px',   // Small devices (landscape phones)
-      'md': '768px',   // Medium devices (tablets)
-      'lg': '1024px',  // Large devices (laptops)
-      'xl': '1280px',  // Extra large devices (desktops)
+      sm: '640px', // Small devices (landscape phones)
+      md: '768px', // Medium devices (tablets)
+      lg: '1024px', // Large devices (laptops)
+      xl: '1280px', // Extra large devices (desktops)
       '2xl': '1536px', // 2X large devices (large desktops)
-    }
-  }
-}
+    },
+  },
+};
 ```
 
 ### Custom Breakpoints
@@ -27,20 +27,20 @@ module.exports = {
 module.exports = {
   theme: {
     screens: {
-      'xs': '475px',
-      'sm': '640px',
-      'md': '768px',
-      'lg': '1024px',
-      'xl': '1280px',
+      xs: '475px',
+      sm: '640px',
+      md: '768px',
+      lg: '1024px',
+      xl: '1280px',
       '2xl': '1536px',
       '3xl': '1920px',
       // Max-width breakpoints
-      'max-md': {'max': '767px'},
+      'max-md': { max: '767px' },
       // Range breakpoints
-      'tablet': {'min': '768px', 'max': '1023px'},
-    }
-  }
-}
+      tablet: { min: '768px', max: '1023px' },
+    },
+  },
+};
 ```
 
 ### Layout Patterns
@@ -80,9 +80,7 @@ module.exports = {
 
 <!-- Centered content with max width -->
 <div class="flex justify-center">
-  <div class="w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-    Content
-  </div>
+  <div class="w-full max-w-7xl px-4 sm:px-6 lg:px-8">Content</div>
 </div>
 
 <!-- Responsive alignment -->
@@ -97,15 +95,11 @@ module.exports = {
 ```html
 <!-- Responsive padding and max-width -->
 <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-  <div class="max-w-7xl">
-    Content
-  </div>
+  <div class="max-w-7xl">Content</div>
 </div>
 
 <!-- Custom container pattern -->
-<div class="w-full sm:max-w-xl md:max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto px-4">
-  Content
-</div>
+<div class="w-full sm:max-w-xl md:max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto px-4">Content</div>
 ```
 
 ### Typography Patterns
@@ -114,13 +108,9 @@ module.exports = {
 
 ```html
 <!-- Progressive text sizing -->
-<h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold">
-  Heading
-</h1>
+<h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold">Heading</h1>
 
-<p class="text-sm sm:text-base md:text-lg">
-  Body text
-</p>
+<p class="text-sm sm:text-base md:text-lg">Body text</p>
 
 <!-- Responsive line height and letter spacing -->
 <p class="text-base leading-relaxed sm:text-lg sm:leading-loose tracking-tight sm:tracking-normal">
@@ -132,9 +122,7 @@ module.exports = {
 
 ```html
 <!-- Single line truncate -->
-<p class="truncate">
-  Long text that will be truncated with ellipsis...
-</p>
+<p class="truncate">Long text that will be truncated with ellipsis...</p>
 
 <!-- Multi-line clamp (requires @tailwindcss/line-clamp) -->
 <p class="line-clamp-3 sm:line-clamp-none">
@@ -148,17 +136,13 @@ module.exports = {
 
 ```html
 <!-- Progressive spacing -->
-<div class="p-4 sm:p-6 md:p-8 lg:p-12">
-  Content with responsive padding
-</div>
+<div class="p-4 sm:p-6 md:p-8 lg:p-12">Content with responsive padding</div>
 
-<section class="mb-8 sm:mb-12 md:mb-16 lg:mb-24">
-  Section with responsive bottom margin
-</section>
+<section class="mb-8 sm:mb-12 md:mb-16 lg:mb-24">Section with responsive bottom margin</section>
 
 <!-- Negative margins for full-width breakout -->
 <div class="max-w-7xl mx-auto px-4">
-  <img class="-mx-4 sm:mx-0 w-screen sm:w-full" src="image.jpg" alt="">
+  <img class="-mx-4 sm:mx-0 w-screen sm:w-full" src="image.jpg" alt="" />
 </div>
 ```
 
@@ -188,7 +172,7 @@ module.exports = {
     <div class="flex justify-between h-16">
       <!-- Logo -->
       <div class="flex items-center">
-        <img class="h-8 w-auto" src="logo.svg" alt="Logo">
+        <img class="h-8 w-auto" src="logo.svg" alt="Logo" />
       </div>
 
       <!-- Desktop menu -->
@@ -199,10 +183,7 @@ module.exports = {
       </div>
 
       <!-- Mobile menu button -->
-      <button
-        class="md:hidden inline-flex items-center justify-center p-2"
-        aria-expanded="false"
-      >
+      <button class="md:hidden inline-flex items-center justify-center p-2" aria-expanded="false">
         <span class="sr-only">Open menu</span>
         <!-- Icon -->
       </button>
@@ -225,13 +206,11 @@ module.exports = {
 ```html
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
   <div class="bg-white rounded-lg shadow overflow-hidden">
-    <img class="w-full h-48 object-cover" src="image.jpg" alt="">
+    <img class="w-full h-48 object-cover" src="image.jpg" alt="" />
     <div class="p-4 sm:p-6">
       <h3 class="text-lg sm:text-xl font-semibold mb-2">Card Title</h3>
       <p class="text-sm sm:text-base text-gray-600">Card description</p>
-      <button class="mt-4 w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded">
-        Action
-      </button>
+      <button class="mt-4 w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded">Action</button>
     </div>
   </div>
 </div>
@@ -248,9 +227,7 @@ module.exports = {
         <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6">
           Hero Title
         </h1>
-        <p class="text-base sm:text-lg md:text-xl mb-6 sm:mb-8">
-          Hero description text
-        </p>
+        <p class="text-base sm:text-lg md:text-xl mb-6 sm:mb-8">Hero description text</p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
           <button class="px-6 py-3 bg-blue-600 rounded-lg">Primary CTA</button>
           <button class="px-6 py-3 border border-white rounded-lg">Secondary</button>
@@ -259,7 +236,7 @@ module.exports = {
 
       <!-- Image -->
       <div class="order-first lg:order-last">
-        <img class="w-full h-auto rounded-lg shadow-2xl" src="hero.jpg" alt="">
+        <img class="w-full h-auto rounded-lg shadow-2xl" src="hero.jpg" alt="" />
       </div>
     </div>
   </div>
@@ -274,43 +251,29 @@ module.exports = {
     <!-- Full width field -->
     <div class="sm:col-span-2">
       <label class="block text-sm font-medium mb-2">Email</label>
-      <input
-        type="email"
-        class="w-full px-3 py-2 sm:px-4 sm:py-3 border rounded-lg"
-      >
+      <input type="email" class="w-full px-3 py-2 sm:px-4 sm:py-3 border rounded-lg" />
     </div>
 
     <!-- Half width fields on desktop -->
     <div>
       <label class="block text-sm font-medium mb-2">First Name</label>
-      <input
-        type="text"
-        class="w-full px-3 py-2 sm:px-4 sm:py-3 border rounded-lg"
-      >
+      <input type="text" class="w-full px-3 py-2 sm:px-4 sm:py-3 border rounded-lg" />
     </div>
 
     <div>
       <label class="block text-sm font-medium mb-2">Last Name</label>
-      <input
-        type="text"
-        class="w-full px-3 py-2 sm:px-4 sm:py-3 border rounded-lg"
-      >
+      <input type="text" class="w-full px-3 py-2 sm:px-4 sm:py-3 border rounded-lg" />
     </div>
 
     <!-- Textarea -->
     <div class="sm:col-span-2">
       <label class="block text-sm font-medium mb-2">Message</label>
-      <textarea
-        rows="4"
-        class="w-full px-3 py-2 sm:px-4 sm:py-3 border rounded-lg"
-      ></textarea>
+      <textarea rows="4" class="w-full px-3 py-2 sm:px-4 sm:py-3 border rounded-lg"></textarea>
     </div>
 
     <!-- Submit button -->
     <div class="sm:col-span-2">
-      <button class="w-full sm:w-auto px-6 py-3 bg-blue-600 text-white rounded-lg">
-        Submit
-      </button>
+      <button class="w-full sm:w-auto px-6 py-3 bg-blue-600 text-white rounded-lg">Submit</button>
     </div>
   </div>
 </form>
@@ -323,12 +286,12 @@ module.exports = {
 ```html
 <!-- Fixed aspect ratio -->
 <div class="aspect-w-16 aspect-h-9">
-  <img class="object-cover" src="image.jpg" alt="">
+  <img class="object-cover" src="image.jpg" alt="" />
 </div>
 
 <!-- Responsive aspect ratio -->
 <div class="aspect-square sm:aspect-video lg:aspect-[4/3]">
-  <img class="object-cover" src="image.jpg" alt="">
+  <img class="object-cover" src="image.jpg" alt="" />
 </div>
 ```
 
@@ -336,19 +299,13 @@ module.exports = {
 
 ```html
 <!-- Hide on mobile, show on desktop -->
-<div class="hidden md:block">
-  Desktop only content
-</div>
+<div class="hidden md:block">Desktop only content</div>
 
 <!-- Show on mobile, hide on desktop -->
-<div class="block md:hidden">
-  Mobile only content
-</div>
+<div class="block md:hidden">Mobile only content</div>
 
 <!-- Complex visibility -->
-<div class="block sm:hidden lg:block xl:hidden">
-  Visible on mobile and large screens only
-</div>
+<div class="block sm:hidden lg:block xl:hidden">Visible on mobile and large screens only</div>
 ```
 
 #### Responsive Columns with Prose
@@ -373,7 +330,7 @@ $grid-breakpoints: (
   md: 768px,
   lg: 992px,
   xl: 1200px,
-  xxl: 1400px
+  xxl: 1400px,
 );
 ```
 
@@ -486,7 +443,7 @@ $grid-breakpoints: (
   <div class="row g-4">
     <div class="col-12 col-sm-6 col-lg-4">
       <div class="card h-100">
-        <img src="image.jpg" class="card-img-top" alt="">
+        <img src="image.jpg" class="card-img-top" alt="" />
         <div class="card-body">
           <h5 class="card-title">Card Title</h5>
           <p class="card-text">Card description</p>
@@ -563,9 +520,7 @@ $grid-breakpoints: (
 
 ```html
 <!-- Responsive alignment -->
-<p class="text-center text-md-start">
-  Centered on mobile, left-aligned on tablet+
-</p>
+<p class="text-center text-md-start">Centered on mobile, left-aligned on tablet+</p>
 
 <!-- Responsive font size -->
 <p class="fs-6 fs-md-5 fs-lg-4">Responsive font size</p>
@@ -609,9 +564,7 @@ $grid-breakpoints: (
 </div>
 
 <!-- Toggle button (hidden on large screens) -->
-<button class="btn d-lg-none" data-bs-toggle="offcanvas" data-bs-target="#sidebar">
-  Menu
-</button>
+<button class="btn d-lg-none" data-bs-toggle="offcanvas" data-bs-target="#sidebar">Menu</button>
 ```
 
 ## Custom Breakpoint Strategies
@@ -676,15 +629,15 @@ $grid-breakpoints: (
 
 ```html
 <!-- Load only needed components -->
-<link href="bootstrap-grid.min.css" rel="stylesheet">
+<link href="bootstrap-grid.min.css" rel="stylesheet" />
 
 <!-- Purge unused Tailwind classes -->
 <!-- tailwind.config.js -->
 <script>
-module.exports = {
-  content: ['./src/**/*.{html,js}'],
-  // Only used classes will be included
-}
+  module.exports = {
+    content: ['./src/**/*.{html,js}'],
+    // Only used classes will be included
+  };
 </script>
 ```
 
@@ -694,12 +647,16 @@ module.exports = {
 <!-- Inline critical mobile CSS -->
 <style>
   /* Mobile-first base styles */
-  body { font-size: 16px; }
-  .container { padding: 1rem; }
+  body {
+    font-size: 16px;
+  }
+  .container {
+    padding: 1rem;
+  }
 </style>
 
 <!-- Load desktop enhancements async -->
-<link rel="stylesheet" href="desktop.css" media="(min-width: 768px)">
+<link rel="stylesheet" href="desktop.css" media="(min-width: 768px)" />
 ```
 
 ## Best Practices
@@ -707,6 +664,7 @@ module.exports = {
 ### Tailwind Best Practices
 
 ✅ **DO:**
+
 - Use arbitrary values sparingly: `w-[347px]`
 - Extract repeated patterns to components
 - Use `@apply` in CSS for component styles
@@ -714,6 +672,7 @@ module.exports = {
 - Use responsive prefixes consistently
 
 ❌ **DON'T:**
+
 - Repeat long class strings (extract to component)
 - Mix Tailwind with inline styles
 - Override Tailwind with `!important`
@@ -722,6 +681,7 @@ module.exports = {
 ### Bootstrap Best Practices
 
 ✅ **DO:**
+
 - Use built-in components when possible
 - Leverage utility classes for customization
 - Follow mobile-first approach with breakpoints
@@ -729,6 +689,7 @@ module.exports = {
 - Test with actual Bootstrap JS components
 
 ❌ **DON'T:**
+
 - Fight the framework with excessive custom CSS
 - Skip responsive classes (add col-12 for mobile)
 - Nest containers unnecessarily
@@ -773,43 +734,42 @@ module.exports = {
 
 ```html
 <!-- Tailwind equivalent -->
-<div class="p-4 md:p-6 border border-gray-300 rounded-lg">
-  Card content
-</div>
+<div class="p-4 md:p-6 border border-gray-300 rounded-lg">Card content</div>
 
 <!-- Bootstrap equivalent -->
 <div class="card p-3 p-md-4">
-  <div class="card-body">
-    Card content
-  </div>
+  <div class="card-body">Card content</div>
 </div>
 ```
 
 ## Framework Comparison
 
-| Feature | Tailwind | Bootstrap | Custom CSS |
-|---------|----------|-----------|------------|
-| Learning curve | Medium | Low | High |
-| File size | Small (with purge) | Medium-Large | Variable |
-| Customization | Excellent | Good | Excellent |
-| Components | Minimal | Extensive | Manual |
-| JS required | No | Yes (for components) | No |
-| Mobile-first | Yes | Yes | Manual |
-| Best for | Custom designs | Rapid prototyping | Full control |
+| Feature        | Tailwind           | Bootstrap            | Custom CSS   |
+| -------------- | ------------------ | -------------------- | ------------ |
+| Learning curve | Medium             | Low                  | High         |
+| File size      | Small (with purge) | Medium-Large         | Variable     |
+| Customization  | Excellent          | Good                 | Excellent    |
+| Components     | Minimal            | Extensive            | Manual       |
+| JS required    | No                 | Yes (for components) | No           |
+| Mobile-first   | Yes                | Yes                  | Manual       |
+| Best for       | Custom designs     | Rapid prototyping    | Full control |
 
 ## Resources
 
 ### Tailwind CSS
+
 - Documentation: https://tailwindcss.com/docs
 - Components: https://tailwindui.com/
 - Cheat sheet: https://nerdcave.com/tailwind-cheat-sheet
 
 ### Bootstrap
+
 - Documentation: https://getbootstrap.com/docs/
 - Examples: https://getbootstrap.com/docs/5.3/examples/
 - Themes: https://themes.getbootstrap.com/
 
 ### Tools
+
 - PurgeCSS: Remove unused CSS
 - PostCSS: Transform CSS with JavaScript
 - Sass: CSS preprocessor for customization

@@ -11,6 +11,7 @@ Implement robust offline-first data synchronization with local storage, conflict
 ## Purpose
 
 This skill provides guidance for building offline-first applications that:
+
 - Store data locally using Realm, SQLite, or IndexedDB
 - Synchronize data with remote servers when connectivity is available
 - Handle conflicts when local and remote data diverge
@@ -19,6 +20,7 @@ This skill provides guidance for building offline-first applications that:
 ## When to Use This Skill
 
 Use this skill when implementing:
+
 - Offline-first mobile apps (iOS, Android, React Native, Flutter)
 - Progressive Web Apps (PWAs) with offline capabilities
 - Desktop applications (Electron) requiring local data storage
@@ -40,18 +42,21 @@ Build applications that function fully offline and sync when online:
 ### Storage Solutions
 
 #### Realm/MongoDB Realm
+
 - Built-in sync protocol and conflict resolution
 - Mobile-first with iOS, Android, React Native support
 - Automatic schema versioning and migration
 - Real-time data sync with MongoDB Atlas
 
 #### SQLite
+
 - Lightweight, cross-platform SQL database
 - Manual sync implementation required
 - Full control over sync protocol and conflict handling
 - Available on mobile, desktop, and embedded systems
 
 #### IndexedDB
+
 - Browser-based NoSQL storage for web apps
 - Asynchronous API for non-blocking operations
 - Available in all modern browsers and PWAs
@@ -60,17 +65,20 @@ Build applications that function fully offline and sync when online:
 ### Sync Patterns
 
 #### Push-Pull Sync
+
 1. **Pull**: Fetch remote changes since last sync
 2. **Merge**: Apply remote changes to local database
 3. **Push**: Upload local changes to server
 4. **Resolve**: Handle any conflicts detected
 
 #### Delta Sync
+
 - Transfer only changed data (deltas) instead of full records
 - Reduce bandwidth and improve sync performance
 - Track timestamps or version vectors for change detection
 
 #### Background Sync
+
 - Queue operations when offline
 - Automatically retry when connectivity returns
 - Use platform-specific APIs (iOS Background Fetch, Android WorkManager, Web Background Sync API)
@@ -166,17 +174,17 @@ Wrap all data operations to track changes:
 
 ```javascript
 function createItem(data) {
-    const item = {
-        id: generateUUID(),
-        data: data,
-        created_at: Date.now(),
-        updated_at: Date.now(),
-        dirty: true,
-        synced_at: null
-    };
-    db.insert('items', item);
-    queueForSync(item.id);
-    return item;
+  const item = {
+    id: generateUUID(),
+    data: data,
+    created_at: Date.now(),
+    updated_at: Date.now(),
+    dirty: true,
+    synced_at: null,
+  };
+  db.insert('items', item);
+  queueForSync(item.id);
+  return item;
 }
 ```
 
@@ -276,17 +284,17 @@ Maintain a queue of pending sync operations:
 
 ```javascript
 class SyncQueue {
-    async processQueue() {
-        const pending = await db.query('SELECT * FROM items WHERE dirty = true');
-        for (const item of pending) {
-            try {
-                await syncItem(item);
-                await db.update('items', { id: item.id, dirty: false, synced_at: Date.now() });
-            } catch (error) {
-                await scheduleRetry(item.id, error);
-            }
-        }
+  async processQueue() {
+    const pending = await db.query('SELECT * FROM items WHERE dirty = true');
+    for (const item of pending) {
+      try {
+        await syncItem(item);
+        await db.update('items', { id: item.id, dirty: false, synced_at: Date.now() });
+      } catch (error) {
+        await scheduleRetry(item.id, error);
+      }
     }
+  }
 }
 ```
 

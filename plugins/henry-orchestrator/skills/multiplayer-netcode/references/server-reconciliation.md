@@ -5,6 +5,7 @@ Server reconciliation is the process of correcting client-side predictions when 
 ## The Problem
 
 Client-side prediction assumes the server will confirm predictions. But what if:
+
 - Another player hits you (server applies damage client didn't predict)
 - Server has different game logic or fixed a bug
 - Packet loss causes misalignment
@@ -15,6 +16,7 @@ Without reconciliation, client and server states diverge, causing desyncs and ch
 ## The Solution
 
 When server state differs from predicted state:
+
 1. Accept server state as truth (server is authoritative)
 2. Correct client state to match server
 3. Replay all inputs sent after the server's state timestamp
@@ -52,7 +54,7 @@ class ServerPlayerState {
       position: this.position,
       velocity: this.velocity,
       lastProcessedInput: this.lastProcessedInput, // Critical for reconciliation
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
   }
 }
@@ -126,6 +128,7 @@ class ReconciliationConfig {
 ```
 
 Common thresholds:
+
 - **Position**: 0.1-0.5 meters (depends on game scale)
 - **Velocity**: 0.5-1.0 m/s
 - **Rotation**: 1-5 degrees
@@ -191,7 +194,7 @@ Smoothly interpolate the visual representation while keeping gameplay state accu
 class SmoothedPlayer {
   constructor() {
     this.gameplayPosition = { x: 0, y: 0 }; // Used for collision, gameplay
-    this.displayPosition = { x: 0, y: 0 };   // Used for rendering
+    this.displayPosition = { x: 0, y: 0 }; // Used for rendering
     this.smoothingTarget = null;
     this.smoothingProgress = 0;
   }
@@ -243,6 +246,7 @@ This technique keeps gameplay accurate while preventing visual "snapping."
 ## Handling Large Corrections
 
 If the error is very large (e.g., >1 meter), it indicates:
+
 - Severe packet loss
 - Server applied an unexpected event (damage, teleport)
 - Bug in client or server code
@@ -282,26 +286,29 @@ class ReconciliationDebugger {
     this.corrections.push({
       error: error,
       inputsReplayed: inputsReplayed,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
 
     this.totalCorrections++;
     this.totalError += error;
 
-    console.log(`Reconciliation #${this.totalCorrections}: error=${error.toFixed(3)}m, replayed=${inputsReplayed} inputs`);
+    console.log(
+      `Reconciliation #${this.totalCorrections}: error=${error.toFixed(3)}m, replayed=${inputsReplayed} inputs`
+    );
   }
 
   getStats() {
     return {
       totalCorrections: this.totalCorrections,
       averageError: this.totalError / this.totalCorrections,
-      recentCorrections: this.corrections.slice(-10)
+      recentCorrections: this.corrections.slice(-10),
     };
   }
 }
 ```
 
 Good prediction has:
+
 - **Low correction frequency**: <5% of updates
 - **Small errors**: <0.5m average
 - **Few replays**: 1-3 inputs replayed per correction
@@ -322,7 +329,7 @@ class GameStateSnapshot {
       ammo: player.ammo,
       buffs: [...player.buffs],
       // ... other state
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
   }
 
@@ -342,22 +349,27 @@ This enables reconciliation of all game state, not just movement.
 ## Common Pitfalls
 
 **Pitfall 1: Not Storing Delta Time**
+
 - Symptom: Replayed inputs produce different results
 - Solution: Store delta time with each input and use it during replay
 
 **Pitfall 2: Replaying All Inputs**
+
 - Symptom: Performance issues, especially with high latency
 - Solution: Only replay inputs after the server's last processed input
 
 **Pitfall 3: No Reconciliation Threshold**
+
 - Symptom: Constant tiny corrections, jittery movement
 - Solution: Only reconcile if error exceeds threshold (0.1m+)
 
 **Pitfall 4: Smoothing Gameplay State**
+
 - Symptom: Collision detection bugs, hitting invisible walls
 - Solution: Only smooth display state, never gameplay state
 
 **Pitfall 5: Not Cleaning Up Pending Inputs**
+
 - Symptom: Memory leak, increasing replay cost over time
 - Solution: Remove inputs confirmed by server from pending buffer
 
@@ -407,7 +419,7 @@ public class ServerReconciliation : MonoBehaviour {
 
 **CPU Cost**: Minimal in common case (no reconciliation). Replay cost scales with number of inputs replayed (typically 1-5).
 
-**Memory Cost**: Storing pending inputs is cheap. At 60Hz with 200ms latency: 60 * 0.2 = 12 inputs buffered.
+**Memory Cost**: Storing pending inputs is cheap. At 60Hz with 200ms latency: 60 \* 0.2 = 12 inputs buffered.
 
 **When to Optimize**: If replaying >10 inputs frequently, reduce update rate or optimize physics simulation.
 

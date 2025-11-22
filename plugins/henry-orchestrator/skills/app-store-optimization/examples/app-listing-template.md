@@ -5,31 +5,37 @@ This template provides a comprehensive structure for creating effective app stor
 ## iOS App Store Listing Template
 
 ### App Name (30 characters max)
+
 ```
 [Brand Name] - [Primary Keyword]
 ```
 
 **Example:**
+
 ```
 Headspace - Meditation
 ```
 
 ### Subtitle (30 characters max)
+
 ```
 [Key Value Proposition]
 ```
 
 **Example:**
+
 ```
 Meditation Made Simple
 ```
 
 ### Promotional Text (170 characters, updatable without review)
+
 ```
 [Limited time offer / New feature / Seasonal message]
 ```
 
 **Example:**
+
 ```
 NEW: Sleep Sounds - Fall asleep to calming nature sounds and guided sleep meditations. Start your free trial today!
 ```
@@ -133,16 +139,19 @@ Join millions finding calm and clarity with [App Name]. Download now and start y
 ```
 
 ### Keywords (100 characters, comma-separated, no spaces)
+
 ```
 [keyword1,keyword2,keyword3,keyword4,keyword5,keyword6,keyword7]
 ```
 
 **Example:**
+
 ```
 meditation,mindfulness,sleep,relax,anxiety,stress,calm,breathe,focus,wellness,yoga,zen
 ```
 
 **Important:**
+
 - No need to repeat words from App Name or Subtitle
 - Use singular or plural (both if space allows)
 - No competitor names
@@ -151,6 +160,7 @@ meditation,mindfulness,sleep,relax,anxiety,stress,calm,breathe,focus,wellness,yo
 ### What's New (4000 characters max)
 
 **Structure:**
+
 ```
 [Version X.X - Date]
 
@@ -173,6 +183,7 @@ BUG FIXES:
 ```
 
 **Example:**
+
 ```
 Version 3.5 - November 2023
 
@@ -203,21 +214,25 @@ Love the app? Rate us 5 stars! Have feedback? Contact us at support@example.com
 ## Google Play Store Listing Template
 
 ### App Title (30 characters max)
+
 ```
 [Brand Name] - [Primary Keyword]
 ```
 
 **Example:**
+
 ```
 Headspace - Meditation
 ```
 
 ### Short Description (80 characters max)
+
 ```
 [Value proposition with primary keywords]
 ```
 
 **Example:**
+
 ```
 Guided meditation for stress, anxiety, sleep. Start your calm journey today.
 ```
@@ -313,6 +328,7 @@ Questions? Visit our Help Center or contact support.
 ```
 
 **Key Points for Google Play Description:**
+
 - First 250 characters are critical (visible before "Read more")
 - Include primary keywords 5-7 times naturally
 - Use semantic variations (meditation, mindfulness, meditate)
@@ -324,6 +340,7 @@ Questions? Visit our Help Center or contact support.
 ### What's New (500 characters)
 
 **Structure:**
+
 ```
 [Headline update]
 
@@ -336,6 +353,7 @@ Fixed: [Bug fix]
 ```
 
 **Example:**
+
 ```
 New Sleep Sounds! 🌙
 
@@ -355,52 +373,68 @@ Rate us 5 stars if you love the update!
 ## Screenshot Captions Template
 
 ### Format
+
 **Position:** Top or bottom of screenshot (avoid center)
 **Font size:** 40-60pt minimum
 **Style:** Bold, high contrast
 **Length:** 5-10 words maximum
 
 ### Screenshot 1 (Hero)
+
 ```
 [Primary Value Proposition]
 ```
+
 **Examples:**
+
 - "Meditation Made Simple"
 - "Fall Asleep in Minutes"
 - "Your Calm Starts Here"
 
 ### Screenshot 2
+
 ```
 [Key Feature or Benefit]
 ```
+
 **Examples:**
+
 - "500+ Guided Meditations"
 - "Track Your Progress Daily"
 - "Download & Use Offline"
 
 ### Screenshot 3
+
 ```
 [Second Key Feature or Benefit]
 ```
+
 **Examples:**
+
 - "Sleep Sounds & Stories"
 - "Reduce Stress & Anxiety"
 - "Just 10 Minutes a Day"
 
 ### Screenshot 4
+
 ```
 [Supporting Feature]
 ```
+
 **Examples:**
+
 - "Meditation for Every Moment"
 - "Personalized Recommendations"
 - "Sync Across All Devices"
 
 ### Screenshot 5
+
 ```
 [Social Proof or CTA]
 ```
+
 **Examples:**
+
 - "Join 70M+ Happy Users"
 - "4.9 Stars from 500K Reviews"
 - "Start Your Free Trial"
@@ -412,6 +446,7 @@ Rate us 5 stars if you love the update!
 ### iOS Categories (Primary + Secondary)
 
 **Common Categories:**
+
 - Health & Fitness (meditation, fitness, health tracking)
 - Lifestyle (habit tracking, personal development)
 - Productivity (task management, note-taking, time tracking)
@@ -424,6 +459,7 @@ Rate us 5 stars if you love the update!
 - Business (CRM, project management, communication)
 
 **Selection Tips:**
+
 - Choose the most relevant primary category
 - Secondary category can increase discoverability
 - Research competitor categories
@@ -433,6 +469,7 @@ Rate us 5 stars if you love the update!
 ### Android Categories (Primary Only)
 
 **Common Categories:**
+
 - Health & Fitness
 - Lifestyle
 - Productivity
@@ -454,27 +491,32 @@ Rate us 5 stars if you love the update!
 ### Key Questions (Both Platforms)
 
 **Violence:**
+
 - Does your app contain violent or disturbing content?
 - Realistic vs. fantasy violence?
 - Intensity level?
 
 **Mature/Suggestive Content:**
+
 - Sexual content or nudity?
 - Profanity or crude humor?
 - Alcohol, tobacco, or drug references?
 
 **User Interaction:**
+
 - User-generated content?
 - Ability to share location?
 - Can users communicate?
 - Unrestricted web access?
 
 **Data Collection:**
+
 - Collect personal information?
 - Share location?
 - Access to contacts or photos?
 
 **Tips:**
+
 - Answer honestly to avoid rejection
 - Consider all content in app
 - Include user-generated content
@@ -487,9 +529,11 @@ Rate us 5 stars if you love the update!
 ## Support & Legal URLs
 
 ### Privacy Policy (REQUIRED if collecting data)
+
 **URL:** https://www.example.com/privacy
 
 **Must Include:**
+
 - What data is collected
 - How data is used
 - Who data is shared with
@@ -498,9 +542,11 @@ Rate us 5 stars if you love the update!
 - Contact information
 
 ### Terms of Service
+
 **URL:** https://www.example.com/terms
 
 **Must Include:**
+
 - User responsibilities
 - Service description
 - Subscription terms (if applicable)
@@ -509,9 +555,11 @@ Rate us 5 stars if you love the update!
 - Liability limitations
 
 ### Support URL
+
 **URL:** https://www.example.com/support
 
 **Should Include:**
+
 - FAQ section
 - Contact form or email
 - Response time expectations
@@ -523,6 +571,7 @@ Rate us 5 stars if you love the update!
 ## Launch Checklist
 
 **Pre-Submission:**
+
 - [ ] App name optimized with keywords
 - [ ] Description written with benefits-first approach
 - [ ] Keywords researched and optimized
@@ -539,6 +588,7 @@ Rate us 5 stars if you love the update!
 - [ ] Localization completed for key markets
 
 **Post-Launch:**
+
 - [ ] Monitor initial reviews and ratings
 - [ ] Respond to user reviews
 - [ ] Track keyword rankings
@@ -553,6 +603,7 @@ Rate us 5 stars if you love the update!
 ## Localization Template
 
 ### Priority Languages
+
 1. English (US, UK, Canada, Australia)
 2. Spanish (Spain, Latin America)
 3. German
@@ -565,6 +616,7 @@ Rate us 5 stars if you love the update!
 ### Localized Elements
 
 **Required:**
+
 - App title/name
 - Subtitle/short description
 - Full description
@@ -573,6 +625,7 @@ Rate us 5 stars if you love the update!
 - What's new text
 
 **Optional:**
+
 - UI in screenshots
 - Video captions
 - Feature graphic (Android)
@@ -580,17 +633,20 @@ Rate us 5 stars if you love the update!
 ### Notes for Translators
 
 **Context:**
+
 - App category: [category]
 - Target audience: [audience]
 - Tone: [formal/casual/friendly/professional]
 - Character limits: [specify for each field]
 
 **Keywords to Emphasize:**
+
 - [Primary keyword 1]
 - [Primary keyword 2]
 - [Primary keyword 3]
 
 **Avoid:**
+
 - Direct translation without localization
 - Keyword stuffing
 - Losing brand voice
@@ -601,6 +657,7 @@ Rate us 5 stars if you love the update!
 ## A/B Testing Ideas
 
 **Test Variables:**
+
 1. App icon variations
 2. Screenshot order
 3. Screenshot captions (feature vs. benefit focused)
@@ -611,6 +668,7 @@ Rate us 5 stars if you love the update!
 8. Number of screenshots (5 vs. 10)
 
 **How to Test:**
+
 - iOS: Product Page Optimization in App Store Connect
 - Android: Store Listing Experiments in Play Console
 - Run tests for full duration (90 days or statistical significance)
@@ -622,18 +680,21 @@ Rate us 5 stars if you love the update!
 ## Ongoing Optimization Schedule
 
 **Weekly:**
+
 - Monitor keyword rankings
 - Track conversion rates
 - Respond to reviews
 - Check competitor changes
 
 **Monthly:**
+
 - Review metrics dashboard
 - Plan metadata updates
 - Research new keywords
 - Analyze A/B test results
 
 **Quarterly:**
+
 - Major optimization review
 - Update screenshots/video if needed
 - Refresh description
@@ -641,6 +702,7 @@ Rate us 5 stars if you love the update!
 - Plan seasonal updates
 
 **With Each App Update:**
+
 - Update "What's New" section
 - Highlight new features in screenshots
 - Add new keywords if relevant

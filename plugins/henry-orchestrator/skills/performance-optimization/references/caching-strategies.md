@@ -9,12 +9,14 @@ This reference provides comprehensive guidance on implementing caching at variou
 Most common caching pattern. Application checks cache before querying database.
 
 **Flow:**
+
 1. Application receives request
 2. Check if data exists in cache
 3. If cache hit: Return cached data
 4. If cache miss: Query database, populate cache, return data
 
 **Implementation (Node.js):**
+
 ```javascript
 const redis = require('redis');
 const client = redis.createClient();
@@ -39,11 +41,13 @@ async function getUser(userId) {
 ```
 
 **When to Use:**
+
 - Read-heavy workloads
 - Data that doesn't change frequently
 - Acceptable to serve slightly stale data
 
 **Trade-offs:**
+
 - Cache miss penalty (extra latency)
 - Potential cache stampede on popular keys
 - Manual cache invalidation required
@@ -53,12 +57,14 @@ async function getUser(userId) {
 Write to cache and database simultaneously, ensuring cache is always up-to-date.
 
 **Flow:**
+
 1. Application writes data
 2. Update cache
 3. Update database
 4. Return success
 
 **Implementation (Node.js):**
+
 ```javascript
 async function updateUser(userId, userData) {
   const cacheKey = `user:${userId}`;
@@ -74,11 +80,13 @@ async function updateUser(userId, userData) {
 ```
 
 **When to Use:**
+
 - Need cache consistency
 - Read-after-write operations are common
 - Write performance is acceptable
 
 **Trade-offs:**
+
 - Slower writes (cache + DB)
 - Wasted cache space if data not read
 - Both systems must succeed or rollback
@@ -88,6 +96,7 @@ async function updateUser(userId, userData) {
 Write to cache immediately, async write to database later. Maximizes write performance.
 
 **Flow:**
+
 1. Application writes data
 2. Update cache
 3. Queue database write (async)
@@ -95,6 +104,7 @@ Write to cache immediately, async write to database later. Maximizes write perfo
 5. Background worker persists to database
 
 **Implementation (Node.js with Bull queue):**
+
 ```javascript
 const Queue = require('bull');
 const writeQueue = new Queue('database-writes');
@@ -109,25 +119,27 @@ async function updateUser(userId, userData) {
   await writeQueue.add({
     operation: 'updateUser',
     userId,
-    userData
+    userData,
   });
 
   return userData;
 }
 
 // Worker process
-writeQueue.process(async (job) => {
+writeQueue.process(async job => {
   const { userId, userData } = job.data;
   await db.query('UPDATE users SET ? WHERE id = ?', [userData, userId]);
 });
 ```
 
 **When to Use:**
+
 - Very high write throughput needed
 - Can tolerate potential data loss
 - Database is write-bottleneck
 
 **Trade-offs:**
+
 - Risk of data loss if cache fails before DB write
 - Complex failure handling
 - Eventual consistency
@@ -149,6 +161,7 @@ await client.setex('session:abc', 300, JSON.stringify(session));
 ```
 
 **Best for:**
+
 - Data with predictable staleness tolerance
 - Session data
 - Temporary data
@@ -172,6 +185,7 @@ async function updateUser(userId, userData) {
 ```
 
 **Best for:**
+
 - Critical data requiring consistency
 - Infrequently updated data
 - Related/dependent data
@@ -190,6 +204,7 @@ async function getUser(userId) {
 ```
 
 **Best for:**
+
 - Schema changes
 - Gradual cache migrations
 - A/B testing
@@ -221,7 +236,7 @@ await client.hset('user:123', 'email', 'john@example.com');
 await client.hmset('user:123', {
   name: 'John Doe',
   email: 'john@example.com',
-  age: 30
+  age: 30,
 });
 
 // Retrieve specific field
@@ -232,6 +247,7 @@ const user = await client.hgetall('user:123');
 ```
 
 **Advantages:**
+
 - Update individual fields without fetching entire object
 - Memory efficient
 - Atomic field operations
@@ -250,6 +266,7 @@ const recentPosts = await client.lrange('recent:posts', 0, 9); // Get 10 most re
 ```
 
 **Use cases:**
+
 - Activity feeds
 - Recent items
 - Leaderboards (use sorted sets instead for scoring)
@@ -271,6 +288,7 @@ const rank = await client.zrevrank('leaderboard', 'user:123');
 ```
 
 **Use cases:**
+
 - Leaderboards
 - Priority queues
 - Time-series data (score = timestamp)
@@ -286,6 +304,7 @@ Use consistent, hierarchical key naming:
 ```
 
 **Examples:**
+
 ```
 user:123
 user:123:profile
@@ -297,6 +316,7 @@ cache:query:users:active
 ```
 
 **Benefits:**
+
 - Organized namespace
 - Easy to invalidate related keys
 - Clear key purpose
@@ -314,10 +334,10 @@ if (keys.length > 0) {
 // Better: Use SCAN for large key sets
 const stream = client.scanStream({
   match: 'user:123:*',
-  count: 100
+  count: 100,
 });
 
-stream.on('data', (keys) => {
+stream.on('data', keys => {
   if (keys.length) {
     client.del(...keys);
   }
@@ -432,7 +452,7 @@ async function getUser(userId) {
   if (cached) {
     // Probabilistic early refresh
     const delta = Date.now() - (ttl - remainingTtl);
-    const probability = delta * beta / ttl;
+    const probability = (delta * beta) / ttl;
 
     if (Math.random() < probability) {
       // Refresh cache in background
@@ -466,7 +486,7 @@ const Redis = require('ioredis');
 const cluster = new Redis.Cluster([
   { port: 7000, host: '127.0.0.1' },
   { port: 7001, host: '127.0.0.1' },
-  { port: 7002, host: '127.0.0.1' }
+  { port: 7002, host: '127.0.0.1' },
 ]);
 
 // Use same API as single Redis instance
@@ -474,6 +494,7 @@ await cluster.set('key', 'value');
 ```
 
 **Use when:**
+
 - Need to cache > 25GB data
 - Need high availability
 - Need to scale reads and writes
@@ -489,13 +510,14 @@ const redis = new Redis({
   sentinels: [
     { host: 'sentinel1', port: 26379 },
     { host: 'sentinel2', port: 26379 },
-    { host: 'sentinel3', port: 26379 }
+    { host: 'sentinel3', port: 26379 },
   ],
-  name: 'mymaster'
+  name: 'mymaster',
 });
 ```
 
 **Use when:**
+
 - Need automatic failover
 - Single node sufficient for data size
 - Primarily scale reads (replicas)
@@ -516,12 +538,13 @@ async function getCacheStats() {
   return {
     hits,
     misses,
-    hitRate: (hitRate * 100).toFixed(2) + '%'
+    hitRate: (hitRate * 100).toFixed(2) + '%',
   };
 }
 ```
 
 **Key Metrics:**
+
 - **Hit rate**: % of requests served from cache
 - **Miss rate**: % of requests requiring DB query
 - **Eviction rate**: How often keys are evicted (memory pressure)
@@ -529,6 +552,7 @@ async function getCacheStats() {
 - **Memory usage**: Current cache size
 
 **Target Metrics:**
+
 - Hit rate: > 80% for read-heavy apps
 - Miss rate: < 20%
 - Eviction rate: < 10%
@@ -536,6 +560,7 @@ async function getCacheStats() {
 ## Best Practices Summary
 
 **DO:**
+
 - Set appropriate TTLs for all cached data
 - Monitor cache hit rates
 - Use consistent key naming conventions
@@ -546,6 +571,7 @@ async function getCacheStats() {
 - Version your cache keys for migrations
 
 **DON'T:**
+
 - Cache everything (cache what's expensive to compute/fetch)
 - Use very long TTLs for frequently changing data
 - Store sensitive data without encryption
@@ -626,7 +652,7 @@ function cacheMiddleware(ttl = 3600) {
 
     // Override res.json to cache response
     const originalJson = res.json.bind(res);
-    res.json = (data) => {
+    res.json = data => {
       client.setex(key, ttl, JSON.stringify(data));
       return originalJson(data);
     };
@@ -694,6 +720,7 @@ export async function getServerSideProps({ params }) {
 ## Summary
 
 Effective caching requires:
+
 1. **Choosing the right pattern** (cache-aside, write-through, write-behind)
 2. **Proper invalidation strategy** (TTL, event-based, versioning)
 3. **Appropriate data structures** (strings, hashes, lists, sorted sets)

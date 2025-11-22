@@ -22,11 +22,13 @@ Include links in responses to guide API navigation:
 ### Pagination Patterns
 
 **Offset-Based Pagination:**
+
 ```
 GET /users?page=2&limit=20
 ```
 
 Response:
+
 ```json
 {
   "data": [...],
@@ -46,11 +48,13 @@ Response:
 ```
 
 **Cursor-Based Pagination (Better for Real-Time Data):**
+
 ```
 GET /posts?cursor=eyJpZCI6MTIzfQ==&limit=20
 ```
 
 Response:
+
 ```json
 {
   "data": [...],
@@ -64,23 +68,27 @@ Response:
 ### Filtering Patterns
 
 **Simple Filters:**
+
 ```
 GET /users?status=active&role=admin
 ```
 
 **Range Filters:**
+
 ```
 GET /orders?createdAt[gte]=2024-01-01&createdAt[lt]=2024-02-01
 GET /products?price[gte]=10&price[lte]=100
 ```
 
 **Search:**
+
 ```
 GET /users?q=john
 GET /posts?search=api+design
 ```
 
 **Nested Filters:**
+
 ```
 GET /users?address.city=Seattle&address.state=WA
 ```
@@ -88,19 +96,23 @@ GET /users?address.city=Seattle&address.state=WA
 ### Sorting Patterns
 
 **Single Field:**
+
 ```
 GET /users?sort=createdAt&order=desc
 ```
 
 **Multiple Fields:**
+
 ```
 GET /users?sort=lastName,firstName&order=asc,asc
 ```
 
 **Combined Notation:**
+
 ```
 GET /users?sort=-createdAt,+lastName
 ```
+
 (- for descending, + for ascending)
 
 ### Field Selection (Sparse Fieldsets)
@@ -111,6 +123,7 @@ GET /posts?fields=title,author(name,email)
 ```
 
 Response includes only requested fields:
+
 ```json
 {
   "id": 123,
@@ -126,6 +139,7 @@ GET /posts/123?expand=author,comments
 ```
 
 Response includes expanded nested resources:
+
 ```json
 {
   "id": 123,
@@ -134,15 +148,14 @@ Response includes expanded nested resources:
     "id": 456,
     "name": "Jane Smith"
   },
-  "comments": [
-    { "id": 1, "text": "Great post!" }
-  ]
+  "comments": [{ "id": 1, "text": "Great post!" }]
 }
 ```
 
 ## Bulk Operations
 
 ### Batch Creates:
+
 ```http
 POST /users/batch
 Content-Type: application/json
@@ -156,6 +169,7 @@ Content-Type: application/json
 ```
 
 Response:
+
 ```json
 {
   "created": [
@@ -167,6 +181,7 @@ Response:
 ```
 
 ### Batch Updates:
+
 ```http
 PATCH /users/batch
 Content-Type: application/json
@@ -180,6 +195,7 @@ Content-Type: application/json
 ```
 
 ### Batch Deletes:
+
 ```http
 DELETE /users/batch
 Content-Type: application/json
@@ -204,6 +220,7 @@ Content-Type: application/json
 ```
 
 Response:
+
 ```http
 HTTP/1.1 202 Accepted
 Location: /reports/status/abc-123
@@ -218,11 +235,13 @@ Location: /reports/status/abc-123
 ```
 
 Check status:
+
 ```http
 GET /reports/status/abc-123
 ```
 
 Response (in progress):
+
 ```json
 {
   "id": "abc-123",
@@ -232,6 +251,7 @@ Response (in progress):
 ```
 
 Response (complete):
+
 ```json
 {
   "id": "abc-123",
@@ -245,6 +265,7 @@ Response (complete):
 ## Error Response Patterns
 
 ### Standard Error Format:
+
 ```json
 {
   "error": {
@@ -266,6 +287,7 @@ Response (complete):
 ```
 
 ### Error Codes Taxonomy:
+
 - `AUTHENTICATION_REQUIRED` - 401
 - `AUTHENTICATION_FAILED` - 401
 - `PERMISSION_DENIED` - 403
@@ -281,6 +303,7 @@ Response (complete):
 ### ETags for Caching:
 
 Response includes ETag:
+
 ```http
 GET /users/123
 
@@ -291,6 +314,7 @@ ETag: "abc123"
 ```
 
 Subsequent request with If-None-Match:
+
 ```http
 GET /users/123
 If-None-Match: "abc123"
@@ -301,6 +325,7 @@ HTTP/1.1 304 Not Modified
 ### Optimistic Locking:
 
 Update with If-Match to prevent conflicts:
+
 ```http
 PATCH /users/123
 If-Match: "abc123"
@@ -309,6 +334,7 @@ If-Match: "abc123"
 ```
 
 If resource changed (ETag mismatch):
+
 ```http
 HTTP/1.1 412 Precondition Failed
 ```
@@ -316,6 +342,7 @@ HTTP/1.1 412 Precondition Failed
 ## Content Negotiation
 
 Request specific format:
+
 ```http
 GET /users/123
 Accept: application/json
@@ -334,6 +361,7 @@ Accept: text/csv
 ## Versioning Strategies Detailed
 
 ### URL Versioning (Recommended):
+
 ```
 https://api.example.com/v1/users
 https://api.example.com/v2/users
@@ -343,6 +371,7 @@ Pros: Clear, easy to route, visible
 Cons: URL changes for new versions
 
 ### Header Versioning:
+
 ```http
 GET /users
 Accept: application/vnd.api.v2+json
@@ -352,6 +381,7 @@ Pros: Clean URLs
 Cons: Harder to test, less discoverable
 
 ### Query Parameter:
+
 ```
 GET /users?version=2
 ```
@@ -362,6 +392,7 @@ Cons: Pollutes query string, easy to miss
 ## Rate Limiting Implementation
 
 ### Response Headers:
+
 ```http
 HTTP/1.1 200 OK
 X-RateLimit-Limit: 100
@@ -370,6 +401,7 @@ X-RateLimit-Reset: 1640995200
 ```
 
 When limit exceeded:
+
 ```http
 HTTP/1.1 429 Too Many Requests
 Retry-After: 60
@@ -388,6 +420,7 @@ X-RateLimit-Reset: 1640995260
 ## Webhook Patterns
 
 ### Webhook Registration:
+
 ```http
 POST /webhooks
 Content-Type: application/json
@@ -400,6 +433,7 @@ Content-Type: application/json
 ```
 
 ### Webhook Delivery:
+
 ```http
 POST https://client.example.com/webhook
 X-Webhook-Signature: sha256=abc123...
@@ -418,6 +452,7 @@ Content-Type: application/json
 Verify signature using HMAC with secret.
 
 ### Webhook Retry Logic:
+
 - Retry failed deliveries with exponential backoff
 - Maximum 3-5 retry attempts
 - Mark webhook as failed after max retries
@@ -444,6 +479,7 @@ Content-Type: application/json
 ```
 
 Degraded state:
+
 ```http
 HTTP/1.1 503 Service Unavailable
 

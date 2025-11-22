@@ -1,7 +1,7 @@
 ---
 description: Converts site to PWA; adds manifest, service worker.
 argument-hint: Optional PWA configuration preferences (name, icons, offline strategy)
-allowed-tools: ["Read", "Write", "Edit", "Grep", "Glob", "Bash", "TodoWrite", "AskUserQuestion"]
+allowed-tools: ['Read', 'Write', 'Edit', 'Grep', 'Glob', 'Bash', 'TodoWrite', 'AskUserQuestion']
 ---
 
 # Progressive Web App (PWA) Conversion
@@ -118,6 +118,7 @@ Convert an existing web application into a Progressive Web App by adding a web a
    - SvelteKit: `static/manifest.json`
 
 3. Create manifest.json with proper structure:
+
    ```json
    {
      "name": "[App Full Name]",
@@ -214,32 +215,36 @@ Convert an existing web application into a Progressive Web App by adding a web a
 3. If using framework plugin:
 
    **For Next.js**:
+
    ```bash
    npm install next-pwa
    ```
 
    Update `next.config.js`:
+
    ```javascript
    const withPWA = require('next-pwa')({
      dest: 'public',
      disable: process.env.NODE_ENV === 'development',
      register: true,
      skipWaiting: true,
-   })
+   });
 
    module.exports = withPWA({
      // existing next config
-   })
+   });
    ```
 
    **For Vite**:
+
    ```bash
    npm install vite-plugin-pwa -D
    ```
 
    Update `vite.config.js`:
+
    ```javascript
-   import { VitePWA } from 'vite-plugin-pwa'
+   import { VitePWA } from 'vite-plugin-pwa';
 
    export default {
      plugins: [
@@ -249,14 +254,15 @@ Convert an existing web application into a Progressive Web App by adding a web a
            // references manifest.json
          },
          workbox: {
-           globPatterns: ['**/*.{js,css,html,ico,png,svg}']
-         }
-       })
-     ]
-   }
+           globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+         },
+       }),
+     ],
+   };
    ```
 
    **For Angular**:
+
    ```bash
    ng add @angular/pwa
    ```
@@ -264,6 +270,7 @@ Convert an existing web application into a Progressive Web App by adding a web a
 4. If implementing custom service worker:
 
    Create `public/sw.js`:
+
    ```javascript
    const CACHE_NAME = 'app-cache-v1';
    const urlsToCache = [
@@ -275,71 +282,75 @@ Convert an existing web application into a Progressive Web App by adding a web a
    ];
 
    // Install event - cache critical assets
-   self.addEventListener('install', (event) => {
+   self.addEventListener('install', event => {
      event.waitUntil(
-       caches.open(CACHE_NAME)
-         .then((cache) => cache.addAll(urlsToCache))
+       caches
+         .open(CACHE_NAME)
+         .then(cache => cache.addAll(urlsToCache))
          .then(() => self.skipWaiting())
      );
    });
 
    // Activate event - clean up old caches
-   self.addEventListener('activate', (event) => {
+   self.addEventListener('activate', event => {
      event.waitUntil(
-       caches.keys().then((cacheNames) => {
-         return Promise.all(
-           cacheNames.map((cacheName) => {
-             if (cacheName !== CACHE_NAME) {
-               return caches.delete(cacheName);
-             }
-           })
-         );
-       }).then(() => self.clients.claim())
+       caches
+         .keys()
+         .then(cacheNames => {
+           return Promise.all(
+             cacheNames.map(cacheName => {
+               if (cacheName !== CACHE_NAME) {
+                 return caches.delete(cacheName);
+               }
+             })
+           );
+         })
+         .then(() => self.clients.claim())
      );
    });
 
    // Fetch event - serve from cache, fallback to network
-   self.addEventListener('fetch', (event) => {
+   self.addEventListener('fetch', event => {
      event.respondWith(
-       caches.match(event.request)
-         .then((response) => {
-           // Cache hit - return response
-           if (response) {
+       caches.match(event.request).then(response => {
+         // Cache hit - return response
+         if (response) {
+           return response;
+         }
+         // Clone the request
+         const fetchRequest = event.request.clone();
+
+         return fetch(fetchRequest).then(response => {
+           // Check if valid response
+           if (!response || response.status !== 200 || response.type !== 'basic') {
              return response;
            }
-           // Clone the request
-           const fetchRequest = event.request.clone();
 
-           return fetch(fetchRequest).then((response) => {
-             // Check if valid response
-             if (!response || response.status !== 200 || response.type !== 'basic') {
-               return response;
-             }
+           // Clone the response
+           const responseToCache = response.clone();
 
-             // Clone the response
-             const responseToCache = response.clone();
-
-             caches.open(CACHE_NAME)
-               .then((cache) => {
-                 cache.put(event.request, responseToCache);
-               });
-
-             return response;
+           caches.open(CACHE_NAME).then(cache => {
+             cache.put(event.request, responseToCache);
            });
-         })
+
+           return response;
+         });
+       })
      );
    });
    ```
 
    Create `public/sw-register.js`:
+
    ```javascript
    if ('serviceWorker' in navigator) {
      window.addEventListener('load', () => {
-       navigator.serviceWorker.register('/sw.js')
-         .then((registration) => {
+       navigator.serviceWorker
+         .register('/sw.js')
+         .then(registration => {
            console.log('SW registered: ', registration);
          })
-         .catch((error) => {
+         .catch(error => {
            console.log('SW registration failed: ', error);
          });
      });
@@ -362,6 +373,7 @@ Convert an existing web application into a Progressive Web App by adding a web a
 
    **Next.js** (App Router):
    Update `app/layout.tsx`:
+
    ```tsx
    export const metadata = {
      manifest: '/manifest.json',
@@ -369,13 +381,14 @@ Convert an existing web application into a Progressive Web App by adding a web a
      appleWebApp: {
        capable: true,
        statusBarStyle: 'default',
-       title: 'App Name'
-     }
-   }
+       title: 'App Name',
+     },
+   };
    ```
 
    **Next.js** (Pages Router):
    Update `pages/_document.tsx`:
+
    ```tsx
    <Head>
      <link rel="manifest" href="/manifest.json" />
@@ -387,6 +400,7 @@ Convert an existing web application into a Progressive Web App by adding a web a
    ```
 
    **React/Vite/Vue** (public/index.html):
+
    ```html
    <head>
      <link rel="manifest" href="/manifest.json" />
@@ -401,10 +415,13 @@ Convert an existing web application into a Progressive Web App by adding a web a
    ```
 
 3. If using custom service worker, add registration script:
+
    ```html
    <script src="/sw-register.js"></script>
    ```
+
    Or inline:
+
    ```html
    <script>
      if ('serviceWorker' in navigator) {
@@ -417,7 +434,10 @@ Convert an existing web application into a Progressive Web App by adding a web a
 
 4. Add viewport meta tag if missing:
    ```html
-   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+   <meta
+     name="viewport"
+     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+   />
    ```
 
 **Output**: HTML/Framework configured to load PWA assets
@@ -437,11 +457,12 @@ Convert an existing web application into a Progressive Web App by adding a web a
    - Update service worker to serve offline page when network fails
 
 3. Add install prompt handler (optional):
+
    ```javascript
    // public/install-prompt.js or in main app file
    let deferredPrompt;
 
-   window.addEventListener('beforeinstallprompt', (e) => {
+   window.addEventListener('beforeinstallprompt', e => {
      e.preventDefault();
      deferredPrompt = e;
      // Show custom install button
@@ -489,11 +510,13 @@ Convert an existing web application into a Progressive Web App by adding a web a
 1. Update TodoWrite: Mark "Test PWA functionality" as in_progress
 
 2. Install dependencies if packages were added:
+
    ```bash
    npm install
    ```
 
 3. Run development build:
+
    ```bash
    npm run dev
    ```
@@ -514,6 +537,7 @@ Convert an existing web application into a Progressive Web App by adding a web a
    - Test offline mode by enabling offline in DevTools
 
 7. Create production build and test:
+
    ```bash
    npm run build
    npm run start  # or serve the build directory
@@ -543,6 +567,7 @@ Convert an existing web application into a Progressive Web App by adding a web a
 1. Mark all todos as completed
 
 2. Create/update README with PWA section:
+
    ```markdown
    ## PWA Features
 
@@ -573,6 +598,7 @@ Convert an existing web application into a Progressive Web App by adding a web a
    ### Required Icons
 
    Make sure to provide icons in the following sizes:
+
    - 72x72, 96x96, 128x128, 144x144, 152x152, 192x192, 384x384, 512x512
 
    Place icons in `/public/icons/` directory.
@@ -587,6 +613,7 @@ Convert an existing web application into a Progressive Web App by adding a web a
      ```
 
 4. Provide summary to user:
+
    ```
    PWA Conversion Complete!
 
@@ -632,21 +659,25 @@ Convert an existing web application into a Progressive Web App by adding a web a
 ### Framework-Specific Considerations
 
 **Next.js**:
+
 - Use `next-pwa` package for automatic SW generation
 - Manifest in public/ directory
 - Use App Router metadata API for meta tags
 
 **Vite**:
+
 - Use `vite-plugin-pwa` with Workbox
 - Auto-generates service worker
 - Supports both generateSW and injectManifest modes
 
 **Create React App**:
+
 - Has built-in service worker support (disabled by default)
 - Enable in `src/index.js`: `serviceWorkerRegistration.register()`
 - Manifest template in `public/manifest.json`
 
 **Angular**:
+
 - Use `@angular/pwa` schematic
 - Auto-configures everything
 - ngsw-config.json for service worker configuration
@@ -665,30 +696,36 @@ Convert an existing web application into a Progressive Web App by adding a web a
 ### Caching Strategies
 
 **Cache First** (fastest for static assets):
+
 - Serve from cache, update cache in background
 - Best for: CSS, JS, images
 
 **Network First** (best for dynamic content):
+
 - Try network, fallback to cache if offline
 - Best for: API calls, dynamic data
 
 **Stale While Revalidate** (balanced):
+
 - Serve from cache immediately, update in background
 - Best for: frequently updated content
 
 ### Common Issues
 
 **Service worker not updating**:
+
 - Clear browser cache
 - Unregister old service worker
 - Use skipWaiting() in service worker
 
 **Manifest not loading**:
+
 - Check file path is correct
 - Verify MIME type is application/json
 - Check CORS headers if manifest is on different domain
 
 **Install prompt not showing**:
+
 - Ensure HTTPS
 - Verify all PWA requirements met
 - Check icons are available

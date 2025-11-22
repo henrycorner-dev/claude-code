@@ -30,7 +30,7 @@ class Box2DGame {
 
     // Create Box2D world with gravity (m/s²)
     this.world = planck.World({
-      gravity: planck.Vec2(0, -10)
+      gravity: planck.Vec2(0, -10),
     });
 
     // Game state
@@ -46,15 +46,15 @@ class Box2DGame {
   setupInput() {
     this.keys = {};
 
-    window.addEventListener('keydown', (e) => {
+    window.addEventListener('keydown', e => {
       this.keys[e.code] = true;
     });
 
-    window.addEventListener('keyup', (e) => {
+    window.addEventListener('keyup', e => {
       this.keys[e.code] = false;
     });
 
-    this.canvas.addEventListener('click', (e) => {
+    this.canvas.addEventListener('click', e => {
       const rect = this.canvas.getBoundingClientRect();
       const pixelX = e.clientX - rect.left;
       const pixelY = e.clientY - rect.top;
@@ -65,52 +65,52 @@ class Box2DGame {
   createWorld() {
     // Create ground
     const groundBody = this.world.createBody({
-      position: planck.Vec2(pixelsToMeters(400), pixelsToMeters(580))
+      position: planck.Vec2(pixelsToMeters(400), pixelsToMeters(580)),
     });
 
     groundBody.createFixture({
       shape: planck.Box(pixelsToMeters(400), pixelsToMeters(30)),
       friction: 0.8,
-      density: 0
+      density: 0,
     });
 
     groundBody.setUserData({ type: 'ground', color: '#444' });
 
     // Create walls
     const leftWall = this.world.createBody({
-      position: planck.Vec2(pixelsToMeters(10), pixelsToMeters(300))
+      position: planck.Vec2(pixelsToMeters(10), pixelsToMeters(300)),
     });
     leftWall.createFixture({
       shape: planck.Box(pixelsToMeters(10), pixelsToMeters(300)),
-      friction: 0.5
+      friction: 0.5,
     });
     leftWall.setUserData({ type: 'wall', color: '#666' });
 
     const rightWall = this.world.createBody({
-      position: planck.Vec2(pixelsToMeters(790), pixelsToMeters(300))
+      position: planck.Vec2(pixelsToMeters(790), pixelsToMeters(300)),
     });
     rightWall.createFixture({
       shape: planck.Box(pixelsToMeters(10), pixelsToMeters(300)),
-      friction: 0.5
+      friction: 0.5,
     });
     rightWall.setUserData({ type: 'wall', color: '#666' });
 
     // Create platforms
     const platform1 = this.world.createBody({
-      position: planck.Vec2(pixelsToMeters(200), pixelsToMeters(400))
+      position: planck.Vec2(pixelsToMeters(200), pixelsToMeters(400)),
     });
     platform1.createFixture({
       shape: planck.Box(pixelsToMeters(100), pixelsToMeters(10)),
-      friction: 0.6
+      friction: 0.6,
     });
     platform1.setUserData({ type: 'platform', color: '#888' });
 
     const platform2 = this.world.createBody({
-      position: planck.Vec2(pixelsToMeters(600), pixelsToMeters(300))
+      position: planck.Vec2(pixelsToMeters(600), pixelsToMeters(300)),
     });
     platform2.createFixture({
       shape: planck.Box(pixelsToMeters(100), pixelsToMeters(10)),
-      friction: 0.6
+      friction: 0.6,
     });
     platform2.setUserData({ type: 'platform', color: '#888' });
 
@@ -129,7 +129,7 @@ class Box2DGame {
       const rowY = pixelY + row * boxSize;
 
       for (let col = 0; col < cols; col++) {
-        const boxX = pixelX + col * boxSize + (row * boxSize / 2);
+        const boxX = pixelX + col * boxSize + (row * boxSize) / 2;
         this.createBox(boxX, rowY, boxSize, boxSize, '#ff6b6b');
       }
     }
@@ -138,17 +138,14 @@ class Box2DGame {
   createBox(pixelX, pixelY, pixelWidth, pixelHeight, color = '#4ecdc4') {
     const body = this.world.createDynamicBody({
       position: planck.Vec2(pixelsToMeters(pixelX), pixelsToMeters(pixelY)),
-      angle: 0
+      angle: 0,
     });
 
     body.createFixture({
-      shape: planck.Box(
-        pixelsToMeters(pixelWidth / 2),
-        pixelsToMeters(pixelHeight / 2)
-      ),
+      shape: planck.Box(pixelsToMeters(pixelWidth / 2), pixelsToMeters(pixelHeight / 2)),
       density: 1.0,
       friction: 0.3,
-      restitution: 0.2
+      restitution: 0.2,
     });
 
     body.setUserData({ type: 'box', color });
@@ -159,7 +156,7 @@ class Box2DGame {
   }
 
   setupCollisionCallbacks() {
-    this.world.on('begin-contact', (contact) => {
+    this.world.on('begin-contact', contact => {
       const fixtureA = contact.getFixtureA();
       const fixtureB = contact.getFixtureB();
       const bodyA = fixtureA.getBody();
@@ -169,18 +166,26 @@ class Box2DGame {
       const userDataB = bodyB.getUserData();
 
       // Player landing
-      if (userDataA && userDataA.type === 'player' &&
-          userDataB && (userDataB.type === 'ground' || userDataB.type === 'platform')) {
+      if (
+        userDataA &&
+        userDataA.type === 'player' &&
+        userDataB &&
+        (userDataB.type === 'ground' || userDataB.type === 'platform')
+      ) {
         this.player.onGround = true;
       }
 
-      if (userDataB && userDataB.type === 'player' &&
-          userDataA && (userDataA.type === 'ground' || userDataA.type === 'platform')) {
+      if (
+        userDataB &&
+        userDataB.type === 'player' &&
+        userDataA &&
+        (userDataA.type === 'ground' || userDataA.type === 'platform')
+      ) {
         this.player.onGround = true;
       }
     });
 
-    this.world.on('end-contact', (contact) => {
+    this.world.on('end-contact', contact => {
       const fixtureA = contact.getFixtureA();
       const fixtureB = contact.getFixtureB();
       const bodyA = fixtureA.getBody();
@@ -202,7 +207,7 @@ class Box2DGame {
 
   update(deltaTime) {
     // Update physics world
-    const timeStep = 1/60;
+    const timeStep = 1 / 60;
     const velocityIterations = 8;
     const positionIterations = 3;
 
@@ -283,16 +288,10 @@ class Box2DGame {
     const vertices = shape.m_vertices;
 
     ctx.beginPath();
-    ctx.moveTo(
-      metersToPixels(vertices[0].x),
-      metersToPixels(vertices[0].y)
-    );
+    ctx.moveTo(metersToPixels(vertices[0].x), metersToPixels(vertices[0].y));
 
     for (let i = 1; i < vertices.length; i++) {
-      ctx.lineTo(
-        metersToPixels(vertices[i].x),
-        metersToPixels(vertices[i].y)
-      );
+      ctx.lineTo(metersToPixels(vertices[i].x), metersToPixels(vertices[i].y));
     }
 
     ctx.closePath();
@@ -333,13 +332,13 @@ class Box2DGame {
     this.update(dt);
     this.render();
 
-    requestAnimationFrame((time) => this.gameLoop(time));
+    requestAnimationFrame(time => this.gameLoop(time));
   }
 
   start() {
     this.running = true;
     this.lastTime = performance.now();
-    requestAnimationFrame((time) => this.gameLoop(time));
+    requestAnimationFrame(time => this.gameLoop(time));
   }
 
   stop() {
@@ -354,7 +353,7 @@ class Box2DCharacter {
     // Create dynamic body
     this.body = game.world.createDynamicBody({
       position: planck.Vec2(pixelsToMeters(pixelX), pixelsToMeters(pixelY)),
-      fixedRotation: true // Prevent rotation
+      fixedRotation: true, // Prevent rotation
     });
 
     // Create fixture
@@ -362,7 +361,7 @@ class Box2DCharacter {
       shape: planck.Box(pixelsToMeters(20), pixelsToMeters(30)),
       density: 1.0,
       friction: 0.3,
-      restitution: 0
+      restitution: 0,
     });
 
     this.body.setUserData({ type: 'player' });
@@ -394,10 +393,7 @@ class Box2DCharacter {
     const control = this.onGround ? 1.0 : this.airControl;
     const velChangeX = (targetVelX - vel.x) * control;
 
-    this.body.setLinearVelocity(planck.Vec2(
-      vel.x + velChangeX,
-      vel.y
-    ));
+    this.body.setLinearVelocity(planck.Vec2(vel.x + velChangeX, vel.y));
 
     // Jumping
     if ((keys['Space'] || keys['ArrowUp'] || keys['KeyW']) && this.onGround) {

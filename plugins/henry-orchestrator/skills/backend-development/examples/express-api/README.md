@@ -40,10 +40,12 @@ npm start
 ## API Endpoints
 
 ### Authentication
+
 - `POST /api/auth/register` - Register new user
 - `POST /api/auth/login` - Login user
 
 ### Users (Protected)
+
 - `GET /api/users` - Get all users
 - `GET /api/users/:id` - Get user by ID
 - `PUT /api/users/:id` - Update user (owner or admin)
@@ -94,6 +96,7 @@ curl -X GET http://localhost:3000/api/users \
 ## Notes
 
 This example demonstrates production-ready patterns for Express applications. The code emphasizes:
+
 - Security best practices
 - Clean architecture
 - Testability

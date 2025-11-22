@@ -22,6 +22,7 @@ Main class for data processing operations.
 Creates a new DataProcessor instance.
 
 **Parameters:**
+
 - `config` (ProcessorConfig, optional): Configuration options
   - `workers` (number, optional): Number of parallel workers. Default: 1
   - `cache_size` (number, optional): Cache size in MB. Default: 100
@@ -29,6 +30,7 @@ Creates a new DataProcessor instance.
   - `encoding` (string, optional): Default file encoding. Default: 'utf-8'
 
 **Example:**
+
 ```python
 from dataprocessor import DataProcessor
 
@@ -54,6 +56,7 @@ processor = DataProcessor({
 Loads data from a file or URL.
 
 **Parameters:**
+
 - `path` (str): File path or URL to load from
 - `**options` (dict, optional): Loading options
   - `delimiter` (str): CSV delimiter. Default: ','
@@ -65,11 +68,13 @@ Loads data from a file or URL.
 **Returns:** `DataFrame` - Loaded data as DataFrame
 
 **Raises:**
+
 - `FileNotFoundError` - When file does not exist
 - `InvalidFormatError` - When file format is not supported
 - `NetworkError` - When URL cannot be fetched
 
 **Example:**
+
 ```python
 # Load CSV file
 data = processor.load('data.csv')
@@ -85,6 +90,7 @@ data = processor.load('large.csv', parallel=True, chunksize=10000)
 ```
 
 **Supported Formats:**
+
 - CSV (.csv)
 - JSON (.json)
 - Parquet (.parquet) - requires `dataprocessor[parquet]`
@@ -99,6 +105,7 @@ data = processor.load('large.csv', parallel=True, chunksize=10000)
 Cleans and validates data.
 
 **Parameters:**
+
 - `data` (DataFrame): Data to clean
 - `**options` (dict, optional): Cleaning options
   - `remove_nulls` (bool): Remove rows with null values. Default: False
@@ -109,9 +116,11 @@ Cleans and validates data.
 **Returns:** `DataFrame` - Cleaned data
 
 **Raises:**
+
 - `ValidationError` - When data fails validation
 
 **Example:**
+
 ```python
 # Remove nulls and duplicates
 cleaned = processor.clean(data, remove_nulls=True, remove_duplicates=True)
@@ -135,6 +144,7 @@ cleaned = processor.clean(data, custom_rules={
 Applies transformations to data.
 
 **Parameters:**
+
 - `data` (DataFrame): Data to transform
 - `operations` (list): List of operations to apply
   - Each operation can be:
@@ -146,10 +156,12 @@ Applies transformations to data.
 **Returns:** `DataFrame` - Transformed data
 
 **Raises:**
+
 - `InvalidOperationError` - When operation is not recognized
 - `TransformError` - When transformation fails
 
 **Example:**
+
 ```python
 # Built-in operations
 result = processor.transform(data, operations=['normalize', 'dedupe'])
@@ -163,6 +175,7 @@ result = processor.transform(data, operations=[
 ```
 
 **Built-in Operations:**
+
 - `normalize`: Normalize numeric columns to 0-1 range
 - `dedupe`: Remove duplicate rows
 - `sort`: Sort by column
@@ -178,6 +191,7 @@ result = processor.transform(data, operations=[
 Saves data to a file.
 
 **Parameters:**
+
 - `data` (DataFrame): Data to save
 - `path` (str): Output file path
 - `**options` (dict, optional): Save options
@@ -189,10 +203,12 @@ Saves data to a file.
 **Returns:** `None`
 
 **Raises:**
+
 - `PermissionError` - When file cannot be written
 - `InvalidFormatError` - When format is not supported
 
 **Example:**
+
 ```python
 # Save as CSV
 processor.save(data, 'output.csv')
@@ -213,15 +229,18 @@ processor.save(data, 'output.parquet', format='parquet')
 Registers a custom plugin.
 
 **Parameters:**
+
 - `name` (str): Plugin name
 - `plugin` (Plugin): Plugin instance
 
 **Returns:** `None`
 
 **Raises:**
+
 - `PluginError` - When plugin is invalid
 
 **Example:**
+
 ```python
 from dataprocessor import Plugin
 
@@ -234,6 +253,7 @@ processor.register_plugin('custom', CustomPlugin())
 ```
 
 **See Also:**
+
 - [Plugin System](#plugin-system)
 
 **Since:** v1.2.0
@@ -247,15 +267,18 @@ processor.register_plugin('custom', CustomPlugin())
 Creates a DataProcessor instance from a configuration file.
 
 **Parameters:**
+
 - `config_path` (str): Path to configuration file (YAML or JSON)
 
 **Returns:** `DataProcessor` - Configured instance
 
 **Raises:**
+
 - `FileNotFoundError` - When config file does not exist
 - `ConfigError` - When config is invalid
 
 **Example:**
+
 ```python
 processor = DataProcessor.from_config('config.yaml')
 ```
@@ -281,12 +304,14 @@ Base class for creating custom plugins.
 Transform data with custom logic.
 
 **Parameters:**
+
 - `data` (DataFrame): Input data
 - `**options`: Plugin-specific options
 
 **Returns:** `DataFrame` - Transformed data
 
 **Example:**
+
 ```python
 from dataprocessor import Plugin
 
@@ -329,11 +354,13 @@ Data validation utilities.
 Creates a validator with custom rules.
 
 **Parameters:**
+
 - `rules` (dict): Validation rules per column
   - Key: Column name
   - Value: Validation function or Rule object
 
 **Example:**
+
 ```python
 from dataprocessor import Validator
 
@@ -354,11 +381,13 @@ validator = Validator({
 Validates data against rules.
 
 **Parameters:**
+
 - `data` (DataFrame): Data to validate
 
 **Returns:** `ValidationResult` - Validation result with errors
 
 **Example:**
+
 ```python
 result = validator.validate(data)
 if result.is_valid:
@@ -384,10 +413,12 @@ In-memory LRU cache.
 #### `MemoryCache(max_size=100, ttl=None)`
 
 **Parameters:**
+
 - `max_size` (int): Maximum cache size in MB. Default: 100
 - `ttl` (int, optional): Time-to-live in seconds
 
 **Example:**
+
 ```python
 from dataprocessor import MemoryCache
 
@@ -405,10 +436,12 @@ Disk-based cache for persistence.
 #### `FileCache(cache_dir, max_size=1000)`
 
 **Parameters:**
+
 - `cache_dir` (str): Directory for cache files
 - `max_size` (int): Maximum cache size in MB. Default: 1000
 
 **Example:**
+
 ```python
 from dataprocessor import FileCache
 

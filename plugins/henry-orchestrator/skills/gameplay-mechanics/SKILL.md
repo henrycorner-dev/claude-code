@@ -11,6 +11,7 @@ This skill provides guidance for implementing core gameplay mechanics in game de
 ## When to Use This Skill
 
 Use this skill when implementing fundamental game systems:
+
 - Core game loops with proper timing and frame management
 - Physics simulation and collision detection
 - Pathfinding for character navigation
@@ -24,7 +25,7 @@ Use this skill when implementing fundamental game systems:
 Implement a game loop with fixed timestep for deterministic physics and gameplay:
 
 ```javascript
-const FIXED_TIMESTEP = 1/60; // 60 FPS
+const FIXED_TIMESTEP = 1 / 60; // 60 FPS
 let accumulator = 0;
 let lastTime = performance.now();
 
@@ -77,7 +78,7 @@ const world = engine.world;
 const render = Render.create({
   element: document.body,
   engine: engine,
-  options: { width: 800, height: 600 }
+  options: { width: 800, height: 600 },
 });
 
 // Create physics bodies
@@ -108,6 +109,7 @@ function update(deltaTime) {
 Box2D is a powerful 2D physics engine originally written in C++, with JavaScript ports available (box2d.js, planck.js).
 
 **Key concepts:**
+
 - **World**: Contains all physics bodies and handles simulation
 - **Bodies**: Dynamic, static, or kinematic entities
 - **Fixtures**: Attach shapes and material properties to bodies
@@ -147,9 +149,9 @@ For detailed integration patterns, performance optimization, and common gotchas,
 
 ## Pathfinding Implementation
 
-### A* Algorithm
+### A\* Algorithm
 
-A* (A-star) is the most widely used pathfinding algorithm, offering optimal paths with excellent performance.
+A\* (A-star) is the most widely used pathfinding algorithm, offering optimal paths with excellent performance.
 
 **Core algorithm structure:**
 
@@ -190,6 +192,7 @@ function aStar(start, goal, grid) {
 **Heuristic selection**: Use Manhattan distance for grid-based movement with 4 directions, Euclidean distance for free movement, or Chebyshev distance for 8-directional movement.
 
 **Optimization techniques:**
+
 - **Jump Point Search**: For uniform-cost grids, dramatically reduces nodes explored
 - **Hierarchical pathfinding**: Pre-compute high-level paths, refine locally
 - **Path smoothing**: Post-process paths to remove unnecessary waypoints
@@ -204,20 +207,22 @@ class NavGrid {
     this.width = width;
     this.height = height;
     this.cellSize = cellSize;
-    this.grid = Array(height).fill().map(() => Array(width).fill(true));
+    this.grid = Array(height)
+      .fill()
+      .map(() => Array(width).fill(true));
   }
 
   worldToGrid(x, y) {
     return {
       x: Math.floor(x / this.cellSize),
-      y: Math.floor(y / this.cellSize)
+      y: Math.floor(y / this.cellSize),
     };
   }
 
   gridToWorld(gridX, gridY) {
     return {
       x: gridX * this.cellSize + this.cellSize / 2,
-      y: gridY * this.cellSize + this.cellSize / 2
+      y: gridY * this.cellSize + this.cellSize / 2,
     };
   }
 
@@ -290,7 +295,7 @@ const idleState = {
   },
   exit() {
     // Cleanup
-  }
+  },
 };
 
 const walkState = {
@@ -309,7 +314,7 @@ const walkState = {
   },
   exit() {
     this.velocity.x = 0;
-  }
+  },
 };
 ```
 
@@ -350,6 +355,7 @@ For advanced patterns including hierarchical FSMs, pushdown automata, and behavi
 ### Coordinate Systems
 
 Maintain clear separation between different coordinate systems:
+
 - **World coordinates**: Game world position (meters or game units)
 - **Screen coordinates**: Pixel positions for rendering
 - **Grid coordinates**: Navigation grid cells
@@ -369,6 +375,7 @@ Create utility functions for conversions and use them consistently.
 ### Determinism
 
 For networked games or replay systems, ensure deterministic physics:
+
 - Use fixed timestep for physics updates
 - Avoid platform-specific floating-point operations
 - Seed random number generators consistently
@@ -407,18 +414,20 @@ function debugRender(ctx) {
 ### Reference Files
 
 For detailed implementation guides and advanced techniques, consult:
+
 - **`references/game-loop-patterns.md`** - Comprehensive game loop architectures, interpolation, and timing strategies
 - **`references/physics-engines.md`** - Deep dive into Box2D and Matter.js with integration patterns and optimization
-- **`references/pathfinding-algorithms.md`** - A*, Dijkstra, JPS, navmesh pathfinding with performance comparisons
+- **`references/pathfinding-algorithms.md`** - A\*, Dijkstra, JPS, navmesh pathfinding with performance comparisons
 - **`references/fsm-patterns.md`** - Advanced FSM patterns, hierarchical states, behavior trees
 
 ### Example Files
 
 Working examples demonstrating complete implementations:
+
 - **`examples/game-loop.js`** - Complete game loop with fixed timestep and interpolation
 - **`examples/matter-physics-setup.js`** - Full Matter.js integration with custom game loop
 - **`examples/box2d-setup.js`** - Box2D setup with proper scaling and coordinate conversion
-- **`examples/astar-pathfinding.js`** - Production-ready A* implementation with priority queue
+- **`examples/astar-pathfinding.js`** - Production-ready A\* implementation with priority queue
 - **`examples/fsm-character.js`** - Character controller with FSM for player/NPC behavior
 - **`examples/spatial-grid.js`** - Spatial partitioning for efficient collision detection
 
@@ -437,6 +446,7 @@ Maintain this order consistently to avoid subtle bugs.
 ### Entity Component System (ECS) Integration
 
 When using ECS architecture, integrate gameplay mechanics as systems:
+
 - **PhysicsSystem**: Updates physics bodies and resolves collisions
 - **MovementSystem**: Handles character movement and navigation
 - **AISystem**: Runs pathfinding and state machine updates
@@ -506,7 +516,7 @@ When implementing gameplay mechanics in a new project:
 2. **Choose physics engine** (Matter.js for simplicity, Box2D for advanced features)
 3. **Implement coordinate conversion** utilities between world/screen/grid systems
 4. **Create navigation grid** for pathfinding with appropriate cell size
-5. **Implement A* pathfinding** with proper heuristic for your game
+5. **Implement A\* pathfinding** with proper heuristic for your game
 6. **Design state machines** for AI behavior with clear states and transitions
 7. **Add visual debugging** for physics, pathfinding, and AI states
 8. **Profile and optimize** based on actual performance metrics

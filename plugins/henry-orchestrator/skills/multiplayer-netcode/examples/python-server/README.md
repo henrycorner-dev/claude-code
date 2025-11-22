@@ -1,6 +1,7 @@
 # Python WebSocket Server
 
 This example demonstrates a multiplayer game server in Python:
+
 - Async WebSocket server using `websockets` library
 - Authoritative game state
 - JSON message protocol
@@ -36,6 +37,7 @@ const client = new GameClient('ws://localhost:3000');
 Same protocol as the JavaScript WebSocket example:
 
 **Client → Server:**
+
 ```json
 {
   "type": "input",
@@ -48,6 +50,7 @@ Same protocol as the JavaScript WebSocket example:
 ```
 
 **Server → Client:**
+
 ```json
 {
   "type": "state",
@@ -80,12 +83,14 @@ Same protocol as the JavaScript WebSocket example:
 ## When to Use Python Server
 
 **Good for:**
+
 - Games with complex AI (leverage scikit-learn, TensorFlow)
 - Integration with data pipelines
 - Rapid prototyping
 - Teams with Python expertise
 
 **Not ideal for:**
+
 - Very high player counts (>1000 concurrent)
 - Ultra-low latency requirements (<10ms)
 - Games needing Node.js ecosystem

@@ -19,6 +19,7 @@ Next.js supports two routing systems: the newer App Router (Next.js 13+) and the
 ### When to Use App Router
 
 **Use App Router when:**
+
 - Starting new projects (recommended by Next.js team)
 - Want to use React Server Components
 - Need streaming and Suspense
@@ -26,6 +27,7 @@ Next.js supports two routing systems: the newer App Router (Next.js 13+) and the
 - Need layouts and nested routing
 
 **Key Features:**
+
 - React Server Components by default
 - Streaming with Suspense
 - Nested layouts and templates
@@ -35,12 +37,14 @@ Next.js supports two routing systems: the newer App Router (Next.js 13+) and the
 ### When to Use Pages Router
 
 **Use Pages Router when:**
+
 - Maintaining existing applications
 - Team unfamiliar with Server Components
 - Need `getServerSideProps`/`getStaticProps` patterns
 - Using libraries incompatible with Server Components
 
 **Key Features:**
+
 - Battle-tested and stable
 - Familiar data fetching methods
 - Wide ecosystem compatibility
@@ -61,6 +65,7 @@ pages/
 ```
 
 **Migration Priority:**
+
 1. New features → App Router
 2. API routes → Can stay in Pages Router or migrate to Route Handlers
 3. Static pages → Migrate when convenient
@@ -110,20 +115,20 @@ Control caching behavior with `cache` and `next.revalidate` options:
 
 ```typescript
 // Static Site Generation (cached indefinitely)
-fetch('https://api.example.com/posts', { cache: 'force-cache' })
+fetch('https://api.example.com/posts', { cache: 'force-cache' });
 
 // Server-Side Rendering (no caching)
-fetch('https://api.example.com/posts', { cache: 'no-store' })
+fetch('https://api.example.com/posts', { cache: 'no-store' });
 
 // Incremental Static Regeneration (revalidate every 60 seconds)
 fetch('https://api.example.com/posts', {
-  next: { revalidate: 60 }
-})
+  next: { revalidate: 60 },
+});
 
 // Tag-based revalidation
 fetch('https://api.example.com/posts', {
-  next: { tags: ['posts'] }
-})
+  next: { tags: ['posts'] },
+});
 ```
 
 #### Parallel Data Fetching
@@ -238,26 +243,26 @@ Server Actions enable mutations without API routes:
 
 ```typescript
 // app/actions.ts
-'use server'
+'use server';
 
-import { revalidatePath } from 'next/cache'
+import { revalidatePath } from 'next/cache';
 
 export async function createPost(formData: FormData) {
-  const title = formData.get('title')
-  const content = formData.get('content')
+  const title = formData.get('title');
+  const content = formData.get('content');
 
   const res = await fetch('https://api.example.com/posts', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ title, content })
-  })
+    body: JSON.stringify({ title, content }),
+  });
 
   if (!res.ok) {
-    throw new Error('Failed to create post')
+    throw new Error('Failed to create post');
   }
 
-  revalidatePath('/posts')
-  return res.json()
+  revalidatePath('/posts');
+  return res.json();
 }
 ```
 
@@ -598,6 +603,7 @@ export default function Template({
 ```
 
 **Use templates when:**
+
 - Need to re-trigger animations on navigation
 - Need to reset state on route change
 - Need to track page views in analytics
@@ -759,6 +765,7 @@ export default async function Page() {
 ### When to Use Each
 
 **Use Server Components for:**
+
 - Data fetching
 - Backend resource access
 - Keeping sensitive data on server
@@ -766,6 +773,7 @@ export default async function Page() {
 - Static content
 
 **Use Client Components for:**
+
 - Interactivity (onClick, onChange)
 - React hooks (useState, useEffect, useReducer)
 - Browser APIs (localStorage, geolocation)
@@ -780,30 +788,27 @@ Middleware runs before requests are completed, enabling authentication, redirect
 
 ```typescript
 // middleware.ts (root of project)
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
   // Check authentication
-  const token = request.cookies.get('token')
+  const token = request.cookies.get('token');
 
   if (!token && request.nextUrl.pathname.startsWith('/dashboard')) {
-    return NextResponse.redirect(new URL('/login', request.url))
+    return NextResponse.redirect(new URL('/login', request.url));
   }
 
   // Add custom header
-  const response = NextResponse.next()
-  response.headers.set('x-custom-header', 'value')
+  const response = NextResponse.next();
+  response.headers.set('x-custom-header', 'value');
 
-  return response
+  return response;
 }
 
 export const config = {
-  matcher: [
-    '/dashboard/:path*',
-    '/api/:path*'
-  ]
-}
+  matcher: ['/dashboard/:path*', '/api/:path*'],
+};
 ```
 
 #### Middleware Use Cases
@@ -811,63 +816,63 @@ export const config = {
 **Authentication:**
 
 ```typescript
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  const token = request.cookies.get('auth-token')
+  const token = request.cookies.get('auth-token');
 
   if (!token) {
-    return NextResponse.redirect(new URL('/login', request.url))
+    return NextResponse.redirect(new URL('/login', request.url));
   }
 
   // Verify token (simplified)
   if (!isValidToken(token.value)) {
-    return NextResponse.redirect(new URL('/login', request.url))
+    return NextResponse.redirect(new URL('/login', request.url));
   }
 
-  return NextResponse.next()
+  return NextResponse.next();
 }
 ```
 
 **Geolocation Redirects:**
 
 ```typescript
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  const country = request.geo?.country || 'US'
+  const country = request.geo?.country || 'US';
 
   // Redirect EU users to EU-specific site
   if (country === 'DE' || country === 'FR') {
-    return NextResponse.redirect(new URL('/eu', request.url))
+    return NextResponse.redirect(new URL('/eu', request.url));
   }
 
-  return NextResponse.next()
+  return NextResponse.next();
 }
 ```
 
 **A/B Testing:**
 
 ```typescript
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
   // Check if user already has variant
-  const variant = request.cookies.get('ab-test-variant')
+  const variant = request.cookies.get('ab-test-variant');
 
   if (variant) {
-    return NextResponse.next()
+    return NextResponse.next();
   }
 
   // Assign random variant
-  const newVariant = Math.random() < 0.5 ? 'A' : 'B'
-  const response = NextResponse.next()
-  response.cookies.set('ab-test-variant', newVariant)
+  const newVariant = Math.random() < 0.5 ? 'A' : 'B';
+  const response = NextResponse.next();
+  response.cookies.set('ab-test-variant', newVariant);
 
-  return response
+  return response;
 }
 ```
 
@@ -877,26 +882,26 @@ App Router uses Route Handlers instead of API Routes:
 
 ```typescript
 // app/api/posts/route.ts
-import { NextResponse } from 'next/server'
+import { NextResponse } from 'next/server';
 
 export async function GET(request: Request) {
-  const posts = await fetch('https://api.example.com/posts').then(r => r.json())
+  const posts = await fetch('https://api.example.com/posts').then(r => r.json());
 
-  return NextResponse.json(posts)
+  return NextResponse.json(posts);
 }
 
 export async function POST(request: Request) {
-  const body = await request.json()
+  const body = await request.json();
 
   const res = await fetch('https://api.example.com/posts', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body)
-  })
+    body: JSON.stringify(body),
+  });
 
-  const post = await res.json()
+  const post = await res.json();
 
-  return NextResponse.json(post, { status: 201 })
+  return NextResponse.json(post, { status: 201 });
 }
 ```
 
@@ -904,26 +909,20 @@ export async function POST(request: Request) {
 
 ```typescript
 // app/api/posts/[id]/route.ts
-import { NextResponse } from 'next/server'
+import { NextResponse } from 'next/server';
 
-export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
-  const post = await fetch(`https://api.example.com/posts/${params.id}`).then(r => r.json())
+export async function GET(request: Request, { params }: { params: { id: string } }) {
+  const post = await fetch(`https://api.example.com/posts/${params.id}`).then(r => r.json());
 
-  return NextResponse.json(post)
+  return NextResponse.json(post);
 }
 
-export async function DELETE(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(request: Request, { params }: { params: { id: string } }) {
   await fetch(`https://api.example.com/posts/${params.id}`, {
-    method: 'DELETE'
-  })
+    method: 'DELETE',
+  });
 
-  return NextResponse.json({ message: 'Deleted' })
+  return NextResponse.json({ message: 'Deleted' });
 }
 ```
 
@@ -933,14 +932,15 @@ Use Edge Runtime for lower latency:
 
 ```typescript
 // app/api/hello/route.ts
-export const runtime = 'edge'
+export const runtime = 'edge';
 
 export async function GET(request: Request) {
-  return new Response('Hello from Edge!')
+  return new Response('Hello from Edge!');
 }
 ```
 
 **Edge Runtime Limitations:**
+
 - No Node.js APIs (fs, path, crypto)
 - Smaller bundle size limits
 - Limited npm packages
@@ -1101,14 +1101,14 @@ export default function NotFound() {
 
 ```typescript
 // app/blog/[slug]/page.tsx
-import type { Metadata } from 'next'
+import type { Metadata } from 'next';
 
 export async function generateMetadata({
-  params
+  params,
 }: {
-  params: { slug: string }
+  params: { slug: string };
 }): Promise<Metadata> {
-  const post = await fetch(`https://api.example.com/posts/${params.slug}`).then(r => r.json())
+  const post = await fetch(`https://api.example.com/posts/${params.slug}`).then(r => r.json());
 
   return {
     title: post.title,
@@ -1116,9 +1116,9 @@ export async function generateMetadata({
     openGraph: {
       title: post.title,
       description: post.excerpt,
-      images: [post.image]
-    }
-  }
+      images: [post.image],
+    },
+  };
 }
 ```
 

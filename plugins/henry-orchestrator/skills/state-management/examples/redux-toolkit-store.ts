@@ -80,19 +80,19 @@ const userSlice = createSlice({
       state.current = action.payload;
       state.error = null;
     },
-    logout: (state) => {
+    logout: state => {
       state.current = null;
       state.loading = 'idle';
       state.error = null;
     },
-    clearError: (state) => {
+    clearError: state => {
       state.error = null;
     },
   },
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     // Fetch user
     builder
-      .addCase(fetchUser.pending, (state) => {
+      .addCase(fetchUser.pending, state => {
         state.loading = 'pending';
         state.error = null;
       })
@@ -107,7 +107,7 @@ const userSlice = createSlice({
 
     // Update user
     builder
-      .addCase(updateUser.pending, (state) => {
+      .addCase(updateUser.pending, state => {
         state.loading = 'pending';
         state.error = null;
       })
@@ -173,19 +173,19 @@ const productsSlice = createSlice({
       state.items.push(action.payload);
     },
     removeProduct: (state, action: PayloadAction<string>) => {
-      state.items = state.items.filter((p) => p.id !== action.payload);
+      state.items = state.items.filter(p => p.id !== action.payload);
     },
     updateProduct: (state, action: PayloadAction<{ id: string; updates: Partial<Product> }>) => {
-      const product = state.items.find((p) => p.id === action.payload.id);
+      const product = state.items.find(p => p.id === action.payload.id);
       if (product) {
         Object.assign(product, action.payload.updates);
       }
     },
   },
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     // Fetch products
     builder
-      .addCase(fetchProducts.pending, (state) => {
+      .addCase(fetchProducts.pending, state => {
         state.loading = 'pending';
         state.error = null;
       })
@@ -200,7 +200,7 @@ const productsSlice = createSlice({
 
     // Create product
     builder
-      .addCase(createProduct.pending, (state) => {
+      .addCase(createProduct.pending, state => {
         state.loading = 'pending';
         state.error = null;
       })
@@ -224,7 +224,7 @@ export const store = configureStore({
     user: userSlice.reducer,
     products: productsSlice.reducer,
   },
-  middleware: (getDefaultMiddleware) =>
+  middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: {
         // Ignore these action types for serializable check
@@ -261,17 +261,16 @@ export const selectProductsError = (state: RootState) => state.products.error;
 // Memoized selectors
 import { createSelector } from '@reduxjs/toolkit';
 
-export const selectExpensiveProducts = createSelector(
-  [selectProducts],
-  (products) => products.filter((p) => p.price > 100)
+export const selectExpensiveProducts = createSelector([selectProducts], products =>
+  products.filter(p => p.price > 100)
 );
 
 export const selectProductsByCategory = createSelector(
   [selectProducts, (_state: RootState, categoryId: string) => categoryId],
-  (products, categoryId) => products.filter((p) => p.categoryId === categoryId)
+  (products, categoryId) => products.filter(p => p.categoryId === categoryId)
 );
 
-export const selectProductStats = createSelector([selectProducts], (products) => {
+export const selectProductStats = createSelector([selectProducts], products => {
   const total = products.length;
   const totalValue = products.reduce((sum, p) => sum + p.price, 0);
   const averagePrice = total > 0 ? totalValue / total : 0;

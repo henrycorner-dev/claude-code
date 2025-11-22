@@ -15,6 +15,7 @@ Background Sync enables deferred actions that reliably execute even when the use
 ```
 
 The browser fires the sync event when:
+
 - Network connectivity is restored
 - Immediately if already online
 - User reopens the app (for periodic sync)
@@ -64,7 +65,7 @@ async function handleFormSubmit(formData) {
 ```javascript
 // In your service worker (sw.js or public/sw.js)
 
-self.addEventListener('sync', (event) => {
+self.addEventListener('sync', event => {
   console.log('Sync event fired:', event.tag);
 
   if (event.tag === 'sync-form-submission') {
@@ -92,9 +93,9 @@ async function syncFormSubmissions() {
         const response = await fetch('/api/submit', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
           },
-          body: JSON.stringify(submission.data)
+          body: JSON.stringify(submission.data),
         });
 
         if (response.ok) {
@@ -115,7 +116,7 @@ async function syncFormSubmissions() {
     if ('Notification' in self && Notification.permission === 'granted') {
       self.registration.showNotification('Sync Complete', {
         body: 'Your data has been synchronized',
-        icon: '/icon-192x192.png'
+        icon: '/icon-192x192.png',
       });
     }
   } catch (error) {
@@ -138,7 +139,7 @@ function openDatabase() {
     request.onerror = () => reject(request.error);
     request.onsuccess = () => resolve(request.result);
 
-    request.onupgradeneeded = (event) => {
+    request.onupgradeneeded = event => {
       const db = event.target.result;
 
       // Create object stores
@@ -163,7 +164,7 @@ function saveToIndexedDB(storeName, data) {
 
     const request = store.add({
       data,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
 
     request.onsuccess = () => resolve(request.result);
@@ -210,7 +211,7 @@ async function submitForm(event) {
     const response = await fetch('/api/forms', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     });
 
     if (response.ok) {
@@ -233,14 +234,14 @@ async function sendMessage(message) {
   const messageData = {
     text: message,
     userId: currentUser.id,
-    timestamp: Date.now()
+    timestamp: Date.now(),
   };
 
   try {
     const response = await fetch('/api/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(messageData)
+      body: JSON.stringify(messageData),
     });
 
     if (response.ok) {
@@ -263,7 +264,7 @@ async function syncMessages() {
       const response = await fetch('/api/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(message.data)
+        body: JSON.stringify(message.data),
       });
 
       if (response.ok) {
@@ -288,7 +289,7 @@ async function uploadFile(file) {
     filename: file.name,
     type: file.type,
     size: file.size,
-    data: base64
+    data: base64,
   };
 
   try {
@@ -297,7 +298,7 @@ async function uploadFile(file) {
 
     const response = await fetch('/api/upload', {
       method: 'POST',
-      body: formData
+      body: formData,
     });
 
     if (response.ok) {
@@ -325,7 +326,7 @@ async function syncUploads() {
 
       const response = await fetch('/api/upload', {
         method: 'POST',
-        body: formData
+        body: formData,
       });
 
       if (response.ok) {
@@ -373,12 +374,12 @@ async function registerPeriodicSync() {
     if ('periodicSync' in registration) {
       // Request permission (requires user engagement)
       const status = await navigator.permissions.query({
-        name: 'periodic-background-sync'
+        name: 'periodic-background-sync',
       });
 
       if (status.state === 'granted') {
         await registration.periodicSync.register('sync-content', {
-          minInterval: 24 * 60 * 60 * 1000 // 24 hours
+          minInterval: 24 * 60 * 60 * 1000, // 24 hours
         });
         console.log('Periodic sync registered');
       }
@@ -389,7 +390,7 @@ async function registerPeriodicSync() {
 }
 
 // Service worker: Handle periodic sync
-self.addEventListener('periodicsync', (event) => {
+self.addEventListener('periodicsync', event => {
   if (event.tag === 'sync-content') {
     event.waitUntil(syncContent());
   }
@@ -501,7 +502,7 @@ export default function SyncStatus() {
 
 ```javascript
 function checkBackgroundSyncSupport() {
-  return new Promise(async (resolve) => {
+  return new Promise(async resolve => {
     if ('serviceWorker' in navigator) {
       const registration = await navigator.serviceWorker.ready;
       resolve('sync' in registration);
@@ -580,10 +581,12 @@ async function retryWithBackoff(fn, maxRetries = 3) {
 
 // Usage
 try {
-  await retryWithBackoff(() => fetch('/api/submit', {
-    method: 'POST',
-    body: JSON.stringify(data)
-  }));
+  await retryWithBackoff(() =>
+    fetch('/api/submit', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    })
+  );
 } catch (error) {
   console.error('All retries failed:', error);
 }

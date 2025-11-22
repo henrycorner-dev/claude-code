@@ -7,6 +7,7 @@ Comprehensive guide to production Kubernetes patterns, StatefulSets, operators, 
 ### Deployments
 
 **Production-Ready Deployment:**
+
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -36,8 +37,8 @@ spec:
         app: webapp
         version: v1.2.0
       annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "9090"
+        prometheus.io/scrape: 'true'
+        prometheus.io/port: '9090'
 
     spec:
       serviceAccountName: webapp-sa
@@ -47,102 +48,103 @@ spec:
         fsGroup: 1001
 
       containers:
-      - name: webapp
-        image: myregistry/webapp:v1.2.0
-        imagePullPolicy: IfNotPresent
+        - name: webapp
+          image: myregistry/webapp:v1.2.0
+          imagePullPolicy: IfNotPresent
 
-        ports:
-        - name: http
-          containerPort: 8080
-          protocol: TCP
-        - name: metrics
-          containerPort: 9090
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+            - name: metrics
+              containerPort: 9090
 
-        env:
-        - name: POD_NAME
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.name
-        - name: POD_NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
-        - name: DATABASE_URL
-          valueFrom:
-            secretKeyRef:
-              name: webapp-secrets
-              key: database-url
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: webapp-secrets
+                  key: database-url
 
-        envFrom:
-        - configMapRef:
-            name: webapp-config
+          envFrom:
+            - configMapRef:
+                name: webapp-config
 
-        resources:
-          requests:
-            cpu: 100m
-            memory: 128Mi
-          limits:
-            cpu: 500m
-            memory: 512Mi
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
 
-        livenessProbe:
-          httpGet:
-            path: /healthz
-            port: http
-          initialDelaySeconds: 30
-          periodSeconds: 10
-          timeoutSeconds: 5
-          failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
 
-        readinessProbe:
-          httpGet:
-            path: /ready
-            port: http
-          initialDelaySeconds: 10
-          periodSeconds: 5
-          timeoutSeconds: 3
-          failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
 
-        startupProbe:
-          httpGet:
-            path: /startup
-            port: http
-          initialDelaySeconds: 0
-          periodSeconds: 10
-          failureThreshold: 30
+          startupProbe:
+            httpGet:
+              path: /startup
+              port: http
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            failureThreshold: 30
 
-        volumeMounts:
-        - name: config
-          mountPath: /etc/config
-          readOnly: true
-        - name: cache
-          mountPath: /var/cache
+          volumeMounts:
+            - name: config
+              mountPath: /etc/config
+              readOnly: true
+            - name: cache
+              mountPath: /var/cache
 
       volumes:
-      - name: config
-        configMap:
-          name: webapp-config
-      - name: cache
-        emptyDir:
-          sizeLimit: 1Gi
+        - name: config
+          configMap:
+            name: webapp-config
+        - name: cache
+          emptyDir:
+            sizeLimit: 1Gi
 
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                - key: app
-                  operator: In
-                  values:
-                  - webapp
-              topologyKey: kubernetes.io/hostname
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - webapp
+                topologyKey: kubernetes.io/hostname
 ```
 
 ### StatefulSets
 
 **For Stateful Applications:**
+
 ```yaml
 apiVersion: apps/v1
 kind: StatefulSet
@@ -162,48 +164,49 @@ spec:
         app: database
     spec:
       containers:
-      - name: postgres
-        image: postgres:15-alpine
+        - name: postgres
+          image: postgres:15-alpine
 
-        ports:
-        - containerPort: 5432
-          name: postgres
+          ports:
+            - containerPort: 5432
+              name: postgres
 
-        env:
-        - name: POSTGRES_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: db-secrets
-              key: password
-        - name: PGDATA
-          value: /var/lib/postgresql/data/pgdata
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secrets
+                  key: password
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
 
-        volumeMounts:
-        - name: data
-          mountPath: /var/lib/postgresql/data
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
 
-        resources:
-          requests:
-            cpu: 500m
-            memory: 1Gi
-          limits:
-            cpu: 2
-            memory: 4Gi
+          resources:
+            requests:
+              cpu: 500m
+              memory: 1Gi
+            limits:
+              cpu: 2
+              memory: 4Gi
 
   volumeClaimTemplates:
-  - metadata:
-      name: data
-    spec:
-      accessModes: ["ReadWriteOnce"]
-      storageClassName: fast-ssd
-      resources:
-        requests:
-          storage: 20Gi
+    - metadata:
+        name: data
+      spec:
+        accessModes: ['ReadWriteOnce']
+        storageClassName: fast-ssd
+        resources:
+          requests:
+            storage: 20Gi
 ```
 
 ### Services
 
 **ClusterIP (Internal):**
+
 ```yaml
 apiVersion: v1
 kind: Service
@@ -214,15 +217,16 @@ spec:
   selector:
     app: webapp
   ports:
-  - name: http
-    port: 80
-    targetPort: 8080
-  - name: metrics
-    port: 9090
-    targetPort: 9090
+    - name: http
+      port: 80
+      targetPort: 8080
+    - name: metrics
+      port: 9090
+      targetPort: 9090
 ```
 
 **LoadBalancer (External):**
+
 ```yaml
 apiVersion: v1
 kind: Service
@@ -235,23 +239,24 @@ spec:
   selector:
     app: webapp
   ports:
-  - port: 443
-    targetPort: 8080
+    - port: 443
+      targetPort: 8080
   sessionAffinity: ClientIP
 ```
 
 **Headless Service (StatefulSet):**
+
 ```yaml
 apiVersion: v1
 kind: Service
 metadata:
   name: database
 spec:
-  clusterIP: None  # Headless
+  clusterIP: None # Headless
   selector:
     app: database
   ports:
-  - port: 5432
+    - port: 5432
 ```
 
 ## Configuration Management
@@ -259,14 +264,15 @@ spec:
 ### ConfigMaps
 
 **From Literals:**
+
 ```yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: app-config
 data:
-  log_level: "info"
-  feature_flag: "true"
+  log_level: 'info'
+  feature_flag: 'true'
   config.json: |
     {
       "database": {
@@ -276,6 +282,7 @@ data:
 ```
 
 **Versioned ConfigMaps:**
+
 ```yaml
 apiVersion: v1
 kind: ConfigMap
@@ -295,13 +302,14 @@ spec:
   template:
     spec:
       containers:
-      - name: app
-        envFrom:
-        - configMapRef:
-            name: app-config-v2
+        - name: app
+          envFrom:
+            - configMapRef:
+                name: app-config-v2
 ```
 
 **Trigger Rollout on Change:**
+
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -311,12 +319,13 @@ spec:
   template:
     metadata:
       annotations:
-        config/checksum: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        config/checksum: { { include (print $.Template.BasePath "/configmap.yaml") . | sha256sum } }
 ```
 
 ### Secrets
 
 **Opaque Secrets:**
+
 ```yaml
 apiVersion: v1
 kind: Secret
@@ -324,11 +333,12 @@ metadata:
   name: app-secrets
 type: Opaque
 stringData:
-  api-key: "secret-value-here"
-  database-url: "postgresql://user:pass@host:5432/db"
+  api-key: 'secret-value-here'
+  database-url: 'postgresql://user:pass@host:5432/db'
 ```
 
 **TLS Secrets:**
+
 ```yaml
 apiVersion: v1
 kind: Secret
@@ -341,6 +351,7 @@ data:
 ```
 
 **Docker Registry Secrets:**
+
 ```yaml
 apiVersion: v1
 kind: Secret
@@ -352,13 +363,14 @@ data:
 ```
 
 Use in Pod:
+
 ```yaml
 spec:
   imagePullSecrets:
-  - name: registry-credentials
+    - name: registry-credentials
   containers:
-  - name: app
-    image: private-registry/app:v1
+    - name: app
+      image: private-registry/app:v1
 ```
 
 ## Ingress and Networking
@@ -372,39 +384,40 @@ metadata:
   name: webapp-ingress
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: 'true'
+    nginx.ingress.kubernetes.io/force-ssl-redirect: 'true'
 spec:
   ingressClassName: nginx
 
   tls:
-  - hosts:
-    - app.example.com
-    secretName: webapp-tls
+    - hosts:
+        - app.example.com
+      secretName: webapp-tls
 
   rules:
-  - host: app.example.com
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: webapp-service
-            port:
-              number: 80
-      - path: /api
-        pathType: Prefix
-        backend:
-          service:
-            name: api-service
-            port:
-              number: 8080
+    - host: app.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: webapp-service
+                port:
+                  number: 80
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: api-service
+                port:
+                  number: 8080
 ```
 
 ### NetworkPolicy
 
 **Restrict Pod Communication:**
+
 ```yaml
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -416,33 +429,33 @@ spec:
       app: webapp
 
   policyTypes:
-  - Ingress
-  - Egress
+    - Ingress
+    - Egress
 
   ingress:
-  - from:
-    - podSelector:
-        matchLabels:
-          role: frontend
-    ports:
-    - protocol: TCP
-      port: 8080
+    - from:
+        - podSelector:
+            matchLabels:
+              role: frontend
+      ports:
+        - protocol: TCP
+          port: 8080
 
   egress:
-  - to:
-    - podSelector:
-        matchLabels:
-          app: database
-    ports:
-    - protocol: TCP
-      port: 5432
-  - to:  # Allow DNS
-    - namespaceSelector:
-        matchLabels:
-          name: kube-system
-    ports:
-    - protocol: UDP
-      port: 53
+    - to:
+        - podSelector:
+            matchLabels:
+              app: database
+      ports:
+        - protocol: TCP
+          port: 5432
+    - to: # Allow DNS
+        - namespaceSelector:
+            matchLabels:
+              name: kube-system
+      ports:
+        - protocol: UDP
+          port: 53
 ```
 
 ## Autoscaling
@@ -467,40 +480,40 @@ spec:
     scaleDown:
       stabilizationWindowSeconds: 300
       policies:
-      - type: Percent
-        value: 50
-        periodSeconds: 60
+        - type: Percent
+          value: 50
+          periodSeconds: 60
     scaleUp:
       stabilizationWindowSeconds: 0
       policies:
-      - type: Percent
-        value: 100
-        periodSeconds: 15
-      - type: Pods
-        value: 2
-        periodSeconds: 15
+        - type: Percent
+          value: 100
+          periodSeconds: 15
+        - type: Pods
+          value: 2
+          periodSeconds: 15
       selectPolicy: Max
 
   metrics:
-  - type: Resource
-    resource:
-      name: cpu
-      target:
-        type: Utilization
-        averageUtilization: 70
-  - type: Resource
-    resource:
-      name: memory
-      target:
-        type: Utilization
-        averageUtilization: 80
-  - type: Pods
-    pods:
-      metric:
-        name: http_requests_per_second
-      target:
-        type: AverageValue
-        averageValue: "1000"
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+    - type: Pods
+      pods:
+        metric:
+          name: http_requests_per_second
+        target:
+          type: AverageValue
+          averageValue: '1000'
 ```
 
 ### Vertical Pod Autoscaler
@@ -517,17 +530,17 @@ spec:
     name: webapp
 
   updatePolicy:
-    updateMode: "Auto"  # or "Recreate", "Initial", "Off"
+    updateMode: 'Auto' # or "Recreate", "Initial", "Off"
 
   resourcePolicy:
     containerPolicies:
-    - containerName: webapp
-      minAllowed:
-        cpu: 100m
-        memory: 128Mi
-      maxAllowed:
-        cpu: 2
-        memory: 2Gi
+      - containerName: webapp
+        minAllowed:
+          cpu: 100m
+          memory: 128Mi
+        maxAllowed:
+          cpu: 2
+          memory: 2Gi
 ```
 
 ## Resource Management
@@ -542,12 +555,12 @@ metadata:
   namespace: production
 spec:
   hard:
-    requests.cpu: "100"
+    requests.cpu: '100'
     requests.memory: 200Gi
-    limits.cpu: "200"
+    limits.cpu: '200'
     limits.memory: 400Gi
-    persistentvolumeclaims: "20"
-    services.loadbalancers: "5"
+    persistentvolumeclaims: '20'
+    services.loadbalancers: '5'
 ```
 
 ### Limit Ranges
@@ -560,24 +573,24 @@ metadata:
   namespace: production
 spec:
   limits:
-  - max:
-      cpu: "4"
-      memory: 8Gi
-    min:
-      cpu: 50m
-      memory: 64Mi
-    default:
-      cpu: 500m
-      memory: 512Mi
-    defaultRequest:
-      cpu: 100m
-      memory: 128Mi
-    type: Container
-  - max:
-      storage: 100Gi
-    min:
-      storage: 1Gi
-    type: PersistentVolumeClaim
+    - max:
+        cpu: '4'
+        memory: 8Gi
+      min:
+        cpu: 50m
+        memory: 64Mi
+      default:
+        cpu: 500m
+        memory: 512Mi
+      defaultRequest:
+        cpu: 100m
+        memory: 128Mi
+      type: Container
+    - max:
+        storage: 100Gi
+      min:
+        storage: 1Gi
+      type: PersistentVolumeClaim
 ```
 
 ## Storage
@@ -591,7 +604,7 @@ metadata:
   name: app-storage
 spec:
   accessModes:
-  - ReadWriteOnce
+    - ReadWriteOnce
   storageClassName: fast-ssd
   resources:
     requests:
@@ -599,48 +612,52 @@ spec:
 ```
 
 Use in Pod:
+
 ```yaml
 spec:
   containers:
-  - name: app
-    volumeMounts:
-    - name: storage
-      mountPath: /data
+    - name: app
+      volumeMounts:
+        - name: storage
+          mountPath: /data
   volumes:
-  - name: storage
-    persistentVolumeClaim:
-      claimName: app-storage
+    - name: storage
+      persistentVolumeClaim:
+        claimName: app-storage
 ```
 
 ### Volume Types
 
 **EmptyDir (Temporary):**
+
 ```yaml
 volumes:
-- name: cache
-  emptyDir:
-    medium: Memory
-    sizeLimit: 1Gi
+  - name: cache
+    emptyDir:
+      medium: Memory
+      sizeLimit: 1Gi
 ```
 
 **HostPath (Node Storage):**
+
 ```yaml
 volumes:
-- name: logs
-  hostPath:
-    path: /var/log/app
-    type: DirectoryOrCreate
+  - name: logs
+    hostPath:
+      path: /var/log/app
+      type: DirectoryOrCreate
 ```
 
 **ConfigMap Volume:**
+
 ```yaml
 volumes:
-- name: config
-  configMap:
-    name: app-config
-    items:
-    - key: config.json
-      path: config.json
+  - name: config
+    configMap:
+      name: app-config
+      items:
+        - key: config.json
+          path: config.json
 ```
 
 ## RBAC
@@ -664,12 +681,12 @@ metadata:
   name: pod-reader
   namespace: production
 rules:
-- apiGroups: [""]
-  resources: ["pods"]
-  verbs: ["get", "list", "watch"]
-- apiGroups: [""]
-  resources: ["configmaps"]
-  verbs: ["get"]
+  - apiGroups: ['']
+    resources: ['pods']
+    verbs: ['get', 'list', 'watch']
+  - apiGroups: ['']
+    resources: ['configmaps']
+    verbs: ['get']
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -677,9 +694,9 @@ metadata:
   name: read-pods
   namespace: production
 subjects:
-- kind: ServiceAccount
-  name: webapp-sa
-  namespace: production
+  - kind: ServiceAccount
+    name: webapp-sa
+    namespace: production
 roleRef:
   kind: Role
   name: pod-reader
@@ -694,18 +711,18 @@ kind: ClusterRole
 metadata:
   name: secret-reader
 rules:
-- apiGroups: [""]
-  resources: ["secrets"]
-  verbs: ["get", "list"]
+  - apiGroups: ['']
+    resources: ['secrets']
+    verbs: ['get', 'list']
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: read-secrets-global
 subjects:
-- kind: ServiceAccount
-  name: webapp-sa
-  namespace: production
+  - kind: ServiceAccount
+    name: webapp-sa
+    namespace: production
 roleRef:
   kind: ClusterRole
   name: secret-reader
@@ -729,14 +746,14 @@ spec:
     spec:
       restartPolicy: OnFailure
       containers:
-      - name: migration
-        image: myapp/migration:v1
-        env:
-        - name: DATABASE_URL
-          valueFrom:
-            secretKeyRef:
-              name: db-secrets
-              key: url
+        - name: migration
+          image: myapp/migration:v1
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: db-secrets
+                  key: url
 ```
 
 ### CronJob
@@ -747,7 +764,7 @@ kind: CronJob
 metadata:
   name: cleanup-job
 spec:
-  schedule: "0 2 * * *"  # Daily at 2 AM
+  schedule: '0 2 * * *' # Daily at 2 AM
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 1
@@ -758,10 +775,10 @@ spec:
         spec:
           restartPolicy: OnFailure
           containers:
-          - name: cleanup
-            image: myapp/cleanup:v1
-            args:
-            - --older-than=30d
+            - name: cleanup
+              image: myapp/cleanup:v1
+              args:
+                - --older-than=30d
 ```
 
 ## Helm Charts
@@ -790,13 +807,13 @@ name: webapp
 description: Web application Helm chart
 type: application
 version: 1.2.0
-appVersion: "1.2.0"
+appVersion: '1.2.0'
 
 dependencies:
-- name: postgresql
-  version: "12.x.x"
-  repository: "https://charts.bitnami.com/bitnami"
-  condition: postgresql.enabled
+  - name: postgresql
+    version: '12.x.x'
+    repository: 'https://charts.bitnami.com/bitnami'
+    condition: postgresql.enabled
 ```
 
 ### values.yaml
@@ -806,7 +823,7 @@ replicaCount: 3
 
 image:
   repository: myregistry/webapp
-  tag: "1.2.0"
+  tag: '1.2.0'
   pullPolicy: IfNotPresent
 
 service:
@@ -818,14 +835,14 @@ ingress:
   enabled: true
   className: nginx
   hosts:
-  - host: app.example.com
-    paths:
-    - path: /
-      pathType: Prefix
+    - host: app.example.com
+      paths:
+        - path: /
+          pathType: Prefix
   tls:
-  - secretName: webapp-tls
-    hosts:
-    - app.example.com
+    - secretName: webapp-tls
+      hosts:
+        - app.example.com
 
 resources:
   requests:
@@ -854,31 +871,27 @@ postgresql:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "webapp.fullname" . }}
-  labels:
-    {{- include "webapp.labels" . | nindent 4 }}
+  name: { { include "webapp.fullname" . } }
+  labels: { { - include "webapp.labels" . | nindent 4 } }
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: { { .Values.replicaCount } }
   selector:
-    matchLabels:
-      {{- include "webapp.selectorLabels" . | nindent 6 }}
+    matchLabels: { { - include "webapp.selectorLabels" . | nindent 6 } }
   template:
     metadata:
-      labels:
-        {{- include "webapp.selectorLabels" . | nindent 8 }}
+      labels: { { - include "webapp.selectorLabels" . | nindent 8 } }
     spec:
       containers:
-      - name: {{ .Chart.Name }}
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
-        ports:
-        - name: http
-          containerPort: {{ .Values.service.targetPort }}
-        resources:
-          {{- toYaml .Values.resources | nindent 10 }}
+        - name: { { .Chart.Name } }
+          image: '{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}'
+          imagePullPolicy: { { .Values.image.pullPolicy } }
+          ports:
+            - name: http
+              containerPort: { { .Values.service.targetPort } }
+          resources: { { - toYaml .Values.resources | nindent 10 } }
 ```
 
-### Helpers (_helpers.tpl)
+### Helpers (\_helpers.tpl)
 
 ```yaml
 {{- define "webapp.fullname" -}}

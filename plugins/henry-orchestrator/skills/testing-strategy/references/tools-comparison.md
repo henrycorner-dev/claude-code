@@ -8,21 +8,21 @@ This reference provides comprehensive comparisons of popular testing tools, incl
 
 #### Feature Comparison
 
-| Feature | Jest | Vitest |
-|---------|------|--------|
-| **Speed** | Moderate (transforms all code) | Fast (native ESM, Vite integration) |
-| **Configuration** | Separate config required | Reuses Vite config |
-| **ESM Support** | Partial (experimental) | Native |
-| **TypeScript** | Requires ts-jest | Built-in |
-| **Watch Mode** | Good | Excellent (HMR-based) |
-| **Snapshot Testing** | Yes | Yes (compatible format) |
-| **Coverage** | Istanbul | c8 (V8 coverage) |
-| **Mocking** | Full API | Jest-compatible API |
-| **Parallel Execution** | Yes (worker threads) | Yes (worker threads) |
-| **Browser Mode** | No | Yes (experimental) |
-| **Maturity** | Very mature (2014) | Newer (2021) |
-| **Ecosystem** | Largest | Growing rapidly |
-| **API Compatibility** | Jest API | Jest-compatible |
+| Feature                | Jest                           | Vitest                              |
+| ---------------------- | ------------------------------ | ----------------------------------- |
+| **Speed**              | Moderate (transforms all code) | Fast (native ESM, Vite integration) |
+| **Configuration**      | Separate config required       | Reuses Vite config                  |
+| **ESM Support**        | Partial (experimental)         | Native                              |
+| **TypeScript**         | Requires ts-jest               | Built-in                            |
+| **Watch Mode**         | Good                           | Excellent (HMR-based)               |
+| **Snapshot Testing**   | Yes                            | Yes (compatible format)             |
+| **Coverage**           | Istanbul                       | c8 (V8 coverage)                    |
+| **Mocking**            | Full API                       | Jest-compatible API                 |
+| **Parallel Execution** | Yes (worker threads)           | Yes (worker threads)                |
+| **Browser Mode**       | No                             | Yes (experimental)                  |
+| **Maturity**           | Very mature (2014)             | Newer (2021)                        |
+| **Ecosystem**          | Largest                        | Growing rapidly                     |
+| **API Compatibility**  | Jest API                       | Jest-compatible                     |
 
 #### Performance Benchmarks
 
@@ -38,12 +38,14 @@ Vitest (watch mode):          ~0.3 seconds (HMR)
 **Key performance factors:**
 
 **Jest:**
+
 - Transforms code through Babel/SWC before execution
 - Spawns worker processes for parallelization
 - Slower watch mode (re-runs affected tests)
 - Heavier memory footprint
 
 **Vitest:**
+
 - Native ESM execution (no transformation needed with Vite)
 - Instant Hot Module Replacement in watch mode
 - Lighter memory usage
@@ -52,6 +54,7 @@ Vitest (watch mode):          ~0.3 seconds (HMR)
 #### When to Choose Jest
 
 **Choose Jest if:**
+
 - Existing large codebase with extensive Jest tests
 - Need maximum ecosystem compatibility (plugins, matchers)
 - Team has deep Jest expertise
@@ -60,6 +63,7 @@ Vitest (watch mode):          ~0.3 seconds (HMR)
 - Require battle-tested stability for critical projects
 
 **Migration from Jasmine/Mocha to Jest:**
+
 ```javascript
 // Before (Mocha + Chai)
 const { expect } = require('chai');
@@ -80,6 +84,7 @@ describe('math', () => {
 #### When to Choose Vitest
 
 **Choose Vitest if:**
+
 - Using Vite as build tool (seamless integration)
 - Starting new project
 - Need fast test execution and watch mode
@@ -90,11 +95,13 @@ describe('math', () => {
 **Migration from Jest to Vitest:**
 
 **1. Install Vitest:**
+
 ```bash
 npm install -D vitest @vitest/ui
 ```
 
 **2. Update package.json:**
+
 ```json
 {
   "scripts": {
@@ -106,6 +113,7 @@ npm install -D vitest @vitest/ui
 ```
 
 **3. Create vitest.config.ts:**
+
 ```typescript
 import { defineConfig } from 'vitest/config';
 
@@ -123,6 +131,7 @@ export default defineConfig({
 ```
 
 **4. Update imports (if not using globals):**
+
 ```typescript
 // Before (Jest globals)
 describe('test', () => {
@@ -171,6 +180,7 @@ vi.spyOn(obj, 'method');
 ```
 
 **6. Coverage configuration:**
+
 ```bash
 # Install c8 for coverage
 npm install -D @vitest/coverage-c8
@@ -196,6 +206,7 @@ export default defineConfig({
 #### Vitest Advantages in Detail
 
 **1. Instant watch mode:**
+
 ```bash
 # Start watch mode
 vitest
@@ -205,6 +216,7 @@ vitest
 ```
 
 **2. Vite config reuse:**
+
 ```typescript
 // vite.config.ts
 import { defineConfig } from 'vite';
@@ -223,6 +235,7 @@ export default defineConfig({
 ```
 
 **3. Native TypeScript:**
+
 ```typescript
 // No ts-jest needed, works out of the box
 import type { User } from './types';
@@ -236,6 +249,7 @@ describe('user validation', () => {
 ```
 
 **4. UI mode:**
+
 ```bash
 vitest --ui
 # Opens browser with interactive test UI
@@ -248,23 +262,23 @@ vitest --ui
 
 #### Feature Comparison
 
-| Feature | Cypress | Playwright |
-|---------|---------|------------|
-| **Browser Support** | Chromium, Firefox, Edge, WebKit (limited) | Chromium, Firefox, WebKit (full) |
-| **Mobile Testing** | Viewport emulation only | Full device emulation |
-| **Multi-tab Support** | Limited | Full support |
-| **Network Interception** | Excellent | Excellent |
-| **Auto-waiting** | Yes | Yes |
-| **Parallel Execution** | Paid (Dashboard) | Built-in free |
-| **API Testing** | Limited | First-class |
-| **Video Recording** | Yes | Yes |
-| **Time Travel Debugging** | Yes | No (but has trace viewer) |
-| **Developer Experience** | Excellent | Very good |
-| **Learning Curve** | Gentle | Moderate |
-| **Speed** | Good | Faster |
-| **Mobile Browser Testing** | No | Yes (real Safari) |
-| **Multiple Contexts** | No | Yes |
-| **CDP Support** | Limited | Full |
+| Feature                    | Cypress                                   | Playwright                       |
+| -------------------------- | ----------------------------------------- | -------------------------------- |
+| **Browser Support**        | Chromium, Firefox, Edge, WebKit (limited) | Chromium, Firefox, WebKit (full) |
+| **Mobile Testing**         | Viewport emulation only                   | Full device emulation            |
+| **Multi-tab Support**      | Limited                                   | Full support                     |
+| **Network Interception**   | Excellent                                 | Excellent                        |
+| **Auto-waiting**           | Yes                                       | Yes                              |
+| **Parallel Execution**     | Paid (Dashboard)                          | Built-in free                    |
+| **API Testing**            | Limited                                   | First-class                      |
+| **Video Recording**        | Yes                                       | Yes                              |
+| **Time Travel Debugging**  | Yes                                       | No (but has trace viewer)        |
+| **Developer Experience**   | Excellent                                 | Very good                        |
+| **Learning Curve**         | Gentle                                    | Moderate                         |
+| **Speed**                  | Good                                      | Faster                           |
+| **Mobile Browser Testing** | No                                        | Yes (real Safari)                |
+| **Multiple Contexts**      | No                                        | Yes                              |
+| **CDP Support**            | Limited                                   | Full                             |
 
 #### Performance Benchmarks
 
@@ -278,6 +292,7 @@ Playwright (parallel, 4 workers): ~2 minutes (free)
 ```
 
 **Key factors:**
+
 - Playwright has faster test execution per test
 - Playwright's built-in parallelization is significant advantage
 - Cypress has overhead from proxy architecture
@@ -286,6 +301,7 @@ Playwright (parallel, 4 workers): ~2 minutes (free)
 #### When to Choose Cypress
 
 **Choose Cypress if:**
+
 - Prioritize developer experience and debugging
 - Team prefers Cypress API style
 - Need visual test runner for development
@@ -296,6 +312,7 @@ Playwright (parallel, 4 workers): ~2 minutes (free)
 **Cypress strengths:**
 
 **1. Superior DX:**
+
 ```javascript
 // Automatic waiting, retry, chaining
 cy.visit('/login');
@@ -308,12 +325,14 @@ cy.contains('Welcome back').should('be.visible');
 ```
 
 **2. Time-travel debugging:**
+
 - Hover over commands to see DOM snapshots
 - See exactly what happened at each step
 - Inspect network requests inline
 - Visual command log
 
 **3. Real-time reloads:**
+
 - Tests auto-reload on file changes
 - See tests run in real browser
 - Inspect with DevTools mid-test
@@ -321,6 +340,7 @@ cy.contains('Welcome back').should('be.visible');
 #### When to Choose Playwright
 
 **Choose Playwright if:**
+
 - Need true cross-browser testing (including Safari)
 - Require better performance and speed
 - Want built-in parallel execution
@@ -332,6 +352,7 @@ cy.contains('Welcome back').should('be.visible');
 **Playwright strengths:**
 
 **1. True multi-browser:**
+
 ```typescript
 import { chromium, firefox, webkit } from '@playwright/test';
 
@@ -348,6 +369,7 @@ test.describe('cross-browser', () => {
 ```
 
 **2. Built-in parallelization:**
+
 ```typescript
 // playwright.config.ts
 export default {
@@ -362,6 +384,7 @@ npx playwright test --shard=3/3
 ```
 
 **3. Multiple contexts/tabs:**
+
 ```typescript
 test('handles multiple tabs', async ({ browser }) => {
   const context = await browser.newContext();
@@ -378,12 +401,13 @@ test('handles multiple tabs', async ({ browser }) => {
 ```
 
 **4. API testing:**
+
 ```typescript
 import { test, expect } from '@playwright/test';
 
 test('API test', async ({ request }) => {
   const response = await request.post('/api/users', {
-    data: { name: 'Test User', email: 'test@example.com' }
+    data: { name: 'Test User', email: 'test@example.com' },
   });
 
   expect(response.ok()).toBeTruthy();
@@ -393,6 +417,7 @@ test('API test', async ({ request }) => {
 ```
 
 **5. Mobile emulation:**
+
 ```typescript
 import { devices } from '@playwright/test';
 
@@ -409,12 +434,14 @@ test('mobile test', async ({ page }) => {
 #### Migration from Cypress to Playwright
 
 **1. Install Playwright:**
+
 ```bash
 npm install -D @playwright/test
 npx playwright install
 ```
 
 **2. Configuration:**
+
 ```typescript
 // playwright.config.ts
 import { defineConfig, devices } from '@playwright/test';
@@ -446,17 +473,17 @@ export default defineConfig({
 
 **3. API mapping:**
 
-| Cypress | Playwright |
-|---------|------------|
-| `cy.visit(url)` | `await page.goto(url)` |
-| `cy.get(selector)` | `page.locator(selector)` |
-| `cy.contains(text)` | `page.getByText(text)` |
-| `cy.click()` | `await locator.click()` |
-| `cy.type(text)` | `await locator.fill(text)` |
+| Cypress                   | Playwright                            |
+| ------------------------- | ------------------------------------- |
+| `cy.visit(url)`           | `await page.goto(url)`                |
+| `cy.get(selector)`        | `page.locator(selector)`              |
+| `cy.contains(text)`       | `page.getByText(text)`                |
+| `cy.click()`              | `await locator.click()`               |
+| `cy.type(text)`           | `await locator.fill(text)`            |
 | `cy.should('be.visible')` | `await expect(locator).toBeVisible()` |
-| `cy.wait(alias)` | `await page.waitForResponse(url)` |
-| `cy.intercept()` | `await page.route(url, handler)` |
-| `cy.fixture()` | `JSON.parse(await fs.readFile())` |
+| `cy.wait(alias)`          | `await page.waitForResponse(url)`     |
+| `cy.intercept()`          | `await page.route(url, handler)`      |
+| `cy.fixture()`            | `JSON.parse(await fs.readFile())`     |
 
 **4. Example conversion:**
 
@@ -504,9 +531,7 @@ test.describe('Login', () => {
   });
 
   test('should show error on invalid credentials', async ({ page }) => {
-    await page.route('**/api/login', route =>
-      route.fulfill({ status: 401 })
-    );
+    await page.route('**/api/login', route => route.fulfill({ status: 401 }));
     await page.getByTestId('email').fill('user@test.com');
     await page.getByTestId('password').fill('wrong');
     await page.getByRole('button', { name: 'Submit' }).click();
@@ -543,6 +568,7 @@ expect(screen.getByText('Count: 1')).toBeInTheDocument();
 #### Best Practices
 
 **1. Query by accessibility:**
+
 ```typescript
 // Prefer
 screen.getByRole('button', { name: 'Submit' });
@@ -555,6 +581,7 @@ screen.getByClassName('email-input');
 ```
 
 **2. User-centric assertions:**
+
 ```typescript
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -575,6 +602,7 @@ test('user can submit form', async () => {
 ```
 
 **3. Async utilities:**
+
 ```typescript
 // Wait for element to appear
 await screen.findByText('Data loaded');
@@ -614,10 +642,7 @@ describe('POST /api/users', () => {
   });
 
   it('should validate email format', async () => {
-    await request(app)
-      .post('/api/users')
-      .send({ name: 'Test', email: 'invalid' })
-      .expect(400);
+    await request(app).post('/api/users').send({ name: 'Test', email: 'invalid' }).expect(400);
   });
 });
 ```
@@ -687,34 +712,38 @@ Start Here: What are you testing?
 
 ### Migration Priority Matrix
 
-| Current Stack | Recommended Next Step | Effort | Benefit |
-|---------------|----------------------|--------|---------|
-| Jest → Vitest | Migrate if using Vite | Low | High (speed) |
-| Mocha → Vitest | Migrate new projects | Medium | High |
-| Enzyme → RTL | Migrate immediately | Medium | Critical |
-| Cypress → Playwright | Consider for new tests | High | Medium |
-| No E2E → Add E2E | Start with Playwright | Medium | High |
+| Current Stack        | Recommended Next Step  | Effort | Benefit      |
+| -------------------- | ---------------------- | ------ | ------------ |
+| Jest → Vitest        | Migrate if using Vite  | Low    | High (speed) |
+| Mocha → Vitest       | Migrate new projects   | Medium | High         |
+| Enzyme → RTL         | Migrate immediately    | Medium | Critical     |
+| Cypress → Playwright | Consider for new tests | High   | Medium       |
+| No E2E → Add E2E     | Start with Playwright  | Medium | High         |
 
 ## Summary Recommendations
 
 **For new projects starting in 2024+:**
+
 - **Unit/Integration:** Vitest + Testing Library
 - **E2E:** Playwright
 - **API Mocking:** MSW
 - **Visual Regression:** Chromatic or Percy
 
 **For existing large codebases:**
+
 - **If using Jest:** Continue with Jest unless using Vite (then migrate)
 - **If using Enzyme:** Migrate to React Testing Library immediately
 - **If using Cypress:** Continue with Cypress, consider Playwright for new tests
 - **If no E2E tests:** Add Playwright
 
 **Performance-critical considerations:**
+
 - Large test suites (>1000 tests): Vitest will save significant time
 - Many E2E tests: Playwright's parallelization provides faster CI
 - Vite projects: Vitest is the obvious choice
 
 **Team considerations:**
+
 - Existing expertise: Weigh against learning curve
 - Ecosystem needs: Jest has largest ecosystem
 - Developer experience: Vitest and Playwright excel here

@@ -15,6 +15,7 @@ Develop systematic, maintainable testing strategies that balance coverage, execu
 ## When to Use This Skill
 
 Apply this skill when:
+
 - Starting a new project and need to establish testing infrastructure
 - Evaluating or migrating testing frameworks
 - Improving test coverage or test quality
@@ -50,11 +51,13 @@ Structure tests following the testing pyramid to optimize for speed, cost, and r
 ### Distribution Guidelines
 
 **Target ratios:**
+
 - Unit tests: 70-80%
 - Integration tests: 15-25%
 - E2E tests: 5-10%
 
 **Rationale:**
+
 - Unit tests execute in milliseconds, provide fast feedback
 - Integration tests catch interface issues, run in seconds
 - E2E tests validate user workflows but are slow and fragile
@@ -66,12 +69,14 @@ Structure tests following the testing pyramid to optimize for speed, cost, and r
 **Focus:** Test individual functions, classes, or modules in isolation.
 
 **Characteristics:**
+
 - No external dependencies (databases, APIs, file system)
 - Use mocks, stubs, or fakes for dependencies
 - Fast execution (milliseconds per test)
 - High coverage of edge cases and error paths
 
 **What to test:**
+
 - Pure functions and business logic
 - Utility functions and helpers
 - Data transformations
@@ -79,6 +84,7 @@ Structure tests following the testing pyramid to optimize for speed, cost, and r
 - Error handling
 
 **Example structure:**
+
 ```
 describe('calculateTotal', () => {
   it('should sum item prices', () => {
@@ -100,12 +106,14 @@ describe('calculateTotal', () => {
 **Focus:** Test interactions between multiple components, modules, or services.
 
 **Characteristics:**
+
 - Test real integrations (databases, APIs, file systems)
 - May use test databases or containers
 - Slower than unit tests (seconds per test)
 - Validate contracts and data flow
 
 **What to test:**
+
 - API endpoints with real request/response
 - Database queries and transactions
 - External service integrations
@@ -113,6 +121,7 @@ describe('calculateTotal', () => {
 - Authentication and authorization flows
 
 **Example structure:**
+
 ```
 describe('POST /api/users', () => {
   beforeEach(async () => {
@@ -142,12 +151,14 @@ describe('POST /api/users', () => {
 **Focus:** Test complete user workflows through the entire application stack.
 
 **Characteristics:**
+
 - Simulate real user interactions in browser
 - Test against running application
 - Slowest tests (seconds to minutes)
 - Focus on critical user paths
 
 **What to test:**
+
 - Critical business workflows (checkout, signup, payment)
 - Cross-browser compatibility
 - User authentication flows
@@ -155,6 +166,7 @@ describe('POST /api/users', () => {
 - Visual regression (optional)
 
 **Example structure:**
+
 ```
 test('user can complete checkout', async ({ page }) => {
   await page.goto('/products');
@@ -181,6 +193,7 @@ test('user can complete checkout', async ({ page }) => {
 ### Coverage Targets
 
 **Recommended thresholds:**
+
 - Overall: 80-90%
 - Critical paths: 95-100%
 - Utility functions: 90-100%
@@ -188,6 +201,7 @@ test('user can complete checkout', async ({ page }) => {
 - Configuration files: Not required
 
 **Configure in package.json:**
+
 ```json
 {
   "jest": {
@@ -212,6 +226,7 @@ test('user can complete checkout', async ({ page }) => {
 ### What NOT to Test
 
 Avoid testing:
+
 - Third-party library internals
 - Framework code (React, Vue internals)
 - Simple getters/setters without logic
@@ -225,6 +240,7 @@ Avoid testing:
 ### Decision Framework
 
 Choose testing tools based on:
+
 1. **Project type:** Frontend, backend, full-stack, monorepo
 2. **Framework:** React, Vue, Angular, Node.js, etc.
 3. **Build tool:** Vite, Webpack, esbuild, etc.
@@ -233,19 +249,20 @@ Choose testing tools based on:
 
 ### Quick Selection Matrix
 
-| Need | Recommended Tool | Alternative |
-|------|-----------------|-------------|
-| React/Vue unit tests | Vitest + Testing Library | Jest |
-| Node.js/backend tests | Vitest or Jest | - |
-| E2E browser tests | Playwright | Cypress |
-| Component visual tests | Storybook + Chromatic | Percy |
-| API integration tests | Supertest (with Jest/Vitest) | - |
-| Vite-based projects | Vitest | Jest (slower) |
-| Legacy/large projects | Jest | Vitest (migration) |
+| Need                   | Recommended Tool             | Alternative        |
+| ---------------------- | ---------------------------- | ------------------ |
+| React/Vue unit tests   | Vitest + Testing Library     | Jest               |
+| Node.js/backend tests  | Vitest or Jest               | -                  |
+| E2E browser tests      | Playwright                   | Cypress            |
+| Component visual tests | Storybook + Chromatic        | Percy              |
+| API integration tests  | Supertest (with Jest/Vitest) | -                  |
+| Vite-based projects    | Vitest                       | Jest (slower)      |
+| Legacy/large projects  | Jest                         | Vitest (migration) |
 
 ### When to Choose Vitest
 
 **Choose Vitest when:**
+
 - Using Vite as build tool (instant compatibility)
 - Starting new project (modern, fast)
 - Need fast test execution (native ESM, instant HMR)
@@ -253,6 +270,7 @@ Choose testing tools based on:
 - Working with TypeScript (better type support)
 
 **Advantages:**
+
 - 10-20x faster than Jest on large codebases
 - Native ESM support
 - Vite config reuse
@@ -262,6 +280,7 @@ Choose testing tools based on:
 ### When to Choose Jest
 
 **Choose Jest when:**
+
 - Existing project already uses Jest
 - Large ecosystem dependency (many plugins)
 - Need maximum stability (mature, battle-tested)
@@ -269,6 +288,7 @@ Choose testing tools based on:
 - Team has deep Jest expertise
 
 **Advantages:**
+
 - Largest ecosystem and community
 - Most mature and stable
 - Extensive documentation
@@ -277,6 +297,7 @@ Choose testing tools based on:
 ### When to Choose Cypress
 
 **Choose Cypress when:**
+
 - Need excellent developer experience
 - Want visual test runner
 - Time-travel debugging is valuable
@@ -284,6 +305,7 @@ Choose testing tools based on:
 - Team prefers Cypress API
 
 **Advantages:**
+
 - Superior DX and debugging
 - Real-time test execution view
 - Automatic waiting and retries
@@ -292,6 +314,7 @@ Choose testing tools based on:
 ### When to Choose Playwright
 
 **Choose Playwright when:**
+
 - Need true multi-browser testing (Chromium, Firefox, WebKit)
 - Require better performance than Cypress
 - Need API testing capabilities
@@ -299,6 +322,7 @@ Choose testing tools based on:
 - Testing involves multiple tabs/contexts
 
 **Advantages:**
+
 - True cross-browser support
 - Faster execution (especially parallel)
 - Better mobile emulation
@@ -312,6 +336,7 @@ Choose testing tools based on:
 ### File Structure
 
 **Co-located tests (recommended for components):**
+
 ```
 src/
   components/
@@ -322,6 +347,7 @@ src/
 ```
 
 **Separate test directory (recommended for integration/E2E):**
+
 ```
 src/
   utils/
@@ -349,6 +375,7 @@ tests/
 ### Follow AAA Pattern
 
 **Arrange-Act-Assert:**
+
 ```typescript
 test('user registration sends welcome email', async () => {
   // Arrange
@@ -362,7 +389,7 @@ test('user registration sends welcome email', async () => {
   expect(mockEmailService).toHaveBeenCalledWith({
     to: 'user@test.com',
     subject: 'Welcome!',
-    body: expect.stringContaining('Test User')
+    body: expect.stringContaining('Test User'),
   });
 });
 ```
@@ -370,22 +397,25 @@ test('user registration sends welcome email', async () => {
 ### Write Descriptive Test Names
 
 **Good:**
+
 ```typescript
-test('throws ValidationError when email is missing')
-test('returns 401 when token is expired')
-test('calculates discount correctly for premium members')
+test('throws ValidationError when email is missing');
+test('returns 401 when token is expired');
+test('calculates discount correctly for premium members');
 ```
 
 **Bad:**
+
 ```typescript
-test('test email')
-test('error case')
-test('calculation')
+test('test email');
+test('error case');
+test('calculation');
 ```
 
 ### One Assertion Concept per Test
 
 **Prefer:**
+
 ```typescript
 test('creates user with hashed password', () => {
   const user = createUser({ password: 'secret123' });
@@ -399,6 +429,7 @@ test('creates user with email in lowercase', () => {
 ```
 
 **Over:**
+
 ```typescript
 test('creates user correctly', () => {
   const user = createUser({ email: 'USER@TEST.COM', password: 'secret123' });
@@ -414,6 +445,7 @@ test('creates user correctly', () => {
 Each test should run independently. Never rely on execution order or shared state between tests.
 
 **Use setup/teardown:**
+
 ```typescript
 describe('UserService', () => {
   let userService: UserService;
@@ -439,6 +471,7 @@ describe('UserService', () => {
 Configure tests to run in parallel for faster CI:
 
 **Jest/Vitest:**
+
 ```json
 {
   "scripts": {
@@ -449,6 +482,7 @@ Configure tests to run in parallel for faster CI:
 ```
 
 **Playwright:**
+
 ```typescript
 // playwright.config.ts
 export default {
@@ -475,6 +509,7 @@ Integrate coverage reporting in CI:
 ### Performance Optimization
 
 **Strategies for faster CI:**
+
 - Cache node_modules and test artifacts
 - Run unit tests before slower integration/E2E tests
 - Parallelize test execution
@@ -486,6 +521,7 @@ Integrate coverage reporting in CI:
 ### 1. Testing Implementation Details
 
 **Avoid:**
+
 ```typescript
 // Testing internal state
 expect(component.state.isLoading).toBe(false);
@@ -493,6 +529,7 @@ expect(component.internalMethod).toHaveBeenCalled();
 ```
 
 **Prefer:**
+
 ```typescript
 // Testing behavior
 expect(screen.getByText('Data loaded')).toBeInTheDocument();
@@ -502,12 +539,14 @@ expect(mockApi.fetchData).toHaveBeenCalled();
 ### 2. Flaky Tests
 
 **Causes:**
+
 - Race conditions and timing issues
 - Shared state between tests
 - External dependencies (network, time)
 - Non-deterministic behavior
 
 **Solutions:**
+
 - Use proper wait utilities (waitFor, findBy)
 - Mock time and random values
 - Isolate test state
@@ -516,6 +555,7 @@ expect(mockApi.fetchData).toHaveBeenCalled();
 ### 3. Over-Mocking
 
 **Avoid:**
+
 ```typescript
 // Mocking everything defeats the purpose
 jest.mock('./database');
@@ -526,6 +566,7 @@ jest.mock('./logger');
 ```
 
 **Prefer:**
+
 - Mock only external boundaries (APIs, databases)
 - Use real implementations for internal modules
 - Consider using fakes over mocks when possible
@@ -535,11 +576,13 @@ jest.mock('./logger');
 ### Reference Files
 
 For detailed tool comparisons, migration guides, and advanced patterns:
+
 - **`references/tools-comparison.md`** - Comprehensive comparison of Jest, Vitest, Cypress, Playwright with migration guides and performance benchmarks
 
 ### Examples
 
 Working test configurations and examples in `examples/`:
+
 - **`jest.config.js`** - Complete Jest configuration
 - **`vitest.config.ts`** - Vitest configuration with TypeScript
 - **`playwright.config.ts`** - Playwright E2E configuration

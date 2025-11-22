@@ -44,6 +44,7 @@ This example demonstrates assembling a team to optimize a landing page for SEO, 
 All three agents audit the current landing page:
 
 **SEO Specialist audits:**
+
 - Meta tags (title, description, Open Graph)
 - Heading structure (H1, H2, etc.)
 - Internal linking
@@ -53,6 +54,7 @@ All three agents audit the current landing page:
 - XML sitemap
 
 **Frontend Engineer audits:**
+
 - Component structure and reusability
 - Accessibility (ARIA, semantic HTML)
 - Responsive design implementation
@@ -61,6 +63,7 @@ All three agents audit the current landing page:
 - CSS/JS bundle sizes
 
 **Performance Engineer audits:**
+
 - Core Web Vitals (LCP, FID, CLS)
 - Time to First Byte (TTFB)
 - Image loading and optimization
@@ -74,11 +77,13 @@ All three agents audit the current landing page:
 **Identify Overlapping Concerns:**
 
 **Image Optimization** (all three agents flagged):
+
 - SEO: Images missing alt text, affecting accessibility score
 - Frontend: Using PNG instead of WebP, not responsive
 - Performance: Largest Contentful Paint (LCP) delayed by large hero image
 
 **Resolution**:
+
 - Convert to WebP with fallbacks
 - Implement responsive images with srcset
 - Add descriptive alt text for SEO and a11y
@@ -86,20 +91,24 @@ All three agents audit the current landing page:
 - Preload hero image with fetchpriority="high"
 
 **Third-Party Scripts** (SEO + Performance flagged):
+
 - SEO: Google Analytics blocking render
 - Performance: Third-party scripts delaying First Input Delay (FID)
 
 **Resolution**:
+
 - Load analytics with `async` attribute
 - Use Partytown to run in web worker
 - Implement consent management for GDPR
 
 **Mobile Experience** (all three flagged):
+
 - SEO: Mobile-friendliness issues
 - Frontend: Viewport not optimized, touch targets too small
 - Performance: CLS from responsive layout shifts
 
 **Resolution**:
+
 - Fix viewport meta tag
 - Increase touch target sizes (min 48x48px)
 - Reserve space for images to prevent CLS
@@ -127,26 +136,28 @@ All three agents audit the current landing page:
 ```
 
 **SEO Specialist provides:**
+
 ```typescript
 // Structured data for landing page
 const structuredData = {
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  "name": "Professional Services - Acme Corp",
-  "description": "Transform your business with our expert consulting services...",
-  "url": "https://acme.com/services",
-  "mainEntity": {
-    "@type": "Service",
-    "name": "Business Consulting",
-    "provider": {
-      "@type": "Organization",
-      "name": "Acme Corp"
-    }
-  }
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: 'Professional Services - Acme Corp',
+  description: 'Transform your business with our expert consulting services...',
+  url: 'https://acme.com/services',
+  mainEntity: {
+    '@type': 'Service',
+    name: 'Business Consulting',
+    provider: {
+      '@type': 'Organization',
+      name: 'Acme Corp',
+    },
+  },
 };
 ```
 
 **Performance Engineer specifies:**
+
 ```typescript
 // Next.js config optimizations
 module.exports = {
@@ -164,6 +175,7 @@ module.exports = {
 ### Phase 4: Validation (1 hour)
 
 **SEO Specialist validates:**
+
 - Run Google Rich Results Test
 - Check Search Console for errors
 - Validate structured data
@@ -171,6 +183,7 @@ module.exports = {
 - Verify meta tags in source
 
 **Performance Engineer validates:**
+
 - Run Lighthouse audits
 - Measure Core Web Vitals in field
 - Check bundle sizes
@@ -178,6 +191,7 @@ module.exports = {
 - Verify caching headers
 
 **Frontend Engineer validates:**
+
 - Cross-browser testing
 - Responsive design on multiple devices
 - Accessibility audit (WAVE, axe)
@@ -187,6 +201,7 @@ module.exports = {
 ## Results
 
 ### Before Optimization
+
 - **Lighthouse Performance**: 62
 - **Lighthouse SEO**: 78
 - **Lighthouse Accessibility**: 85
@@ -196,6 +211,7 @@ module.exports = {
 - **Search Ranking**: Page 3 for target keywords
 
 ### After Optimization
+
 - **Lighthouse Performance**: 94 ✅
 - **Lighthouse SEO**: 100 ✅
 - **Lighthouse Accessibility**: 98 ✅
@@ -219,6 +235,7 @@ module.exports = {
 
 **Resolution:**
 Implement performance-friendly animations:
+
 - Use CSS transforms (translateX/Y, scale, opacity) instead of animating layout properties
 - Use `will-change` sparingly and remove after animation
 - Implement Intersection Observer for scroll-triggered animations
@@ -250,6 +267,7 @@ Implement performance-friendly animations:
 ## Success Metrics
 
 **SEO Metrics:**
+
 - ✅ Lighthouse SEO score: 100
 - ✅ All meta tags present and optimized
 - ✅ Structured data validated
@@ -257,6 +275,7 @@ Implement performance-friendly animations:
 - 🎯 Target: Page 1 ranking within 3 months
 
 **Performance Metrics:**
+
 - ✅ LCP < 2.5s
 - ✅ FID < 100ms
 - ✅ CLS < 0.1
@@ -265,6 +284,7 @@ Implement performance-friendly animations:
 - ✅ Bundle size reduced by 40%
 
 **User Experience Metrics:**
+
 - ✅ Accessibility score > 95
 - ✅ Zero critical a11y issues
 - ✅ Responsive on all tested devices
@@ -309,21 +329,27 @@ Current Lighthouse scores: Performance 62, SEO 78, Accessibility 85"
 ## Variations
 
 ### Add UX/UI Designer (4 agents)
+
 ```
 /henry-orchestrator:henry-team seo-specialist frontend-engineer performance-engineer ux-ui-designer - Redesign and optimize landing page
 ```
+
 Use when: Page needs visual/UX redesign in addition to technical optimization
 
 ### Add A11y Specialist (4 agents)
+
 ```
 /henry-orchestrator:henry-team seo-specialist frontend-engineer performance-engineer a11y-specialist - Optimize with accessibility focus
 ```
+
 Use when: Accessibility is critical (public sector, inclusive product)
 
 ### Minimal Team (2 agents)
+
 ```
 /henry-orchestrator:henry-team frontend-engineer performance-engineer - Quick performance optimization
 ```
+
 Use when: SEO is already good, focus purely on technical performance
 
 ## Related Examples

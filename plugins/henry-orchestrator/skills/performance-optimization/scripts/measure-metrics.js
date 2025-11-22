@@ -107,7 +107,7 @@ async function measureWebVitals(url) {
 
     browser = await puppeteer.launch({
       headless: 'new',
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
 
     const page = await browser.newPage();
@@ -138,7 +138,7 @@ async function measureWebVitals(url) {
         download: perfData.responseEnd - perfData.responseStart,
         domInteractive: perfData.domInteractive - perfData.fetchStart,
         domComplete: perfData.domComplete - perfData.fetchStart,
-        loadComplete: perfData.loadEventEnd - perfData.fetchStart
+        loadComplete: perfData.loadEventEnd - perfData.fetchStart,
       };
     });
 
@@ -147,15 +147,15 @@ async function measureWebVitals(url) {
       const paints = performance.getEntriesByType('paint');
       return {
         fcp: paints.find(p => p.name === 'first-contentful-paint')?.startTime || 0,
-        lcp: 0 // Will be calculated separately
+        lcp: 0, // Will be calculated separately
       };
     });
 
     // Get LCP
     const lcp = await page.evaluate(() => {
-      return new Promise((resolve) => {
+      return new Promise(resolve => {
         let lcpValue = 0;
-        const observer = new PerformanceObserver((list) => {
+        const observer = new PerformanceObserver(list => {
           const entries = list.getEntries();
           const lastEntry = entries[entries.length - 1];
           lcpValue = lastEntry.renderTime || lastEntry.loadTime;
@@ -171,9 +171,9 @@ async function measureWebVitals(url) {
 
     // Get CLS
     const cls = await page.evaluate(() => {
-      return new Promise((resolve) => {
+      return new Promise(resolve => {
         let clsValue = 0;
-        const observer = new PerformanceObserver((list) => {
+        const observer = new PerformanceObserver(list => {
           for (const entry of list.getEntries()) {
             if (!entry.hadRecentInput) {
               clsValue += entry.value;
@@ -206,8 +206,8 @@ async function measureWebVitals(url) {
         download: { value: navigationTiming.download, unit: 'ms' },
         domInteractive: { value: navigationTiming.domInteractive, unit: 'ms' },
         domComplete: { value: navigationTiming.domComplete, unit: 'ms' },
-        loadComplete: { value: navigationTiming.loadComplete, unit: 'ms' }
-      }
+        loadComplete: { value: navigationTiming.loadComplete, unit: 'ms' },
+      },
     };
 
     // Display results
@@ -235,7 +235,6 @@ async function measureWebVitals(url) {
     console.log(`✅ Report saved to: ${outputFile}`);
 
     return results;
-
   } catch (error) {
     console.error('❌ Error measuring Web Vitals:', error);
     throw error;
@@ -279,15 +278,14 @@ function rateTTFB(value) {
 // ============================================================================
 
 function displayMetric(name, metric) {
-  const emoji = {
-    'good': '✅',
-    'needs-improvement': '⚠️',
-    'poor': '❌'
-  }[metric.rating] || '❓';
+  const emoji =
+    {
+      good: '✅',
+      'needs-improvement': '⚠️',
+      poor: '❌',
+    }[metric.rating] || '❓';
 
-  const value = metric.unit
-    ? `${metric.value.toFixed(2)} ${metric.unit}`
-    : metric.value.toFixed(3);
+  const value = metric.unit ? `${metric.value.toFixed(2)} ${metric.unit}` : metric.value.toFixed(3);
 
   console.log(`${emoji} ${name.padEnd(6)} ${value.padStart(12)} (${metric.rating})`);
 }
@@ -341,5 +339,5 @@ module.exports = {
   rateFCP,
   rateCLS,
   rateTTFB,
-  browserCode // Export browser code for documentation
+  browserCode, // Export browser code for documentation
 };

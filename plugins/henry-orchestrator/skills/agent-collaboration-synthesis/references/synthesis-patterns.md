@@ -7,6 +7,7 @@ This document provides detailed patterns for synthesizing outputs from multiple 
 **Scenario**: Parallel security, performance, QA reviews completed
 
 **Agent outputs**:
+
 - Security: 8 vulnerabilities (2 critical, 3 high, 3 medium)
 - Performance: 12 issues (3 critical, 5 high, 4 medium)
 - QA: Test coverage 65%, 6 missing scenarios
@@ -25,6 +26,7 @@ This document provides detailed patterns for synthesizing outputs from multiple 
    - Error handling: Both security and QA flagged gaps
 
 3. **Create integrated action plan**:
+
    ```
    Phase 1 - Critical Fixes (This week):
    1. Fix SQL injection vulnerability in auth endpoint [Security P0]
@@ -50,6 +52,7 @@ This document provides detailed patterns for synthesizing outputs from multiple 
    - All auth flows have security tests
 
 **Synthesized deliverable**:
+
 - Executive summary: "5 critical issues require immediate attention. Authentication is highest priority (security + test gaps). Performance improvements will reduce load time from 4.2s to <2.5s."
 - Detailed findings by category (Security, Performance, Quality)
 - Integrated action plan with phases
@@ -60,6 +63,7 @@ This document provides detailed patterns for synthesizing outputs from multiple 
 **Scenario**: Complete design workflow (research → UX → visual → a11y)
 
 **Agent outputs**:
+
 - UX Researcher: 3 user personas, 2 journey maps, 8 pain points
 - UX/UI Designer: 15 wireframes, 5 user flows, interactive prototype
 - UI Visual Designer: High-fidelity designs, component library, style guide
@@ -79,6 +83,7 @@ This document provides detailed patterns for synthesizing outputs from multiple 
    - Screen reader testing complete
 
 3. **Create comprehensive handoff package**:
+
    ```
    Design Handoff Package:
 
@@ -121,6 +126,7 @@ This document provides detailed patterns for synthesizing outputs from multiple 
    - Design system documented
 
 **Synthesized deliverable**:
+
 - Complete design package ready for engineering handoff
 - Research insights integrated into design rationale
 - Accessibility requirements built into all components
@@ -131,6 +137,7 @@ This document provides detailed patterns for synthesizing outputs from multiple 
 **Scenario**: Full-stack feature (product strategy → design → frontend + backend → QA)
 
 **Agent outputs**:
+
 - Product Strategist: PRD, success metrics (MAU +15%, conversion +8%)
 - UX/UI Designer: User flows, high-fidelity designs
 - Frontend Engineer: React dashboard with charts, real-time updates
@@ -163,6 +170,7 @@ This document provides detailed patterns for synthesizing outputs from multiple 
    - Security review passed
 
 **Synthesized deliverable**:
+
 ```
 Feature: Real-Time Analytics Dashboard
 
@@ -197,6 +205,7 @@ Ready for production deployment.
 **Scenario**: Pre-launch audit (security + performance + a11y + SEO + ops)
 
 **Agent outputs**:
+
 - Security: 3 critical, 5 high, 8 medium vulnerabilities
 - Performance: LCP 3.2s (target: <2.5s), 6 optimization opportunities
 - A11y: 15 WCAG violations (2 critical, 8 high, 5 medium)
@@ -206,6 +215,7 @@ Ready for production deployment.
 **Synthesis approach**:
 
 1. **Create severity matrix**:
+
    ```
    Critical (5): 3 security + 2 a11y → BLOCK LAUNCH
    High (19): 5 security + 8 a11y + 6 performance → FIX BEFORE LAUNCH
@@ -221,6 +231,7 @@ Ready for production deployment.
    - Missing keyboard navigation (A11y P0 - WCAG A violation)
 
 3. **Create launch readiness plan**:
+
    ```
    Launch Readiness Plan:
 
@@ -249,6 +260,7 @@ Ready for production deployment.
    - [ ] Monitoring and alerting active
 
 **Synthesized deliverable**:
+
 - Launch readiness report with go/no-go decision
 - Prioritized remediation plan
 - Post-launch optimization roadmap
@@ -268,12 +280,12 @@ The henry commands already include synthesis phases, but this skill provides det
 
 ## Quick Reference
 
-| Scenario | Synthesis Focus | Key Output |
-|----------|----------------|------------|
-| Multi-agent review | Prioritization, conflict resolution | Action plan by priority |
-| Design workflow | Integration, handoff clarity | Design handoff package |
-| Feature development | Validation, coherence | Feature completion report |
-| Pre-launch audit | Risk assessment, go/no-go | Launch readiness report |
-| Optimization sprint | Before/after, impact | Optimization impact report |
+| Scenario            | Synthesis Focus                     | Key Output                 |
+| ------------------- | ----------------------------------- | -------------------------- |
+| Multi-agent review  | Prioritization, conflict resolution | Action plan by priority    |
+| Design workflow     | Integration, handoff clarity        | Design handoff package     |
+| Feature development | Validation, coherence               | Feature completion report  |
+| Pre-launch audit    | Risk assessment, go/no-go           | Launch readiness report    |
+| Optimization sprint | Before/after, impact                | Optimization impact report |
 
 For additional guidance on specific synthesis scenarios, reference the relevant Henry command or ask for help.

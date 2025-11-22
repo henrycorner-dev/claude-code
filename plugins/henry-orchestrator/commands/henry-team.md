@@ -1,7 +1,7 @@
 ---
 description: Assemble and run custom team of Henry agents
 argument-hint: Agents and task (e.g. frontend-engineer qa-tester review login)
-allowed-tools: ["Glob", "Read", "Grep", "Bash", "Task", "TodoWrite"]
+allowed-tools: ['Glob', 'Read', 'Grep', 'Bash', 'Task', 'TodoWrite']
 ---
 
 # Henry Custom Team Assembly
@@ -153,7 +153,6 @@ This is part of a team review. frontend-engineer is checking the UI component.
 ```
 
 2. Decide execution strategy:
-
    - **Parallel** (default): Launch all agents simultaneously for speed
    - **Sequential**: Launch one at a time if dependencies exist
    - **Grouped**: Launch in logical groups (e.g., design team first, then engineering)
@@ -174,21 +173,18 @@ This is part of a team review. frontend-engineer is checking the UI component.
 **Actions**:
 
 1. Collect outputs from all agents:
-
    - Each agent's findings
    - Recommendations
    - Concerns or blockers
    - Implementation guidance
 
 2. Identify patterns:
-
    - **Agreement**: Where agents align
    - **Conflicts**: Where agents disagree
    - **Overlaps**: Duplicate findings
    - **Gaps**: What wasn't covered
 
 3. Cross-reference findings:
-
    - Security issues that impact performance
    - UX decisions that affect implementation
    - Performance optimizations that affect code quality
@@ -243,7 +239,6 @@ This is part of a team review. frontend-engineer is checking the UI component.
 **Actions**:
 
 1. Organize recommendations by priority:
-
    - **Must do**: Critical issues (security, bugs, blockers)
    - **Should do**: Important improvements
    - **Could do**: Nice-to-haves
@@ -271,7 +266,6 @@ This is part of a team review. frontend-engineer is checking the UI component.
    ```
 
 3. Provide implementation guidance:
-
    - Code examples (from engineer agents)
    - Best practices (from specialist agents)
    - Testing strategies (from qa-tester)
@@ -291,7 +285,6 @@ This is part of a team review. frontend-engineer is checking the UI component.
 **Actions**:
 
 1. Ask user what they want to do:
-
    - **Implement now**: Proceed with fixes (switch to code mode if needed)
    - **Get detailed guide**: Deep dive on specific findings
    - **Create issues**: Track items for later
@@ -299,13 +292,11 @@ This is part of a team review. frontend-engineer is checking the UI component.
    - **Run different team**: Try different agent combination
 
 2. If implementing:
-
    - Prioritize by user preference
    - Offer to implement (code mode)
    - Or provide implementation guide
 
 3. If creating issues:
-
    - Structure as GitHub issues
    - Include agent attributions
    - Add labels (security, performance, etc.)

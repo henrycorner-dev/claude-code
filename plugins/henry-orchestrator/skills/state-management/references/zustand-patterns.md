@@ -23,10 +23,10 @@ interface UserState {
   logout: () => void;
 }
 
-export const useUserStore = create<UserState>((set) => ({
+export const useUserStore = create<UserState>(set => ({
   user: null,
   isAuthenticated: false,
-  setUser: (user) => set({ user, isAuthenticated: true }),
+  setUser: user => set({ user, isAuthenticated: true }),
   logout: () => set({ user: null, isAuthenticated: false }),
 }));
 ```
@@ -51,26 +51,26 @@ interface TodoState {
 }
 
 export const useTodoStore = create<TodoState>()(
-  immer((set) => ({
+  immer(set => ({
     todos: [],
-    addTodo: (text) =>
-      set((state) => {
+    addTodo: text =>
+      set(state => {
         state.todos.push({
           id: crypto.randomUUID(),
           text,
           completed: false,
         });
       }),
-    toggleTodo: (id) =>
-      set((state) => {
-        const todo = state.todos.find((t) => t.id === id);
+    toggleTodo: id =>
+      set(state => {
+        const todo = state.todos.find(t => t.id === id);
         if (todo) {
           todo.completed = !todo.completed;
         }
       }),
-    removeTodo: (id) =>
-      set((state) => {
-        state.todos = state.todos.filter((t) => t.id !== id);
+    removeTodo: id =>
+      set(state => {
+        state.todos = state.todos.filter(t => t.id !== id);
       }),
   }))
 );
@@ -113,7 +113,7 @@ export const useProductStore = create<ProductState>((set, get) => ({
     }
   },
 
-  createProduct: async (product) => {
+  createProduct: async product => {
     set({ loading: true, error: null });
     try {
       const response = await fetch('/api/products', {
@@ -122,7 +122,7 @@ export const useProductStore = create<ProductState>((set, get) => ({
         body: JSON.stringify(product),
       });
       const newProduct = await response.json();
-      set((state) => ({
+      set(state => ({
         products: [...state.products, newProduct],
         loading: false,
       }));
@@ -183,14 +183,13 @@ interface AppSettings {
 
 export const useSettingsStore = create<AppSettings>()(
   persist(
-    (set) => ({
+    set => ({
       theme: 'light',
       language: 'en',
       notifications: true,
-      setTheme: (theme) => set({ theme }),
-      setLanguage: (language) => set({ language }),
-      toggleNotifications: () =>
-        set((state) => ({ notifications: !state.notifications })),
+      setTheme: theme => set({ theme }),
+      setLanguage: language => set({ language }),
+      toggleNotifications: () => set(state => ({ notifications: !state.notifications })),
     }),
     {
       name: 'app-settings', // localStorage key
@@ -205,17 +204,17 @@ export const useSettingsStore = create<AppSettings>()(
 ```typescript
 export const useUserStore = create<UserState>()(
   persist(
-    (set) => ({
+    set => ({
       user: null,
       token: null,
       preferences: {},
-      setUser: (user) => set({ user }),
-      setToken: (token) => set({ token }),
-      setPreferences: (preferences) => set({ preferences }),
+      setUser: user => set({ user }),
+      setToken: token => set({ token }),
+      setPreferences: preferences => set({ preferences }),
     }),
     {
       name: 'user-store',
-      partialize: (state) => ({
+      partialize: state => ({
         // Only persist these fields
         token: state.token,
         preferences: state.preferences,
@@ -246,7 +245,9 @@ const idbStorage: StateStorage = {
 
 export const useStore = create<State>()(
   persist(
-    (set) => ({ /* state */ }),
+    set => ({
+      /* state */
+    }),
     {
       name: 'my-store',
       storage: createJSONStorage(() => idbStorage),
@@ -262,10 +263,10 @@ import { devtools } from 'zustand/middleware';
 
 export const useStore = create<State>()(
   devtools(
-    (set) => ({
+    set => ({
       count: 0,
-      increment: () => set((state) => ({ count: state.count + 1 }), false, 'increment'),
-      decrement: () => set((state) => ({ count: state.count - 1 }), false, 'decrement'),
+      increment: () => set(state => ({ count: state.count + 1 }), false, 'increment'),
+      decrement: () => set(state => ({ count: state.count - 1 }), false, 'decrement'),
     }),
     { name: 'CounterStore' }
   )
@@ -282,7 +283,7 @@ import { immer } from 'zustand/middleware/immer';
 export const useStore = create<State>()(
   devtools(
     persist(
-      immer((set) => ({
+      immer(set => ({
         // Store implementation
       })),
       { name: 'my-store' }
@@ -311,9 +312,9 @@ export const createUserSlice: StateCreator<
   [],
   [],
   UserSlice
-> = (set) => ({
+> = set => ({
   user: null,
-  setUser: (user) => set({ user }),
+  setUser: user => set({ user }),
   logout: () => set({ user: null }),
 });
 
@@ -328,10 +329,10 @@ export const createProductSlice: StateCreator<
   [],
   [],
   ProductSlice
-> = (set) => ({
+> = set => ({
   products: [],
-  addProduct: (product) =>
-    set((state) => ({
+  addProduct: product =>
+    set(state => ({
       products: [...state.products, product],
     })),
 });
@@ -492,12 +493,12 @@ export const useTodoStore = create<TodoState>((set, get) => ({
   todos: [],
   optimisticTodos: new Map(),
 
-  addTodo: async (text) => {
+  addTodo: async text => {
     const tempId = `temp-${Date.now()}`;
     const optimisticTodo = { id: tempId, text, completed: false };
 
     // Add optimistically
-    set((state) => ({
+    set(state => ({
       optimisticTodos: new Map(state.optimisticTodos).set(tempId, optimisticTodo),
     }));
 
@@ -509,7 +510,7 @@ export const useTodoStore = create<TodoState>((set, get) => ({
       const newTodo = await response.json();
 
       // Replace optimistic with real
-      set((state) => {
+      set(state => {
         const newOptimistic = new Map(state.optimisticTodos);
         newOptimistic.delete(tempId);
         return {
@@ -519,7 +520,7 @@ export const useTodoStore = create<TodoState>((set, get) => ({
       });
     } catch (error) {
       // Remove optimistic on error
-      set((state) => {
+      set(state => {
         const newOptimistic = new Map(state.optimisticTodos);
         newOptimistic.delete(tempId);
         return { optimisticTodos: newOptimistic };
@@ -538,7 +539,7 @@ export const useTodoStore = create<TodoState>((set, get) => ({
 const currentUser = useUserStore.getState().user;
 
 // Subscribe to changes
-const unsubscribe = useUserStore.subscribe((state) => {
+const unsubscribe = useUserStore.subscribe(state => {
   console.log('User changed:', state.user);
 });
 
@@ -643,11 +644,11 @@ interface NotificationState {
 export const useNotificationStore = create<NotificationState>((set, get) => ({
   notifications: [],
 
-  subscribe: (callback) => {
+  subscribe: callback => {
     // Return unsubscribe function
     return useNotificationStore.subscribe((state, prevState) => {
       const newNotifications = state.notifications.filter(
-        (n) => !prevState.notifications.includes(n)
+        n => !prevState.notifications.includes(n)
       );
       newNotifications.forEach(callback);
     });
@@ -656,7 +657,7 @@ export const useNotificationStore = create<NotificationState>((set, get) => ({
 
 // Usage:
 useEffect(() => {
-  const unsubscribe = useNotificationStore.getState().subscribe((notification) => {
+  const unsubscribe = useNotificationStore.getState().subscribe(notification => {
     toast.show(notification.message);
   });
 
@@ -686,7 +687,7 @@ export const useCartStore = create<CartState>((set, get) => ({
 }));
 
 // Usage:
-const total = useCartStore((state) => state.total);
+const total = useCartStore(state => state.total);
 ```
 
 ### Middleware for Side Effects
@@ -696,15 +697,15 @@ import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 
 export const useStore = create<State>()(
-  subscribeWithSelector((set) => ({
+  subscribeWithSelector(set => ({
     user: null,
-    setUser: (user) => set({ user }),
+    setUser: user => set({ user }),
   }))
 );
 
 // Subscribe to specific property
 useStore.subscribe(
-  (state) => state.user,
+  state => state.user,
   (user, prevUser) => {
     console.log('User changed from', prevUser, 'to', user);
   }

@@ -5,6 +5,7 @@ Lag compensation is a server-side technique that ensures accurate hit detection 
 ## The Problem
 
 Without lag compensation:
+
 1. Client sees enemy at position A (100ms ago due to latency)
 2. Client shoots at position A
 3. Server receives shot after 50ms (half RTT)
@@ -17,6 +18,7 @@ This makes hit detection feel unfair—players must "lead" targets to account fo
 ## The Solution
 
 With lag compensation:
+
 1. Client sees enemy at position A
 2. Client shoots at position A, sends command with timestamp
 3. Server receives shot
@@ -30,12 +32,14 @@ This is often called "favor the shooter" netcode.
 ## When to Use Lag Compensation
 
 **Use lag compensation for:**
+
 - Hitscan weapons (instant hit: rifles, pistols, lasers)
 - Fast projectiles (rockets, arrows where flight time is short)
 - Melee attacks
 - Any action targeting other entities with timing-critical hit detection
 
 **Don't use lag compensation for:**
+
 - Slow projectiles (the projectile's flight time handles the delay naturally)
 - Area-of-effect attacks (too complex to rewind entire game state)
 - Non-competitive scenarios where precision isn't critical
@@ -60,8 +64,8 @@ class ServerStateHistory {
         id: player.id,
         position: { ...player.position },
         rotation: player.rotation,
-        hitboxes: player.getHitboxes()
-      }))
+        hitboxes: player.getHitboxes(),
+      })),
     };
 
     this.history.push(snapshot);
@@ -109,7 +113,7 @@ class WeaponSystem {
       weaponId: this.currentWeapon.id,
       position: this.player.position,
       direction: this.player.aimDirection,
-      timestamp: clientTimestamp
+      timestamp: clientTimestamp,
     });
 
     // Show local hit effect (prediction)
@@ -190,7 +194,7 @@ class HitDetection {
           targetId: historicalPlayer.id,
           hitPosition: hit.position,
           hitNormal: hit.normal,
-          distance: hit.distance
+          distance: hit.distance,
         };
       }
     }
@@ -257,16 +261,13 @@ Limit how far back the server will rewind to prevent abuse.
 ```javascript
 class LagCompensationConfig {
   static MAX_COMPENSATION = 200; // Maximum 200ms compensation
-  static MIN_COMPENSATION = 0;   // Don't compensate negative latency
+  static MIN_COMPENSATION = 0; // Don't compensate negative latency
 
   static getCompensationTime(clientRTT) {
     const latency = clientRTT / 2;
 
     // Clamp to limits
-    return Math.max(
-      this.MIN_COMPENSATION,
-      Math.min(this.MAX_COMPENSATION, latency)
-    );
+    return Math.max(this.MIN_COMPENSATION, Math.min(this.MAX_COMPENSATION, latency));
   }
 }
 ```
@@ -287,7 +288,7 @@ class LatencyTracker {
   startTracking(client) {
     this.clients.set(client.id, {
       lastPing: 0,
-      rtt: 100 // Default estimate
+      rtt: 100, // Default estimate
     });
 
     // Send ping every 2 seconds
@@ -313,7 +314,7 @@ class LatencyTracker {
 }
 
 // Client-side
-socket.on('ping', (data) => {
+socket.on('ping', data => {
   socket.emit('pong', data);
 });
 ```
@@ -333,20 +334,24 @@ class PlayerHitboxes {
         type: 'head',
         min: { x: player.position.x - 0.2, y: player.position.y + 1.5, z: player.position.z - 0.2 },
         max: { x: player.position.x + 0.2, y: player.position.y + 1.9, z: player.position.z + 0.2 },
-        damageMultiplier: 2.0 // Headshot bonus
+        damageMultiplier: 2.0, // Headshot bonus
       },
       {
         type: 'torso',
         min: { x: player.position.x - 0.3, y: player.position.y + 0.5, z: player.position.z - 0.2 },
         max: { x: player.position.x + 0.3, y: player.position.y + 1.5, z: player.position.z + 0.2 },
-        damageMultiplier: 1.0
+        damageMultiplier: 1.0,
       },
       {
         type: 'legs',
         min: { x: player.position.x - 0.2, y: player.position.y, z: player.position.z - 0.15 },
-        max: { x: player.position.x + 0.2, y: player.position.y + 0.5, z: player.position.z + 0.15 },
-        damageMultiplier: 0.75
-      }
+        max: {
+          x: player.position.x + 0.2,
+          y: player.position.y + 0.5,
+          z: player.position.z + 0.15,
+        },
+        damageMultiplier: 0.75,
+      },
     ];
   }
 }
@@ -357,12 +362,14 @@ Simplified hitboxes reduce memory usage and hit detection cost.
 ## "Favor the Shooter" vs "Favor the Victim"
 
 **Favor the Shooter (Lag Compensation)**:
+
 - Pro: Hits register when shooter aims accurately
 - Pro: Feels responsive for high-latency players
 - Con: Victim might get hit behind cover ("I was behind the wall!")
 - **Used by**: Most modern competitive shooters (Overwatch, Valorant, CoD)
 
 **Favor the Victim (No Lag Compensation)**:
+
 - Pro: Victim never hit behind cover
 - Pro: Simpler implementation
 - Con: Shooter must lead targets (feels bad)
@@ -402,22 +409,27 @@ class LagCompensationDebugger {
 ## Common Pitfalls
 
 **Pitfall 1: Not Limiting Compensation**
+
 - Symptom: High-latency players shooting far into the past
 - Solution: Cap max compensation (200ms is common)
 
 **Pitfall 2: Using Client Timestamp Directly**
+
 - Symptom: Clients can cheat by sending fake timestamps
 - Solution: Server measures client RTT independently, ignores client timestamps
 
 **Pitfall 3: Compensating Non-Hitscan Weapons**
+
 - Symptom: Complex implementation, minimal benefit
 - Solution: Only compensate hitscan; let projectiles handle delay naturally
 
 **Pitfall 4: Not Storing Enough History**
+
 - Symptom: Can't rewind far enough for high-latency clients
 - Solution: Store at least 1 second of history (supports up to 500ms RTT)
 
 **Pitfall 5: Excessive Memory Usage**
+
 - Symptom: State history consumes too much memory
 - Solution: Store simplified state (positions, hitboxes only), not full game state
 
@@ -436,7 +448,7 @@ class ProjectileLagCompensation {
     const projectile = new Projectile({
       position: fireData.position,
       velocity: fireData.direction.multiplyScalar(fireData.speed),
-      ownerId: player.id
+      ownerId: player.id,
     });
 
     // Simulate projectile forward by latency amount
@@ -460,7 +472,7 @@ This ensures projectiles spawn at the position the client predicted.
 
 ## Performance Considerations
 
-**Memory**: Storing state history. At 60Hz for 1 second: 60 snapshots * (players * 100 bytes) = 6KB per player. Scales with player count.
+**Memory**: Storing state history. At 60Hz for 1 second: 60 snapshots _ (players _ 100 bytes) = 6KB per player. Scales with player count.
 
 **CPU**: Raycast hit detection in historical state. Optimize with spatial partitioning (octree, grid).
 

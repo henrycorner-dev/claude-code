@@ -7,6 +7,7 @@ This example demonstrates adapting a Henry command for platform-specific needs. 
 ## Scenario
 
 **Standard henry-feature is web-focused:**
+
 - Uses ui-visual-designer for web design
 - Implementation assumes web technologies
 - Testing focuses on browsers
@@ -17,24 +18,28 @@ This example demonstrates adapting a Henry command for platform-specific needs. 
 ## Key Differences for Mobile
 
 ### Design
+
 - Must follow platform guidelines (iOS HIG, Material Design)
 - Mobile-specific patterns (navigation, gestures)
 - Different screen sizes and orientations
 - Offline-first considerations
 
 ### Implementation
+
 - Native (Swift/Kotlin) or React Native
 - Platform-specific APIs and permissions
 - Background task handling
 - Memory and battery constraints
 
 ### Testing
+
 - Multiple devices and OS versions
 - Offline/online transitions
 - Interruptions (calls, notifications)
 - App store compliance
 
 ### Performance
+
 - Cold start time (< 2s)
 - Memory footprint
 - ANR (Application Not Responding) rate
@@ -62,6 +67,7 @@ End-to-end mobile feature development with platform-specific considerations for 
 **Goal**: Create platform-appropriate UX design
 
 **Actions**:
+
 1. Launch ux-ui-designer for mobile-first design
 2. Apply platform-specific guidelines:
    - iOS: Human Interface Guidelines
@@ -82,6 +88,7 @@ End-to-end mobile feature development with platform-specific considerations for 
 **Agents**: ux-ui-designer, mobile-app-engineer
 
 **Deliverables**:
+
 - Platform-specific wireframes
 - Design mockups for key screens
 - Interactive prototypes
@@ -94,6 +101,7 @@ End-to-end mobile feature development with platform-specific considerations for 
 **Goal**: Implement feature for target platform(s)
 
 **Actions**:
+
 1. Launch mobile-app-engineer for implementation
 2. Choose technology stack:
    - Native: Swift (iOS) / Kotlin (Android)
@@ -120,6 +128,7 @@ End-to-end mobile feature development with platform-specific considerations for 
 **Agents**: mobile-app-engineer
 
 **Deliverables**:
+
 - Mobile app implementation
 - Platform-specific optimizations
 - Offline support (if required)
@@ -131,6 +140,7 @@ End-to-end mobile feature development with platform-specific considerations for 
 **Goal**: Comprehensive testing across devices and scenarios
 
 **Actions**:
+
 1. Launch qa-tester for mobile test strategy
 2. Device testing:
    - iOS: Test on multiple iPhone models (various screen sizes)
@@ -141,10 +151,10 @@ End-to-end mobile feature development with platform-specific considerations for 
    - Offline/online transitions
    - Background/foreground transitions
    - Interruptions:
-     * Incoming calls
-     * Notifications
-     * Low battery warnings
-     * App switching
+     - Incoming calls
+     - Notifications
+     - Low battery warnings
+     - App switching
    - Permission flows
 4. Performance testing:
    - Cold start time
@@ -160,6 +170,7 @@ End-to-end mobile feature development with platform-specific considerations for 
 **Agents**: qa-tester, mobile-app-engineer
 
 **Deliverables**:
+
 - Mobile test results
 - Device compatibility matrix
 - Test coverage report
@@ -170,6 +181,7 @@ End-to-end mobile feature development with platform-specific considerations for 
 **Goal**: Meet mobile performance targets
 
 **Actions**:
+
 1. Launch performance-engineer for mobile metrics
 2. Measure and optimize cold start time:
    - Target: < 2 seconds
@@ -199,6 +211,7 @@ End-to-end mobile feature development with platform-specific considerations for 
 **Agents**: performance-engineer, mobile-app-engineer
 
 **Deliverables**:
+
 - Performance benchmarks
 - Optimization report
 - Before/after metrics comparison
@@ -208,31 +221,36 @@ End-to-end mobile feature development with platform-specific considerations for 
 Complete mobile feature ready for release:
 
 **Design:**
+
 - ✅ Platform-appropriate UX following iOS/Android guidelines
 - ✅ Mobile-first design with offline support
 - ✅ Responsive across device sizes
 
 **Implementation:**
+
 - ✅ Native or cross-platform implementation
 - ✅ Platform-specific features handled
 - ✅ Optimized for mobile constraints
 
 **Testing:**
+
 - ✅ Tested on multiple devices and OS versions
 - ✅ Scenario testing (offline, interruptions, etc.)
 - ✅ App store compliance validated
 
 **Performance:**
+
 - ✅ Cold start time: [X]s (target: < 2s)
 - ✅ Memory usage: [X]MB
 - ✅ ANR/Hang rate: [X]% (target: < 0.5%)
 - ✅ Crash-free rate: [X]% (target: > 99.5%)
 
 **Next Steps:**
+
 - Prepare app store listing (if new app)
 - Submit for internal testing:
-  * iOS: TestFlight
-  * Android: Google Play Internal Testing
+  - iOS: TestFlight
+  - Android: Google Play Internal Testing
 - Gather user feedback and iterate
 - Plan phased rollout
 
@@ -242,23 +260,32 @@ Complete mobile feature ready for release:
 
 **iOS feature:**
 ```
+
 /mobile-feature offline-notes iOS
+
 ```
 
 **Android feature:**
 ```
+
 /mobile-feature payment-flow Android
+
 ```
 
 **Cross-platform React Native:**
 ```
+
 /mobile-feature user-profile "iOS and Android"
+
 ```
 
 **Tablet-optimized:**
 ```
+
 /mobile-feature dashboard-view "iPad and Android tablets"
+
 ```
+
 ```
 
 ### Usage
@@ -278,33 +305,37 @@ Complete mobile feature ready for release:
 
 ### Agent Changes
 
-| Standard | Mobile | Reason |
-|----------|--------|--------|
-| ui-visual-designer | mobile-app-engineer | Mobile needs platform-specific expertise |
-| frontend-engineer | mobile-app-engineer | Mobile app development, not web |
-| performance-engineer (web metrics) | performance-engineer (mobile metrics) | Different performance targets |
+| Standard                           | Mobile                                | Reason                                   |
+| ---------------------------------- | ------------------------------------- | ---------------------------------------- |
+| ui-visual-designer                 | mobile-app-engineer                   | Mobile needs platform-specific expertise |
+| frontend-engineer                  | mobile-app-engineer                   | Mobile app development, not web          |
+| performance-engineer (web metrics) | performance-engineer (mobile metrics) | Different performance targets            |
 
 ### Phase Adjustments
 
 **Phase 1: Design**
+
 - Added platform guideline compliance
 - Added mobile-specific patterns
 - Added offline considerations
 - Added multiple screen size handling
 
 **Phase 2: Implementation**
+
 - Changed from web to mobile technologies
 - Added platform-specific requirements (permissions, etc.)
 - Added offline-first implementation
 - Added mobile optimization considerations
 
 **Phase 3: Testing**
+
 - Changed from browser testing to device testing
 - Added OS version testing
 - Added mobile-specific scenarios (interruptions, etc.)
 - Added app store compliance check
 
 **Phase 4: Performance**
+
 - Changed metrics from web (LCP, FID) to mobile (cold start, ANR)
 - Added mobile-specific targets
 - Added battery and memory optimization
@@ -320,17 +351,19 @@ If targeting iOS only, can optimize further:
 ## Phase 1: iOS Design
 
 **Actions**:
+
 - Follow iOS Human Interface Guidelines strictly
 - Use iOS-native components (UIKit/SwiftUI)
 - Consider iOS-specific features:
-  * Face ID / Touch ID
-  * Siri Shortcuts
-  * Widgets
-  * App Clips
+  - Face ID / Touch ID
+  - Siri Shortcuts
+  - Widgets
+  - App Clips
 
 ## Phase 2: Swift Implementation
 
 **Actions**:
+
 - Implement using Swift and SwiftUI/UIKit
 - Follow iOS architecture patterns (MVVM, Coordinator)
 - Use iOS system frameworks
@@ -339,6 +372,7 @@ If targeting iOS only, can optimize further:
 ## Phase 3: iOS Testing
 
 **Actions**:
+
 - Test on iPhone models (SE, standard, Pro, Pro Max)
 - Test on iPad (if universal app)
 - Test on various iOS versions (n, n-1, n-2)
@@ -353,17 +387,19 @@ If targeting Android only:
 ## Phase 1: Android Design
 
 **Actions**:
+
 - Follow Material Design guidelines
 - Use Material Design components
 - Consider Android-specific features:
-  * Home screen widgets
-  * Live wallpapers
-  * Quick Settings tiles
-  * Android Auto / Wear OS (if applicable)
+  - Home screen widgets
+  - Live wallpapers
+  - Quick Settings tiles
+  - Android Auto / Wear OS (if applicable)
 
 ## Phase 2: Kotlin Implementation
 
 **Actions**:
+
 - Implement using Kotlin and Jetpack Compose/Views
 - Follow Android architecture patterns (MVVM, MVI)
 - Use Android Jetpack libraries
@@ -372,6 +408,7 @@ If targeting Android only:
 ## Phase 3: Android Testing
 
 **Actions**:
+
 - Test on multiple manufacturers
 - Test on various screen sizes and densities
 - Test on Android versions (API 21+ typically)
@@ -386,6 +423,7 @@ If using React Native:
 ## Phase 2: React Native Implementation
 
 **Actions**:
+
 - Implement using React Native
 - Use platform-agnostic components where possible
 - Handle platform differences with Platform.select
@@ -396,6 +434,7 @@ If using React Native:
 ## Phase 3: Cross-Platform Testing
 
 **Actions**:
+
 - Test on both iOS and Android
 - Verify platform-specific variations
 - Test on various devices on both platforms
@@ -405,12 +444,14 @@ If using React Native:
 ## When to Use Mobile Workflow
 
 ### Use When:
+
 - ✅ Building mobile app feature
 - ✅ Need platform-specific guidance
 - ✅ Mobile-specific concerns (offline, performance, etc.)
 - ✅ App store submission requirements
 
 ### Use Standard henry-feature When:
+
 - ❌ Building web application
 - ❌ Progressive Web App (PWA)
 - ❌ Electron/desktop app
@@ -419,20 +460,24 @@ If using React Native:
 ## Tips
 
 **Platform guidelines:**
+
 - iOS: https://developer.apple.com/design/human-interface-guidelines/
 - Android: https://m3.material.io/
 
 **Performance targets:**
+
 - Cold start: < 2 seconds
 - ANR rate: < 0.5%
 - Crash-free rate: > 99.5%
 - Memory: Minimize for low-end devices
 
 **Testing devices:**
+
 - iOS: Cover iPhone SE (small), standard, Pro Max (large), iPad
 - Android: Cover multiple manufacturers, screen sizes, Android versions
 
 **App store requirements:**
+
 - iOS App Store: Review Guidelines, Privacy Requirements
 - Google Play: Developer Policy, Privacy Policy
 
@@ -452,6 +497,7 @@ Add additional mobile-specific phases:
 **Goal**: Add mobile analytics tracking
 
 **Actions**:
+
 1. Integrate analytics SDK (Firebase, Amplitude, etc.)
 2. Define events to track
 3. Implement tracking
@@ -472,6 +518,7 @@ Add conditional platform-specific phases:
 **Condition**: Only for iOS
 
 **Actions**:
+
 - Implement iOS widgets
 - Add Siri Shortcuts
 - Create App Clips
@@ -481,6 +528,7 @@ Add conditional platform-specific phases:
 **Condition**: Only for Android
 
 **Actions**:
+
 - Implement home screen widgets
 - Add Quick Settings tiles
 ```

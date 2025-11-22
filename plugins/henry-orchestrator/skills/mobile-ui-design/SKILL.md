@@ -35,6 +35,7 @@ Use this skill when:
 ### Platform-Specific Design
 
 **Material Design (Android):**
+
 - Material components and elevation
 - Floating Action Buttons (FABs)
 - Bottom navigation bars
@@ -43,6 +44,7 @@ Use this skill when:
 - Material color systems and theming
 
 **Human Interface Guidelines (iOS):**
+
 - Tab bars at the bottom
 - Navigation bars at the top
 - Modal presentations and sheets
@@ -57,6 +59,7 @@ Use this skill when:
 Primary navigation pattern for mobile apps with 3-5 top-level destinations.
 
 **iOS Tab Bar:**
+
 ```swift
 // SwiftUI example
 TabView {
@@ -76,6 +79,7 @@ TabView {
 ```
 
 **Android Bottom Navigation:**
+
 ```kotlin
 // Jetpack Compose example
 Scaffold(
@@ -103,12 +107,14 @@ Scaffold(
 Secondary navigation pattern, typically for Android apps with many sections.
 
 **When to Use:**
+
 - Apps with 5+ top-level sections
 - Settings and account management
 - Less frequently accessed features
 - Supporting navigation, not primary
 
 **Implementation Considerations:**
+
 - Access via hamburger menu or swipe from left edge
 - Include header with user info/branding
 - Group related items with dividers
@@ -119,12 +125,14 @@ Secondary navigation pattern, typically for Android apps with many sections.
 Hierarchical navigation for drilling into content.
 
 **iOS Navigation Stack:**
+
 - Navigation bar at top with back button
 - Large titles that collapse on scroll
 - Swipe from left edge to go back
 - Push/pop transitions
 
 **Android Navigation:**
+
 - App bar at top with up/back button
 - Shared element transitions
 - System back button support
@@ -134,12 +142,14 @@ Hierarchical navigation for drilling into content.
 #### Minimum Touch Targets
 
 **iOS:**
+
 - Minimum: 44pt × 44pt (88px × 88px @2x)
 - Comfortable: 48pt × 48pt
 - Status bar height: 44pt (non-notch), 47pt (notch)
 - Tab bar height: 49pt
 
 **Android:**
+
 - Minimum: 48dp × 48dp
 - Comfortable: 56dp × 56dp for primary actions
 - App bar height: 56dp (portrait), 48dp (landscape)
@@ -148,11 +158,13 @@ Hierarchical navigation for drilling into content.
 #### Spacing
 
 **iOS:**
+
 - System spacing: 8pt, 16pt, 20pt
 - Safe area insets for notch/home indicator
 - Margins: 16pt-20pt from screen edges
 
 **Android:**
+
 - Base unit: 8dp grid system
 - Common spacing: 8dp, 16dp, 24dp
 - Screen margins: 16dp typical
@@ -163,12 +175,14 @@ Hierarchical navigation for drilling into content.
 #### Screen Sizes
 
 **iOS:**
+
 - iPhone SE: 375×667pt
 - iPhone 13/14: 390×844pt
 - iPhone 14 Pro Max: 430×932pt
 - iPad: 768×1024pt and up
 
 **Android:**
+
 - Small: 360dp width typical
 - Medium: 400dp+ width
 - Large: 600dp+ (tablets)
@@ -235,6 +249,7 @@ Validate design:
 ### Cards
 
 **Material Design Cards:**
+
 ```kotlin
 Card(
     modifier = Modifier
@@ -251,6 +266,7 @@ Card(
 ```
 
 **iOS Cards:**
+
 ```swift
 // iOS uses grouped lists or custom containers
 GroupBox {
@@ -270,12 +286,14 @@ GroupBox {
 ### Lists
 
 **iOS Lists:**
+
 - Use native `List` or `UITableView`
 - Swipe actions for delete/archive
 - Disclosure indicators for navigation
 - System separators
 
 **Android Lists:**
+
 - RecyclerView or LazyColumn
 - Use Material list items with proper density
 - Ripple effects on touch
@@ -284,10 +302,12 @@ GroupBox {
 ### Buttons and Actions
 
 **Primary Actions:**
+
 - iOS: Prominent button or toolbar button
 - Android: FAB for primary screen action or prominent button
 
 **Secondary Actions:**
+
 - iOS: Toolbar buttons or context menus
 - Android: App bar actions or overflow menu
 
@@ -296,12 +316,14 @@ GroupBox {
 ### Platform Accessibility Features
 
 **iOS:**
+
 - VoiceOver support with proper labels
 - Dynamic Type for text scaling
 - High Contrast mode
 - Reduce Motion for animations
 
 **Android:**
+
 - TalkBack screen reader support
 - Font scaling (up to 200%)
 - Color correction modes
@@ -320,12 +342,14 @@ GroupBox {
 ### Reference Files
 
 For comprehensive platform-specific guidelines:
+
 - **`references/design-systems.md`** - Detailed Material Design and HIG specifications, component guidelines, and platform-specific patterns
 - **`references/navigation-patterns.md`** - In-depth navigation implementations, flow patterns, and best practices for each navigation type
 
 ### Examples
 
 Working implementations in `examples/`:
+
 - **`bottom-navigation-ios.swift`** - Complete iOS tab bar implementation
 - **`bottom-navigation-android.kt`** - Complete Android bottom navigation
 - **`navigation-drawer-android.kt`** - Material 3 navigation drawer
@@ -334,10 +358,12 @@ Working implementations in `examples/`:
 ### External Resources
 
 **Material Design:**
+
 - https://m3.material.io - Material Design 3 guidelines
 - https://developer.android.com/jetpack/compose - Jetpack Compose documentation
 
 **Human Interface Guidelines:**
+
 - https://developer.apple.com/design/human-interface-guidelines - Official iOS HIG
 - https://developer.apple.com/design/resources - Design resources and templates
 
@@ -345,12 +371,12 @@ Working implementations in `examples/`:
 
 ### Navigation Decision Matrix
 
-| App Structure | iOS | Android | Notes |
-|--------------|-----|---------|-------|
-| 3-5 main sections | Tab Bar | Bottom Navigation | Primary pattern |
-| 5+ sections | Tab Bar + More | Navigation Drawer | Consider reorganizing |
-| Deep hierarchy | Navigation Stack | Navigation Component | Use with primary nav |
-| Content-focused | Hide bars on scroll | Collapsing toolbar | Show on reverse scroll |
+| App Structure     | iOS                 | Android              | Notes                  |
+| ----------------- | ------------------- | -------------------- | ---------------------- |
+| 3-5 main sections | Tab Bar             | Bottom Navigation    | Primary pattern        |
+| 5+ sections       | Tab Bar + More      | Navigation Drawer    | Consider reorganizing  |
+| Deep hierarchy    | Navigation Stack    | Navigation Component | Use with primary nav   |
+| Content-focused   | Hide bars on scroll | Collapsing toolbar   | Show on reverse scroll |
 
 ### Common Mistakes to Avoid
 
@@ -392,12 +418,14 @@ Working implementations in `examples/`:
 ### Cross-Platform Development
 
 **React Native:**
+
 - Use platform-specific files (`.ios.js`, `.android.js`) when needed
 - Leverage `Platform.select()` for platform differences
 - Use React Navigation for navigation patterns
 - Consider React Native Paper or Native Base for Material components
 
 **Flutter:**
+
 - Use Material widgets for Android look
 - Use Cupertino widgets for iOS look
 - Platform-adaptive widgets automatically select appropriate style

@@ -13,6 +13,7 @@ This skill provides comprehensive guidance for identifying security vulnerabilit
 ## When to Use This Skill
 
 Use this skill when:
+
 - Conducting security audits of existing code
 - Identifying potential vulnerabilities (OWASP Top 10)
 - Implementing authentication and authorization systems
@@ -28,6 +29,7 @@ Use this skill when:
 ### Defense in Depth
 
 Implement multiple layers of security controls:
+
 - Never rely on a single security mechanism
 - Validate at every trust boundary
 - Assume external inputs are malicious
@@ -36,6 +38,7 @@ Implement multiple layers of security controls:
 ### Least Privilege
 
 Grant minimum necessary permissions:
+
 - Use minimal database permissions
 - Restrict file system access
 - Limit API access scopes
@@ -44,6 +47,7 @@ Grant minimum necessary permissions:
 ### Secure by Default
 
 Build security into the foundation:
+
 - Use secure defaults in configuration
 - Require explicit opt-out of security features
 - Enable security features automatically
@@ -54,6 +58,7 @@ Build security into the foundation:
 ### Step 1: Identify Entry Points
 
 Locate all points where external data enters the application:
+
 - HTTP request parameters (query, body, headers, cookies)
 - File uploads
 - Database queries
@@ -65,6 +70,7 @@ Locate all points where external data enters the application:
 ### Step 2: Trace Data Flow
 
 Follow data from entry points through the application:
+
 - Track how input is processed
 - Identify where input is used in sensitive operations
 - Find where data is stored or transmitted
@@ -73,6 +79,7 @@ Follow data from entry points through the application:
 ### Step 3: Check for Vulnerabilities
 
 Systematically check for common vulnerability patterns:
+
 - SQL/NoSQL injection points
 - XSS (reflected, stored, DOM-based)
 - Authentication and session issues
@@ -86,6 +93,7 @@ Systematically check for common vulnerability patterns:
 ### Step 4: Verify Security Controls
 
 Confirm security mechanisms are properly implemented:
+
 - Input validation exists and is effective
 - Output encoding is applied correctly
 - Authentication is required where needed
@@ -97,6 +105,7 @@ Confirm security mechanisms are properly implemented:
 ### Step 5: Test Edge Cases
 
 Validate security under unusual conditions:
+
 - Empty or null inputs
 - Extremely long inputs
 - Special characters and encoding
@@ -109,6 +118,7 @@ Validate security under unusual conditions:
 Check code for these common issues:
 
 **Injection Vulnerabilities:**
+
 - [ ] SQL queries use parameterized statements or ORM
 - [ ] NoSQL queries sanitize user input
 - [ ] Command execution is avoided or properly sanitized
@@ -116,6 +126,7 @@ Check code for these common issues:
 - [ ] XML parsers disable external entities
 
 **Authentication Issues:**
+
 - [ ] Passwords are hashed with strong algorithms (bcrypt, Argon2)
 - [ ] Multi-factor authentication is available
 - [ ] Account lockout prevents brute force
@@ -123,18 +134,21 @@ Check code for these common issues:
 - [ ] Logout invalidates sessions completely
 
 **Authorization Issues:**
+
 - [ ] Authorization checks on every sensitive operation
 - [ ] Direct object references are protected
 - [ ] Privilege escalation is prevented
 - [ ] Horizontal access controls are enforced
 
 **Data Protection:**
+
 - [ ] Sensitive data encrypted at rest
 - [ ] TLS/HTTPS for data in transit
 - [ ] Secrets not hardcoded in code
 - [ ] PII handling follows regulations
 
 **Input Validation:**
+
 - [ ] Whitelist validation for known formats
 - [ ] Length limits enforced
 - [ ] Type checking performed
@@ -251,6 +265,7 @@ Referrer-Policy: strict-origin-when-cross-origin
 ## Common Pitfalls to Avoid
 
 **Don't:**
+
 - Trust user input without validation
 - Use string concatenation for SQL queries
 - Store passwords in plain text or with weak hashing (MD5, SHA1)
@@ -261,6 +276,7 @@ Referrer-Policy: strict-origin-when-cross-origin
 - Hardcode secrets in source code
 
 **Do:**
+
 - Validate all input at trust boundaries
 - Use parameterized queries or ORMs
 - Hash passwords with bcrypt, scrypt, or Argon2
@@ -301,24 +317,28 @@ Security audit utilities in `scripts/`:
 When auditing or implementing security:
 
 **Python:**
+
 - Use parameterized queries with `?` placeholders
 - Use `html.escape()` for HTML output
 - Use `secrets` module for tokens
 - Use `bcrypt` or `argon2` for password hashing
 
 **JavaScript/Node.js:**
+
 - Use parameterized queries or ORMs (Sequelize, TypeORM)
 - Use template engines with auto-escaping (Handlebars, EJS)
 - Use `crypto.randomBytes()` for tokens
 - Use `bcrypt` package for password hashing
 
 **Java:**
+
 - Use `PreparedStatement` for SQL queries
 - Use OWASP Java Encoder for output encoding
 - Use `SecureRandom` for tokens
 - Use `BCrypt` or `Argon2` for password hashing
 
 **PHP:**
+
 - Use PDO with prepared statements
 - Use `htmlspecialchars()` with `ENT_QUOTES`
 - Use `random_bytes()` for tokens
@@ -360,16 +380,19 @@ When documenting security findings:
 ## Progressive Learning Path
 
 **Start with:**
+
 - Input validation patterns
 - SQL injection prevention
 - Basic XSS prevention
 
 **Then move to:**
+
 - Authentication implementation
 - Authorization patterns
 - Encryption usage
 
 **Finally cover:**
+
 - Advanced OWASP Top 10 items
 - Security architecture
 - Threat modeling

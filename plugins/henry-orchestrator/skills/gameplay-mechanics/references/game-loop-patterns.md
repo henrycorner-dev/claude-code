@@ -11,7 +11,7 @@ The fixed timestep loop ensures deterministic physics and gameplay by updating a
 **Structure:**
 
 ```javascript
-const FIXED_TIMESTEP = 1/60; // 60 updates per second
+const FIXED_TIMESTEP = 1 / 60; // 60 updates per second
 const MAX_UPDATES_PER_FRAME = 5; // Prevent spiral of death
 
 let accumulator = 0;
@@ -44,12 +44,14 @@ function gameLoop(currentTime) {
 ```
 
 **Advantages:**
+
 - Deterministic gameplay and physics
 - Consistent behavior across different hardware
 - Simpler replay and networking implementation
 - Physics engines work best with fixed timestep
 
 **Disadvantages:**
+
 - Requires interpolation for smooth rendering
 - Can waste CPU on fast hardware
 - Must handle spiral of death scenarios
@@ -80,11 +82,13 @@ function gameLoop(currentTime) {
 ```
 
 **Advantages:**
+
 - Simpler implementation
 - No interpolation needed
 - Naturally adapts to hardware capability
 
 **Disadvantages:**
+
 - Non-deterministic gameplay
 - Physics instability at low frame rates
 - Difficult to network or replay
@@ -99,7 +103,7 @@ Combines fixed and variable timesteps by using a small fixed timestep but allowi
 **Structure:**
 
 ```javascript
-const TIMESTEP = 1/60;
+const TIMESTEP = 1 / 60;
 let accumulator = 0;
 let lastTime = performance.now();
 
@@ -128,11 +132,13 @@ function gameLoop(currentTime) {
 ```
 
 **Advantages:**
+
 - Smoother than pure fixed timestep
 - More deterministic than variable timestep
 - Good for hybrid physics/visual systems
 
 **Disadvantages:**
+
 - More complex than other approaches
 - Still requires careful physics handling
 - Not perfectly deterministic
@@ -166,7 +172,7 @@ class GameObject {
     // Interpolate between previous and current position
     return {
       x: this.previousPosition.x * (1 - alpha) + this.position.x * alpha,
-      y: this.previousPosition.y * (1 - alpha) + this.position.y * alpha
+      y: this.previousPosition.y * (1 - alpha) + this.position.y * alpha,
     };
   }
 }
@@ -207,7 +213,7 @@ For networked games, extrapolate position based on velocity when updates are del
 function extrapolatePosition(lastPosition, velocity, timeSinceUpdate) {
   return {
     x: lastPosition.x + velocity.x * timeSinceUpdate,
-    y: lastPosition.y + velocity.y * timeSinceUpdate
+    y: lastPosition.y + velocity.y * timeSinceUpdate,
   };
 }
 ```
@@ -392,6 +398,7 @@ requestAnimationFrame(gameLoop);
 ```
 
 **Benefits:**
+
 - Automatically pauses when tab is not visible
 - Synchronized with display refresh rate
 - Better performance and battery life
@@ -424,7 +431,7 @@ Offload physics to a Web Worker:
 // main.js
 const physicsWorker = new Worker('physics-worker.js');
 
-physicsWorker.onmessage = (e) => {
+physicsWorker.onmessage = e => {
   const { bodies } = e.data;
   updateRenderPositions(bodies);
 };
@@ -438,7 +445,7 @@ function gameLoop() {
 }
 
 // physics-worker.js
-onmessage = (e) => {
+onmessage = e => {
   const { input } = e.data;
   updatePhysics(input);
   postMessage({ bodies: physicsBodies });
@@ -492,7 +499,7 @@ class PerformanceMonitor {
       fps: 1000 / this.average(this.frameTimes),
       avgFrameTime: this.average(this.frameTimes),
       avgUpdateTime: this.average(this.updateTimes),
-      avgRenderTime: this.average(this.renderTimes)
+      avgRenderTime: this.average(this.renderTimes),
     };
   }
 
@@ -539,7 +546,7 @@ function renderDebugInfo(ctx, perfMonitor) {
 For most games, use the fixed timestep loop with interpolation:
 
 ```javascript
-const FIXED_TIMESTEP = 1/60;
+const FIXED_TIMESTEP = 1 / 60;
 const MAX_UPDATES = 5;
 
 let accumulator = 0;
@@ -604,12 +611,12 @@ class Game {
 
     this.perfMonitor.endFrame();
 
-    requestAnimationFrame((time) => this.gameLoop(time));
+    requestAnimationFrame(time => this.gameLoop(time));
   }
 
   start() {
     lastTime = performance.now();
-    requestAnimationFrame((time) => this.gameLoop(time));
+    requestAnimationFrame(time => this.gameLoop(time));
   }
 }
 ```

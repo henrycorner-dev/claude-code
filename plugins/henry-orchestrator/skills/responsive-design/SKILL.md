@@ -13,6 +13,7 @@ This skill provides guidance for implementing responsive web design using mobile
 ## When to Use This Skill
 
 Load this skill when implementing:
+
 - Mobile-first responsive layouts
 - Framework-based responsive designs (Tailwind CSS, Bootstrap)
 - Custom media queries and breakpoints
@@ -33,6 +34,7 @@ Start with mobile designs and progressively enhance for larger screens:
 4. **Performance**: Lighter styles load first, enhanced features load conditionally
 
 Benefits:
+
 - Faster mobile performance
 - Forces content prioritization
 - Easier to enhance than reduce
@@ -45,6 +47,7 @@ Benefits:
 Utility-first framework with built-in responsive modifiers:
 
 **Breakpoints:**
+
 - `sm:` - 640px and up
 - `md:` - 768px and up
 - `lg:` - 1024px and up
@@ -52,6 +55,7 @@ Utility-first framework with built-in responsive modifiers:
 - `2xl:` - 1536px and up
 
 **Pattern:**
+
 ```html
 <div class="w-full md:w-1/2 lg:w-1/3">
   <!-- Mobile: full width, Tablet: half, Desktop: third -->
@@ -63,6 +67,7 @@ Utility-first framework with built-in responsive modifiers:
 Component-based framework with grid system:
 
 **Breakpoints:**
+
 - `xs` - <576px (default)
 - `sm` - ≥576px
 - `md` - ≥768px
@@ -71,6 +76,7 @@ Component-based framework with grid system:
 - `xxl` - ≥1400px
 
 **Pattern:**
+
 ```html
 <div class="col-12 col-md-6 col-lg-4">
   <!-- Mobile: full width, Tablet: half, Desktop: third -->
@@ -82,6 +88,7 @@ Component-based framework with grid system:
 Custom breakpoints for specific design needs:
 
 **Standard breakpoints:**
+
 - Mobile: 320px - 480px
 - Tablet: 481px - 768px
 - Laptop: 769px - 1024px
@@ -89,6 +96,7 @@ Custom breakpoints for specific design needs:
 - Large screens: 1201px+
 
 **Common patterns:**
+
 ```css
 /* Mobile-first base styles */
 .element {
@@ -120,6 +128,7 @@ Custom breakpoints for specific design needs:
 Semantic attributes that enhance screen reader support:
 
 **Key ARIA attributes:**
+
 - `aria-label`: Accessible name for elements
 - `aria-labelledby`: Reference to labeling element
 - `aria-describedby`: Reference to description
@@ -129,6 +138,7 @@ Semantic attributes that enhance screen reader support:
 - `role`: Define element purpose (navigation, button, etc.)
 
 **Usage:**
+
 ```html
 <button aria-label="Close dialog" aria-expanded="false">
   <span aria-hidden="true">×</span>
@@ -140,11 +150,13 @@ Semantic attributes that enhance screen reader support:
 Web Content Accessibility Guidelines ensure content is accessible to all users:
 
 **WCAG 2.1 Levels:**
+
 - **A**: Minimum accessibility (required)
 - **AA**: Standard compliance (recommended)
 - **AAA**: Enhanced accessibility (ideal)
 
 **Key requirements:**
+
 1. **Perceivable**: Content must be presentable to all users
 2. **Operable**: Interface must be navigable by all input methods
 3. **Understandable**: Content and operation must be clear
@@ -157,18 +169,21 @@ For detailed WCAG guidelines and testing procedures, consult `references/accessi
 ### 1. Choose Framework or Custom Approach
 
 **Use Tailwind when:**
+
 - Rapid prototyping needed
 - Utility-first approach preferred
 - Custom design system required
 - Small to medium projects
 
 **Use Bootstrap when:**
+
 - Pre-built components needed
 - Team familiar with Bootstrap
 - Consistent UI patterns desired
 - Quick MVP development
 
 **Use custom CSS when:**
+
 - Full control over styles required
 - Minimal framework overhead desired
 - Specific performance constraints
@@ -253,7 +268,9 @@ Ensure interactive elements are accessible on touch devices:
 **Minimum touch target: 44x44px (WCAG 2.1 AA)**
 
 ```css
-button, a, input {
+button,
+a,
+input {
   min-height: 44px;
   min-width: 44px;
   padding: 0.75rem 1rem;
@@ -274,9 +291,7 @@ Implement ARIA and semantic HTML:
 ```html
 <!-- Navigation with ARIA -->
 <nav role="navigation" aria-label="Main navigation">
-  <button aria-expanded="false" aria-controls="menu">
-    Menu
-  </button>
+  <button aria-expanded="false" aria-controls="menu">Menu</button>
   <ul id="menu" aria-hidden="true">
     <li><a href="#home">Home</a></li>
     <li><a href="#about">About</a></li>
@@ -286,12 +301,7 @@ Implement ARIA and semantic HTML:
 <!-- Form with proper labels -->
 <form>
   <label for="email">Email address</label>
-  <input
-    id="email"
-    type="email"
-    aria-required="true"
-    aria-describedby="email-help"
-  />
+  <input id="email" type="email" aria-required="true" aria-describedby="email-help" />
   <span id="email-help">We'll never share your email</span>
 </form>
 ```
@@ -299,6 +309,7 @@ Implement ARIA and semantic HTML:
 ### 6. Test Across Devices and Assistive Technologies
 
 **Testing checklist:**
+
 - [ ] Mobile devices (320px, 375px, 414px widths)
 - [ ] Tablets (768px, 1024px)
 - [ ] Desktop (1280px, 1920px)
@@ -354,11 +365,7 @@ Mobile menu that expands to horizontal nav:
 />
 
 <!-- Tailwind responsive image -->
-<img
-  src="image.jpg"
-  alt="Descriptive text"
-  class="w-full md:w-1/2 lg:w-1/3 h-auto"
-/>
+<img src="image.jpg" alt="Descriptive text" class="w-full md:w-1/2 lg:w-1/3 h-auto" />
 ```
 
 ## Additional Resources
@@ -381,29 +388,35 @@ Working examples demonstrating responsive patterns:
 ## Quick Reference
 
 ### Tailwind Responsive Syntax
+
 ```html
-<div class="text-sm md:text-base lg:text-lg">
-  Responsive text sizing
-</div>
+<div class="text-sm md:text-base lg:text-lg">Responsive text sizing</div>
 ```
 
 ### Bootstrap Responsive Classes
+
 ```html
-<div class="d-block d-md-flex">
-  Block on mobile, flex on tablet+
-</div>
+<div class="d-block d-md-flex">Block on mobile, flex on tablet+</div>
 ```
 
 ### Media Query Template
+
 ```css
 /* Mobile first */
-.element { /* base styles */ }
+.element {
+  /* base styles */
+}
 
-@media (min-width: 768px) { /* tablet */ }
-@media (min-width: 1024px) { /* desktop */ }
+@media (min-width: 768px) {
+  /* tablet */
+}
+@media (min-width: 1024px) {
+  /* desktop */
+}
 ```
 
 ### ARIA Quick Reference
+
 ```html
 <button aria-label="Close" aria-pressed="false">×</button>
 <div role="alert" aria-live="polite">Status message</div>
@@ -413,6 +426,7 @@ Working examples demonstrating responsive patterns:
 ## Best Practices
 
 ✅ **DO:**
+
 - Start with mobile styles, enhance for larger screens
 - Use semantic HTML (nav, main, article, section)
 - Provide text alternatives for images (alt text)
@@ -423,6 +437,7 @@ Working examples demonstrating responsive patterns:
 - Test with actual screen readers
 
 ❌ **DON'T:**
+
 - Design desktop-first then strip features for mobile
 - Use fixed pixel widths for containers
 - Rely only on color to convey information

@@ -28,12 +28,14 @@ This skill shows you how to orchestrate these phases for different product scena
 **When to use**: Well-defined requirements, regulatory compliance needed, minimal expected changes
 
 **Lifecycle**:
+
 ```
 Strategy → Design → Build → Test → Deploy → Maintain
 (Each phase complete before next begins)
 ```
 
 **Henry workflow**:
+
 ```
 1. henry-product (complete strategy)
    ↓ [Gate: PRD approved]
@@ -54,6 +56,7 @@ Strategy → Design → Build → Test → Deploy → Maintain
 **When to use**: Evolving requirements, fast feedback needed, flexibility important
 
 **Lifecycle**:
+
 ```
 Sprint cycle (1-2 weeks):
 Plan → Design → Build → Review → Demo → Retrospective
@@ -61,6 +64,7 @@ Plan → Design → Build → Review → Demo → Retrospective
 ```
 
 **Henry workflow**:
+
 ```
 Sprint N:
 1. henry-product (sprint planning, story refinement)
@@ -85,12 +89,14 @@ Major releases:
 **When to use**: High uncertainty, validating product-market fit, MVP testing
 
 **Lifecycle**:
+
 ```
 Build MVP → Measure usage → Learn from data → Pivot or persevere
 (Rapid experimentation cycles)
 ```
 
 **Henry workflow**:
+
 ```
 Hypothesis phase:
 1. henry-product (define hypothesis, metrics, MVP scope)
@@ -117,6 +123,7 @@ Learn phase:
 ### Phase 1: Strategy & Planning (henry-product)
 
 **Goals**:
+
 - Define product vision and market opportunity
 - Create Product Requirements Document (PRD)
 - Prioritize features using frameworks (RICE, ICE, Kano)
@@ -124,11 +131,13 @@ Learn phase:
 - Assess risks and constraints
 
 **Agents involved**:
+
 - **product-strategist**: Market analysis, PRD, feature prioritization
 - **data-analytics-engineer**: Metrics definition, instrumentation plan
 - **seo-specialist**: SEO strategy (if applicable)
 
 **Deliverables**:
+
 - PRD with user stories and acceptance criteria
 - Feature prioritization with scoring
 - Success metrics (North Star metric, supporting metrics)
@@ -138,12 +147,14 @@ Learn phase:
 **Duration**: 1-2 weeks for new product, 2-5 days for new feature
 
 **Success criteria**:
+
 - Clear problem statement and solution hypothesis
 - Quantified success metrics
 - Prioritized feature list
 - Stakeholder alignment on scope
 
 **Example**:
+
 ```
 /henry-orchestrator:henry-product SaaS analytics platform for e-commerce
 
@@ -159,6 +170,7 @@ Output:
 ### Phase 2: Design & UX (henry-design)
 
 **Goals**:
+
 - Understand user needs through research
 - Design user flows and information architecture
 - Create wireframes and high-fidelity designs
@@ -166,12 +178,14 @@ Output:
 - Prepare design handoff for engineering
 
 **Agents involved**:
+
 - **ux-researcher**: User research, personas, journey mapping
 - **ux-ui-designer**: Flows, wireframes, prototypes
 - **ui-visual-designer**: Visual design, design system
 - **a11y-specialist**: Accessibility review and compliance
 
 **Deliverables**:
+
 - User personas and journey maps
 - Information architecture
 - User flows for key tasks
@@ -183,6 +197,7 @@ Output:
 **Duration**: 1-3 weeks depending on scope
 
 **Success criteria**:
+
 - Designs validate against user research
 - WCAG 2.1 AA compliant
 - All user flows designed
@@ -190,6 +205,7 @@ Output:
 - Engineering handoff package complete
 
 **Example**:
+
 ```
 /henry-orchestrator:henry-design Analytics dashboard with real-time data visualizations
 
@@ -207,6 +223,7 @@ Output:
 ### Phase 3: Implementation (henry-feature)
 
 **Goals**:
+
 - Build features according to designs and PRD
 - Implement frontend, backend, and infrastructure
 - Write comprehensive tests
@@ -214,6 +231,7 @@ Output:
 - Optimize performance
 
 **Agents involved**:
+
 - **frontend-engineer**: UI implementation
 - **backend-engineer**: API, database, business logic
 - **mobile-app-engineer**: Mobile app (if applicable)
@@ -223,6 +241,7 @@ Output:
 - **devops-sre-architect**: Infrastructure and deployment
 
 **Deliverables**:
+
 - Working implementation matching designs
 - API documentation (OpenAPI/Swagger)
 - Database schema and migrations
@@ -234,6 +253,7 @@ Output:
 **Duration**: 2-12 weeks depending on complexity
 
 **Success criteria**:
+
 - All acceptance criteria met
 - Test coverage ≥ 80%
 - No critical security vulnerabilities
@@ -242,6 +262,7 @@ Output:
 - Documentation complete
 
 **Example**:
+
 ```
 /henry-orchestrator:henry-feature Implement real-time analytics dashboard
 
@@ -268,6 +289,7 @@ Quality:
 ### Phase 4: Quality Assurance (henry-review)
 
 **Goals**:
+
 - Comprehensive code review
 - Security vulnerability assessment
 - Performance validation
@@ -275,12 +297,14 @@ Quality:
 - Bug fixing and validation
 
 **Agents involved**:
+
 - **qa-tester**: Test execution, bug reporting
 - **security-engineer**: Security testing
 - **performance-engineer**: Performance benchmarking
 - **frontend-engineer / backend-engineer**: Code review, bug fixes
 
 **Deliverables**:
+
 - Code review findings and resolutions
 - Security test results
 - Performance benchmarks
@@ -291,6 +315,7 @@ Quality:
 **Duration**: 1-2 weeks
 
 **Success criteria**:
+
 - All critical bugs fixed
 - Security vulnerabilities resolved
 - Performance targets met
@@ -298,6 +323,7 @@ Quality:
 - Code quality standards met
 
 **Example**:
+
 ```
 /henry-orchestrator:henry-review Dashboard implementation before merge
 
@@ -323,6 +349,7 @@ Recommendation: Approved for merge
 ### Phase 5: Pre-Launch Validation (henry-audit + henry-optimize)
 
 **Goals**:
+
 - Comprehensive health check across all dimensions
 - Fix critical and high-priority issues
 - Validate production readiness
@@ -330,6 +357,7 @@ Recommendation: Approved for merge
 - Create go/no-go decision framework
 
 **Agents involved**:
+
 - **security-engineer**: Security audit
 - **performance-engineer**: Performance audit
 - **a11y-specialist**: Accessibility audit
@@ -338,6 +366,7 @@ Recommendation: Approved for merge
 - **data-analytics-engineer**: Analytics validation
 
 **Deliverables**:
+
 - Comprehensive audit report
 - Critical and high-priority issues resolved
 - Performance baseline established
@@ -349,6 +378,7 @@ Recommendation: Approved for merge
 **Duration**: 1-2 weeks
 
 **Success criteria**:
+
 - 0 critical issues
 - All high-priority issues resolved or accepted risk
 - Launch checklist complete
@@ -356,6 +386,7 @@ Recommendation: Approved for merge
 - Rollback plan documented
 
 **Example**:
+
 ```
 /henry-orchestrator:henry-audit Comprehensive pre-launch audit
 
@@ -381,6 +412,7 @@ Go/No-Go Decision: GO (with post-launch optimization plan for remaining items)
 ### Phase 6: Launch (henry-launch)
 
 **Goals**:
+
 - Deploy to production safely
 - Configure monitoring and alerting
 - Set up analytics and tracking
@@ -388,6 +420,7 @@ Go/No-Go Decision: GO (with post-launch optimization plan for remaining items)
 - Execute go-to-market plan
 
 **Agents involved**:
+
 - **devops-sre-architect**: Deployment execution, monitoring
 - **seo-specialist**: SEO optimization, search visibility
 - **data-analytics-engineer**: Analytics instrumentation
@@ -396,6 +429,7 @@ Go/No-Go Decision: GO (with post-launch optimization plan for remaining items)
 - **performance-engineer**: Production performance validation
 
 **Deliverables**:
+
 - Production deployment complete
 - Monitoring dashboards and alerts configured
 - Analytics tracking validated
@@ -407,6 +441,7 @@ Go/No-Go Decision: GO (with post-launch optimization plan for remaining items)
 **Duration**: 1-2 weeks (including monitoring period)
 
 **Success criteria**:
+
 - Successful production deployment
 - All monitoring and alerts working
 - Analytics tracking validated
@@ -415,6 +450,7 @@ Go/No-Go Decision: GO (with post-launch optimization plan for remaining items)
 - User feedback mechanism active
 
 **Example**:
+
 ```
 /henry-orchestrator:henry-launch Analytics platform production deployment
 
@@ -444,6 +480,7 @@ Status: Successful launch, monitoring continues
 ### Phase 7: Post-Launch Optimization
 
 **Goals**:
+
 - Monitor production metrics
 - Address post-launch issues
 - Optimize based on real user data
@@ -451,12 +488,14 @@ Status: Successful launch, monitoring continues
 - Continuous improvement
 
 **Agents involved**:
+
 - **data-analytics-engineer**: Usage analysis, funnel optimization
 - **performance-engineer**: Real user monitoring (RUM), optimization
 - **product-strategist**: Feature prioritization based on data
 - **qa-tester**: Regression prevention, test expansion
 
 **Deliverables**:
+
 - Weekly/monthly metrics reports
 - User feedback analysis
 - Optimization backlog
@@ -466,12 +505,14 @@ Status: Successful launch, monitoring continues
 **Duration**: Ongoing
 
 **Success criteria**:
+
 - Metrics trending positive
 - User satisfaction maintained/improved
 - Technical debt managed
 - Continuous deployment working
 
 **Example**:
+
 ```
 Week 1-4 Post-Launch:
 
@@ -603,6 +644,7 @@ Success Metrics:
 ### Gate 1: Strategy Approval
 
 **Criteria**:
+
 - [ ] PRD complete and stakeholder-approved
 - [ ] Success metrics defined and measurable
 - [ ] Market opportunity validated
@@ -614,6 +656,7 @@ Success Metrics:
 ### Gate 2: Design Approval
 
 **Criteria**:
+
 - [ ] User research complete (if applicable)
 - [ ] Designs approved by stakeholders
 - [ ] WCAG 2.1 AA compliance confirmed
@@ -625,6 +668,7 @@ Success Metrics:
 ### Gate 3: Implementation Complete
 
 **Criteria**:
+
 - [ ] All acceptance criteria met
 - [ ] Test coverage ≥ 80%
 - [ ] Code review approved
@@ -636,6 +680,7 @@ Success Metrics:
 ### Gate 4: Quality Assurance
 
 **Criteria**:
+
 - [ ] All critical bugs fixed
 - [ ] Regression tests passing
 - [ ] Performance targets met
@@ -647,6 +692,7 @@ Success Metrics:
 ### Gate 5: Launch Readiness
 
 **Criteria**:
+
 - [ ] Audit complete, 0 critical issues
 - [ ] Monitoring and alerting configured
 - [ ] Rollback plan tested
@@ -658,6 +704,7 @@ Success Metrics:
 ### Gate 6: Launch Success
 
 **Criteria**:
+
 - [ ] Deployment successful
 - [ ] Error rate within acceptable range (<1%)
 - [ ] Performance metrics within targets
@@ -671,26 +718,32 @@ Success Metrics:
 ### Common Risks and Mitigations
 
 **Risk: Scope Creep**
+
 - **Mitigation**: Strict PRD, change control process, regular scope reviews
 - **Henry approach**: Lock scope after henry-product, defer new requests to next iteration
 
 **Risk: Technical Debt Accumulation**
+
 - **Mitigation**: Code review standards, refactoring sprints, quality metrics
 - **Henry approach**: Regular henry-audit to identify debt, henry-optimize to address
 
 **Risk: Delayed Launch**
+
 - **Mitigation**: Realistic timelines, MVP approach, parallel workstreams
 - **Henry approach**: Use MVP template, prioritize ruthlessly with RICE scoring
 
 **Risk: Poor User Adoption**
+
 - **Mitigation**: User research, beta testing, gradual rollout
 - **Henry approach**: henry-design validates with users, henry-launch enables gradual rollout
 
 **Risk: Security Vulnerabilities**
+
 - **Mitigation**: Security review throughout development, regular audits
 - **Henry approach**: security-engineer involved from design, henry-audit before launch
 
 **Risk: Performance Issues**
+
 - **Mitigation**: Performance budgets, continuous monitoring, optimization sprints
 - **Henry approach**: performance-engineer sets budgets, henry-optimize addresses issues
 
@@ -699,27 +752,32 @@ Success Metrics:
 ### Product Metrics
 
 **Acquisition**:
+
 - Signups per week/month
 - Traffic sources
 - Conversion rate (visitor → signup)
 
 **Activation**:
+
 - Time to first value
 - Activation rate (signup → activated user)
 - Onboarding completion rate
 
 **Retention**:
+
 - D1, D7, D30 retention rates
 - Churn rate
 - Cohort analysis
 
 **Revenue** (if applicable):
+
 - MRR (Monthly Recurring Revenue)
 - ARPU (Average Revenue Per User)
 - Customer Acquisition Cost (CAC)
 - Lifetime Value (LTV)
 
 **Referral**:
+
 - Viral coefficient
 - NPS (Net Promoter Score)
 - Referral rate
@@ -727,17 +785,20 @@ Success Metrics:
 ### Development Metrics
 
 **Velocity**:
+
 - Story points per sprint
 - Features delivered vs. planned
 - Cycle time (idea → production)
 
 **Quality**:
+
 - Defect escape rate
 - Test coverage
 - Code review turnaround time
 - Deployment frequency
 
 **Performance**:
+
 - Core Web Vitals compliance
 - API response times
 - Error rates
@@ -752,7 +813,7 @@ Success Metrics:
 ✅ **Measure everything**: Instrument from day one with data-analytics-engineer  
 ✅ **Launch incrementally**: Beta → gradual rollout → full launch  
 ✅ **Monitor continuously**: Real-time dashboards, alerts, user feedback  
-✅ **Iterate based on data**: Post-launch optimization driven by metrics  
+✅ **Iterate based on data**: Post-launch optimization driven by metrics
 
 ### DON'T:
 
@@ -762,7 +823,7 @@ Success Metrics:
 ❌ **Big bang launches**: High risk, no fallback  
 ❌ **Ignore user feedback**: Data-driven decisions beat opinions  
 ❌ **Accumulate technical debt**: Slows future development  
-❌ **Optimize prematurely**: Validate first, optimize later  
+❌ **Optimize prematurely**: Validate first, optimize later
 
 ## Integration with Henry Commands
 
@@ -782,14 +843,14 @@ For detailed command documentation and agent capabilities, see `/henry-orchestra
 
 ## Quick Reference
 
-| Phase | Command | Duration | Key Deliverables |
-|-------|---------|----------|------------------|
-| Strategy | henry-product | 1-2 weeks | PRD, metrics, roadmap |
-| Design | henry-design | 1-3 weeks | Designs, prototypes, a11y |
-| Implementation | henry-feature | 2-12 weeks | Working code, tests, docs |
-| QA | henry-review | 1-2 weeks | Quality validation, bug fixes |
-| Pre-Launch | henry-audit + henry-optimize | 1-2 weeks | Health check, fixes |
-| Launch | henry-launch | 1-2 weeks | Production deployment |
-| Post-Launch | henry-team, henry-optimize | Ongoing | Monitoring, iteration |
+| Phase          | Command                      | Duration   | Key Deliverables              |
+| -------------- | ---------------------------- | ---------- | ----------------------------- |
+| Strategy       | henry-product                | 1-2 weeks  | PRD, metrics, roadmap         |
+| Design         | henry-design                 | 1-3 weeks  | Designs, prototypes, a11y     |
+| Implementation | henry-feature                | 2-12 weeks | Working code, tests, docs     |
+| QA             | henry-review                 | 1-2 weeks  | Quality validation, bug fixes |
+| Pre-Launch     | henry-audit + henry-optimize | 1-2 weeks  | Health check, fixes           |
+| Launch         | henry-launch                 | 1-2 weeks  | Production deployment         |
+| Post-Launch    | henry-team, henry-optimize   | Ongoing    | Monitoring, iteration         |
 
 For detailed lifecycle planning, templates, and risk management strategies, reference this skill or consult with product-strategist agent.

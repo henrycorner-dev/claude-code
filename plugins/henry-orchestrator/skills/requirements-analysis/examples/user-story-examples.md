@@ -21,6 +21,7 @@ Acceptance Criteria:
 ### US-001: Product Search
 
 **Story:**
+
 ```
 As a customer
 I want to search for products by name or keyword
@@ -28,6 +29,7 @@ So that I can quickly find items I'm interested in purchasing
 ```
 
 **Acceptance Criteria:**
+
 - [ ] Given I'm on any page, when I enter a search term in the search box and press Enter, then I see a list of matching products
 - [ ] Given I've entered a search term, when there are no matching products, then I see a "no results found" message with suggestions
 - [ ] Given I'm viewing search results, when I see products, then each result shows product image, name, price, and rating
@@ -42,6 +44,7 @@ So that I can quickly find items I'm interested in purchasing
 ### US-002: Add to Cart
 
 **Story:**
+
 ```
 As a customer
 I want to add products to my shopping cart
@@ -49,6 +52,7 @@ So that I can purchase multiple items in a single checkout
 ```
 
 **Acceptance Criteria:**
+
 - [ ] Given I'm viewing a product, when I click "Add to Cart", then the product is added and I see a confirmation message
 - [ ] Given I've added a product, when I view my cart, then I see the product with correct name, price, quantity, and image
 - [ ] Given I've added a product, when I add it again, then the quantity increases instead of creating a duplicate entry
@@ -64,6 +68,7 @@ So that I can purchase multiple items in a single checkout
 ### US-003: Guest Checkout
 
 **Story:**
+
 ```
 As a customer who doesn't have an account
 I want to complete my purchase without creating an account
@@ -71,6 +76,7 @@ So that I can buy quickly without the overhead of registration
 ```
 
 **Acceptance Criteria:**
+
 - [ ] Given I have items in my cart, when I click checkout, then I see an option for "Guest Checkout"
 - [ ] Given I choose guest checkout, when I proceed, then I can enter shipping and payment info without creating an account
 - [ ] Given I'm checking out as a guest, when I complete payment, then I receive an order confirmation email
@@ -87,6 +93,7 @@ So that I can buy quickly without the overhead of registration
 ### US-010: Create Task
 
 **Story:**
+
 ```
 As a project manager
 I want to create tasks with title, description, assignee, and due date
@@ -94,6 +101,7 @@ So that I can organize work for my team
 ```
 
 **Acceptance Criteria:**
+
 - [ ] Given I'm viewing a project, when I click "New Task", then a task creation form appears
 - [ ] Given the task form is open, when I enter a title and click Save, then the task is created (title is required)
 - [ ] Given I'm creating a task, when I fill in optional fields (description, assignee, due date), then those values are saved
@@ -109,6 +117,7 @@ So that I can organize work for my team
 ### US-011: Task Comments
 
 **Story:**
+
 ```
 As a team member
 I want to add comments to tasks
@@ -116,6 +125,7 @@ So that I can communicate context, updates, and questions about the work
 ```
 
 **Acceptance Criteria:**
+
 - [ ] Given I'm viewing a task, when I type a comment and click Post, then the comment appears in the activity feed
 - [ ] Given a task has comments, when I view the task, then comments are displayed in chronological order with author and timestamp
 - [ ] Given I wrote a comment, when I hover over it, then I see options to edit or delete
@@ -131,6 +141,7 @@ So that I can communicate context, updates, and questions about the work
 ### US-012: Kanban Board View
 
 **Story:**
+
 ```
 As a project manager
 I want to view and organize tasks in a Kanban board layout
@@ -138,6 +149,7 @@ So that I can visualize workflow stages and move tasks through the process
 ```
 
 **Acceptance Criteria:**
+
 - [ ] Given I'm viewing a project, when I switch to Board view, then I see columns for each workflow stage (To Do, In Progress, Done)
 - [ ] Given I'm in Board view, when I drag a task from one column to another, then the task status updates automatically
 - [ ] Given a column has many tasks, when I scroll within the column, then other columns remain visible (independent scrolling)
@@ -155,6 +167,7 @@ So that I can visualize workflow stages and move tasks through the process
 ### US-020: View Account Balance
 
 **Story:**
+
 ```
 As an account holder
 I want to view my current account balance
@@ -162,6 +175,7 @@ So that I know how much money I have available
 ```
 
 **Acceptance Criteria:**
+
 - [ ] Given I'm logged in, when I navigate to the dashboard, then I see my account balance prominently displayed
 - [ ] Given I have multiple accounts, when I view the dashboard, then I see balances for all my accounts
 - [ ] Given my balance is negative, when I view it, then it's displayed in red with a negative sign
@@ -177,6 +191,7 @@ So that I know how much money I have available
 ### US-021: Transfer Funds
 
 **Story:**
+
 ```
 As an account holder
 I want to transfer money between my accounts
@@ -184,6 +199,7 @@ So that I can move funds where I need them
 ```
 
 **Acceptance Criteria:**
+
 - [ ] Given I'm viewing an account, when I click "Transfer", then I see a form to select source account, destination account, and amount
 - [ ] Given I'm entering a transfer amount, when the amount exceeds my available balance, then I see an error message and cannot proceed
 - [ ] Given I've filled in the transfer form, when I click Submit, then I see a confirmation screen showing all details before finalizing
@@ -199,6 +215,7 @@ So that I can move funds where I need them
 ### US-022: Transaction History Export
 
 **Story:**
+
 ```
 As an account holder
 I want to export my transaction history to CSV or PDF
@@ -206,6 +223,7 @@ So that I can use it for personal budgeting or tax preparation
 ```
 
 **Acceptance Criteria:**
+
 - [ ] Given I'm viewing transaction history, when I click "Export", then I see options for CSV and PDF formats
 - [ ] Given I select a date range, when I export, then only transactions within that range are included
 - [ ] Given I choose CSV format, when the export completes, then I receive a file with columns for date, description, amount, balance
@@ -223,6 +241,7 @@ So that I can use it for personal budgeting or tax preparation
 ### US-030: Book Appointment
 
 **Story:**
+
 ```
 As a patient
 I want to book an appointment with my doctor
@@ -230,6 +249,7 @@ So that I can receive medical care at a convenient time
 ```
 
 **Acceptance Criteria:**
+
 - [ ] Given I'm logged in, when I navigate to Appointments, then I see a calendar view of available time slots
 - [ ] Given I select a date, when available slots are shown, then I only see times when my doctor is available
 - [ ] Given I select a time slot, when I confirm, then the appointment is booked and I receive a confirmation email
@@ -245,6 +265,7 @@ So that I can receive medical care at a convenient time
 ### US-031: View Test Results
 
 **Story:**
+
 ```
 As a patient
 I want to view my lab test results online
@@ -252,6 +273,7 @@ So that I can access my health information quickly without calling the office
 ```
 
 **Acceptance Criteria:**
+
 - [ ] Given I have new test results, when I log in, then I see a notification badge on the Test Results section
 - [ ] Given I navigate to Test Results, when I view the list, then I see test name, date, and status (normal/abnormal)
 - [ ] Given I select a test result, when I view details, then I see individual result values with reference ranges
@@ -267,6 +289,7 @@ So that I can access my health information quickly without calling the office
 ### US-032: Medication Refill Request
 
 **Story:**
+
 ```
 As a patient
 I want to request prescription refills online
@@ -274,6 +297,7 @@ So that I can renew my medications without calling the pharmacy
 ```
 
 **Acceptance Criteria:**
+
 - [ ] Given I'm viewing my medications, when I see a prescription, then I see a "Request Refill" button for refillable prescriptions
 - [ ] Given I click "Request Refill", when I submit, then my pharmacy receives the request and I see a confirmation message
 - [ ] Given I've requested a refill, when I check status, then I see whether it's pending, approved, or ready for pickup
@@ -291,6 +315,7 @@ So that I can renew my medications without calling the pharmacy
 ### US-040: Custom Dashboard
 
 **Story:**
+
 ```
 As a data analyst
 I want to create custom dashboards with multiple widgets
@@ -298,6 +323,7 @@ So that I can monitor the metrics most important to my role
 ```
 
 **Acceptance Criteria:**
+
 - [ ] Given I'm viewing dashboards, when I click "Create Dashboard", then I can name it and add it to my list
 - [ ] Given I'm editing a dashboard, when I click "Add Widget", then I see a catalog of available widget types (chart, table, metric, etc.)
 - [ ] Given I've added a widget, when I configure it, then I can select data source, metrics, filters, and visualization options
@@ -313,6 +339,7 @@ So that I can monitor the metrics most important to my role
 ### US-041: Real-Time Alerts
 
 **Story:**
+
 ```
 As a product manager
 I want to set up alerts that notify me when metrics cross thresholds
@@ -320,6 +347,7 @@ So that I can respond quickly to important changes in user behavior
 ```
 
 **Acceptance Criteria:**
+
 - [ ] Given I'm viewing a metric, when I click "Create Alert", then I can define a threshold condition (greater than, less than, percent change)
 - [ ] Given I'm creating an alert, when I set parameters, then I can choose notification channels (email, Slack, SMS)
 - [ ] Given an alert is triggered, when the condition is met, then I receive a notification with metric value and link to dashboard
@@ -335,6 +363,7 @@ So that I can respond quickly to important changes in user behavior
 ### US-042: SQL Query Builder
 
 **Story:**
+
 ```
 As a data analyst
 I want to write custom SQL queries against my data warehouse
@@ -342,6 +371,7 @@ So that I can perform ad-hoc analysis beyond pre-built reports
 ```
 
 **Acceptance Criteria:**
+
 - [ ] Given I'm on the Explore page, when I open the SQL editor, then I can write and execute SQL queries
 - [ ] Given I'm writing a query, when I type table or column names, then I get autocomplete suggestions based on schema
 - [ ] Given I execute a query, when it completes, then results are displayed in a table with pagination for large result sets
@@ -359,6 +389,7 @@ So that I can perform ad-hoc analysis beyond pre-built reports
 ### US-050: Log Workout
 
 **Story:**
+
 ```
 As a fitness enthusiast
 I want to log my workouts with exercises, sets, reps, and weight
@@ -366,6 +397,7 @@ So that I can track my progress over time
 ```
 
 **Acceptance Criteria:**
+
 - [ ] Given I'm on the home screen, when I tap "Log Workout", then I can start a new workout session
 - [ ] Given I'm logging a workout, when I add an exercise, then I can search or browse from a library of exercises
 - [ ] Given I've selected an exercise, when I log sets, then I can record reps, weight, and rest time for each set
@@ -381,6 +413,7 @@ So that I can track my progress over time
 ### US-051: Progress Photos
 
 **Story:**
+
 ```
 As a user working towards fitness goals
 I want to take and store progress photos
@@ -388,6 +421,7 @@ So that I can visually track my physical transformation
 ```
 
 **Acceptance Criteria:**
+
 - [ ] Given I'm in the Progress section, when I tap "Add Photo", then my camera opens to take a photo
 - [ ] Given I've taken a photo, when I save it, then I can add a date and optional note
 - [ ] Given I have multiple photos, when I view them, then they're displayed in chronological order in a grid
@@ -403,6 +437,7 @@ So that I can visually track my physical transformation
 ### US-052: Workout Reminders
 
 **Story:**
+
 ```
 As a user with fitness goals
 I want to set reminders for my workout schedule
@@ -410,6 +445,7 @@ So that I stay consistent with my training routine
 ```
 
 **Acceptance Criteria:**
+
 - [ ] Given I'm in Settings, when I go to Reminders, then I can enable workout notifications
 - [ ] Given I enable reminders, when I set a schedule, then I can choose days of week and times
 - [ ] Given a reminder is scheduled, when the time arrives, then I receive a push notification
@@ -453,6 +489,7 @@ Based on these examples, effective user stories:
 ## Using These Examples
 
 When writing your own user stories:
+
 1. Review examples in a similar domain for inspiration
 2. Adapt the format and acceptance criteria to your context
 3. Ensure stories are testable and provide clear user value

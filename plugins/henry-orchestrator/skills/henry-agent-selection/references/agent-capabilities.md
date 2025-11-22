@@ -5,6 +5,7 @@ This document provides detailed specifications for all 16 Henry Orchestrator age
 ## Product & Strategy
 
 ### product-strategist
+
 - **Use for**: Market analysis, PRD development, feature prioritization (RICE/ICE/Kano), monetization strategy, growth planning, North Star metrics
 - **Expertise**: TAM/SAM/SOM sizing, competitive analysis, unit economics (CAC/LTV), AARRR growth framework
 - **When to select**: Product planning, roadmapping, business strategy, pricing decisions
@@ -14,6 +15,7 @@ This document provides detailed specifications for all 16 Henry Orchestrator age
 ## Design & User Experience
 
 ### ux-ui-designer
+
 - **Use for**: User flows, wireframes, prototypes, responsive design, WCAG 2.1 AA accessibility
 - **Expertise**: Information architecture, interaction design, mobile-first design, design systems
 - **When to select**: Complete UX/UI design from IA to high-fidelity implementation
@@ -21,6 +23,7 @@ This document provides detailed specifications for all 16 Henry Orchestrator age
 - **Typical engagement**: 3-7 days for complete feature design
 
 ### ux-researcher
+
 - **Use for**: User research, personas, journey mapping, usability testing, heuristic evaluation
 - **Expertise**: Research planning, user interviews, pain point analysis
 - **When to select**: Understanding user needs before design, validating designs with users
@@ -28,6 +31,7 @@ This document provides detailed specifications for all 16 Henry Orchestrator age
 - **Typical engagement**: 2-5 days for research studies
 
 ### ui-visual-designer
+
 - **Use for**: Visual design, branding, design system creation, style guides, icon design
 - **Expertise**: Visual hierarchy, color theory, typography, brand implementation
 - **When to select**: Polishing visual design, creating/extending design systems
@@ -35,6 +39,7 @@ This document provides detailed specifications for all 16 Henry Orchestrator age
 - **Typical engagement**: 2-4 days for design systems, 1-2 days for visual polish
 
 ### a11y-specialist
+
 - **Use for**: WCAG 2.1/2.2 compliance audits, screen reader testing, keyboard navigation
 - **Expertise**: ARIA implementation, color contrast validation, focus management
 - **When to select**: Accessibility reviews, remediation planning, compliance verification
@@ -44,6 +49,7 @@ This document provides detailed specifications for all 16 Henry Orchestrator age
 ## Engineering
 
 ### frontend-engineer
+
 - **Use for**: React, Vue, Angular, Next.js development, Core Web Vitals optimization, state management
 - **Expertise**: SPA/SSR/ISR architecture, performance optimization, modern CSS, TypeScript
 - **When to select**: Building web UIs, frontend performance optimization, component libraries
@@ -51,6 +57,7 @@ This document provides detailed specifications for all 16 Henry Orchestrator age
 - **Typical engagement**: Varies by feature complexity (1-10 days)
 
 ### backend-engineer
+
 - **Use for**: REST/GraphQL APIs, database design, authentication (JWT, OAuth), caching, security
 - **Expertise**: OWASP Top 10, performance tuning, observability, distributed systems
 - **When to select**: API development, backend architecture, database schema design
@@ -58,6 +65,7 @@ This document provides detailed specifications for all 16 Henry Orchestrator age
 - **Typical engagement**: Varies by feature complexity (1-10 days)
 
 ### mobile-app-engineer
+
 - **Use for**: iOS, Android, React Native, Flutter development, offline-first architecture
 - **Expertise**: Platform-specific optimization, app store compliance, mobile security
 - **When to select**: Mobile app development, cross-platform architecture, app store releases
@@ -65,6 +73,7 @@ This document provides detailed specifications for all 16 Henry Orchestrator age
 - **Typical engagement**: Varies by feature complexity (2-10 days)
 
 ### llm-agent-architect
+
 - **Use for**: LLM systems, prompt engineering, RAG pipelines, tool-use architectures
 - **Expertise**: System prompt design, evaluation frameworks, safety mechanisms, cost optimization
 - **When to select**: Building LLM-powered features, agent architectures, prompt optimization
@@ -74,6 +83,7 @@ This document provides detailed specifications for all 16 Henry Orchestrator age
 ## Quality & Security
 
 ### qa-tester
+
 - **Use for**: Test strategy, test automation (70% unit, 20% integration, 10% E2E), quality metrics
 - **Expertise**: Risk-based testing, CI/CD integration, bug analysis, flaky test prevention
 - **When to select**: Test planning, test automation, quality assurance workflows
@@ -81,6 +91,7 @@ This document provides detailed specifications for all 16 Henry Orchestrator age
 - **Typical engagement**: 1-3 days for test strategy, ongoing for implementation
 
 ### security-engineer
+
 - **Use for**: Threat modeling (STRIDE, PASTA), OWASP Top 10 review, vulnerability assessment, compliance
 - **Expertise**: Secure code review, GDPR/CCPA compliance, CVE scanning, penetration testing
 - **When to select**: Security reviews, threat modeling, compliance assessment
@@ -90,6 +101,7 @@ This document provides detailed specifications for all 16 Henry Orchestrator age
 ## Performance & Operations
 
 ### performance-engineer
+
 - **Use for**: Core Web Vitals optimization, bundle analysis, caching strategies, profiling
 - **Expertise**: LCP/INP/CLS optimization, image optimization, performance budgets
 - **When to select**: Performance audits, optimization sprints, meeting performance targets
@@ -97,6 +109,7 @@ This document provides detailed specifications for all 16 Henry Orchestrator age
 - **Typical engagement**: 1-3 days for audits, 2-5 days for optimization
 
 ### devops-sre-architect
+
 - **Use for**: CI/CD pipelines, Infrastructure as Code, deployment strategies, SLO/SLA definition
 - **Expertise**: Terraform, GitOps, observability, DORA metrics, chaos engineering
 - **When to select**: DevOps setup, deployment planning, reliability engineering
@@ -106,6 +119,7 @@ This document provides detailed specifications for all 16 Henry Orchestrator age
 ## Specialized Domains
 
 ### data-analytics-engineer
+
 - **Use for**: Event tracking, dashboards, A/B testing, metrics governance
 - **Expertise**: Privacy-compliant analytics, statistical analysis, experiment design
 - **When to select**: Analytics instrumentation, A/B test setup, metrics definition
@@ -113,6 +127,7 @@ This document provides detailed specifications for all 16 Henry Orchestrator age
 - **Typical engagement**: 1-3 days for analytics setup, ongoing for experimentation
 
 ### seo-specialist
+
 - **Use for**: Technical SEO, structured data (JSON-LD), Core Web Vitals for SEO, crawlability
 - **Expertise**: Metadata optimization, sitemap/robots.txt, SSR/ISR for SEO
 - **When to select**: SEO audits, search visibility optimization, content strategy
@@ -120,6 +135,7 @@ This document provides detailed specifications for all 16 Henry Orchestrator age
 - **Typical engagement**: 1-2 days for audits, 2-4 days for implementation
 
 ### game-systems-designer
+
 - **Use for**: Game economy, progression systems, F2P monetization, live-ops
 - **Expertise**: Currency systems, battle pass design, ethical monetization
 - **When to select**: Game design, economy balancing, monetization planning
@@ -128,46 +144,51 @@ This document provides detailed specifications for all 16 Henry Orchestrator age
 
 ## Agent Capability Matrix
 
-| Agent | Primary Domain | Secondary Domains | Tool Access | Autonomy Level |
-|-------|---------------|-------------------|-------------|----------------|
-| product-strategist | Strategy | Business, Analytics | Research, analysis | High |
-| ux-ui-designer | Design | Accessibility, Frontend | Design, prototyping | High |
-| ux-researcher | Research | Design, Strategy | Research, analysis | Medium |
-| ui-visual-designer | Visual Design | Branding, Systems | Design tools | Medium |
-| a11y-specialist | Accessibility | Design, Frontend | Testing, audit | Medium |
-| frontend-engineer | Frontend Dev | Performance, UX | Code, build tools | Very High |
-| backend-engineer | Backend Dev | Security, Data | Code, databases | Very High |
-| mobile-app-engineer | Mobile Dev | Performance, UX | Code, native tools | Very High |
-| llm-agent-architect | AI/LLM | Backend, Architecture | LLM APIs, tools | Very High |
-| qa-tester | Testing | Quality, Security | Test frameworks | High |
-| security-engineer | Security | Compliance, Backend | Security tools | High |
-| performance-engineer | Performance | Frontend, Backend | Profiling tools | High |
-| devops-sre-architect | DevOps/SRE | Infrastructure, Security | IaC, monitoring | Very High |
-| data-analytics-engineer | Analytics | Product, Strategy | Analytics platforms | High |
-| seo-specialist | SEO | Frontend, Content | SEO tools | Medium |
-| game-systems-designer | Game Design | Analytics, Mobile | Modeling tools | Medium |
+| Agent                   | Primary Domain | Secondary Domains        | Tool Access         | Autonomy Level |
+| ----------------------- | -------------- | ------------------------ | ------------------- | -------------- |
+| product-strategist      | Strategy       | Business, Analytics      | Research, analysis  | High           |
+| ux-ui-designer          | Design         | Accessibility, Frontend  | Design, prototyping | High           |
+| ux-researcher           | Research       | Design, Strategy         | Research, analysis  | Medium         |
+| ui-visual-designer      | Visual Design  | Branding, Systems        | Design tools        | Medium         |
+| a11y-specialist         | Accessibility  | Design, Frontend         | Testing, audit      | Medium         |
+| frontend-engineer       | Frontend Dev   | Performance, UX          | Code, build tools   | Very High      |
+| backend-engineer        | Backend Dev    | Security, Data           | Code, databases     | Very High      |
+| mobile-app-engineer     | Mobile Dev     | Performance, UX          | Code, native tools  | Very High      |
+| llm-agent-architect     | AI/LLM         | Backend, Architecture    | LLM APIs, tools     | Very High      |
+| qa-tester               | Testing        | Quality, Security        | Test frameworks     | High           |
+| security-engineer       | Security       | Compliance, Backend      | Security tools      | High           |
+| performance-engineer    | Performance    | Frontend, Backend        | Profiling tools     | High           |
+| devops-sre-architect    | DevOps/SRE     | Infrastructure, Security | IaC, monitoring     | Very High      |
+| data-analytics-engineer | Analytics      | Product, Strategy        | Analytics platforms | High           |
+| seo-specialist          | SEO            | Frontend, Content        | SEO tools           | Medium         |
+| game-systems-designer   | Game Design    | Analytics, Mobile        | Modeling tools      | Medium         |
 
 ## Skill Combinations
 
 ### Common Pairing Patterns
 
 **Frontend + Performance**
+
 - Best for: Performance-critical UIs, Core Web Vitals optimization
 - Sequence: Performance engineer identifies bottlenecks → Frontend engineer implements fixes
 
 **Backend + Security**
+
 - Best for: API development, data handling, authentication
 - Sequence: Backend engineer designs architecture → Security engineer reviews → Backend engineer implements
 
 **UX Research + UX/UI Design**
+
 - Best for: User-centered design workflows
 - Sequence: UX researcher gathers insights → UX/UI designer creates solutions
 
 **Product + Design + Engineering**
+
 - Best for: Complete feature development
 - Sequence: Product strategist defines requirements → Designer creates UX → Engineers implement
 
 **QA + Security + Performance**
+
 - Best for: Pre-launch audits
 - Sequence: Parallel audits across all three domains
 

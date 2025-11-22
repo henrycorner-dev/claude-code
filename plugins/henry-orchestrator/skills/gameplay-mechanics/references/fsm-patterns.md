@@ -75,7 +75,7 @@ const idleState = {
 
   exit() {
     // Cleanup if needed
-  }
+  },
 };
 
 const walkState = {
@@ -103,7 +103,7 @@ const walkState = {
 
   exit() {
     this.entity.velocity.x = 0;
-  }
+  },
 };
 
 const jumpState = {
@@ -129,7 +129,7 @@ const jumpState = {
 
   exit() {
     // Jump complete
-  }
+  },
 };
 ```
 
@@ -241,7 +241,7 @@ const attackState = {
 
   exit() {
     this.attackComplete = false;
-  }
+  },
 };
 ```
 
@@ -276,7 +276,7 @@ const chargeState = {
 
   exit() {
     this.timer = 0;
-  }
+  },
 };
 ```
 
@@ -334,7 +334,7 @@ const combatState = {
 
   exit() {
     this.substate = 'stance';
-  }
+  },
 };
 ```
 
@@ -434,7 +434,7 @@ const patrolState = {
     if (this.entity.canSeePlayer()) {
       this.fsm.transition('combat');
     }
-  }
+  },
 };
 
 // Substates of patrol
@@ -447,7 +447,7 @@ const walkingSubstate = {
     if (this.entity.reachedWaypoint()) {
       this.fsm.transition('idle');
     }
-  }
+  },
 };
 
 const idleSubstate = {
@@ -466,7 +466,7 @@ const idleSubstate = {
       this.entity.nextWaypoint();
       this.fsm.transition('walking');
     }
-  }
+  },
 };
 
 // Combat state with substates
@@ -483,7 +483,7 @@ const combatState = {
     if (!this.entity.canSeePlayer() && this.entity.timeSinceLastSaw > 5.0) {
       this.fsm.transition('patrol');
     }
-  }
+  },
 };
 
 const approachSubstate = {
@@ -495,7 +495,7 @@ const approachSubstate = {
     if (this.entity.distanceToPlayer < this.entity.attackRange) {
       this.fsm.transition('attack');
     }
-  }
+  },
 };
 
 const attackSubstate = {
@@ -525,7 +525,7 @@ const attackSubstate = {
     if (this.entity.health < 0.3) {
       this.fsm.transition('retreat');
     }
-  }
+  },
 };
 
 const retreatSubstate = {
@@ -537,7 +537,7 @@ const retreatSubstate = {
     if (this.entity.distanceToPlayer > 10) {
       this.fsm.transition('approach');
     }
-  }
+  },
 };
 
 // Setup HFSM
@@ -657,7 +657,7 @@ const gameplayState = {
 
   exit() {
     console.log('Exiting gameplay');
-  }
+  },
 };
 
 const pauseState = {
@@ -680,7 +680,7 @@ const pauseState = {
 
   exit() {
     this.hidePauseMenu();
-  }
+  },
 };
 ```
 
@@ -815,30 +815,30 @@ class Repeater extends BehaviorNode {
 const enemyBehaviorTree = new Selector([
   // Try to attack if player is close
   new Sequence([
-    new Condition((entity) => entity.canSeePlayer()),
-    new Condition((entity) => entity.distanceToPlayer < 5),
-    new Action((entity) => {
+    new Condition(entity => entity.canSeePlayer()),
+    new Condition(entity => entity.distanceToPlayer < 5),
+    new Action(entity => {
       entity.attack();
       return 'success';
-    })
+    }),
   ]),
 
   // Chase player if visible
   new Sequence([
-    new Condition((entity) => entity.canSeePlayer()),
-    new Action((entity) => {
+    new Condition(entity => entity.canSeePlayer()),
+    new Action(entity => {
       entity.moveTowardsPlayer();
       return 'success';
-    })
+    }),
   ]),
 
   // Patrol waypoints
   new Sequence([
-    new Action((entity) => {
+    new Action(entity => {
       entity.patrolWaypoints();
       return 'success';
-    })
-  ])
+    }),
+  ]),
 ]);
 
 class Enemy {
@@ -892,7 +892,7 @@ const npcAI = new UtilityAI();
 
 npcAI.addAction(
   'attack',
-  (entity) => {
+  entity => {
     if (!entity.canSeePlayer()) return 0;
     const distance = entity.distanceToPlayer;
     const health = entity.health / entity.maxHealth;
@@ -900,24 +900,24 @@ npcAI.addAction(
     // Higher score when close and healthy
     return (1 - distance / 10) * health;
   },
-  (entity) => entity.attack()
+  entity => entity.attack()
 );
 
 npcAI.addAction(
   'retreat',
-  (entity) => {
+  entity => {
     const health = entity.health / entity.maxHealth;
     const distance = entity.distanceToPlayer;
 
     // Higher score when low health and close to player
     return (1 - health) * (1 - distance / 10);
   },
-  (entity) => entity.retreat()
+  entity => entity.retreat()
 );
 
 npcAI.addAction(
   'heal',
-  (entity) => {
+  entity => {
     const health = entity.health / entity.maxHealth;
     const hasPotions = entity.potions > 0;
     const safe = entity.distanceToPlayer > 8;
@@ -926,34 +926,37 @@ npcAI.addAction(
 
     return (1 - health) * 0.8;
   },
-  (entity) => entity.usePotion()
+  entity => entity.usePotion()
 );
 
 npcAI.addAction(
   'patrol',
-  (entity) => {
+  entity => {
     // Default low-priority action
     return 0.1;
   },
-  (entity) => entity.patrol()
+  entity => entity.patrol()
 );
 ```
 
 ## FSM vs Behavior Trees vs Utility AI
 
 **Use FSM when:**
+
 - Clear, discrete states
 - Simple transitions
 - Animation-driven behavior
 - Character controllers
 
 **Use Behavior Trees when:**
+
 - Complex, hierarchical behavior
 - Need reusable sub-behaviors
 - Priority-based decisions
 - Strategic AI
 
 **Use Utility AI when:**
+
 - Many competing actions
 - Context-dependent decisions
 - Smooth priority blending

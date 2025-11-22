@@ -1,7 +1,7 @@
 ---
 description: Configures notifications (Firebase); tests delivery.
 argument-hint: Optional platform preference (iOS/Android/Web) or project name
-allowed-tools: ["Read", "Write", "Edit", "Grep", "Glob", "Bash", "TodoWrite", "AskUserQuestion"]
+allowed-tools: ['Read', 'Write', 'Edit', 'Grep', 'Glob', 'Bash', 'TodoWrite', 'AskUserQuestion']
 ---
 
 # Firebase Push Notifications Configuration & Testing
@@ -83,23 +83,27 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
    - Ask about notification requirements (background, data-only, rich media, etc.)
 
 3. Verify Firebase CLI installation:
+
    ```bash
    # Check if Firebase CLI is installed
    firebase --version
    ```
 
 4. If Firebase CLI not installed, guide installation:
+
    ```bash
    npm install -g firebase-tools
    firebase login
    ```
 
 5. For existing Firebase project, list projects:
+
    ```bash
    firebase projects:list
    ```
 
 6. Initialize Firebase in project if needed:
+
    ```bash
    firebase init
    # Select:
@@ -133,6 +137,7 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
 2. Install platform-specific Firebase packages:
 
    **React Native (Non-Expo)**:
+
    ```bash
    # Install Firebase messaging
    npm install @react-native-firebase/app @react-native-firebase/messaging
@@ -142,6 +147,7 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
    ```
 
    **React Native (Expo)**:
+
    ```bash
    # Install Expo notifications
    npx expo install expo-notifications expo-device expo-constants
@@ -151,6 +157,7 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
    ```
 
    **Flutter**:
+
    ```bash
    # Add to pubspec.yaml
    flutter pub add firebase_core
@@ -161,12 +168,14 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
    ```
 
    **Next.js/React Web**:
+
    ```bash
    # Install Firebase JS SDK
    npm install firebase
    ```
 
    **Vue/Nuxt**:
+
    ```bash
    # Install Firebase JS SDK
    npm install firebase
@@ -176,6 +185,7 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
    ```
 
    **Angular**:
+
    ```bash
    # Install Firebase and AngularFire
    npm install firebase @angular/fire
@@ -186,6 +196,7 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
    - Ensure background modes are enabled
 
 4. For Android, verify dependencies in `android/app/build.gradle`:
+
    ```gradle
    dependencies {
        // Firebase BOM for version management
@@ -214,145 +225,154 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
 2. **iOS Configuration** (React Native/Flutter):
 
    a. Enable Push Notifications capability in Xcode:
-      - Open `ios/[ProjectName].xcworkspace` in Xcode
-      - Select project → Signing & Capabilities
-      - Add "Push Notifications" capability
-      - Add "Background Modes" capability
-      - Enable "Remote notifications" under Background Modes
+   - Open `ios/[ProjectName].xcworkspace` in Xcode
+   - Select project → Signing & Capabilities
+   - Add "Push Notifications" capability
+   - Add "Background Modes" capability
+   - Enable "Remote notifications" under Background Modes
 
    b. Configure APNs (Apple Push Notification service):
-      - Go to Apple Developer Portal → Certificates, IDs & Profiles
-      - Create APNs Authentication Key or Certificate
-      - Upload to Firebase Console → Project Settings → Cloud Messaging → iOS app
+   - Go to Apple Developer Portal → Certificates, IDs & Profiles
+   - Create APNs Authentication Key or Certificate
+   - Upload to Firebase Console → Project Settings → Cloud Messaging → iOS app
 
    c. Update Info.plist for permissions:
-      ```xml
-      <key>UIBackgroundModes</key>
-      <array>
-          <string>remote-notification</string>
-      </array>
-      ```
+
+   ```xml
+   <key>UIBackgroundModes</key>
+   <array>
+       <string>remote-notification</string>
+   </array>
+   ```
 
    d. For Flutter, update `ios/Runner/AppDelegate.swift`:
-      ```swift
-      import Firebase
-      import UserNotifications
 
-      @UIApplicationMain
-      @objc class AppDelegate: FlutterAppDelegate {
-        override func application(
-          _ application: UIApplication,
-          didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
-        ) -> Bool {
-          FirebaseApp.configure()
+   ```swift
+   import Firebase
+   import UserNotifications
 
-          if #available(iOS 10.0, *) {
-            UNUserNotificationCenter.current().delegate = self
-          }
+   @UIApplicationMain
+   @objc class AppDelegate: FlutterAppDelegate {
+     override func application(
+       _ application: UIApplication,
+       didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+     ) -> Bool {
+       FirebaseApp.configure()
 
-          GeneratedPluginRegistrant.register(with: self)
-          return super.application(application, didFinishLaunchingWithOptions: launchOptions)
-        }
-      }
-      ```
+       if #available(iOS 10.0, *) {
+         UNUserNotificationCenter.current().delegate = self
+       }
+
+       GeneratedPluginRegistrant.register(with: self)
+       return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+     }
+   }
+   ```
 
 3. **Android Configuration**:
 
    a. Update `AndroidManifest.xml`:
-      ```xml
-      <manifest>
-          <uses-permission android:name="android.permission.INTERNET"/>
-          <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
-          <application>
-              <!-- Firebase Messaging Service -->
-              <service
-                  android:name=".MyFirebaseMessagingService"
-                  android:exported="false">
-                  <intent-filter>
-                      <action android:name="com.google.firebase.MESSAGING_EVENT"/>
-                  </intent-filter>
-              </service>
+   ```xml
+   <manifest>
+       <uses-permission android:name="android.permission.INTERNET"/>
+       <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
-              <!-- Notification channel for Android 8+ -->
-              <meta-data
-                  android:name="com.google.firebase.messaging.default_notification_channel_id"
-                  android:value="@string/default_notification_channel_id"/>
-          </application>
-      </manifest>
-      ```
+       <application>
+           <!-- Firebase Messaging Service -->
+           <service
+               android:name=".MyFirebaseMessagingService"
+               android:exported="false">
+               <intent-filter>
+                   <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+               </intent-filter>
+           </service>
+
+           <!-- Notification channel for Android 8+ -->
+           <meta-data
+               android:name="com.google.firebase.messaging.default_notification_channel_id"
+               android:value="@string/default_notification_channel_id"/>
+       </application>
+   </manifest>
+   ```
 
    b. Add Google Services plugin to `android/build.gradle`:
-      ```gradle
-      buildscript {
-          dependencies {
-              classpath 'com.google.gms:google-services:4.4.0'
-          }
-      }
-      ```
+
+   ```gradle
+   buildscript {
+       dependencies {
+           classpath 'com.google.gms:google-services:4.4.0'
+       }
+   }
+   ```
 
    c. Apply plugin in `android/app/build.gradle`:
-      ```gradle
-      apply plugin: 'com.google.gms.google-services'
-      ```
+
+   ```gradle
+   apply plugin: 'com.google.gms.google-services'
+   ```
 
    d. Set notification icon (optional but recommended):
-      - Add notification icon to `android/app/src/main/res/drawable/`
-      - Update in AndroidManifest.xml:
-      ```xml
-      <meta-data
-          android:name="com.google.firebase.messaging.default_notification_icon"
-          android:resource="@drawable/ic_notification"/>
-      ```
+   - Add notification icon to `android/app/src/main/res/drawable/`
+   - Update in AndroidManifest.xml:
+
+   ```xml
+   <meta-data
+       android:name="com.google.firebase.messaging.default_notification_icon"
+       android:resource="@drawable/ic_notification"/>
+   ```
 
 4. **Web Configuration** (Next.js/React/Vue):
 
    a. Create `public/firebase-messaging-sw.js` (Service Worker):
-      ```javascript
-      importScripts('https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js');
-      importScripts('https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js');
 
-      firebase.initializeApp({
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_AUTH_DOMAIN",
-        projectId: "YOUR_PROJECT_ID",
-        storageBucket: "YOUR_STORAGE_BUCKET",
-        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-        appId: "YOUR_APP_ID"
-      });
+   ```javascript
+   importScripts('https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js');
+   importScripts('https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js');
 
-      const messaging = firebase.messaging();
+   firebase.initializeApp({
+     apiKey: 'YOUR_API_KEY',
+     authDomain: 'YOUR_AUTH_DOMAIN',
+     projectId: 'YOUR_PROJECT_ID',
+     storageBucket: 'YOUR_STORAGE_BUCKET',
+     messagingSenderId: 'YOUR_MESSAGING_SENDER_ID',
+     appId: 'YOUR_APP_ID',
+   });
 
-      messaging.onBackgroundMessage((payload) => {
-        console.log('Received background message:', payload);
+   const messaging = firebase.messaging();
 
-        const notificationTitle = payload.notification.title;
-        const notificationOptions = {
-          body: payload.notification.body,
-          icon: '/firebase-logo.png'
-        };
+   messaging.onBackgroundMessage(payload => {
+     console.log('Received background message:', payload);
 
-        self.registration.showNotification(notificationTitle, notificationOptions);
-      });
-      ```
+     const notificationTitle = payload.notification.title;
+     const notificationOptions = {
+       body: payload.notification.body,
+       icon: '/firebase-logo.png',
+     };
+
+     self.registration.showNotification(notificationTitle, notificationOptions);
+   });
+   ```
 
    b. Register service worker in main app:
-      ```javascript
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/firebase-messaging-sw.js')
-          .then((registration) => {
-            console.log('Service Worker registered:', registration);
-          })
-          .catch((error) => {
-            console.error('Service Worker registration failed:', error);
-          });
-      }
-      ```
+
+   ```javascript
+   if ('serviceWorker' in navigator) {
+     navigator.serviceWorker
+       .register('/firebase-messaging-sw.js')
+       .then(registration => {
+         console.log('Service Worker registered:', registration);
+       })
+       .catch(error => {
+         console.error('Service Worker registration failed:', error);
+       });
+   }
+   ```
 
    c. Add VAPID key from Firebase Console:
-      - Go to Firebase Console → Project Settings → Cloud Messaging
-      - Generate Web Push certificates (VAPID keys)
-      - Save the public key for use in the app
+   - Go to Firebase Console → Project Settings → Cloud Messaging
+   - Generate Web Push certificates (VAPID keys)
+   - Save the public key for use in the app
 
 **Output**: Platform-specific notification configurations completed
 
@@ -369,6 +389,7 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
 2. **React Native (Non-Expo)** implementation:
 
    Create `src/services/notificationService.js`:
+
    ```javascript
    import messaging from '@react-native-firebase/messaging';
    import { Platform, PermissionsAndroid, Alert } from 'react-native';
@@ -454,6 +475,7 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
 3. **React Native (Expo)** implementation:
 
    Create `src/services/notificationService.js`:
+
    ```javascript
    import * as Notifications from 'expo-notifications';
    import * as Device from 'expo-device';
@@ -527,6 +549,7 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
 4. **Flutter** implementation:
 
    Create `lib/services/notification_service.dart`:
+
    ```dart
    import 'package:firebase_messaging/firebase_messaging.dart';
    import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -638,6 +661,7 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
 5. **Web (Next.js/React)** implementation:
 
    Create `src/firebase/messaging.js`:
+
    ```javascript
    import { getMessaging, getToken, onMessage } from 'firebase/messaging';
    import { initializeApp } from 'firebase/app';
@@ -679,8 +703,8 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
    }
 
    export function onMessageListener() {
-     return new Promise((resolve) => {
-       onMessage(messaging, (payload) => {
+     return new Promise(resolve => {
+       onMessage(messaging, payload => {
          console.log('Foreground message:', payload);
          resolve(payload);
        });
@@ -691,6 +715,7 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
 6. Initialize notification service in app entry point:
 
    **React Native**: In `App.js` or `index.js`
+
    ```javascript
    import notificationService from './src/services/notificationService';
 
@@ -707,6 +732,7 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
    ```
 
    **Flutter**: In `main.dart`
+
    ```dart
    void main() async {
      WidgetsFlutterBinding.ensureInitialized();
@@ -720,6 +746,7 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
    ```
 
    **Next.js**: In `_app.js` or layout component
+
    ```javascript
    import { requestNotificationPermission, onMessageListener } from '@/firebase/messaging';
 
@@ -748,6 +775,7 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
 2. Create a test notification component/screen:
 
    **React Native** (`src/screens/NotificationTest.js`):
+
    ```javascript
    import React, { useState, useEffect } from 'react';
    import { View, Text, Button, TextInput, StyleSheet } from 'react-native';
@@ -768,7 +796,9 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
      };
 
      const sendTestNotification = () => {
-       alert('Copy your FCM token and use Firebase Console or your backend to send a test notification');
+       alert(
+         'Copy your FCM token and use Firebase Console or your backend to send a test notification'
+       );
      };
 
      return (
@@ -776,7 +806,9 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
          <Text style={styles.title}>Push Notification Testing</Text>
 
          <Text style={styles.label}>FCM Token:</Text>
-         <Text style={styles.token} selectable>{token}</Text>
+         <Text style={styles.token} selectable>
+           {token}
+         </Text>
 
          <Button title="Refresh Token" onPress={loadToken} />
 
@@ -827,6 +859,7 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
 3. Create backend test endpoint (optional, for automated testing):
 
    **Node.js/Express** (`server/routes/notifications.js`):
+
    ```javascript
    const admin = require('firebase-admin');
    const express = require('express');
@@ -834,7 +867,7 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
 
    // Initialize Firebase Admin SDK
    admin.initializeApp({
-     credential: admin.credential.cert(require('../firebase-service-account.json'))
+     credential: admin.credential.cert(require('../firebase-service-account.json')),
    });
 
    router.post('/send-test', async (req, res) => {
@@ -884,12 +917,13 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
 4. Create test script using Firebase Admin SDK:
 
    **Node.js script** (`scripts/send-test-notification.js`):
+
    ```javascript
    const admin = require('firebase-admin');
    const serviceAccount = require('../firebase-service-account.json');
 
    admin.initializeApp({
-     credential: admin.credential.cert(serviceAccount)
+     credential: admin.credential.cert(serviceAccount),
    });
 
    async function sendTestNotification() {
@@ -993,6 +1027,7 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
    - Verify notification appears while app is open
 
    **Method 2: Using test script**
+
    ```bash
    npm run test:notification YOUR_FCM_TOKEN_HERE
    ```
@@ -1003,7 +1038,6 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
    - Custom data is received correctly
 
 4. Test background notifications:
-
    - Send notification using Firebase Console or script
    - Put app in background (minimize or switch apps)
    - Verify notification appears in system tray
@@ -1011,7 +1045,6 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
    - Verify app opens and handles notification data
 
 5. Test notification from quit state:
-
    - Completely close/quit the app
    - Send notification using Firebase Console or script
    - Verify notification appears in system tray
@@ -1038,7 +1071,6 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
    - Notification click opens/focuses the web app
 
 7. Test edge cases:
-
    - Token refresh (simulate by clearing app data)
    - Multiple notifications (verify all appear)
    - Notifications with custom data payloads
@@ -1047,10 +1079,12 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
    - Notification grouping (Android)
 
 8. Document test results:
+
    ```markdown
    ## Notification Testing Results
 
    ### iOS
+
    - [x] Permission request works
    - [x] FCM token generated
    - [x] Foreground notifications display
@@ -1060,6 +1094,7 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
    - [x] Badge count updates
 
    ### Android
+
    - [x] Permission request works (Android 13+)
    - [x] FCM token generated
    - [x] Foreground notifications display
@@ -1069,6 +1104,7 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
    - [x] Custom icon displays
 
    ### Web
+
    - [x] Browser permission works
    - [x] FCM token generated
    - [x] Foreground notifications display
@@ -1077,9 +1113,11 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
    - [x] Custom data received
 
    ### Issues Found
+
    - [List any issues discovered during testing]
 
    ### Next Steps
+
    - [Any follow-up work needed]
    ```
 
@@ -1096,12 +1134,14 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
 1. Mark all todos as completed
 
 2. Create `PUSH_NOTIFICATIONS.md` documentation:
+
    ```markdown
    # Push Notifications Setup - Complete Guide
 
    ## Overview
 
    This project uses Firebase Cloud Messaging (FCM) for push notifications across:
+
    - iOS (APNs via FCM)
    - Android (FCM native)
    - Web (FCM with Service Workers)
@@ -1110,10 +1150,10 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
 
    \`\`\`
    Firebase Cloud Messaging
-           |
-           |--- iOS (APNs)
-           |--- Android (FCM)
-           |--- Web (Service Workers)
+   |
+   |--- iOS (APNs)
+   |--- Android (FCM)
+   |--- Web (Service Workers)
    \`\`\`
 
    ## Configuration Files
@@ -1135,14 +1175,17 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
    ### Handling Notifications
 
    **Foreground**: App is open and active
+
    - Notification is handled by \`onMessage\` listener
    - Display in-app alert or custom UI
 
    **Background**: App is in background but not killed
+
    - System displays notification automatically
    - Tap opens app and triggers \`onNotificationOpenedApp\`
 
    **Quit**: App is completely closed
+
    - System displays notification automatically
    - Tap launches app and triggers \`getInitialNotification\`
 
@@ -1160,15 +1203,15 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
 
    \`\`\`javascript
    const message = {
-     notification: {
-       title: 'Hello',
-       body: 'World',
-     },
-     data: {
-       screen: 'home',
-       id: '123',
-     },
-     token: userFcmToken,
+   notification: {
+   title: 'Hello',
+   body: 'World',
+   },
+   data: {
+   screen: 'home',
+   id: '123',
+   },
+   token: userFcmToken,
    };
 
    const response = await admin.messaging().send(message);
@@ -1178,72 +1221,75 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
 
    \`\`\`bash
    curl -X POST https://fcm.googleapis.com/v1/projects/YOUR_PROJECT_ID/messages:send \\
-     -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \\
-     -H "Content-Type: application/json" \\
-     -d '{
-       "message": {
-         "token": "FCM_TOKEN",
-         "notification": {
-           "title": "Hello",
-           "body": "World"
-         }
-       }
-     }'
+   -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \\
+   -H "Content-Type: application/json" \\
+   -d '{
+   "message": {
+   "token": "FCM_TOKEN",
+   "notification": {
+   "title": "Hello",
+   "body": "World"
+   }
+   }
+   }'
    \`\`\`
 
    ## Notification Payload Structure
 
    ### Basic Notification
+
    \`\`\`json
    {
-     "notification": {
-       "title": "Notification Title",
-       "body": "Notification body text"
-     },
-     "token": "DEVICE_FCM_TOKEN"
+   "notification": {
+   "title": "Notification Title",
+   "body": "Notification body text"
+   },
+   "token": "DEVICE_FCM_TOKEN"
    }
    \`\`\`
 
    ### With Custom Data
+
    \`\`\`json
    {
-     "notification": {
-       "title": "New Message",
-       "body": "You have a new message"
-     },
-     "data": {
-       "screen": "chat",
-       "chatId": "123",
-       "userId": "456"
-     },
-     "token": "DEVICE_FCM_TOKEN"
+   "notification": {
+   "title": "New Message",
+   "body": "You have a new message"
+   },
+   "data": {
+   "screen": "chat",
+   "chatId": "123",
+   "userId": "456"
+   },
+   "token": "DEVICE_FCM_TOKEN"
    }
    \`\`\`
 
    ### Platform-Specific Options
+
    \`\`\`json
    {
-     "notification": {
-       "title": "Hello",
-       "body": "World"
-     },
-     "android": {
-       "priority": "high",
-       "notification": {
-         "channelId": "default",
-         "sound": "default",
-         "color": "#FF0000"
-       }
-     },
-     "apns": {
-       "payload": {
-         "aps": {
-           "sound": "default",
-           "badge": 1
-         }
-       }
-     },
-     "token": "DEVICE_FCM_TOKEN"
+   "notification": {
+   "title": "Hello",
+   "body": "World"
+   },
+   "android": {
+   "priority": "high",
+   "notification": {
+   "channelId": "default",
+   "sound": "default",
+   "color": "#FF0000"
+   }
+   },
+   "apns": {
+   "payload": {
+   "aps": {
+   "sound": "default",
+   "badge": 1
+   }
+   }
+   },
+   "token": "DEVICE_FCM_TOKEN"
    }
    \`\`\`
 
@@ -1257,11 +1303,11 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
 
    // Send to topic
    const message = {
-     notification: {
-       title: 'Breaking News',
-       body: 'Something important happened'
-     },
-     topic: 'news'
+   notification: {
+   title: 'Breaking News',
+   body: 'Something important happened'
+   },
+   topic: 'news'
    };
    await admin.messaging().send(message);
    \`\`\`
@@ -1271,11 +1317,13 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
    ### iOS Issues
 
    **No token generated**
+
    - Verify APNs certificates are uploaded to Firebase
    - Check Push Notifications capability is enabled in Xcode
    - Ensure app is run on real device (simulator has limitations)
 
    **Notifications not appearing**
+
    - Check notification permissions are granted
    - Verify Background Modes → Remote notifications is enabled
    - Check device is not in Do Not Disturb mode
@@ -1283,11 +1331,13 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
    ### Android Issues
 
    **No token generated**
+
    - Verify google-services.json is in android/app/
    - Check Google Services plugin is applied
    - Ensure internet permission is in AndroidManifest
 
    **Notifications not appearing**
+
    - Check notification permissions (Android 13+)
    - Verify notification channel is created
    - Check device notification settings
@@ -1295,11 +1345,13 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
    ### Web Issues
 
    **No token generated**
+
    - Verify using HTTPS (required for service workers)
    - Check service worker is registered
    - Ensure VAPID key is correct
 
    **Background notifications not working**
+
    - Verify firebase-messaging-sw.js is in public/ directory
    - Check service worker scope is correct
    - Check browser console for errors
@@ -1349,6 +1401,7 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
 3. Create implementation examples document:
 
    **Common use cases** (`docs/notification-examples.md`):
+
    ```markdown
    # Push Notification Implementation Examples
 
@@ -1356,15 +1409,15 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
 
    \`\`\`javascript
    const message = {
-     notification: {
-       title: 'Welcome to Our App!',
-       body: 'Thanks for joining. Let\\'s get started!',
-     },
-     data: {
-       screen: 'onboarding',
-       action: 'start_tour',
-     },
-     token: userToken,
+   notification: {
+   title: 'Welcome to Our App!',
+   body: 'Thanks for joining. Let\\'s get started!',
+   },
+   data: {
+   screen: 'onboarding',
+   action: 'start_tour',
+   },
+   token: userToken,
    };
    \`\`\`
 
@@ -1372,31 +1425,31 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
 
    \`\`\`javascript
    const message = {
-     notification: {
-       title: senderName,
-       body: messagePreview,
-     },
-     data: {
-       screen: 'chat',
-       chatId: chatId,
-       senderId: senderId,
-       messageId: messageId,
-     },
-     android: {
-       notification: {
-         channelId: 'chat_messages',
-         priority: 'high',
-       },
-     },
-     apns: {
-       payload: {
-         aps: {
-           badge: unreadCount,
-           sound: 'chat_notification.wav',
-         },
-       },
-     },
-     token: recipientToken,
+   notification: {
+   title: senderName,
+   body: messagePreview,
+   },
+   data: {
+   screen: 'chat',
+   chatId: chatId,
+   senderId: senderId,
+   messageId: messageId,
+   },
+   android: {
+   notification: {
+   channelId: 'chat_messages',
+   priority: 'high',
+   },
+   },
+   apns: {
+   payload: {
+   aps: {
+   badge: unreadCount,
+   sound: 'chat_notification.wav',
+   },
+   },
+   },
+   token: recipientToken,
    };
    \`\`\`
 
@@ -1404,31 +1457,31 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
 
    \`\`\`javascript
    const message = {
-     notification: {
-       title: 'Don\\'t Forget!',
-       body: 'Your meeting starts in 10 minutes',
-     },
-     data: {
-       screen: 'calendar',
-       eventId: eventId,
-       type: 'reminder',
-     },
-     android: {
-       notification: {
-         priority: 'high',
-         defaultSound: true,
-         defaultVibrateTimings: true,
-       },
-     },
-     apns: {
-       payload: {
-         aps: {
-           sound: 'default',
-           'interruption-level': 'time-sensitive',
-         },
-       },
-     },
-     token: userToken,
+   notification: {
+   title: 'Don\\'t Forget!',
+   body: 'Your meeting starts in 10 minutes',
+   },
+   data: {
+   screen: 'calendar',
+   eventId: eventId,
+   type: 'reminder',
+   },
+   android: {
+   notification: {
+   priority: 'high',
+   defaultSound: true,
+   defaultVibrateTimings: true,
+   },
+   },
+   apns: {
+   payload: {
+   aps: {
+   sound: 'default',
+   'interruption-level': 'time-sensitive',
+   },
+   },
+   },
+   token: userToken,
    };
    \`\`\`
 
@@ -1436,25 +1489,25 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
 
    \`\`\`javascript
    const message = {
-     notification: {
-       title: 'New Product Launch',
-       body: 'Check out our latest product!',
-     },
-     data: {
-       screen: 'product',
-       productId: productId,
-     },
-     android: {
-       notification: {
-         imageUrl: 'https://example.com/product-image.jpg',
-       },
-     },
-     apns: {
-       fcm_options: {
-         image: 'https://example.com/product-image.jpg',
-       },
-     },
-     token: userToken,
+   notification: {
+   title: 'New Product Launch',
+   body: 'Check out our latest product!',
+   },
+   data: {
+   screen: 'product',
+   productId: productId,
+   },
+   android: {
+   notification: {
+   imageUrl: 'https://example.com/product-image.jpg',
+   },
+   },
+   apns: {
+   fcm_options: {
+   image: 'https://example.com/product-image.jpg',
+   },
+   },
+   token: userToken,
    };
    \`\`\`
 
@@ -1462,25 +1515,25 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
 
    \`\`\`javascript
    const message = {
-     data: {
-       type: 'sync',
-       action: 'refresh_data',
-       timestamp: Date.now().toString(),
-     },
-     android: {
-       priority: 'high',
-     },
-     apns: {
-       headers: {
-         'apns-priority': '5',
-       },
-       payload: {
-         aps: {
-           'content-available': 1,
-         },
-       },
-     },
-     token: userToken,
+   data: {
+   type: 'sync',
+   action: 'refresh_data',
+   timestamp: Date.now().toString(),
+   },
+   android: {
+   priority: 'high',
+   },
+   apns: {
+   headers: {
+   'apns-priority': '5',
+   },
+   payload: {
+   aps: {
+   'content-available': 1,
+   },
+   },
+   },
+   token: userToken,
    };
    \`\`\`
 
@@ -1488,15 +1541,15 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
 
    \`\`\`javascript
    const message = {
-     notification: {
-       title: 'App Update Available',
-       body: 'Version 2.0 is now available. Update now!',
-     },
-     data: {
-       screen: 'update',
-       version: '2.0.0',
-     },
-     topic: 'all_users',
+   notification: {
+   title: 'App Update Available',
+   body: 'Version 2.0 is now available. Update now!',
+   },
+   data: {
+   screen: 'update',
+   version: '2.0.0',
+   },
+   topic: 'all_users',
    };
    \`\`\`
 
@@ -1504,15 +1557,15 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
 
    \`\`\`javascript
    const message = {
-     notification: {
-       title: 'Special Offer',
-       body: 'Limited time offer just for you!',
-     },
-     data: {
-       screen: 'offers',
-       offerId: offerId,
-     },
-     condition: "'premium_users' in topics && 'notifications_enabled' in topics",
+   notification: {
+   title: 'Special Offer',
+   body: 'Limited time offer just for you!',
+   },
+   data: {
+   screen: 'offers',
+   offerId: offerId,
+   },
+   condition: "'premium_users' in topics && 'notifications_enabled' in topics",
    };
    \`\`\`
 
@@ -1520,64 +1573,71 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
 
    \`\`\`javascript
    const message = {
-     notification: {
-       title: 'Friend Request',
-       body: 'John Doe wants to connect',
-     },
-     data: {
-       screen: 'profile',
-       userId: userId,
-     },
-     android: {
-       notification: {
-         clickAction: 'FRIEND_REQUEST',
-         actions: [
-           {
-             title: 'Accept',
-             action: 'accept',
-           },
-           {
-             title: 'Decline',
-             action: 'decline',
-           },
-         ],
-       },
-     },
-     token: userToken,
+   notification: {
+   title: 'Friend Request',
+   body: 'John Doe wants to connect',
+   },
+   data: {
+   screen: 'profile',
+   userId: userId,
+   },
+   android: {
+   notification: {
+   clickAction: 'FRIEND_REQUEST',
+   actions: [
+   {
+   title: 'Accept',
+   action: 'accept',
+   },
+   {
+   title: 'Decline',
+   action: 'decline',
+   },
+   ],
+   },
+   },
+   token: userToken,
    };
    \`\`\`
    ```
 
 4. Create Quick Reference Card:
+
    ```markdown
    ## Quick Reference
 
    ### Get FCM Token
+
    \`\`\`javascript
    const token = await notificationService.getToken();
    \`\`\`
 
    ### Request Permission
+
    \`\`\`javascript
    const granted = await notificationService.requestPermission();
    \`\`\`
 
    ### Subscribe to Topic
+
    \`\`\`javascript
    await messaging().subscribeToTopic('news');
    \`\`\`
 
    ### Unsubscribe from Topic
+
    \`\`\`javascript
    await messaging().unsubscribeFromTopic('news');
    \`\`\`
 
    ### Send Test Notification
+
    \`\`\`bash
    npm run test:notification YOUR_FCM_TOKEN
    \`\`\`
 
    ### Check Notification Status
+
    \`\`\`javascript
    const status = await messaging().hasPermission();
    // iOS: 0=not determined, 1=denied, 2=authorized
@@ -1586,6 +1646,7 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
    ```
 
 5. Provide implementation summary to user:
+
    ```
    Push Notifications Setup Complete!
 
@@ -1673,18 +1734,21 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
 ### Platform-Specific Requirements
 
 **iOS**:
+
 - Requires physical device for testing (simulator has limitations)
 - Must upload APNs authentication key or certificate to Firebase
 - Requires Apple Developer Program membership for production
 - Different behavior in development vs production builds
 
 **Android**:
+
 - Android 13+ requires POST_NOTIFICATIONS runtime permission
 - Must create notification channels for Android 8+
 - Google Play Services required on device
 - Works on emulators
 
 **Web**:
+
 - Requires HTTPS (except localhost)
 - Service worker required for background notifications
 - Different behavior across browsers (Chrome, Firefox, Safari)
@@ -1719,18 +1783,21 @@ Guide the user through setting up Firebase Cloud Messaging (FCM) for push notifi
 ### Common Issues
 
 **Token not generated**:
+
 - Check Firebase configuration files are correctly placed
 - Verify network connectivity
 - Check Google Play Services (Android)
 - Ensure permissions are granted
 
 **Notifications not appearing**:
+
 - Check device notification settings
 - Verify Do Not Disturb is off
 - Check notification channels (Android)
 - Verify background modes (iOS)
 
 **Service worker not working (Web)**:
+
 - Must use HTTPS
 - Check service worker file is in correct location
 - Verify service worker scope

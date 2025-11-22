@@ -822,7 +822,7 @@ paths:
 
 ### 1. Add Descriptions Everywhere
 
-```yaml
+````yaml
 paths:
   /users:
     get:
@@ -851,7 +851,7 @@ paths:
           schema:
             type: string
             enum: [active, inactive, suspended]
-```
+````
 
 ### 2. Provide Examples
 

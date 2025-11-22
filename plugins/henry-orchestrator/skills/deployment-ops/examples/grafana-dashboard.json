@@ -13,7 +13,7 @@
         "id": 1,
         "title": "Request Rate",
         "type": "graph",
-        "gridPos": {"x": 0, "y": 0, "w": 12, "h": 8},
+        "gridPos": { "x": 0, "y": 0, "w": 12, "h": 8 },
         "targets": [
           {
             "expr": "sum(rate(http_requests_total[5m])) by (job)",
@@ -21,19 +21,16 @@
             "refId": "A"
           }
         ],
-        "yaxes": [
-          {"format": "reqps", "label": "Requests/sec"},
-          {"format": "short"}
-        ],
-        "xaxis": {"mode": "time"},
-        "tooltip": {"shared": true, "sort": 2},
-        "legend": {"show": true, "alignAsTable": true, "values": true, "current": true}
+        "yaxes": [{ "format": "reqps", "label": "Requests/sec" }, { "format": "short" }],
+        "xaxis": { "mode": "time" },
+        "tooltip": { "shared": true, "sort": 2 },
+        "legend": { "show": true, "alignAsTable": true, "values": true, "current": true }
       },
       {
         "id": 2,
         "title": "Error Rate",
         "type": "graph",
-        "gridPos": {"x": 12, "y": 0, "w": 12, "h": 8},
+        "gridPos": { "x": 12, "y": 0, "w": 12, "h": 8 },
         "targets": [
           {
             "expr": "sum(rate(http_requests_total{status=~\"5..\"}[5m])) by (job) / sum(rate(http_requests_total[5m])) by (job)",
@@ -41,17 +38,14 @@
             "refId": "A"
           }
         ],
-        "yaxes": [
-          {"format": "percentunit", "label": "Error Rate"},
-          {"format": "short"}
-        ],
+        "yaxes": [{ "format": "percentunit", "label": "Error Rate" }, { "format": "short" }],
         "alert": {
           "conditions": [
             {
-              "evaluator": {"params": [0.05], "type": "gt"},
-              "operator": {"type": "and"},
-              "query": {"params": ["A", "5m", "now"]},
-              "reducer": {"params": [], "type": "avg"},
+              "evaluator": { "params": [0.05], "type": "gt" },
+              "operator": { "type": "and" },
+              "query": { "params": ["A", "5m", "now"] },
+              "reducer": { "params": [], "type": "avg" },
               "type": "query"
             }
           ],
@@ -67,7 +61,7 @@
         "id": 3,
         "title": "Request Duration (p50, p95, p99)",
         "type": "graph",
-        "gridPos": {"x": 0, "y": 8, "w": 12, "h": 8},
+        "gridPos": { "x": 0, "y": 8, "w": 12, "h": 8 },
         "targets": [
           {
             "expr": "histogram_quantile(0.50, sum(rate(http_request_duration_seconds_bucket[5m])) by (le, job))",
@@ -85,16 +79,13 @@
             "refId": "C"
           }
         ],
-        "yaxes": [
-          {"format": "s", "label": "Duration"},
-          {"format": "short"}
-        ]
+        "yaxes": [{ "format": "s", "label": "Duration" }, { "format": "short" }]
       },
       {
         "id": 4,
         "title": "Active Connections",
         "type": "graph",
-        "gridPos": {"x": 12, "y": 8, "w": 12, "h": 8},
+        "gridPos": { "x": 12, "y": 8, "w": 12, "h": 8 },
         "targets": [
           {
             "expr": "sum(active_connections) by (job)",
@@ -102,16 +93,13 @@
             "refId": "A"
           }
         ],
-        "yaxes": [
-          {"format": "short", "label": "Connections"},
-          {"format": "short"}
-        ]
+        "yaxes": [{ "format": "short", "label": "Connections" }, { "format": "short" }]
       },
       {
         "id": 5,
         "title": "CPU Usage",
         "type": "graph",
-        "gridPos": {"x": 0, "y": 16, "w": 12, "h": 8},
+        "gridPos": { "x": 0, "y": 16, "w": 12, "h": 8 },
         "targets": [
           {
             "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"production\"}[5m])) by (pod)",
@@ -119,16 +107,13 @@
             "refId": "A"
           }
         ],
-        "yaxes": [
-          {"format": "percentunit", "label": "CPU Usage"},
-          {"format": "short"}
-        ]
+        "yaxes": [{ "format": "percentunit", "label": "CPU Usage" }, { "format": "short" }]
       },
       {
         "id": 6,
         "title": "Memory Usage",
         "type": "graph",
-        "gridPos": {"x": 12, "y": 16, "w": 12, "h": 8},
+        "gridPos": { "x": 12, "y": 16, "w": 12, "h": 8 },
         "targets": [
           {
             "expr": "sum(container_memory_working_set_bytes{namespace=\"production\"}) by (pod)",
@@ -136,16 +121,13 @@
             "refId": "A"
           }
         ],
-        "yaxes": [
-          {"format": "bytes", "label": "Memory"},
-          {"format": "short"}
-        ]
+        "yaxes": [{ "format": "bytes", "label": "Memory" }, { "format": "short" }]
       },
       {
         "id": 7,
         "title": "Request Status Breakdown",
         "type": "piechart",
-        "gridPos": {"x": 0, "y": 24, "w": 6, "h": 8},
+        "gridPos": { "x": 0, "y": 24, "w": 6, "h": 8 },
         "targets": [
           {
             "expr": "sum(increase(http_requests_total[1h])) by (status)",
@@ -158,7 +140,7 @@
         "id": 8,
         "title": "Availability (30d)",
         "type": "stat",
-        "gridPos": {"x": 6, "y": 24, "w": 6, "h": 8},
+        "gridPos": { "x": 6, "y": 24, "w": 6, "h": 8 },
         "targets": [
           {
             "expr": "1 - (sum(rate(http_requests_total{status=~\"5..\"}[30d])) / sum(rate(http_requests_total[30d])))",
@@ -177,9 +159,9 @@
             "thresholds": {
               "mode": "absolute",
               "steps": [
-                {"value": 0, "color": "red"},
-                {"value": 0.99, "color": "yellow"},
-                {"value": 0.999, "color": "green"}
+                { "value": 0, "color": "red" },
+                { "value": 0.99, "color": "yellow" },
+                { "value": 0.999, "color": "green" }
               ]
             }
           }
@@ -189,7 +171,7 @@
         "id": 9,
         "title": "Pod Restarts",
         "type": "graph",
-        "gridPos": {"x": 12, "y": 24, "w": 12, "h": 8},
+        "gridPos": { "x": 12, "y": 24, "w": 12, "h": 8 },
         "targets": [
           {
             "expr": "rate(kube_pod_container_status_restarts_total{namespace=\"production\"}[5m])",
@@ -197,16 +179,13 @@
             "refId": "A"
           }
         ],
-        "yaxes": [
-          {"format": "ops", "label": "Restarts/sec"},
-          {"format": "short"}
-        ]
+        "yaxes": [{ "format": "ops", "label": "Restarts/sec" }, { "format": "short" }]
       },
       {
         "id": 10,
         "title": "Request Heatmap",
         "type": "heatmap",
-        "gridPos": {"x": 0, "y": 32, "w": 24, "h": 8},
+        "gridPos": { "x": 0, "y": 32, "w": 24, "h": 8 },
         "targets": [
           {
             "expr": "sum(increase(http_request_duration_seconds_bucket[1m])) by (le)",

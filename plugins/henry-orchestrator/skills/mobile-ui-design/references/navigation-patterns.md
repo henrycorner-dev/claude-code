@@ -21,12 +21,14 @@ Bottom navigation is the primary navigation pattern for mobile apps with 3-5 top
 ### When to Use
 
 **Ideal for:**
+
 - Apps with 3-5 top-level sections of equal importance
 - Frequent switching between sections
 - Apps where users need quick access to all main features
 - Consumer-facing apps (social media, shopping, productivity)
 
 **Avoid when:**
+
 - Only 2 sections (use a different pattern)
 - More than 5 sections (consider reorganizing or using navigation drawer)
 - One section is significantly more important (make it a primary screen)
@@ -346,6 +348,7 @@ class MainActivity : AppCompatActivity() {
 ### Best Practices for Bottom Navigation
 
 **Do:**
+
 - Use 3-5 items only
 - Use clear, concise labels (one word preferred)
 - Use recognizable icons that match labels
@@ -355,6 +358,7 @@ class MainActivity : AppCompatActivity() {
 - Provide haptic feedback on selection (iOS)
 
 **Don't:**
+
 - Use for fewer than 3 or more than 5 items
 - Use long labels (truncation looks bad)
 - Mix different icon styles
@@ -372,6 +376,7 @@ The navigation drawer (Android) provides access to app destinations and function
 ### When to Use
 
 **Ideal for:**
+
 - Apps with 5+ sections
 - Hierarchical navigation structures
 - Secondary navigation supplementing bottom nav
@@ -380,6 +385,7 @@ The navigation drawer (Android) provides access to app destinations and function
 - Account switching functionality
 
 **Avoid when:**
+
 - App has fewer than 5 sections (use bottom nav instead)
 - Users need constant access to all sections
 - Navigation is the primary interaction
@@ -629,6 +635,7 @@ struct ContentView: View {
 ### Drawer Best Practices
 
 **Do:**
+
 - Place navigation at the top
 - Group related items with sections
 - Use clear labels and icons
@@ -639,6 +646,7 @@ struct ContentView: View {
 - Support swipe-to-open gesture
 
 **Don't:**
+
 - Overload with too many items (keep under 10-12)
 - Mix navigation and actions
 - Use as primary navigation (prefer bottom nav)
@@ -655,6 +663,7 @@ Stack navigation represents hierarchical navigation where screens are pushed and
 ### When to Use
 
 **Ideal for:**
+
 - Drilling into content hierarchies
 - Master-detail flows
 - Multi-step processes
@@ -662,6 +671,7 @@ Stack navigation represents hierarchical navigation where screens are pushed and
 - Settings and preferences
 
 **Characteristics:**
+
 - Linear, sequential navigation
 - Back button/gesture to return
 - Clear parent-child relationships
@@ -876,6 +886,7 @@ NavHost(
 ### Stack Navigation Best Practices
 
 **Do:**
+
 - Provide clear back navigation
 - Use descriptive titles for each screen
 - Maintain navigation state properly
@@ -885,6 +896,7 @@ NavHost(
 - Clear stack when appropriate (logout, reset)
 
 **Don't:**
+
 - Create circular navigation loops
 - Break the back button
 - Push same screen multiple times
@@ -1042,6 +1054,7 @@ fun ComplexNavigationApp() {
 ### Platform-Specific Guidelines
 
 **iOS:**
+
 - Use tab bar for primary navigation (3-5 items)
 - Implement swipe-back gesture
 - Use large titles that collapse on scroll
@@ -1049,6 +1062,7 @@ fun ComplexNavigationApp() {
 - Use sheets for temporary focused tasks
 
 **Android:**
+
 - Use bottom navigation for primary (3-5 items)
 - Support system back button
 - Use navigation drawer for secondary nav
@@ -1172,14 +1186,14 @@ NavHost(navController, startDestination = "home") {
 
 ### Navigation Pattern Selection Matrix
 
-| Scenario | iOS | Android |
-|----------|-----|---------|
-| 3-5 primary sections | Tab Bar | Bottom Navigation |
-| 5+ sections | Tab Bar + More | Drawer + Bottom Nav |
-| Deep hierarchies | Navigation Stack | Navigation Component |
-| Temporary tasks | Sheet/Modal | Bottom Sheet/Dialog |
-| Settings flows | Push navigation | Nested navigation |
-| Tablets | Sidebar | Permanent Drawer |
+| Scenario             | iOS              | Android              |
+| -------------------- | ---------------- | -------------------- |
+| 3-5 primary sections | Tab Bar          | Bottom Navigation    |
+| 5+ sections          | Tab Bar + More   | Drawer + Bottom Nav  |
+| Deep hierarchies     | Navigation Stack | Navigation Component |
+| Temporary tasks      | Sheet/Modal      | Bottom Sheet/Dialog  |
+| Settings flows       | Push navigation  | Nested navigation    |
+| Tablets              | Sidebar          | Permanent Drawer     |
 
 ### Key Takeaways
 

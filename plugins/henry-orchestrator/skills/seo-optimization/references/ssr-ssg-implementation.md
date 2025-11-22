@@ -9,11 +9,13 @@ This reference provides comprehensive guidance for implementing Server-Side Rend
 Content is rendered in the browser using JavaScript.
 
 **Pros:**
+
 - Rich interactivity
 - Reduced server load
 - Fast subsequent navigation
 
 **Cons:**
+
 - Poor SEO without additional setup
 - Slower initial page load
 - Content not in HTML source
@@ -26,12 +28,14 @@ Content is rendered in the browser using JavaScript.
 Content is rendered on the server for each request.
 
 **Pros:**
+
 - Excellent SEO (content in HTML source)
 - Fast first contentful paint
 - Works without JavaScript
 - Dynamic content support
 
 **Cons:**
+
 - Higher server load
 - Slower time to interactive
 - More complex infrastructure
@@ -44,12 +48,14 @@ Content is rendered on the server for each request.
 Content is pre-rendered at build time as static HTML files.
 
 **Pros:**
+
 - Best performance (served from CDN)
 - Excellent SEO
 - Lowest hosting costs
 - High scalability
 
 **Cons:**
+
 - Requires rebuild for content changes
 - Not suitable for highly dynamic content
 - Build time increases with page count
@@ -62,12 +68,14 @@ Content is pre-rendered at build time as static HTML files.
 Hybrid approach that combines SSG benefits with periodic revalidation.
 
 **Pros:**
+
 - Static performance benefits
 - Content updates without full rebuild
 - Stale-while-revalidate strategy
 - Best of both worlds
 
 **Cons:**
+
 - Complexity in cache management
 - Not all platforms support it
 - First user after expiry sees stale content
@@ -78,16 +86,16 @@ Hybrid approach that combines SSG benefits with periodic revalidation.
 
 ### Decision Matrix
 
-| Content Type | Recommended Strategy | Reason |
-|-------------|---------------------|---------|
-| Marketing pages | SSG | Rarely changes, needs speed |
-| Blog posts | SSG or SSG+ISR | Mostly static, occasional updates |
-| Documentation | SSG | Static content, version controlled |
-| Product catalog | SSG+ISR or SSR | Prices/inventory change frequently |
-| User dashboards | CSR with SSR shell | Personalized, requires auth |
-| Search results | SSR | Dynamic, needs SEO |
-| Real-time feeds | CSR with SSR shell | Highly dynamic |
-| E-commerce product pages | SSG+ISR | Mostly static with periodic updates |
+| Content Type             | Recommended Strategy | Reason                              |
+| ------------------------ | -------------------- | ----------------------------------- |
+| Marketing pages          | SSG                  | Rarely changes, needs speed         |
+| Blog posts               | SSG or SSG+ISR       | Mostly static, occasional updates   |
+| Documentation            | SSG                  | Static content, version controlled  |
+| Product catalog          | SSG+ISR or SSR       | Prices/inventory change frequently  |
+| User dashboards          | CSR with SSR shell   | Personalized, requires auth         |
+| Search results           | SSR                  | Dynamic, needs SEO                  |
+| Real-time feeds          | CSR with SSR shell   | Highly dynamic                      |
+| E-commerce product pages | SSG+ISR              | Mostly static with periodic updates |
 
 ### Hybrid Approaches
 
@@ -124,7 +132,7 @@ export async function getStaticProps({ params }) {
 export async function getStaticPaths() {
   const posts = await fetchAllPosts();
 
-  const paths = posts.map((post) => ({
+  const paths = posts.map(post => ({
     params: { slug: post.slug },
   }));
 
@@ -168,10 +176,7 @@ export async function getServerSideProps({ params, req, res }) {
   const inventory = await fetchInventory(params.id, userLocation);
 
   // Optional: set cache headers
-  res.setHeader(
-    'Cache-Control',
-    'public, s-maxage=10, stale-while-revalidate=59'
-  );
+  res.setHeader('Cache-Control', 'public, s-maxage=10, stale-while-revalidate=59');
 
   return {
     props: {
@@ -220,7 +225,7 @@ export async function getStaticPaths() {
   // Pre-render top 100 products
   const topProducts = await fetchTopProducts(100);
 
-  const paths = topProducts.map((product) => ({
+  const paths = topProducts.map(product => ({
     params: { id: product.id.toString() },
   }));
 
@@ -270,9 +275,7 @@ export default function Dashboard() {
         <meta name="robots" content="noindex, nofollow" />
       </Head>
 
-      <div>
-        {data ? <UserDashboard data={data} /> : <Loading />}
-      </div>
+      <div>{data ? <UserDashboard data={data} /> : <Loading />}</div>
     </>
   );
 }
@@ -287,7 +290,7 @@ export default function Dashboard() {
 export async function generateStaticParams() {
   const posts = await fetchAllPosts();
 
-  return posts.map((post) => ({
+  return posts.map(post => ({
     slug: post.slug,
   }));
 }
@@ -383,7 +386,7 @@ export default {
       const { $content } = require('@nuxt/content');
       const posts = await $content('blog').fetch();
 
-      return posts.map((post) => `/blog/${post.slug}`);
+      return posts.map(post => `/blog/${post.slug}`);
     },
   },
 };
@@ -577,10 +580,7 @@ export default function BlogPost({ data }) {
 
   return (
     <>
-      <Seo
-        title={mdx.frontmatter.title}
-        description={mdx.frontmatter.excerpt}
-      />
+      <Seo title={mdx.frontmatter.title} description={mdx.frontmatter.excerpt} />
 
       <article>
         <h1>{mdx.frontmatter.title}</h1>
@@ -591,7 +591,7 @@ export default function BlogPost({ data }) {
 }
 
 export const query = graphql`
-  query($id: String!) {
+  query ($id: String!) {
     mdx(id: { eq: $id }) {
       frontmatter {
         title
@@ -750,12 +750,7 @@ npm install react-snap
     "postbuild": "react-snap"
   },
   "reactSnap": {
-    "include": [
-      "/",
-      "/about",
-      "/blog/post-1",
-      "/blog/post-2"
-    ]
+    "include": ["/", "/about", "/blog/post-1", "/blog/post-2"]
   }
 }
 ```
@@ -778,10 +773,7 @@ app.use(prerender.set('prerenderToken', 'YOUR_TOKEN'));
 ```js
 // Next.js API route with caching
 export default function handler(req, res) {
-  res.setHeader(
-    'Cache-Control',
-    'public, s-maxage=10, stale-while-revalidate=59'
-  );
+  res.setHeader('Cache-Control', 'public, s-maxage=10, stale-while-revalidate=59');
 
   const data = fetchData();
   res.json(data);
@@ -836,6 +828,7 @@ lighthouse https://example.com --view
 ```
 
 Check:
+
 - SEO score
 - Performance metrics
 - Accessibility
@@ -844,6 +837,7 @@ Check:
 ### Google Search Console
 
 Monitor:
+
 - Index coverage
 - Page experience
 - Core Web Vitals
@@ -869,6 +863,7 @@ Monitor:
 **Problem:** SSR adds server processing time.
 
 **Solution:**
+
 - Use edge rendering
 - Implement caching
 - Optimize database queries
@@ -879,6 +874,7 @@ Monitor:
 **Problem:** SSG build time grows with page count.
 
 **Solution:**
+
 - Use incremental builds
 - Pre-render only critical pages
 - Use on-demand ISR for others
@@ -888,6 +884,7 @@ Monitor:
 **Problem:** User-specific content can't be pre-rendered.
 
 **Solution:**
+
 - Use SSR shell with client-side content
 - Add noindex meta tag
 - Implement edge personalization
@@ -895,6 +892,7 @@ Monitor:
 ## Best Practices Summary
 
 ✅ **DO:**
+
 - Use SSG for content that changes infrequently
 - Implement ISR for content needing periodic updates
 - Use SSR for highly dynamic or personalized content
@@ -904,6 +902,7 @@ Monitor:
 - Test with Lighthouse and Search Console
 
 ❌ **DON'T:**
+
 - Serve SEO-critical content client-side only
 - Rebuild entire site for minor content updates
 - Ignore caching opportunities

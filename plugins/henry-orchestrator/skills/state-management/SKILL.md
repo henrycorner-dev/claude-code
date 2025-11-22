@@ -27,15 +27,18 @@ Use this skill when implementing or refactoring application state management, pa
 Choose the appropriate state management solution based on application complexity:
 
 **Simple Applications (< 5 routes, minimal shared state):**
+
 - React: Context API + useReducer
 - Vue: Composition API with composables
 - No external library needed
 
 **Medium Applications (5-20 routes, moderate shared state):**
+
 - React: Zustand or Recoil (simpler, less boilerplate)
 - Vue: Pinia (modern, TypeScript-first)
 
 **Complex Applications (20+ routes, extensive shared state):**
+
 - React: Redux Toolkit (established patterns, DevTools, middleware ecosystem)
 - Vue: Pinia or Vuex (Pinia recommended for new projects)
 
@@ -66,6 +69,7 @@ Store entities by ID to avoid duplication:
 ```
 
 **Separation of Concerns:**
+
 - State: Data only (no logic)
 - Actions: State mutations
 - Selectors/Getters: Derived data and computed values
@@ -76,11 +80,13 @@ Store entities by ID to avoid duplication:
 ### Setting Up Redux Toolkit (React)
 
 **Installation:**
+
 ```bash
 npm install @reduxjs/toolkit react-redux
 ```
 
 **Store Configuration:**
+
 1. Create store file with configureStore
 2. Define slices with createSlice for each domain
 3. Implement async actions with createAsyncThunk
@@ -88,6 +94,7 @@ npm install @reduxjs/toolkit react-redux
 5. Wrap app with Provider
 
 **Key Patterns:**
+
 - Use createSlice for reducer + actions
 - Use createAsyncThunk for API calls
 - Use createSelector for memoized selectors
@@ -98,17 +105,20 @@ See `references/redux-toolkit-patterns.md` for detailed implementation patterns.
 ### Setting Up Zustand (React)
 
 **Installation:**
+
 ```bash
 npm install zustand
 ```
 
 **Store Creation:**
+
 1. Define store with create() function
 2. Implement state and actions in single object
 3. Add middleware (persist, devtools, immer)
 4. Use selectors in components
 
 **Key Patterns:**
+
 - Colocate state and actions
 - Use shallow equality for selectors
 - Leverage middleware for cross-cutting concerns
@@ -119,11 +129,13 @@ See `references/zustand-patterns.md` for detailed implementation patterns.
 ### Setting Up Pinia (Vue 3)
 
 **Installation:**
+
 ```bash
 npm install pinia
 ```
 
 **Store Configuration:**
+
 1. Create Pinia instance and install in app
 2. Define stores with defineStore
 3. Use setup or options syntax
@@ -131,6 +143,7 @@ npm install pinia
 5. Add plugins (persistence, DevTools)
 
 **Key Patterns:**
+
 - Use setup syntax for Composition API style
 - Define getters for computed state
 - Handle async in actions
@@ -141,11 +154,13 @@ See `references/pinia-patterns.md` for detailed implementation patterns.
 ### Setting Up Vuex (Vue 2/3)
 
 **Installation:**
+
 ```bash
 npm install vuex
 ```
 
 **Store Configuration:**
+
 1. Create store with modules
 2. Define state, mutations, actions, getters per module
 3. Enable namespacing
@@ -153,6 +168,7 @@ npm install vuex
 5. Install in Vue app
 
 **Key Patterns:**
+
 - Use modules for organization
 - Mutations for sync, actions for async
 - Map helpers (mapState, mapActions) in components
@@ -168,7 +184,7 @@ See `references/vuex-patterns.md` for detailed implementation patterns.
 Use createAsyncThunk with automatic pending/fulfilled/rejected actions:
 
 ```javascript
-const fetchUser = createAsyncThunk('user/fetch', async (userId) => {
+const fetchUser = createAsyncThunk('user/fetch', async userId => {
   const response = await api.getUser(userId);
   return response.data;
 });
@@ -178,14 +194,14 @@ const fetchUser = createAsyncThunk('user/fetch', async (userId) => {
 Define async actions directly in store:
 
 ```javascript
-const useStore = create((set) => ({
+const useStore = create(set => ({
   user: null,
   loading: false,
-  fetchUser: async (userId) => {
+  fetchUser: async userId => {
     set({ loading: true });
     const user = await api.getUser(userId);
     set({ user, loading: false });
-  }
+  },
 }));
 ```
 
@@ -210,6 +226,7 @@ export const useUserStore = defineStore('user', () => {
 ### Loading and Error States
 
 Always track three states for async operations:
+
 1. **Loading/pending**: Operation in progress
 2. **Success**: Data available
 3. **Error**: Operation failed with error details
@@ -221,15 +238,18 @@ See `references/async-patterns.md` for comprehensive async handling patterns.
 ### Storage Options
 
 **localStorage:**
+
 - Synchronous, string-only
 - Good for: User preferences, theme, non-sensitive data
 - Size limit: ~5-10MB
 
 **sessionStorage:**
+
 - Same as localStorage but cleared on tab close
 - Good for: Temporary form data, wizard state
 
 **IndexedDB:**
+
 - Asynchronous, supports complex objects
 - Good for: Large datasets, offline-first apps
 - Size limit: Often 50MB+ (varies by browser)
@@ -253,7 +273,9 @@ import { persist } from 'zustand/middleware';
 
 const useStore = create(
   persist(
-    (set) => ({ /* store */ }),
+    set => ({
+      /* store */
+    }),
     { name: 'my-store' }
   )
 );
@@ -275,27 +297,32 @@ See `references/persistence-patterns.md` for detailed persistence configurations
 ### Performance Optimization
 
 **Selector Optimization:**
+
 - Use memoized selectors (createSelector in Redux, computed in Pinia)
 - Select only needed data in components
 - Use shallow equality checks
 
 **Update Batching:**
+
 - Batch multiple updates when possible
 - Use framework-specific batching (React 18 auto-batches, Vue 3 auto-batches)
 
 **Code Splitting:**
+
 - Lazy load store modules
 - Use dynamic imports for large slices
 
 ### TypeScript Integration
 
 **Strongly type:**
+
 - State shape
 - Action payloads
 - Thunk arguments
 - Selectors return types
 
 **Use discriminated unions for:**
+
 - Action types
 - Loading states
 - Error types
@@ -305,6 +332,7 @@ See `references/typescript-patterns.md` for TypeScript-specific patterns.
 ### DevTools Integration
 
 **Enable DevTools:**
+
 - Redux: Built-in with Redux DevTools Extension
 - Zustand: Add devtools middleware
 - Pinia: Built-in Vue DevTools integration
@@ -316,11 +344,13 @@ Track action history and state snapshots for debugging.
 ### Testing Strategies
 
 **Unit Testing:**
+
 - Test reducers/mutations as pure functions
 - Test selectors/getters independently
 - Mock async actions
 
 **Integration Testing:**
+
 - Test store with components
 - Test async workflows end-to-end
 - Verify persistence behavior
@@ -395,6 +425,7 @@ See `references/migration-guides.md` for step-by-step migration instructions.
 ### Reference Files
 
 Detailed patterns and configurations:
+
 - **`references/redux-toolkit-patterns.md`** - Complete Redux Toolkit implementation patterns
 - **`references/zustand-patterns.md`** - Zustand store patterns and middleware
 - **`references/pinia-patterns.md`** - Pinia setup and composition patterns
@@ -408,6 +439,7 @@ Detailed patterns and configurations:
 ### Example Files
 
 Working implementations:
+
 - **`examples/redux-toolkit-store.ts`** - Complete Redux Toolkit store setup
 - **`examples/zustand-store.ts`** - Zustand store with middleware
 - **`examples/pinia-store.ts`** - Pinia store with TypeScript

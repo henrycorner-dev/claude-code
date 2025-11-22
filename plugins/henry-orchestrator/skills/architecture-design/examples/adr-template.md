@@ -20,6 +20,7 @@ Describe the problem or opportunity that requires a decision.
 - What requirements must be met?
 
 **Example:**
+
 > We need to select a primary database for our user management system. The system will handle user profiles, authentication, and authorization for a SaaS application expected to scale to 100k users in the first year. We need ACID guarantees for payment-related data and complex querying capabilities for reporting.
 
 ---
@@ -29,6 +30,7 @@ Describe the problem or opportunity that requires a decision.
 State the decision clearly and concisely.
 
 **Example:**
+
 > We will use **PostgreSQL** as our primary relational database.
 
 ---
@@ -42,10 +44,12 @@ List and briefly evaluate other options that were considered.
 **Description:** Brief description of the alternative
 
 **Pros:**
+
 - Advantage 1
 - Advantage 2
 
 **Cons:**
+
 - Disadvantage 1
 - Disadvantage 2
 
@@ -56,10 +60,12 @@ List and briefly evaluate other options that were considered.
 **Description:** Brief description of the alternative
 
 **Pros:**
+
 - Advantage 1
 - Advantage 2
 
 **Cons:**
+
 - Disadvantage 1
 - Disadvantage 2
 
@@ -77,6 +83,7 @@ Explain the reasoning behind the decision in detail.
 - What trade-offs are being made?
 
 **Example:**
+
 > PostgreSQL provides the ACID guarantees we need for financial data while offering excellent performance for our expected scale. Its JSONB support gives us flexibility for evolving user profile schemas without sacrificing query performance. The team has strong PostgreSQL experience, reducing operational risk. While horizontal scaling is more complex than with NoSQL alternatives, vertical scaling and read replicas will serve our needs for the foreseeable future.
 
 ---
@@ -90,6 +97,7 @@ Explain the reasoning behind the decision in detail.
 - Long-term advantages
 
 **Example:**
+
 - ✅ Strong data consistency and ACID guarantees
 - ✅ Rich query capabilities with SQL
 - ✅ JSONB support for flexible schema
@@ -104,6 +112,7 @@ Explain the reasoning behind the decision in detail.
 - Known limitations
 
 **Example:**
+
 - ❌ Vertical scaling limitations at very large scale
 - ❌ More complex horizontal scaling (sharding requires planning)
 - ❌ Higher operational overhead than fully-managed NoSQL
@@ -116,6 +125,7 @@ Explain the reasoning behind the decision in detail.
 - Related decisions needed
 
 **Example:**
+
 - ⚠️ Will need to implement connection pooling (PgBouncer) for high concurrency
 - ⚠️ Monitor query performance and add indexes proactively
 - ⚠️ Plan for read replicas when read traffic increases
@@ -145,12 +155,14 @@ Describe how the decision will be implemented.
 **Example:**
 
 **Timeline:**
+
 - Week 1: Set up PostgreSQL on AWS RDS
 - Week 2: Implement data models and migrations
 - Week 3: Deploy to staging and test
 - Week 4: Production deployment
 
 **Success Metrics:**
+
 - Query response times < 100ms for p95
 - Zero data loss or consistency issues
 - Successful handling of 1000 concurrent connections
@@ -163,6 +175,7 @@ Describe how the decision will be implemented.
 Link to related ADRs or decisions.
 
 **Example:**
+
 - [ADR-002: API Framework Selection](./adr-002-api-framework.md)
 - [ADR-005: Caching Strategy](./adr-005-caching-strategy.md)
 
@@ -173,6 +186,7 @@ Link to related ADRs or decisions.
 Links to relevant documentation, articles, or discussions.
 
 **Example:**
+
 - [PostgreSQL Documentation](https://www.postgresql.org/docs/)
 - [AWS RDS PostgreSQL Best Practices](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_BestPractices.html)
 - Team discussion: Slack thread on #architecture (2024-01-15)
@@ -181,9 +195,9 @@ Links to relevant documentation, articles, or discussions.
 
 ## Review and Updates
 
-| Date | Change | Author |
-|------|--------|--------|
-| 2024-01-20 | Initial version | Jane Doe |
+| Date       | Change                                            | Author   |
+| ---------- | ------------------------------------------------- | -------- |
+| 2024-01-20 | Initial version                                   | Jane Doe |
 | 2024-03-15 | Updated consequences based on 2 months experience | Jane Doe |
 
 ---
@@ -222,6 +236,7 @@ Our application currently stores user sessions in-memory on each application ser
 - No session persistence across deployments
 
 We need a distributed session storage solution that:
+
 - Persists across server restarts
 - Allows any application server to access any session
 - Scales horizontally
@@ -243,11 +258,13 @@ We will use **Redis** (AWS ElastiCache) for distributed session storage.
 **Description:** Store sessions in our existing PostgreSQL database
 
 **Pros:**
+
 - Already using PostgreSQL, no new infrastructure
 - ACID guarantees
 - Familiar to team
 
 **Cons:**
+
 - Higher latency than in-memory solution (~50ms vs ~5ms)
 - Additional load on primary database
 - Requires additional indexes
@@ -259,11 +276,13 @@ We will use **Redis** (AWS ElastiCache) for distributed session storage.
 **Description:** Use AWS DynamoDB for session storage
 
 **Pros:**
+
 - Fully managed, serverless
 - Low latency
 - Automatic scaling
 
 **Cons:**
+
 - Higher cost at our scale (~$100/month vs ~$30/month for Redis)
 - Less flexible data structures than Redis
 - Team less familiar with DynamoDB
@@ -275,11 +294,13 @@ We will use **Redis** (AWS ElastiCache) for distributed session storage.
 **Description:** Use Memcached for session storage
 
 **Pros:**
+
 - Simple key-value store
 - Low latency
 - Less memory overhead than Redis
 
 **Cons:**
+
 - No persistence (sessions lost on server restart)
 - Limited data structures
 - No replication built-in
@@ -341,12 +362,14 @@ The AWS ElastiCache managed service eliminates operational overhead of running R
 ### Migration Plan
 
 **Rollout:**
+
 1. Deploy new code with Redis session storage (but keep in-memory as fallback)
 2. Monitor for errors and performance issues
 3. Increase traffic percentage gradually
 4. Remove in-memory session code once Redis is at 100%
 
 **Rollback:**
+
 - Can roll back to in-memory sessions by reverting deployment
 - Sticky sessions can be re-enabled in load balancer if needed
 - Redis data can be flushed without data loss (users just re-login)
@@ -379,9 +402,9 @@ The AWS ElastiCache managed service eliminates operational overhead of running R
 
 ## Review and Updates
 
-| Date | Change | Author |
-|------|--------|--------|
-| 2024-01-20 | Initial version | Jane Doe |
+| Date       | Change                                    | Author     |
+| ---------- | ----------------------------------------- | ---------- |
+| 2024-01-20 | Initial version                           | Jane Doe   |
 | 2024-02-15 | Added metrics after 4 weeks in production | John Smith |
 
 ---
@@ -389,6 +412,7 @@ The AWS ElastiCache managed service eliminates operational overhead of running R
 ## Notes
 
 **Production Metrics (after 1 month):**
+
 - Average session read latency: 3.2ms (p99: 7.8ms)
 - Redis memory usage: 45% of allocated
 - Zero session-related incidents
@@ -396,6 +420,7 @@ The AWS ElastiCache managed service eliminates operational overhead of running R
 - Cost: $32/month (within budget)
 
 **Lessons Learned:**
+
 - Connection pooling was critical - started with too few connections
 - TTL of 7 days is working well, only 2% of sessions expire naturally
 - Plan to use Redis for API caching next quarter as planned

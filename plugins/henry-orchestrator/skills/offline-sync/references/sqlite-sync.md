@@ -133,37 +133,37 @@ INSERT INTO sync_metadata (key, value) VALUES ('device_id', 'unique-device-id');
 const db = require('better-sqlite3')('app.db');
 
 function createItem(title, description) {
-    const id = generateUUID();
-    const now = Date.now();
+  const id = generateUUID();
+  const now = Date.now();
 
-    const stmt = db.prepare(`
+  const stmt = db.prepare(`
         INSERT INTO items (id, title, description, created_at, updated_at, dirty, version)
         VALUES (?, ?, ?, ?, ?, 1, 1)
     `);
 
-    stmt.run(id, title, description, now, now);
+  stmt.run(id, title, description, now, now);
 
-    // Log change
-    logChange('items', id, 'INSERT', { title, description });
+  // Log change
+  logChange('items', id, 'INSERT', { title, description });
 
-    return id;
+  return id;
 }
 
 function logChange(tableName, recordId, operation, data) {
-    const stmt = db.prepare(`
+  const stmt = db.prepare(`
         INSERT INTO sync_log (table_name, record_id, operation, timestamp, data)
         VALUES (?, ?, ?, ?, ?)
     `);
 
-    stmt.run(tableName, recordId, operation, Date.now(), JSON.stringify(data));
+  stmt.run(tableName, recordId, operation, Date.now(), JSON.stringify(data));
 }
 
 function generateUUID() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        const r = Math.random() * 16 | 0;
-        const v = c === 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-    });
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    const r = (Math.random() * 16) | 0;
+    const v = c === 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
 }
 ```
 
@@ -171,13 +171,13 @@ function generateUUID() {
 
 ```javascript
 function getItems() {
-    const stmt = db.prepare('SELECT * FROM items WHERE deleted_at IS NULL');
-    return stmt.all();
+  const stmt = db.prepare('SELECT * FROM items WHERE deleted_at IS NULL');
+  return stmt.all();
 }
 
 function getUnsyncedItems() {
-    const stmt = db.prepare('SELECT * FROM items WHERE dirty = 1');
-    return stmt.all();
+  const stmt = db.prepare('SELECT * FROM items WHERE dirty = 1');
+  return stmt.all();
 }
 ```
 
@@ -185,12 +185,12 @@ function getUnsyncedItems() {
 
 ```javascript
 function updateItem(id, updates) {
-    const now = Date.now();
+  const now = Date.now();
 
-    // Get current version
-    const current = db.prepare('SELECT version FROM items WHERE id = ?').get(id);
+  // Get current version
+  const current = db.prepare('SELECT version FROM items WHERE id = ?').get(id);
 
-    const stmt = db.prepare(`
+  const stmt = db.prepare(`
         UPDATE items
         SET title = COALESCE(?, title),
             description = COALESCE(?, description),
@@ -200,10 +200,10 @@ function updateItem(id, updates) {
         WHERE id = ?
     `);
 
-    stmt.run(updates.title, updates.description, now, id);
+  stmt.run(updates.title, updates.description, now, id);
 
-    // Log change
-    logChange('items', id, 'UPDATE', updates);
+  // Log change
+  logChange('items', id, 'UPDATE', updates);
 }
 ```
 
@@ -211,9 +211,9 @@ function updateItem(id, updates) {
 
 ```javascript
 function deleteItem(id) {
-    const now = Date.now();
+  const now = Date.now();
 
-    const stmt = db.prepare(`
+  const stmt = db.prepare(`
         UPDATE items
         SET deleted_at = ?,
             updated_at = ?,
@@ -221,16 +221,16 @@ function deleteItem(id) {
         WHERE id = ?
     `);
 
-    stmt.run(now, now, id);
+  stmt.run(now, now, id);
 
-    // Log change
-    logChange('items', id, 'DELETE', null);
+  // Log change
+  logChange('items', id, 'DELETE', null);
 }
 
 // Hard delete (only after confirmed sync)
 function hardDeleteItem(id) {
-    db.prepare('DELETE FROM items WHERE id = ?').run(id);
-    db.prepare('DELETE FROM sync_log WHERE record_id = ?').run(id);
+  db.prepare('DELETE FROM items WHERE id = ?').run(id);
+  db.prepare('DELETE FROM sync_log WHERE record_id = ?').run(id);
 }
 ```
 
@@ -240,61 +240,61 @@ function hardDeleteItem(id) {
 
 ```javascript
 async function pullChanges() {
-    const lastSyncAt = getLastSyncAt();
+  const lastSyncAt = getLastSyncAt();
 
-    // Fetch changes from server since last sync
-    const response = await fetch(`/api/sync/pull?since=${lastSyncAt}`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-    });
+  // Fetch changes from server since last sync
+  const response = await fetch(`/api/sync/pull?since=${lastSyncAt}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
 
-    const { items, timestamp } = await response.json();
+  const { items, timestamp } = await response.json();
 
-    // Apply changes with conflict resolution
-    db.transaction(() => {
-        for (const remoteItem of items) {
-            applyRemoteChange(remoteItem);
-        }
-    })();
+  // Apply changes with conflict resolution
+  db.transaction(() => {
+    for (const remoteItem of items) {
+      applyRemoteChange(remoteItem);
+    }
+  })();
 
-    // Update last sync timestamp
-    updateLastSyncAt(timestamp);
+  // Update last sync timestamp
+  updateLastSyncAt(timestamp);
 }
 
 function applyRemoteChange(remoteItem) {
-    const localItem = db.prepare('SELECT * FROM items WHERE id = ?').get(remoteItem.id);
+  const localItem = db.prepare('SELECT * FROM items WHERE id = ?').get(remoteItem.id);
 
-    if (!localItem) {
-        // New item from server
-        insertRemoteItem(remoteItem);
-    } else if (localItem.dirty) {
-        // Conflict: both local and remote changed
-        resolveConflict(localItem, remoteItem);
-    } else {
-        // No conflict: update local with remote
-        updateFromRemote(remoteItem);
-    }
+  if (!localItem) {
+    // New item from server
+    insertRemoteItem(remoteItem);
+  } else if (localItem.dirty) {
+    // Conflict: both local and remote changed
+    resolveConflict(localItem, remoteItem);
+  } else {
+    // No conflict: update local with remote
+    updateFromRemote(remoteItem);
+  }
 }
 
 function insertRemoteItem(remoteItem) {
-    const stmt = db.prepare(`
+  const stmt = db.prepare(`
         INSERT INTO items (id, title, description, created_at, updated_at, deleted_at, synced_at, dirty, version)
         VALUES (?, ?, ?, ?, ?, ?, ?, 0, ?)
     `);
 
-    stmt.run(
-        remoteItem.id,
-        remoteItem.title,
-        remoteItem.description,
-        remoteItem.created_at,
-        remoteItem.updated_at,
-        remoteItem.deleted_at,
-        Date.now(),
-        remoteItem.version
-    );
+  stmt.run(
+    remoteItem.id,
+    remoteItem.title,
+    remoteItem.description,
+    remoteItem.created_at,
+    remoteItem.updated_at,
+    remoteItem.deleted_at,
+    Date.now(),
+    remoteItem.version
+  );
 }
 
 function updateFromRemote(remoteItem) {
-    const stmt = db.prepare(`
+  const stmt = db.prepare(`
         UPDATE items
         SET title = ?,
             description = ?,
@@ -305,15 +305,15 @@ function updateFromRemote(remoteItem) {
         WHERE id = ?
     `);
 
-    stmt.run(
-        remoteItem.title,
-        remoteItem.description,
-        remoteItem.updated_at,
-        remoteItem.deleted_at,
-        Date.now(),
-        remoteItem.version,
-        remoteItem.id
-    );
+  stmt.run(
+    remoteItem.title,
+    remoteItem.description,
+    remoteItem.updated_at,
+    remoteItem.deleted_at,
+    Date.now(),
+    remoteItem.version,
+    remoteItem.id
+  );
 }
 ```
 
@@ -321,53 +321,55 @@ function updateFromRemote(remoteItem) {
 
 ```javascript
 async function pushChanges() {
-    const unsyncedItems = getUnsyncedItems();
+  const unsyncedItems = getUnsyncedItems();
 
-    if (unsyncedItems.length === 0) {
-        return;
+  if (unsyncedItems.length === 0) {
+    return;
+  }
+
+  // Send to server
+  const response = await fetch('/api/sync/push', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ items: unsyncedItems }),
+  });
+
+  const { accepted, conflicts } = await response.json();
+
+  // Mark accepted items as synced
+  db.transaction(() => {
+    for (const id of accepted) {
+      markAsSynced(id);
     }
 
-    // Send to server
-    const response = await fetch('/api/sync/push', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({ items: unsyncedItems })
-    });
-
-    const { accepted, conflicts } = await response.json();
-
-    // Mark accepted items as synced
-    db.transaction(() => {
-        for (const id of accepted) {
-            markAsSynced(id);
-        }
-
-        // Handle conflicts returned by server
-        for (const conflict of conflicts) {
-            handleServerConflict(conflict);
-        }
-    })();
+    // Handle conflicts returned by server
+    for (const conflict of conflicts) {
+      handleServerConflict(conflict);
+    }
+  })();
 }
 
 function markAsSynced(id) {
-    const stmt = db.prepare(`
+  const stmt = db.prepare(`
         UPDATE items
         SET dirty = 0,
             synced_at = ?
         WHERE id = ?
     `);
 
-    stmt.run(Date.now(), id);
+  stmt.run(Date.now(), id);
 
-    // Mark sync log entries as synced
-    db.prepare(`
+  // Mark sync log entries as synced
+  db.prepare(
+    `
         UPDATE sync_log
         SET synced = 1
         WHERE record_id = ? AND synced = 0
-    `).run(id);
+    `
+  ).run(id);
 }
 ```
 
@@ -375,21 +377,21 @@ function markAsSynced(id) {
 
 ```javascript
 async function sync() {
-    try {
-        console.log('Starting sync...');
+  try {
+    console.log('Starting sync...');
 
-        // 1. Pull remote changes
-        await pullChanges();
+    // 1. Pull remote changes
+    await pullChanges();
 
-        // 2. Push local changes
-        await pushChanges();
+    // 2. Push local changes
+    await pushChanges();
 
-        console.log('Sync completed successfully');
-        return { success: true };
-    } catch (error) {
-        console.error('Sync failed:', error);
-        return { success: false, error };
-    }
+    console.log('Sync completed successfully');
+    return { success: true };
+  } catch (error) {
+    console.error('Sync failed:', error);
+    return { success: false, error };
+  }
 }
 ```
 
@@ -399,14 +401,14 @@ async function sync() {
 
 ```javascript
 function resolveConflictLWW(localItem, remoteItem) {
-    if (remoteItem.updated_at > localItem.updated_at) {
-        // Remote is newer, accept remote
-        updateFromRemote(remoteItem);
-        console.log(`Conflict resolved: Accepted remote for ${localItem.id}`);
-    } else {
-        // Local is newer, keep local (will be pushed)
-        console.log(`Conflict resolved: Keeping local for ${localItem.id}`);
-    }
+  if (remoteItem.updated_at > localItem.updated_at) {
+    // Remote is newer, accept remote
+    updateFromRemote(remoteItem);
+    console.log(`Conflict resolved: Accepted remote for ${localItem.id}`);
+  } else {
+    // Local is newer, keep local (will be pushed)
+    console.log(`Conflict resolved: Keeping local for ${localItem.id}`);
+  }
 }
 ```
 
@@ -414,16 +416,16 @@ function resolveConflictLWW(localItem, remoteItem) {
 
 ```javascript
 function resolveConflictVersionVector(localItem, remoteItem) {
-    if (remoteItem.version > localItem.version) {
-        // Remote has higher version
-        updateFromRemote(remoteItem);
-    } else if (localItem.version > remoteItem.version) {
-        // Local has higher version (will be pushed)
-        return;
-    } else {
-        // Same version but different content - use timestamp
-        resolveConflictLWW(localItem, remoteItem);
-    }
+  if (remoteItem.version > localItem.version) {
+    // Remote has higher version
+    updateFromRemote(remoteItem);
+  } else if (localItem.version > remoteItem.version) {
+    // Local has higher version (will be pushed)
+    return;
+  } else {
+    // Same version but different content - use timestamp
+    resolveConflictLWW(localItem, remoteItem);
+  }
 }
 ```
 
@@ -431,16 +433,16 @@ function resolveConflictVersionVector(localItem, remoteItem) {
 
 ```javascript
 function resolveConflictMerge(localItem, remoteItem) {
-    // Merge both changes
-    const merged = {
-        id: localItem.id,
-        title: remoteItem.updated_at > localItem.updated_at ? remoteItem.title : localItem.title,
-        description: mergeText(localItem.description, remoteItem.description),
-        updated_at: Math.max(localItem.updated_at, remoteItem.updated_at),
-        version: Math.max(localItem.version, remoteItem.version) + 1
-    };
+  // Merge both changes
+  const merged = {
+    id: localItem.id,
+    title: remoteItem.updated_at > localItem.updated_at ? remoteItem.title : localItem.title,
+    description: mergeText(localItem.description, remoteItem.description),
+    updated_at: Math.max(localItem.updated_at, remoteItem.updated_at),
+    version: Math.max(localItem.version, remoteItem.version) + 1,
+  };
 
-    const stmt = db.prepare(`
+  const stmt = db.prepare(`
         UPDATE items
         SET title = ?,
             description = ?,
@@ -450,15 +452,15 @@ function resolveConflictMerge(localItem, remoteItem) {
         WHERE id = ?
     `);
 
-    stmt.run(merged.title, merged.description, merged.updated_at, merged.version, merged.id);
+  stmt.run(merged.title, merged.description, merged.updated_at, merged.version, merged.id);
 
-    console.log(`Conflict resolved: Merged changes for ${localItem.id}`);
+  console.log(`Conflict resolved: Merged changes for ${localItem.id}`);
 }
 
 function mergeText(local, remote) {
-    // Simple merge: concatenate if different
-    if (local === remote) return local;
-    return `${local}\n---\n${remote}`;
+  // Simple merge: concatenate if different
+  if (local === remote) return local;
+  return `${local}\n---\n${remote}`;
 }
 ```
 
@@ -466,38 +468,33 @@ function mergeText(local, remote) {
 
 ```javascript
 function resolveConflictUserChoice(localItem, remoteItem) {
-    // Store conflict for user to resolve
-    const stmt = db.prepare(`
+  // Store conflict for user to resolve
+  const stmt = db.prepare(`
         INSERT INTO conflicts (local_id, local_data, remote_data, created_at)
         VALUES (?, ?, ?, ?)
     `);
 
-    stmt.run(
-        localItem.id,
-        JSON.stringify(localItem),
-        JSON.stringify(remoteItem),
-        Date.now()
-    );
+  stmt.run(localItem.id, JSON.stringify(localItem), JSON.stringify(remoteItem), Date.now());
 
-    console.log(`Conflict flagged for user resolution: ${localItem.id}`);
+  console.log(`Conflict flagged for user resolution: ${localItem.id}`);
 }
 
 // Later, user resolves
 function applyUserResolution(conflictId, chosenVersion) {
-    // 'local', 'remote', or merged data
-    const conflict = db.prepare('SELECT * FROM conflicts WHERE id = ?').get(conflictId);
+  // 'local', 'remote', or merged data
+  const conflict = db.prepare('SELECT * FROM conflicts WHERE id = ?').get(conflictId);
 
-    if (chosenVersion === 'local') {
-        // Keep local, mark for push
-        db.prepare('UPDATE items SET dirty = 1 WHERE id = ?').run(conflict.local_id);
-    } else if (chosenVersion === 'remote') {
-        // Accept remote
-        const remoteData = JSON.parse(conflict.remote_data);
-        updateFromRemote(remoteData);
-    }
+  if (chosenVersion === 'local') {
+    // Keep local, mark for push
+    db.prepare('UPDATE items SET dirty = 1 WHERE id = ?').run(conflict.local_id);
+  } else if (chosenVersion === 'remote') {
+    // Accept remote
+    const remoteData = JSON.parse(conflict.remote_data);
+    updateFromRemote(remoteData);
+  }
 
-    // Remove conflict
-    db.prepare('DELETE FROM conflicts WHERE id = ?').run(conflictId);
+  // Remove conflict
+  db.prepare('DELETE FROM conflicts WHERE id = ?').run(conflictId);
 }
 ```
 
@@ -507,29 +504,29 @@ function applyUserResolution(conflictId, chosenVersion) {
 
 ```javascript
 function getDeltaSinceLastSync() {
-    const stmt = db.prepare(`
+  const stmt = db.prepare(`
         SELECT * FROM sync_log
         WHERE synced = 0
         ORDER BY timestamp ASC
     `);
 
-    return stmt.all();
+  return stmt.all();
 }
 
 function applyDelta(delta) {
-    db.transaction(() => {
-        for (const change of delta) {
-            if (change.operation === 'INSERT') {
-                const data = JSON.parse(change.data);
-                insertRemoteItem({ id: change.record_id, ...data });
-            } else if (change.operation === 'UPDATE') {
-                const data = JSON.parse(change.data);
-                updateFromRemote({ id: change.record_id, ...data });
-            } else if (change.operation === 'DELETE') {
-                deleteItem(change.record_id);
-            }
-        }
-    })();
+  db.transaction(() => {
+    for (const change of delta) {
+      if (change.operation === 'INSERT') {
+        const data = JSON.parse(change.data);
+        insertRemoteItem({ id: change.record_id, ...data });
+      } else if (change.operation === 'UPDATE') {
+        const data = JSON.parse(change.data);
+        updateFromRemote({ id: change.record_id, ...data });
+      } else if (change.operation === 'DELETE') {
+        deleteItem(change.record_id);
+      }
+    }
+  })();
 }
 ```
 
@@ -542,13 +539,13 @@ const schedule = require('node-schedule');
 
 // Sync every 5 minutes
 const job = schedule.scheduleJob('*/5 * * * *', async () => {
-    await sync();
+  await sync();
 });
 
 // Sync on network reconnection
 window.addEventListener('online', () => {
-    console.log('Network reconnected, syncing...');
-    sync();
+  console.log('Network reconnected, syncing...');
+  sync();
 });
 ```
 
@@ -560,26 +557,26 @@ import BackgroundFetch from 'react-native-background-fetch';
 
 // Monitor network changes
 NetInfo.addEventListener(state => {
-    if (state.isConnected) {
-        sync();
-    }
+  if (state.isConnected) {
+    sync();
+  }
 });
 
 // Background fetch (iOS/Android)
 BackgroundFetch.configure(
-    {
-        minimumFetchInterval: 15, // Minutes
-        stopOnTerminate: false,
-        startOnBoot: true
-    },
-    async (taskId) => {
-        console.log('[BackgroundFetch] Task:', taskId);
-        await sync();
-        BackgroundFetch.finish(taskId);
-    },
-    (error) => {
-        console.error('[BackgroundFetch] Error:', error);
-    }
+  {
+    minimumFetchInterval: 15, // Minutes
+    stopOnTerminate: false,
+    startOnBoot: true,
+  },
+  async taskId => {
+    console.log('[BackgroundFetch] Task:', taskId);
+    await sync();
+    BackgroundFetch.finish(taskId);
+  },
+  error => {
+    console.error('[BackgroundFetch] Error:', error);
+  }
 );
 ```
 
@@ -662,36 +659,36 @@ func scheduleNextSync() {
 
 ```javascript
 class SyncManager {
-    constructor() {
-        this.retryDelay = 1000; // Start with 1 second
-        this.maxRetryDelay = 60000; // Max 1 minute
-        this.retryCount = 0;
-        this.maxRetries = 5;
+  constructor() {
+    this.retryDelay = 1000; // Start with 1 second
+    this.maxRetryDelay = 60000; // Max 1 minute
+    this.retryCount = 0;
+    this.maxRetries = 5;
+  }
+
+  async syncWithRetry() {
+    try {
+      await sync();
+      this.resetRetry();
+    } catch (error) {
+      if (this.retryCount < this.maxRetries) {
+        this.retryCount++;
+        this.retryDelay = Math.min(this.retryDelay * 2, this.maxRetryDelay);
+
+        console.log(`Sync failed, retrying in ${this.retryDelay}ms (attempt ${this.retryCount})`);
+
+        setTimeout(() => this.syncWithRetry(), this.retryDelay);
+      } else {
+        console.error('Max retries reached, giving up');
+        this.resetRetry();
+      }
     }
+  }
 
-    async syncWithRetry() {
-        try {
-            await sync();
-            this.resetRetry();
-        } catch (error) {
-            if (this.retryCount < this.maxRetries) {
-                this.retryCount++;
-                this.retryDelay = Math.min(this.retryDelay * 2, this.maxRetryDelay);
-
-                console.log(`Sync failed, retrying in ${this.retryDelay}ms (attempt ${this.retryCount})`);
-
-                setTimeout(() => this.syncWithRetry(), this.retryDelay);
-            } else {
-                console.error('Max retries reached, giving up');
-                this.resetRetry();
-            }
-        }
-    }
-
-    resetRetry() {
-        this.retryCount = 0;
-        this.retryDelay = 1000;
-    }
+  resetRetry() {
+    this.retryCount = 0;
+    this.retryDelay = 1000;
+  }
 }
 ```
 
@@ -699,28 +696,28 @@ class SyncManager {
 
 ```javascript
 async function pushChangesWithPartialSuccess() {
-    const unsyncedItems = getUnsyncedItems();
-    const successfulIds = [];
-    const failedItems = [];
+  const unsyncedItems = getUnsyncedItems();
+  const successfulIds = [];
+  const failedItems = [];
 
-    for (const item of unsyncedItems) {
-        try {
-            await pushSingleItem(item);
-            successfulIds.push(item.id);
-        } catch (error) {
-            console.error(`Failed to sync item ${item.id}:`, error);
-            failedItems.push({ item, error });
-        }
+  for (const item of unsyncedItems) {
+    try {
+      await pushSingleItem(item);
+      successfulIds.push(item.id);
+    } catch (error) {
+      console.error(`Failed to sync item ${item.id}:`, error);
+      failedItems.push({ item, error });
     }
+  }
 
-    // Mark successful items as synced
-    db.transaction(() => {
-        for (const id of successfulIds) {
-            markAsSynced(id);
-        }
-    })();
+  // Mark successful items as synced
+  db.transaction(() => {
+    for (const id of successfulIds) {
+      markAsSynced(id);
+    }
+  })();
 
-    return { successfulIds, failedItems };
+  return { successfulIds, failedItems };
 }
 ```
 
@@ -730,18 +727,18 @@ async function pushChangesWithPartialSuccess() {
 
 ```javascript
 function batchInsert(items) {
-    const stmt = db.prepare(`
+  const stmt = db.prepare(`
         INSERT INTO items (id, title, description, created_at, updated_at, dirty)
         VALUES (?, ?, ?, ?, ?, 1)
     `);
 
-    const insertMany = db.transaction((items) => {
-        for (const item of items) {
-            stmt.run(item.id, item.title, item.description, item.created_at, item.updated_at);
-        }
-    });
+  const insertMany = db.transaction(items => {
+    for (const item of items) {
+      stmt.run(item.id, item.title, item.description, item.created_at, item.updated_at);
+    }
+  });
 
-    insertMany(items);
+  insertMany(items);
 }
 ```
 
@@ -749,29 +746,29 @@ function batchInsert(items) {
 
 ```javascript
 async function pullChangesWithPagination() {
-    const lastSyncAt = getLastSyncAt();
-    let page = 0;
-    const pageSize = 100;
-    let hasMore = true;
+  const lastSyncAt = getLastSyncAt();
+  let page = 0;
+  const pageSize = 100;
+  let hasMore = true;
 
-    while (hasMore) {
-        const response = await fetch(
-            `/api/sync/pull?since=${lastSyncAt}&page=${page}&limit=${pageSize}`
-        );
+  while (hasMore) {
+    const response = await fetch(
+      `/api/sync/pull?since=${lastSyncAt}&page=${page}&limit=${pageSize}`
+    );
 
-        const { items, hasMore: more, timestamp } = await response.json();
+    const { items, hasMore: more, timestamp } = await response.json();
 
-        db.transaction(() => {
-            for (const item of items) {
-                applyRemoteChange(item);
-            }
-        })();
+    db.transaction(() => {
+      for (const item of items) {
+        applyRemoteChange(item);
+      }
+    })();
 
-        hasMore = more;
-        page++;
+    hasMore = more;
+    page++;
 
-        updateLastSyncAt(timestamp);
-    }
+    updateLastSyncAt(timestamp);
+  }
 }
 ```
 
@@ -796,45 +793,45 @@ CREATE INDEX idx_items_active ON items(updated_at) WHERE deleted_at IS NULL;
 const Database = require('better-sqlite3');
 
 describe('Sync operations', () => {
-    let db;
+  let db;
 
-    beforeEach(() => {
-        db = new Database(':memory:');
-        // Initialize schema
-        initSchema(db);
-    });
+  beforeEach(() => {
+    db = new Database(':memory:');
+    // Initialize schema
+    initSchema(db);
+  });
 
-    afterEach(() => {
-        db.close();
-    });
+  afterEach(() => {
+    db.close();
+  });
 
-    it('should mark item as dirty after update', () => {
-        const id = createItem('Test', 'Description');
-        updateItem(id, { title: 'Updated' });
+  it('should mark item as dirty after update', () => {
+    const id = createItem('Test', 'Description');
+    updateItem(id, { title: 'Updated' });
 
-        const item = db.prepare('SELECT * FROM items WHERE id = ?').get(id);
-        expect(item.dirty).toBe(1);
-    });
+    const item = db.prepare('SELECT * FROM items WHERE id = ?').get(id);
+    expect(item.dirty).toBe(1);
+  });
 
-    it('should resolve conflict with LWW', () => {
-        const localItem = {
-            id: '123',
-            title: 'Local',
-            updated_at: 1000,
-            dirty: 1
-        };
+  it('should resolve conflict with LWW', () => {
+    const localItem = {
+      id: '123',
+      title: 'Local',
+      updated_at: 1000,
+      dirty: 1,
+    };
 
-        const remoteItem = {
-            id: '123',
-            title: 'Remote',
-            updated_at: 2000
-        };
+    const remoteItem = {
+      id: '123',
+      title: 'Remote',
+      updated_at: 2000,
+    };
 
-        resolveConflictLWW(localItem, remoteItem);
+    resolveConflictLWW(localItem, remoteItem);
 
-        const item = db.prepare('SELECT * FROM items WHERE id = ?').get('123');
-        expect(item.title).toBe('Remote');
-    });
+    const item = db.prepare('SELECT * FROM items WHERE id = ?').get('123');
+    expect(item.title).toBe('Remote');
+  });
 });
 ```
 
@@ -842,26 +839,26 @@ describe('Sync operations', () => {
 
 ```javascript
 describe('Full sync cycle', () => {
-    it('should sync changes between two databases', async () => {
-        const db1 = new Database('db1.db');
-        const db2 = new Database('db2.db');
+  it('should sync changes between two databases', async () => {
+    const db1 = new Database('db1.db');
+    const db2 = new Database('db2.db');
 
-        // Create item on db1
-        const id = createItem(db1, 'Item 1', 'Description');
+    // Create item on db1
+    const id = createItem(db1, 'Item 1', 'Description');
 
-        // Sync db1 to server
-        await pushChanges(db1);
+    // Sync db1 to server
+    await pushChanges(db1);
 
-        // Sync server to db2
-        await pullChanges(db2);
+    // Sync server to db2
+    await pullChanges(db2);
 
-        // Verify item exists on db2
-        const item = db2.prepare('SELECT * FROM items WHERE id = ?').get(id);
-        expect(item.title).toBe('Item 1');
+    // Verify item exists on db2
+    const item = db2.prepare('SELECT * FROM items WHERE id = ?').get(id);
+    expect(item.title).toBe('Item 1');
 
-        db1.close();
-        db2.close();
-    });
+    db1.close();
+    db2.close();
+  });
 });
 ```
 

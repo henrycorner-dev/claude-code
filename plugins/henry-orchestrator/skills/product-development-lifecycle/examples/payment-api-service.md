@@ -14,12 +14,14 @@ This example demonstrates building a payment processing API service using the he
 ## Phase 1: Strategy & Planning (Week 1)
 
 ### User Prompt
+
 ```
 Build a payment API service for subscription billing with Stripe integration.
 Need PCI compliance and high reliability.
 ```
 
 ### Command Used
+
 ```bash
 /henry-orchestrator:henry-product Payment processing API for SaaS subscriptions
 ```
@@ -27,6 +29,7 @@ Need PCI compliance and high reliability.
 ### PRD Summary
 
 **Core Features (RICE Prioritized):**
+
 1. Create/cancel subscriptions (P0)
 2. Webhook handling for payment events (P0)
 3. Usage-based billing (P1)
@@ -35,12 +38,14 @@ Need PCI compliance and high reliability.
 6. Subscription analytics (P2)
 
 **Success Metrics:**
+
 - API uptime: >99.9%
 - Response time: <200ms (95th percentile)
 - Webhook processing: <5s end-to-end
 - Zero payment data breaches
 
 **Compliance Requirements:**
+
 - PCI DSS Level 1 (using Stripe - SAQ A)
 - SOC 2 Type II (planned for year 2)
 - GDPR compliant
@@ -50,6 +55,7 @@ Need PCI compliance and high reliability.
 ## Phase 2: Design & Architecture (Week 2)
 
 ### Command Used
+
 ```bash
 /henry-orchestrator:henry-design Payment API architecture with Stripe integration
 ```
@@ -159,6 +165,7 @@ CREATE INDEX idx_webhook_events_processed ON webhook_events(processed, created_a
 ## Phase 3: Implementation (Weeks 3-8)
 
 ### Command Used
+
 ```bash
 /henry-orchestrator:henry-feature Implement payment API with Stripe
 ```
@@ -166,6 +173,7 @@ CREATE INDEX idx_webhook_events_processed ON webhook_events(processed, created_a
 ### Sprint Breakdown
 
 **Sprint 1 (Weeks 3-4): Foundation**
+
 - Project setup (TypeScript, Express, PostgreSQL)
 - Authentication (API key management)
 - Database migrations
@@ -173,12 +181,14 @@ CREATE INDEX idx_webhook_events_processed ON webhook_events(processed, created_a
 - Error handling framework
 
 **Sprint 2 (Weeks 5-6): Core Features**
+
 - Customer management endpoints
 - Subscription CRUD operations
 - Payment method management
 - Idempotency handling
 
 **Sprint 3 (Weeks 7-8): Webhooks & Reliability**
+
 - Webhook signature verification
 - Event processing queue
 - Retry logic for failed webhooks
@@ -187,16 +197,13 @@ CREATE INDEX idx_webhook_events_processed ON webhook_events(processed, created_a
 ### Key Implementation Details
 
 **Authentication Middleware:**
+
 ```typescript
 // middleware/auth.ts
 import { Request, Response, NextFunction } from 'express';
 import { ApiKey } from '../models/ApiKey';
 
-export async function authenticate(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
+export async function authenticate(req: Request, res: Response, next: NextFunction) {
   const apiKey = req.headers['x-api-key'];
 
   if (!apiKey || typeof apiKey !== 'string') {
@@ -223,6 +230,7 @@ export async function authenticate(
 ```
 
 **Subscription Creation with Idempotency:**
+
 ```typescript
 // controllers/subscriptions.ts
 import { Request, Response } from 'express';
@@ -235,14 +243,11 @@ export async function createSubscription(req: Request, res: Response) {
   const { customerId, planId, paymentMethodId } = req.body;
 
   // Idempotency key from client or generate
-  const idempotencyKey = req.headers['idempotency-key'] as string ||
-                         generateIdempotencyKey();
+  const idempotencyKey = (req.headers['idempotency-key'] as string) || generateIdempotencyKey();
 
   try {
     // Check for existing subscription with this idempotency key
-    const existing = await db.subscriptions.findByIdempotencyKey(
-      idempotencyKey
-    );
+    const existing = await db.subscriptions.findByIdempotencyKey(idempotencyKey);
     if (existing) {
       return res.status(200).json(existing); // Return cached result
     }
@@ -266,13 +271,16 @@ export async function createSubscription(req: Request, res: Response) {
     });
 
     // Create subscription in Stripe
-    const stripeSubscription = await stripe.subscriptions.create({
-      customer: customer.stripeCustomerId,
-      items: [{ price: planId }],
-      expand: ['latest_invoice.payment_intent'],
-    }, {
-      idempotencyKey, // Stripe-level idempotency
-    });
+    const stripeSubscription = await stripe.subscriptions.create(
+      {
+        customer: customer.stripeCustomerId,
+        items: [{ price: planId }],
+        expand: ['latest_invoice.payment_intent'],
+      },
+      {
+        idempotencyKey, // Stripe-level idempotency
+      }
+    );
 
     // Save to our database
     const subscription = await db.subscriptions.create({
@@ -299,6 +307,7 @@ export async function createSubscription(req: Request, res: Response) {
 ```
 
 **Webhook Handler with Queue:**
+
 ```typescript
 // controllers/webhooks.ts
 import { Request, Response } from 'express';
@@ -315,11 +324,7 @@ export async function handleStripeWebhook(req: Request, res: Response) {
 
   try {
     // Verify webhook signature (critical for security)
-    event = stripe.webhooks.constructEvent(
-      req.body,
-      signature,
-      webhookSecret
-    );
+    event = stripe.webhooks.constructEvent(req.body, signature, webhookSecret);
   } catch (err) {
     console.error('Webhook signature verification failed:', err);
     return res.status(400).send(`Webhook Error: ${err.message}`);
@@ -340,16 +345,20 @@ export async function handleStripeWebhook(req: Request, res: Response) {
   });
 
   // Add to processing queue (asynchronous)
-  await webhookQueue.add('process-webhook', {
-    eventId: event.id,
-    eventType: event.type,
-  }, {
-    attempts: 5,
-    backoff: {
-      type: 'exponential',
-      delay: 2000,
+  await webhookQueue.add(
+    'process-webhook',
+    {
+      eventId: event.id,
+      eventType: event.type,
     },
-  });
+    {
+      attempts: 5,
+      backoff: {
+        type: 'exponential',
+        delay: 2000,
+      },
+    }
+  );
 
   // Respond immediately (Stripe expects 200 within 5s)
   res.status(200).json({ received: true });
@@ -357,6 +366,7 @@ export async function handleStripeWebhook(req: Request, res: Response) {
 ```
 
 **Webhook Queue Processor:**
+
 ```typescript
 // queues/webhookQueue.ts
 import { Queue, Worker } from 'bullmq';
@@ -367,41 +377,45 @@ export const webhookQueue = new Queue('webhooks', {
   connection: redisConnection,
 });
 
-const worker = new Worker('webhooks', async (job) => {
-  const { eventId, eventType } = job.data;
+const worker = new Worker(
+  'webhooks',
+  async job => {
+    const { eventId, eventType } = job.data;
 
-  const webhookEvent = await db.webhookEvents.findByStripeEventId(eventId);
-  if (!webhookEvent) {
-    throw new Error(`Webhook event ${eventId} not found`);
+    const webhookEvent = await db.webhookEvents.findByStripeEventId(eventId);
+    if (!webhookEvent) {
+      throw new Error(`Webhook event ${eventId} not found`);
+    }
+
+    if (webhookEvent.processed) {
+      return; // Already processed
+    }
+
+    // Process based on event type
+    switch (eventType) {
+      case 'customer.subscription.updated':
+        await processSubscriptionUpdated(webhookEvent.payload);
+        break;
+      case 'customer.subscription.deleted':
+        await processSubscriptionDeleted(webhookEvent.payload);
+        break;
+      case 'invoice.payment_succeeded':
+        await processPaymentSucceeded(webhookEvent.payload);
+        break;
+      case 'invoice.payment_failed':
+        await processPaymentFailed(webhookEvent.payload);
+        break;
+      default:
+        console.log(`Unhandled event type: ${eventType}`);
+    }
+
+    // Mark as processed
+    await db.webhookEvents.markProcessed(eventId);
+  },
+  {
+    connection: redisConnection,
   }
-
-  if (webhookEvent.processed) {
-    return; // Already processed
-  }
-
-  // Process based on event type
-  switch (eventType) {
-    case 'customer.subscription.updated':
-      await processSubscriptionUpdated(webhookEvent.payload);
-      break;
-    case 'customer.subscription.deleted':
-      await processSubscriptionDeleted(webhookEvent.payload);
-      break;
-    case 'invoice.payment_succeeded':
-      await processPaymentSucceeded(webhookEvent.payload);
-      break;
-    case 'invoice.payment_failed':
-      await processPaymentFailed(webhookEvent.payload);
-      break;
-    default:
-      console.log(`Unhandled event type: ${eventType}`);
-  }
-
-  // Mark as processed
-  await db.webhookEvents.markProcessed(eventId);
-}, {
-  connection: redisConnection,
-});
+);
 
 worker.on('failed', (job, err) => {
   console.error(`Webhook processing failed for job ${job.id}:`, err);
@@ -417,6 +431,7 @@ worker.on('failed', (job, err) => {
 ### Security Implementation
 
 **PCI Compliance Measures:**
+
 - ✅ Never store card numbers (use Stripe tokens)
 - ✅ TLS 1.2+ only
 - ✅ Webhook signature verification
@@ -425,6 +440,7 @@ worker.on('failed', (job, err) => {
 - ✅ Regular security scans
 
 **Input Validation:**
+
 ```typescript
 // validation/subscriptionSchema.ts
 import { z } from 'zod';
@@ -445,6 +461,7 @@ const validated = createSubscriptionSchema.parse(req.body);
 **Test Coverage: 88%**
 
 **Unit Tests:**
+
 ```typescript
 // tests/subscriptions.test.ts
 describe('Subscription Creation', () => {
@@ -489,6 +506,7 @@ describe('Subscription Creation', () => {
 ```
 
 **Integration Tests:**
+
 ```typescript
 // tests/integration/webhook.test.ts
 describe('Webhook Processing', () => {
@@ -500,10 +518,7 @@ describe('Webhook Processing', () => {
 
     const signature = generateWebhookSignature(event);
 
-    await request(app)
-      .post('/webhooks/stripe')
-      .set('stripe-signature', signature)
-      .send(event);
+    await request(app).post('/webhooks/stripe').set('stripe-signature', signature).send(event);
 
     // Wait for queue processing
     await wait(1000);
@@ -519,6 +534,7 @@ describe('Webhook Processing', () => {
 ## Phase 4: Quality Assurance (Week 9)
 
 ### Command Used
+
 ```bash
 /henry-orchestrator:henry-review Payment API before production
 ```
@@ -526,12 +542,14 @@ describe('Webhook Processing', () => {
 ### QA Results
 
 **Functional Testing:**
+
 - ✅ All endpoints working correctly
 - ✅ Idempotency tested (duplicate requests)
 - ✅ Error handling validated
 - ✅ Edge cases covered (expired cards, insufficient funds)
 
 **Security Testing:**
+
 - ✅ No SQL injection vulnerabilities
 - ✅ Webhook signature verification working
 - ✅ API key authentication secure
@@ -539,11 +557,13 @@ describe('Webhook Processing', () => {
 - ✅ No sensitive data in logs
 
 **Performance Testing:**
+
 - ✅ API response time: 150ms avg (target: <200ms)
 - ✅ Webhook processing: 2.5s avg (target: <5s)
 - ✅ Load test: 1000 req/s sustained (no degradation)
 
 **Bugs Found:**
+
 1. ✅ Webhook retry exhaustion not alerting → Fixed
 2. ✅ Subscription cancellation not handling grace period → Fixed
 3. ✅ Rate limit counter not expiring → Fixed
@@ -553,6 +573,7 @@ describe('Webhook Processing', () => {
 ## Phase 5: Pre-Launch Audit (Week 10)
 
 ### Command Used
+
 ```bash
 /henry-orchestrator:henry-audit Payment API production readiness
 ```
@@ -560,24 +581,28 @@ describe('Webhook Processing', () => {
 ### Audit Results
 
 **Security:**
+
 - ✅ PCI DSS SAQ A compliant
 - ✅ Penetration test passed (external firm)
 - ✅ Secrets management secure (AWS Secrets Manager)
 - ✅ API key rotation implemented
 
 **Reliability:**
+
 - ✅ Database replication configured (failover <30s)
 - ✅ Redis sentinel for high availability
 - ✅ Automated backups (hourly, 30-day retention)
 - ✅ Disaster recovery plan documented
 
 **Monitoring:**
+
 - ✅ APM (Datadog) configured
 - ✅ Error tracking (Sentry)
 - ✅ Custom metrics (subscription churn, webhook latency)
 - ✅ Alerts for critical events
 
 **Documentation:**
+
 - ✅ API reference (OpenAPI/Swagger)
 - ✅ Integration guide
 - ✅ Webhook documentation
@@ -590,6 +615,7 @@ describe('Webhook Processing', () => {
 ## Phase 6: Launch (Week 11)
 
 ### Command Used
+
 ```bash
 /henry-orchestrator:henry-launch Payment API production deployment
 ```
@@ -597,17 +623,20 @@ describe('Webhook Processing', () => {
 ### Launch Execution
 
 **Deployment:**
+
 - Blue-green deployment to AWS ECS
 - Database migrations applied (zero downtime)
 - DNS cutover with 5-minute TTL
 
 **Launch Results:**
+
 - ✅ Deployment successful
 - ✅ All health checks passing
 - ✅ First production subscription created (internal test)
 - ✅ Webhooks processing correctly
 
 **Week 1 Metrics:**
+
 - Uptime: 100%
 - Avg response time: 145ms
 - Webhook processing: 1.8s avg
@@ -620,21 +649,23 @@ describe('Webhook Processing', () => {
 
 ### Metrics Tracking
 
-| Metric | Week 1 | Week 4 | Target |
-|--------|--------|--------|--------|
-| Uptime | 100% | 99.95% | >99.9% |
-| Response time (p95) | 180ms | 165ms | <200ms |
-| Webhook latency | 1.8s | 1.5s | <5s |
-| Error rate | 0.1% | 0.08% | <1% |
+| Metric              | Week 1 | Week 4 | Target |
+| ------------------- | ------ | ------ | ------ |
+| Uptime              | 100%   | 99.95% | >99.9% |
+| Response time (p95) | 180ms  | 165ms  | <200ms |
+| Webhook latency     | 1.8s   | 1.5s   | <5s    |
+| Error rate          | 0.1%   | 0.08%  | <1%    |
 
 ### Optimizations
 
 **Performance:**
+
 - Added database connection pooling tuning
 - Implemented Redis caching for customer lookups
 - Optimized webhook queue concurrency
 
 **Features Added:**
+
 - Usage-based billing (metered subscriptions)
 - Proration support for plan changes
 - Subscription pause/resume
@@ -646,6 +677,7 @@ describe('Webhook Processing', () => {
 **Timeline:** 11 weeks from concept to production launch
 
 **Final Metrics:**
+
 - ✅ 99.95% uptime (exceeded 99.9% target)
 - ✅ 165ms response time (exceeded <200ms target)
 - ✅ PCI compliant

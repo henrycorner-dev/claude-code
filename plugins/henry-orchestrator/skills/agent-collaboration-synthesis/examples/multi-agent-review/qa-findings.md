@@ -12,27 +12,28 @@ Test coverage at 65% (target: 80%). Found 6 critical test scenarios missing, pri
 
 ### Overall Coverage
 
-| Category | Coverage | Target | Status |
-|----------|----------|--------|--------|
-| Unit Tests | 72% | 80% | 🟡 Below |
-| Integration Tests | 58% | 70% | 🔴 Below |
-| E2E Tests | 45% | 60% | 🔴 Below |
-| **Overall** | **65%** | **80%** | 🔴 Below |
+| Category          | Coverage | Target  | Status   |
+| ----------------- | -------- | ------- | -------- |
+| Unit Tests        | 72%      | 80%     | 🟡 Below |
+| Integration Tests | 58%      | 70%     | 🔴 Below |
+| E2E Tests         | 45%      | 60%     | 🔴 Below |
+| **Overall**       | **65%**  | **80%** | 🔴 Below |
 
 ### Coverage by Component
 
-| Component | Lines | Branches | Functions | Status |
-|-----------|-------|----------|-----------|--------|
-| CheckoutForm | 85% | 78% | 90% | 🟢 Good |
-| PaymentProcessor | 45% | 32% | 50% | 🔴 Poor |
-| OrderValidation | 68% | 55% | 70% | 🟡 Fair |
-| CartManagement | 78% | 72% | 82% | 🟢 Good |
+| Component        | Lines | Branches | Functions | Status  |
+| ---------------- | ----- | -------- | --------- | ------- |
+| CheckoutForm     | 85%   | 78%      | 90%       | 🟢 Good |
+| PaymentProcessor | 45%   | 32%      | 50%       | 🔴 Poor |
+| OrderValidation  | 68%   | 55%      | 70%       | 🟡 Fair |
+| CartManagement   | 78%   | 72%      | 82%       | 🟢 Good |
 
 ## Missing Test Scenarios
 
 ### Critical (P0)
 
 #### 1. Authentication Edge Cases
+
 - **Category**: Security + Functional
 - **Missing tests**:
   - Session expiry during checkout
@@ -45,6 +46,7 @@ Test coverage at 65% (target: 80%). Found 6 critical test scenarios missing, pri
 - **Test file**: `tests/auth/checkout-auth.spec.ts`
 
 #### 2. Payment Processing Failures
+
 - **Category**: Integration
 - **Missing tests**:
   - Payment gateway timeout
@@ -57,6 +59,7 @@ Test coverage at 65% (target: 80%). Found 6 critical test scenarios missing, pri
 - **Test file**: `tests/payment/payment-failures.spec.ts`
 
 #### 3. Race Condition in Inventory
+
 - **Category**: Integration
 - **Missing tests**:
   - Concurrent checkouts of last item
@@ -70,6 +73,7 @@ Test coverage at 65% (target: 80%). Found 6 critical test scenarios missing, pri
 ### High (P1)
 
 #### 4. Error Recovery Flows
+
 - **Missing tests**:
   - Retry logic for API failures
   - Error message accuracy
@@ -78,6 +82,7 @@ Test coverage at 65% (target: 80%). Found 6 critical test scenarios missing, pri
 - **Effort**: 1 day
 
 #### 5. Cross-Browser Compatibility
+
 - **Missing tests**:
   - Safari payment form
   - Firefox autofill behavior
@@ -86,6 +91,7 @@ Test coverage at 65% (target: 80%). Found 6 critical test scenarios missing, pri
 - **Effort**: 1 day
 
 #### 6. Mobile Responsiveness
+
 - **Missing tests**:
   - Touch interactions on payment form
   - Mobile keyboard handling
@@ -98,6 +104,7 @@ Test coverage at 65% (target: 80%). Found 6 critical test scenarios missing, pri
 ### Manual Testing Issues
 
 #### Bug 1: Promo Code Validation
+
 - **Severity**: High
 - **Description**: Invalid promo code shows success message
 - **Steps to reproduce**:
@@ -111,6 +118,7 @@ Test coverage at 65% (target: 80%). Found 6 critical test scenarios missing, pri
 - **Status**: 🔴 Not fixed
 
 #### Bug 2: Total Calculation Error
+
 - **Severity**: Critical
 - **Description**: Tax calculation wrong for $0.00 subtotal
 - **Steps to reproduce**:
@@ -123,6 +131,7 @@ Test coverage at 65% (target: 80%). Found 6 critical test scenarios missing, pri
 - **Status**: 🔴 Not fixed
 
 #### Bug 3: Address Autocomplete Broken
+
 - **Severity**: Medium
 - **Description**: Address autocomplete doesn't work on mobile
 - **Browser**: Safari iOS
@@ -156,6 +165,7 @@ Test coverage at 65% (target: 80%). Found 6 critical test scenarios missing, pri
 ### Immediate Actions (P0)
 
 1. **Add authentication test suite**
+
    ```typescript
    // tests/auth/checkout-auth.spec.ts
    describe('Checkout Authentication', () => {
@@ -176,6 +186,7 @@ Test coverage at 65% (target: 80%). Found 6 critical test scenarios missing, pri
    ```
 
 2. **Add payment failure tests**
+
    ```typescript
    // tests/payment/payment-failures.spec.ts
    describe('Payment Failures', () => {
@@ -222,6 +233,7 @@ Test coverage at 65% (target: 80%). Found 6 critical test scenarios missing, pri
 ## Success Metrics
 
 After fixes, we should achieve:
+
 - ✅ 80%+ test coverage
 - ✅ All auth flows have security tests
 - ✅ 0 critical/high severity bugs
@@ -231,10 +243,12 @@ After fixes, we should achieve:
 ## Dependencies
 
 ### Blocked by Security Team
+
 - Auth edge case tests require security review
 - Payment failure scenarios need threat model
 
 ### Blocking Deployment
+
 - Authentication test suite (P0)
 - Payment failure tests (P0)
 - Bug fixes for promo code and tax calculation

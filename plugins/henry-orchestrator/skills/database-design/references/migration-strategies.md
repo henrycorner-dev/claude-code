@@ -21,6 +21,7 @@ This reference provides detailed guidance on database migrations, zero-downtime 
 ### What Are Migrations?
 
 Migrations are version-controlled, incremental changes to database schema. They allow teams to:
+
 - Track schema evolution over time
 - Reproduce schema across environments
 - Coordinate schema changes with application code
@@ -29,6 +30,7 @@ Migrations are version-controlled, incremental changes to database schema. They 
 ### Migration File Structure
 
 **Timestamp-based naming:**
+
 ```
 20240115120000_create_users_table.sql
 20240115130000_add_email_to_users.sql
@@ -36,6 +38,7 @@ Migrations are version-controlled, incremental changes to database schema. They 
 ```
 
 **Basic migration template:**
+
 ```sql
 -- migrate:up
 CREATE TABLE users (
@@ -51,11 +54,13 @@ DROP TABLE users;
 ### Migration States
 
 Migrations have three states:
+
 1. **Pending:** Not yet applied to database
 2. **Applied:** Successfully executed
 3. **Failed:** Execution encountered error
 
 **Tracking table:**
+
 ```sql
 CREATE TABLE schema_migrations (
     version VARCHAR(255) PRIMARY KEY,
@@ -70,6 +75,7 @@ CREATE TABLE schema_migrations (
 ### Adding a Column (Safe)
 
 **Without default:**
+
 ```sql
 -- migrate:up
 ALTER TABLE users ADD COLUMN bio TEXT;
@@ -79,6 +85,7 @@ ALTER TABLE users DROP COLUMN bio;
 ```
 
 **With default value:**
+
 ```sql
 -- migrate:up
 ALTER TABLE users ADD COLUMN is_active BOOLEAN DEFAULT true NOT NULL;
@@ -92,6 +99,7 @@ ALTER TABLE users DROP COLUMN is_active;
 ### Adding an Index (Mostly Safe)
 
 **Regular index (blocks writes):**
+
 ```sql
 -- migrate:up
 CREATE INDEX idx_users_email ON users(email);
@@ -101,6 +109,7 @@ DROP INDEX idx_users_email;
 ```
 
 **Concurrent index (PostgreSQL - doesn't block):**
+
 ```sql
 -- migrate:up
 CREATE INDEX CONCURRENTLY idx_users_email ON users(email);
@@ -132,6 +141,7 @@ DROP TABLE posts;
 ### Adding a Non-Null Constraint (Two Steps)
 
 **Step 1: Add column as nullable**
+
 ```sql
 -- migrate:up
 ALTER TABLE users ADD COLUMN email VARCHAR(255);
@@ -143,6 +153,7 @@ ALTER TABLE users DROP COLUMN email;
 **Step 2: Deploy application code that populates email**
 
 **Step 3: Make column NOT NULL**
+
 ```sql
 -- migrate:up
 ALTER TABLE users ALTER COLUMN email SET NOT NULL;
@@ -160,6 +171,7 @@ ALTER TABLE users ALTER COLUMN email DROP NOT NULL;
 **Problem:** Application may still be reading this column.
 
 **Safe approach:**
+
 1. Deploy code that stops reading the column
 2. Wait for all old code to be retired
 3. Drop the column in a later migration
@@ -182,6 +194,7 @@ ALTER TABLE users ADD COLUMN deprecated_field VARCHAR(255);
 **Safe approach (multi-phase):**
 
 **Phase 1: Add new column, backfill data**
+
 ```sql
 -- migrate:up
 ALTER TABLE users ADD COLUMN full_name VARCHAR(255);
@@ -194,6 +207,7 @@ ALTER TABLE users DROP COLUMN full_name;
 **Phase 2: Deploy code that reads from both columns, writes to both**
 
 **Phase 3: Drop old column**
+
 ```sql
 -- migrate:up
 ALTER TABLE users DROP COLUMN name;
@@ -204,6 +218,7 @@ UPDATE users SET name = full_name;
 ```
 
 **Alternative (PostgreSQL - view-based):**
+
 ```sql
 -- Create view with old column name
 CREATE VIEW users_legacy AS
@@ -217,6 +232,7 @@ SELECT id, full_name AS name, email FROM users;
 **Problem:** May require rewriting entire table, causes long locks.
 
 **Example - String to Integer:**
+
 ```sql
 -- BAD: Can lock table for hours on large tables
 ALTER TABLE products ALTER COLUMN sku TYPE INTEGER USING sku::integer;
@@ -225,6 +241,7 @@ ALTER TABLE products ALTER COLUMN sku TYPE INTEGER USING sku::integer;
 **Safe approach (multi-phase):**
 
 **Phase 1: Add new column**
+
 ```sql
 ALTER TABLE products ADD COLUMN sku_int INTEGER;
 UPDATE products SET sku_int = sku::integer WHERE sku ~ '^[0-9]+$';
@@ -233,6 +250,7 @@ UPDATE products SET sku_int = sku::integer WHERE sku ~ '^[0-9]+$';
 **Phase 2: Deploy code that reads from both, writes to both**
 
 **Phase 3: Make new column primary, drop old**
+
 ```sql
 ALTER TABLE products DROP COLUMN sku;
 ALTER TABLE products RENAME COLUMN sku_int TO sku;
@@ -243,6 +261,7 @@ ALTER TABLE products RENAME COLUMN sku_int TO sku;
 **Problem:** Validates all existing rows, can lock tables.
 
 **Fast method (PostgreSQL):**
+
 ```sql
 -- Add constraint without validation
 ALTER TABLE posts
@@ -269,6 +288,7 @@ Zero-downtime migrations require careful coordination between schema changes and
 ### Example: Adding a Required Column
 
 **Traditional approach (causes downtime):**
+
 ```sql
 ALTER TABLE users ADD COLUMN email VARCHAR(255) NOT NULL;
 -- ERROR: existing rows violate NOT NULL
@@ -277,6 +297,7 @@ ALTER TABLE users ADD COLUMN email VARCHAR(255) NOT NULL;
 **Zero-downtime approach:**
 
 **Step 1: Add nullable column with default**
+
 ```sql
 ALTER TABLE users ADD COLUMN email VARCHAR(255) DEFAULT 'noemail@example.com';
 ```
@@ -284,6 +305,7 @@ ALTER TABLE users ADD COLUMN email VARCHAR(255) DEFAULT 'noemail@example.com';
 **Step 2: Deploy code that populates email for new users**
 
 **Step 3: Backfill existing users**
+
 ```sql
 -- Run in batches to avoid long locks
 UPDATE users SET email = 'user' || id || '@example.com'
@@ -295,11 +317,13 @@ WHERE email = 'noemail@example.com' AND id BETWEEN 10001 AND 20000;
 ```
 
 **Step 4: Add NOT NULL constraint**
+
 ```sql
 ALTER TABLE users ALTER COLUMN email SET NOT NULL;
 ```
 
 **Step 5: Remove default if needed**
+
 ```sql
 ALTER TABLE users ALTER COLUMN email DROP DEFAULT;
 ```
@@ -309,6 +333,7 @@ ALTER TABLE users ALTER COLUMN email DROP DEFAULT;
 **Goal:** Split `users` into `users` and `user_profiles`.
 
 **Step 1: Create new table**
+
 ```sql
 CREATE TABLE user_profiles (
     user_id INTEGER PRIMARY KEY REFERENCES users(id),
@@ -320,6 +345,7 @@ CREATE TABLE user_profiles (
 **Step 2: Deploy code that writes to both tables**
 
 **Step 3: Backfill data**
+
 ```sql
 INSERT INTO user_profiles (user_id, bio, avatar_url)
 SELECT id, bio, avatar_url FROM users
@@ -329,6 +355,7 @@ WHERE bio IS NOT NULL OR avatar_url IS NOT NULL;
 **Step 4: Deploy code that reads from new table**
 
 **Step 5: Drop old columns**
+
 ```sql
 ALTER TABLE users DROP COLUMN bio;
 ALTER TABLE users DROP COLUMN avatar_url;
@@ -347,6 +374,7 @@ ALTER TABLE users DROP COLUMN avatar_url;
 ### When Rollbacks Fail
 
 **Scenario 1: Data was deleted**
+
 ```sql
 -- migrate:up
 ALTER TABLE users DROP COLUMN phone;
@@ -359,6 +387,7 @@ ALTER TABLE users ADD COLUMN phone VARCHAR(20);
 **Solution:** Backup before risky migrations.
 
 **Scenario 2: Migration partially applied**
+
 ```sql
 -- migrate:up
 CREATE TABLE orders (...);
@@ -367,6 +396,7 @@ CREATE INDEX idx_orders_user (user_id);
 ```
 
 **Solution:** Wrap migrations in transactions when possible.
+
 ```sql
 BEGIN;
 CREATE TABLE orders (...);
@@ -414,12 +444,14 @@ ALTER TABLE users DROP COLUMN full_name;
 Run data migration separately from schema migration.
 
 **Schema migration:**
+
 ```sql
 -- 20240115_add_full_name.sql
 ALTER TABLE users ADD COLUMN full_name VARCHAR(255);
 ```
 
 **Data migration script:**
+
 ```ruby
 # backfill_full_name.rb
 User.find_in_batches(batch_size: 1000) do |batch|
@@ -467,11 +499,13 @@ END $$;
 ### Rails (Active Record)
 
 **Generate migration:**
+
 ```bash
 rails generate migration AddEmailToUsers email:string
 ```
 
 **Migration file:**
+
 ```ruby
 class AddEmailToUsers < ActiveRecord::Migration[7.0]
   def change
@@ -482,16 +516,19 @@ end
 ```
 
 **Run migration:**
+
 ```bash
 rails db:migrate
 ```
 
 **Rollback:**
+
 ```bash
 rails db:rollback
 ```
 
 **Disable DDL transactions (for concurrent indexes):**
+
 ```ruby
 class AddIndexToUsers < ActiveRecord::Migration[7.0]
   disable_ddl_transaction!
@@ -505,11 +542,13 @@ end
 ### Django
 
 **Create migration:**
+
 ```bash
 python manage.py makemigrations
 ```
 
 **Migration file:**
+
 ```python
 from django.db import migrations, models
 
@@ -528,11 +567,13 @@ class Migration(migrations.Migration):
 ```
 
 **Run migration:**
+
 ```bash
 python manage.py migrate
 ```
 
 **Data migration:**
+
 ```python
 from django.db import migrations
 
@@ -555,30 +596,33 @@ class Migration(migrations.Migration):
 ### Node.js (TypeORM)
 
 **Generate migration:**
+
 ```bash
 typeorm migration:create -n AddEmailToUsers
 ```
 
 **Migration file:**
+
 ```typescript
-import { MigrationInterface, QueryRunner } from "typeorm";
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class AddEmailToUsers1642234567890 implements MigrationInterface {
-    public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`
             ALTER TABLE users ADD COLUMN email VARCHAR(255)
         `);
-    }
+  }
 
-    public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`
             ALTER TABLE users DROP COLUMN email
         `);
-    }
+  }
 }
 ```
 
 **Run migration:**
+
 ```bash
 typeorm migration:run
 ```
@@ -586,6 +630,7 @@ typeorm migration:run
 ### Prisma
 
 **Update schema file:**
+
 ```prisma
 model User {
   id    Int     @id @default(autoincrement())
@@ -595,11 +640,13 @@ model User {
 ```
 
 **Create migration:**
+
 ```bash
 prisma migrate dev --name add_email_to_users
 ```
 
 **Deploy to production:**
+
 ```bash
 prisma migrate deploy
 ```
@@ -607,23 +654,27 @@ prisma migrate deploy
 ### golang-migrate
 
 **Create migration:**
+
 ```bash
 migrate create -ext sql -dir db/migrations -seq add_email_to_users
 ```
 
 **Up migration (000001_add_email_to_users.up.sql):**
+
 ```sql
 ALTER TABLE users ADD COLUMN email VARCHAR(255);
 CREATE INDEX idx_users_email ON users(email);
 ```
 
 **Down migration (000001_add_email_to_users.down.sql):**
+
 ```sql
 DROP INDEX idx_users_email;
 ALTER TABLE users DROP COLUMN email;
 ```
 
 **Run migration:**
+
 ```bash
 migrate -path db/migrations -database postgres://localhost/mydb up
 ```
@@ -651,6 +702,7 @@ rails db:schema:dump
 ### Test with Production Data
 
 **Copy production data to staging:**
+
 ```bash
 # Export production schema and sample data
 pg_dump -h prod.example.com -U user -d proddb --schema-only > schema.sql
@@ -675,6 +727,7 @@ ALTER TABLE users ADD COLUMN email VARCHAR(255);
 ```
 
 **Estimate table lock time:**
+
 ```sql
 EXPLAIN ANALYZE
 ALTER TABLE users ADD COLUMN email VARCHAR(255) DEFAULT 'noemail@example.com';
@@ -683,6 +736,7 @@ ALTER TABLE users ADD COLUMN email VARCHAR(255) DEFAULT 'noemail@example.com';
 ### Test with Large Datasets
 
 Create test data to simulate production:
+
 ```sql
 -- Generate 1 million test users
 INSERT INTO users (username, created_at)
@@ -774,6 +828,7 @@ DROP TABLE users_old;
 For very large tables, use specialized tools:
 
 **gh-ost (GitHub):**
+
 ```bash
 gh-ost \
   --user="root" \
@@ -786,6 +841,7 @@ gh-ost \
 ```
 
 **pt-online-schema-change (Percona):**
+
 ```bash
 pt-online-schema-change \
   --alter "ADD COLUMN email VARCHAR(255)" \
@@ -794,6 +850,7 @@ pt-online-schema-change \
 ```
 
 These tools:
+
 - Create shadow table with changes
 - Copy data in chunks
 - Swap tables atomically
@@ -802,6 +859,7 @@ These tools:
 ### Blue-Green Database Migrations
 
 For critical migrations:
+
 1. Duplicate production database to "green"
 2. Apply migration to green
 3. Deploy application pointing to green
@@ -867,6 +925,7 @@ Always test that `down` migration works before production.
 ## Summary
 
 **Golden Rules:**
+
 1. **Always backup before migrations**
 2. **Test in staging with production-like data**
 3. **Use transactions when possible**

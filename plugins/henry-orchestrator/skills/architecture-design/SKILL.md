@@ -36,12 +36,14 @@ Use this skill when:
 Before designing architecture, gather and clarify:
 
 **Functional Requirements:**
+
 - Core features and capabilities needed
 - User workflows and interactions
 - Integration requirements with external systems
 - Data models and relationships
 
 **Non-Functional Requirements:**
+
 - Expected scale (users, requests, data volume)
 - Performance requirements (latency, throughput)
 - Availability and reliability targets
@@ -56,6 +58,7 @@ Select the appropriate pattern based on requirements:
 #### Monolith
 
 **When to choose:**
+
 - Small to medium applications with clear bounded scope
 - Small development teams (1-5 developers)
 - Simple deployment requirements
@@ -63,6 +66,7 @@ Select the appropriate pattern based on requirements:
 - Limited microservices expertise
 
 **Trade-offs:**
+
 - ✅ Simpler development and debugging
 - ✅ Easier deployment and operations
 - ✅ Better performance (no network overhead)
@@ -74,6 +78,7 @@ Select the appropriate pattern based on requirements:
 #### Microservices
 
 **When to choose:**
+
 - Large, complex applications with distinct domains
 - Multiple teams working independently
 - Need for independent scaling of components
@@ -81,6 +86,7 @@ Select the appropriate pattern based on requirements:
 - High availability and fault isolation needs
 
 **Trade-offs:**
+
 - ✅ Independent deployment and scaling
 - ✅ Technology flexibility per service
 - ✅ Team autonomy and parallel development
@@ -93,12 +99,14 @@ Select the appropriate pattern based on requirements:
 #### Modular Monolith (Hybrid)
 
 **When to choose:**
+
 - Starting small but anticipating growth
 - Want architectural flexibility without microservices complexity
 - Clear domain boundaries within single deployment
 - Potential future migration to microservices
 
 **Trade-offs:**
+
 - ✅ Clean separation of concerns
 - ✅ Easier migration path to microservices
 - ✅ Simpler operations than microservices
@@ -111,24 +119,28 @@ Select the appropriate pattern based on requirements:
 #### Database Selection
 
 **Relational (PostgreSQL, MySQL):**
+
 - Structured data with clear relationships
 - ACID transaction requirements
 - Complex queries and joins
 - Strong consistency needs
 
 **Document (MongoDB, Firestore):**
+
 - Flexible schema requirements
 - Hierarchical or nested data
 - Rapid iteration on data models
 - Horizontal scaling needs
 
 **Key-Value (Redis, DynamoDB):**
+
 - Simple data access patterns (get/set)
 - High-performance caching
 - Session storage
 - Real-time features
 
 **Graph (Neo4j, Neptune):**
+
 - Complex relationship queries
 - Social networks
 - Recommendation engines
@@ -137,17 +149,20 @@ Select the appropriate pattern based on requirements:
 #### Data Flow Patterns
 
 **Synchronous (Request/Response):**
+
 - User-facing operations requiring immediate response
 - Simple workflows
 - Strong consistency requirements
 
 **Asynchronous (Message Queues):**
+
 - Background processing
 - Decoupling services
 - Handling traffic spikes
 - Reliable delivery guarantees
 
 **Event-Driven:**
+
 - Real-time updates
 - Complex workflows with multiple handlers
 - Audit trails and event sourcing
@@ -158,12 +173,14 @@ Select the appropriate pattern based on requirements:
 #### Frontend
 
 **Considerations:**
+
 - User experience requirements (responsiveness, interactivity)
 - Team expertise
 - SEO requirements
 - Mobile vs. web vs. both
 
 **Common choices:**
+
 - React: Large ecosystem, flexible, component-based
 - Vue: Gentle learning curve, progressive framework
 - Angular: Full-featured, enterprise-focused
@@ -173,12 +190,14 @@ Select the appropriate pattern based on requirements:
 #### Backend
 
 **Considerations:**
+
 - Performance requirements
 - Development speed
 - Team expertise
 - Ecosystem and libraries
 
 **Common choices:**
+
 - Node.js: JavaScript everywhere, async I/O, large ecosystem
 - Python: Rapid development, ML/data science integration
 - Go: High performance, built for concurrency
@@ -188,12 +207,14 @@ Select the appropriate pattern based on requirements:
 #### Infrastructure
 
 **Considerations:**
+
 - Operational expertise
 - Cost constraints
 - Scaling requirements
 - Deployment frequency
 
 **Common choices:**
+
 - Cloud providers: AWS, GCP, Azure
 - Container orchestration: Kubernetes, ECS, Cloud Run
 - Serverless: Lambda, Cloud Functions, Vercel
@@ -204,24 +225,28 @@ Select the appropriate pattern based on requirements:
 Design approaches for:
 
 **Authentication & Authorization:**
+
 - OAuth2/OIDC for federated identity
 - JWT for stateless authentication
 - RBAC or ABAC for authorization
 - Session management strategy
 
 **Observability:**
+
 - Structured logging (JSON format)
 - Metrics collection (Prometheus, CloudWatch)
 - Distributed tracing (OpenTelemetry)
 - Error tracking (Sentry, Rollbar)
 
 **Reliability:**
+
 - Retry mechanisms with exponential backoff
 - Circuit breakers for external dependencies
 - Graceful degradation strategies
 - Health checks and readiness probes
 
 **Security:**
+
 - Input validation and sanitization
 - SQL injection prevention
 - XSS protection
@@ -233,19 +258,24 @@ Design approaches for:
 Document architectural decisions using:
 
 **Architecture Decision Records (ADRs):**
+
 ```markdown
 # ADR-001: Use PostgreSQL for Primary Database
 
 ## Status
+
 Accepted
 
 ## Context
+
 Need to select primary database for user data, transactions, and reporting.
 
 ## Decision
+
 Use PostgreSQL as primary relational database.
 
 ## Consequences
+
 ✅ Strong ACID guarantees
 ✅ Rich query capabilities
 ✅ JSON support for flexible data
@@ -254,11 +284,13 @@ Use PostgreSQL as primary relational database.
 ```
 
 **Component Diagrams:**
+
 - System context diagram (external interactions)
 - Container diagram (high-level components)
 - Component diagram (internal structure)
 
 **Data Flow Diagrams:**
+
 - Request/response flows
 - Background job flows
 - Event propagation paths
@@ -286,12 +318,14 @@ Use PostgreSQL as primary relational database.
 When evolving architecture:
 
 **Monolith to Microservices:**
+
 1. Identify bounded contexts
 2. Extract one service at a time
 3. Use strangler fig pattern
 4. Start with least coupled components
 
 **Technology Stack Changes:**
+
 1. Implement new tech alongside old
 2. Route percentage of traffic to new stack
 3. Monitor and compare performance
@@ -303,6 +337,7 @@ When evolving architecture:
 ### Reference Files
 
 For detailed patterns and guidance:
+
 - **`references/patterns.md`** - Detailed architectural patterns with trade-offs
 - **`references/tech-stack-guide.md`** - Technology selection decision trees
 - **`references/scalability.md`** - Scaling strategies and performance optimization
@@ -310,6 +345,7 @@ For detailed patterns and guidance:
 ### Example Files
 
 Working examples in `examples/`:
+
 - **`examples/adr-template.md`** - Architecture Decision Record template
 - **`examples/monolith-structure.md`** - Example monolith project structure
 - **`examples/microservices-structure.md`** - Example microservices organization

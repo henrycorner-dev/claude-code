@@ -5,6 +5,7 @@ This reference provides comprehensive guidance on reducing JavaScript bundle siz
 ## Why Code Splitting Matters
 
 **Problem Without Code Splitting:**
+
 ```
 bundle.js (2.5 MB)
 └── All application code loaded upfront
@@ -16,12 +17,14 @@ bundle.js (2.5 MB)
 ```
 
 **Impact:**
+
 - Slow initial page load (parse + execute 2.5 MB JavaScript)
 - Poor Time to Interactive (TTI)
 - Wasted bandwidth for unused code
 - Poor mobile experience
 
 **With Code Splitting:**
+
 ```
 main.js (200 KB) - Core + Homepage
 dashboard.js (300 KB) - Loaded on dashboard route
@@ -30,6 +33,7 @@ vendors.js (400 KB) - Shared third-party libraries
 ```
 
 **Benefits:**
+
 - Fast initial load (only 600 KB)
 - Improved TTI and FCP
 - Parallel loading
@@ -42,24 +46,27 @@ vendors.js (400 KB) - Shared third-party libraries
 Manually configure multiple entry points.
 
 **webpack.config.js:**
+
 ```javascript
 module.exports = {
   entry: {
     main: './src/index.js',
-    admin: './src/admin.js'
+    admin: './src/admin.js',
   },
   output: {
     filename: '[name].[contenthash].js',
-    path: path.resolve(__dirname, 'dist')
-  }
+    path: path.resolve(__dirname, 'dist'),
+  },
 };
 ```
 
 **Use case:**
+
 - Completely separate applications (e.g., user-facing + admin panel)
 - Multiple HTML pages
 
 **Trade-offs:**
+
 - Manual configuration
 - Potential code duplication
 - Less automatic optimization
@@ -69,6 +76,7 @@ module.exports = {
 Load code on-demand using dynamic `import()`.
 
 **Basic Dynamic Import:**
+
 ```javascript
 // Before
 import { heavy } from './heavy-module';
@@ -83,11 +91,13 @@ button.addEventListener('click', async () => {
 ```
 
 **Webpack automatically:**
+
 1. Creates separate chunk for `heavy-module.js`
 2. Loads chunk when `import()` is called
 3. Caches chunk for subsequent imports
 
 **Route-Based Splitting (React Router):**
+
 ```javascript
 import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -113,6 +123,7 @@ function App() {
 ```
 
 **Component-Based Splitting:**
+
 ```javascript
 import { lazy, Suspense } from 'react';
 
@@ -138,6 +149,7 @@ function Dashboard() {
 ```
 
 **Named Exports with Dynamic Imports:**
+
 ```javascript
 // Import specific exports
 const { calculate } = await import('./math-utils');
@@ -152,6 +164,7 @@ const result = module.default();
 Automatic code splitting with intelligent chunk optimization.
 
 **webpack.config.js:**
+
 ```javascript
 module.exports = {
   optimization: {
@@ -163,22 +176,23 @@ module.exports = {
           test: /[\\/]node_modules[\\/]/,
           name: 'vendors',
           priority: 10,
-          reuseExistingChunk: true
+          reuseExistingChunk: true,
         },
         // Separate common code shared across chunks
         common: {
           minChunks: 2, // Module must be shared by at least 2 chunks
           name: 'common',
           priority: 5,
-          reuseExistingChunk: true
-        }
-      }
-    }
-  }
+          reuseExistingChunk: true,
+        },
+      },
+    },
+  },
 };
 ```
 
 **Advanced Configuration:**
+
 ```javascript
 module.exports = {
   optimization: {
@@ -194,32 +208,33 @@ module.exports = {
         reactVendor: {
           test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
           name: 'react-vendor',
-          priority: 20
+          priority: 20,
         },
         utilityVendor: {
           test: /[\\/]node_modules[\\/](lodash|moment|date-fns)[\\/]/,
           name: 'utility-vendor',
-          priority: 15
+          priority: 15,
         },
         defaultVendors: {
           test: /[\\/]node_modules[\\/]/,
           name: 'vendors',
-          priority: 10
+          priority: 10,
         },
         // Split CSS
         styles: {
           name: 'styles',
           test: /\.css$/,
           chunks: 'all',
-          enforce: true
-        }
-      }
-    }
-  }
+          enforce: true,
+        },
+      },
+    },
+  },
 };
 ```
 
 **Result:**
+
 ```
 dist/
 ├── main.[hash].js (50 KB) - Application code
@@ -234,6 +249,7 @@ dist/
 ### React.lazy + Suspense
 
 **Basic Usage:**
+
 ```javascript
 import { lazy, Suspense } from 'react';
 
@@ -249,6 +265,7 @@ function App() {
 ```
 
 **Multiple Lazy Components:**
+
 ```javascript
 const Header = lazy(() => import('./Header'));
 const Sidebar = lazy(() => import('./Sidebar'));
@@ -268,6 +285,7 @@ function App() {
 ```
 
 **Nested Suspense Boundaries:**
+
 ```javascript
 function App() {
   return (
@@ -337,6 +355,7 @@ function App() {
 Prefetch chunks before user navigates to improve perceived performance.
 
 **Prefetch on Hover:**
+
 ```javascript
 import { lazy, Suspense, useState } from 'react';
 
@@ -375,29 +394,25 @@ function App() {
 ```
 
 **Webpack Magic Comments:**
+
 ```javascript
 // Prefetch (load during browser idle time)
-const Dashboard = lazy(() =>
-  import(/* webpackPrefetch: true */ './Dashboard')
-);
+const Dashboard = lazy(() => import(/* webpackPrefetch: true */ './Dashboard'));
 
 // Preload (load in parallel with parent chunk)
-const CriticalComponent = lazy(() =>
-  import(/* webpackPreload: true */ './CriticalComponent')
-);
+const CriticalComponent = lazy(() => import(/* webpackPreload: true */ './CriticalComponent'));
 
 // Custom chunk name
-const Admin = lazy(() =>
-  import(/* webpackChunkName: "admin-panel" */ './Admin')
-);
+const Admin = lazy(() => import(/* webpackChunkName: "admin-panel" */ './Admin'));
 
 // Combine multiple comments
-const Profile = lazy(() =>
-  import(
-    /* webpackChunkName: "profile" */
-    /* webpackPrefetch: true */
-    './Profile'
-  )
+const Profile = lazy(
+  () =>
+    import(
+      /* webpackChunkName: "profile" */
+      /* webpackPrefetch: true */
+      './Profile'
+    )
 );
 ```
 
@@ -406,15 +421,14 @@ const Profile = lazy(() =>
 ### Async Components
 
 **Basic Async Component:**
+
 ```javascript
 import { defineAsyncComponent } from 'vue';
 
 export default {
   components: {
     // Simple async component
-    AsyncComponent: defineAsyncComponent(() =>
-      import('./components/AsyncComponent.vue')
-    ),
+    AsyncComponent: defineAsyncComponent(() => import('./components/AsyncComponent.vue')),
 
     // With loading and error states
     AsyncComponentWithOptions: defineAsyncComponent({
@@ -422,15 +436,16 @@ export default {
       loadingComponent: LoadingSpinner,
       errorComponent: ErrorComponent,
       delay: 200, // Show loading after 200ms
-      timeout: 3000 // Show error after 3s
-    })
-  }
+      timeout: 3000, // Show error after 3s
+    }),
+  },
 };
 ```
 
 ### Vue Router Lazy Loading
 
 **Route-Based Splitting:**
+
 ```javascript
 import { createRouter, createWebHistory } from 'vue-router';
 
@@ -438,32 +453,34 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: () => import('./views/Home.vue')
+    component: () => import('./views/Home.vue'),
   },
   {
     path: '/dashboard',
     name: 'Dashboard',
-    component: () => import('./views/Dashboard.vue')
+    component: () => import('./views/Dashboard.vue'),
   },
   {
     path: '/admin',
     name: 'Admin',
-    component: () => import(
-      /* webpackChunkName: "admin" */
-      './views/Admin.vue'
-    )
-  }
+    component: () =>
+      import(
+        /* webpackChunkName: "admin" */
+        './views/Admin.vue'
+      ),
+  },
 ];
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes,
 });
 
 export default router;
 ```
 
 **Grouping Components:**
+
 ```javascript
 // Components with same chunk name are bundled together
 const UserProfile = () => import(/* webpackChunkName: "user" */ './UserProfile.vue');
@@ -491,13 +508,14 @@ Each page is automatically split into its own chunk.
 ### Dynamic Imports with next/dynamic
 
 **Client-Side Only Components:**
+
 ```javascript
 import dynamic from 'next/dynamic';
 
 // Component only loads on client (SSR disabled)
 const DynamicComponent = dynamic(() => import('../components/Heavy'), {
   ssr: false,
-  loading: () => <Spinner />
+  loading: () => <Spinner />,
 });
 
 export default function Page() {
@@ -510,21 +528,19 @@ export default function Page() {
 ```
 
 **Named Exports:**
+
 ```javascript
-const DynamicHeader = dynamic(() =>
-  import('../components/Layout').then(mod => mod.Header)
-);
+const DynamicHeader = dynamic(() => import('../components/Layout').then(mod => mod.Header));
 ```
 
 **Conditional Loading:**
+
 ```javascript
 export default function Dashboard() {
   const [showChart, setShowChart] = useState(false);
 
   // Only import when needed
-  const Chart = showChart
-    ? dynamic(() => import('../components/Chart'))
-    : null;
+  const Chart = showChart ? dynamic(() => import('../components/Chart')) : null;
 
   return (
     <div>
@@ -556,6 +572,7 @@ const result = debounce(fn);
 Tell webpack which files have side effects.
 
 **package.json:**
+
 ```json
 {
   "name": "my-library",
@@ -564,13 +581,10 @@ Tell webpack which files have side effects.
 ```
 
 **With exceptions:**
+
 ```json
 {
-  "sideEffects": [
-    "*.css",
-    "*.scss",
-    "./src/polyfills.js"
-  ]
+  "sideEffects": ["*.css", "*.scss", "./src/polyfills.js"]
 }
 ```
 
@@ -582,8 +596,8 @@ module.exports = {
   mode: 'production', // Enables tree shaking and minification
   optimization: {
     usedExports: true, // Mark unused exports
-    minimize: true // Remove unused code
-  }
+    minimize: true, // Remove unused code
+  },
 };
 ```
 
@@ -606,11 +620,13 @@ import debounce from 'lodash/debounce';
 ### Webpack Bundle Analyzer
 
 **Install:**
+
 ```bash
 npm install --save-dev webpack-bundle-analyzer
 ```
 
 **webpack.config.js:**
+
 ```javascript
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
@@ -619,19 +635,21 @@ module.exports = {
     new BundleAnalyzerPlugin({
       analyzerMode: 'static', // Generates HTML file
       openAnalyzer: true,
-      reportFilename: 'bundle-report.html'
-    })
-  ]
+      reportFilename: 'bundle-report.html',
+    }),
+  ],
 };
 ```
 
 **Run:**
+
 ```bash
 npm run build
 # Opens interactive treemap of bundle
 ```
 
 **Interpret Results:**
+
 - Large boxes = large modules (optimization targets)
 - Duplicate modules = potential for code splitting
 - Unexpected modules = check why they're included
@@ -639,11 +657,13 @@ npm run build
 ### Source Map Explorer
 
 **Install:**
+
 ```bash
 npm install --save-dev source-map-explorer
 ```
 
 **package.json:**
+
 ```json
 {
   "scripts": {
@@ -653,6 +673,7 @@ npm install --save-dev source-map-explorer
 ```
 
 **Run:**
+
 ```bash
 npm run build
 npm run analyze
@@ -661,14 +682,16 @@ npm run analyze
 ### Next.js Bundle Analyzer
 
 **Install:**
+
 ```bash
 npm install @next/bundle-analyzer
 ```
 
 **next.config.js:**
+
 ```javascript
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true'
+  enabled: process.env.ANALYZE === 'true',
 });
 
 module.exports = withBundleAnalyzer({
@@ -677,6 +700,7 @@ module.exports = withBundleAnalyzer({
 ```
 
 **Analyze:**
+
 ```bash
 ANALYZE=true npm run build
 ```
@@ -686,17 +710,19 @@ ANALYZE=true npm run build
 Set maximum bundle sizes to prevent regressions.
 
 **webpack.config.js:**
+
 ```javascript
 module.exports = {
   performance: {
     maxAssetSize: 244000, // 244 KB per asset
     maxEntrypointSize: 244000, // 244 KB per entry point
-    hints: 'error' // Fail build if exceeded
-  }
+    hints: 'error', // Fail build if exceeded
+  },
 };
 ```
 
 **Next.js (next.config.js):**
+
 ```javascript
 module.exports = {
   webpack: (config, { isServer }) => {
@@ -704,11 +730,11 @@ module.exports = {
       config.performance = {
         maxAssetSize: 244000,
         maxEntrypointSize: 244000,
-        hints: 'error'
+        hints: 'error',
       };
     }
     return config;
-  }
+  },
 };
 ```
 
@@ -717,6 +743,7 @@ module.exports = {
 ### Route-Based Splitting
 
 **DO:**
+
 ```javascript
 // Split each route
 const Home = lazy(() => import('./pages/Home'));
@@ -729,6 +756,7 @@ const Admin = lazy(() => import('./pages/Admin'));
 ### Component-Based Splitting
 
 **DO:**
+
 ```javascript
 // Split large, conditionally-rendered components
 const HeavyChart = lazy(() => import('./components/Chart'));
@@ -737,6 +765,7 @@ const CodeEditor = lazy(() => import('./components/CodeEditor'));
 ```
 
 **DON'T:**
+
 ```javascript
 // Don't split small components
 const Button = lazy(() => import('./components/Button')); // Overkill
@@ -747,6 +776,7 @@ const Button = lazy(() => import('./components/Button')); // Overkill
 ### Vendor Splitting
 
 **DO:**
+
 ```javascript
 // Separate stable vendor dependencies
 optimization: {
@@ -767,6 +797,7 @@ optimization: {
 ### Prefetching/Preloading
 
 **DO:**
+
 ```javascript
 // Prefetch likely next page on link hover
 <Link to="/dashboard" onMouseEnter={prefetchDashboard}>
@@ -775,11 +806,10 @@ optimization: {
 ```
 
 **DON'T:**
+
 ```javascript
 // Don't preload everything
-const Everything = lazy(() =>
-  import(/* webpackPreload: true */ './Everything')
-);
+const Everything = lazy(() => import(/* webpackPreload: true */ './Everything'));
 ```
 
 **Reasoning:** Prefetch strategically, not aggressively.
@@ -787,6 +817,7 @@ const Everything = lazy(() =>
 ### Error Handling
 
 **DO:**
+
 ```javascript
 <ErrorBoundary>
   <Suspense fallback={<Spinner />}>
@@ -820,6 +851,7 @@ const LazyComponent = lazy(() => import('./Heavy'));
 ```
 
 **Fix:**
+
 ```javascript
 <Suspense fallback={<Spinner />}>
   <LazyComponent />
@@ -879,6 +911,7 @@ Zero configuration required.
 ## Summary
 
 **Key Takeaways:**
+
 1. Split by routes first (biggest impact, easiest to implement)
 2. Split large components that are conditionally rendered
 3. Separate vendor dependencies for better caching
@@ -888,6 +921,7 @@ Zero configuration required.
 7. Don't over-split (creates more problems than it solves)
 
 **Prioritization:**
+
 1. Route-based splitting (high impact, low effort)
 2. Vendor splitting (medium impact, low effort)
 3. Component splitting (medium impact, medium effort)

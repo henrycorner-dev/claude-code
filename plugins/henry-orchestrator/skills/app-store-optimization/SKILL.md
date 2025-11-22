@@ -72,6 +72,7 @@ Android indexes all visible text, requiring natural keyword integration:
 5. Track rankings weekly and iterate
 
 Use `scripts/keyword-analyzer.py` to check keyword density:
+
 ```bash
 python scripts/keyword-analyzer.py description.txt --keywords "meditation,mindfulness,sleep"
 ```
@@ -88,6 +89,7 @@ python scripts/keyword-analyzer.py description.txt --keywords "meditation,mindfu
 - Test in grayscale to verify contrast
 
 **Technical Specs:**
+
 - iOS: 1024x1024 px PNG/JPEG, no transparency
 - Android: 512x512 px PNG, transparency allowed
 
@@ -96,6 +98,7 @@ python scripts/keyword-analyzer.py description.txt --keywords "meditation,mindfu
 First 2-3 screenshots are critical (appear "above the fold"). Structure them to tell a story:
 
 **Option A - Feature Flow:**
+
 1. Hero feature (primary value prop)
 2. Second key feature
 3. Third key feature
@@ -103,6 +106,7 @@ First 2-3 screenshots are critical (appear "above the fold"). Structure them to 
 5. Social proof / CTA
 
 **Option B - Story Flow:**
+
 1. Problem statement
 2. Solution (your app)
 3. How it works
@@ -110,6 +114,7 @@ First 2-3 screenshots are critical (appear "above the fold"). Structure them to 
 5. Social proof
 
 **Screenshot Best Practices:**
+
 - Use text overlays with large fonts (min 40pt)
 - High contrast captions at top or bottom
 - Keep text to 5-10 words max
@@ -118,6 +123,7 @@ First 2-3 screenshots are critical (appear "above the fold"). Structure them to 
 - Localize text for each market
 
 **Technical Specs:**
+
 - iOS: 2-10 screenshots, portrait for phones
   - 6.7" iPhone: 1290x2796 px (portrait)
   - 6.5" iPhone: 1242x2688 px (portrait)
@@ -142,6 +148,7 @@ Design for silent viewing (many users watch muted). Show actual app interactions
 Before submission, verify:
 
 **Privacy (Guideline 5.1):**
+
 - [ ] Privacy policy URL provided and accessible
 - [ ] Policy describes all data collection and usage
 - [ ] User consent obtained before collecting data
@@ -149,17 +156,20 @@ Before submission, verify:
 - [ ] Purpose strings for all requested permissions
 
 **App Completeness (Guideline 2.1):**
+
 - [ ] All features functional
 - [ ] No placeholder content
 - [ ] Demo account provided if login required
 - [ ] Review notes explain non-obvious features
 
 **Payments (Guideline 3.1):**
+
 - [ ] In-app purchases used for digital content
 - [ ] No alternative payment mechanisms for digital goods
 - [ ] Subscriptions use App Store payment system
 
 **Metadata Accuracy (Guideline 2.3):**
+
 - [ ] Screenshots show actual app usage
 - [ ] Description matches functionality
 - [ ] No misleading marketing
@@ -167,6 +177,7 @@ Before submission, verify:
 **Google Play Store Critical Requirements:**
 
 **Data Safety (Required):**
+
 - [ ] Data Safety form completed accurately in Play Console
 - [ ] All data types collected declared
 - [ ] Data usage purposes explained
@@ -174,21 +185,25 @@ Before submission, verify:
 - [ ] Security practices described
 
 **Privacy Policy:**
+
 - [ ] Provided both in-app AND on store listing
 - [ ] Accessible without login
 - [ ] Covers all data collection
 
 **Permissions:**
+
 - [ ] Only necessary permissions requested
 - [ ] Prominent disclosure for sensitive permissions
 - [ ] Clear explanation for each permission
 
 **Payments:**
+
 - [ ] Google Play Billing for digital goods/services
 - [ ] Physical goods may use alternative payment
 - [ ] Clear pricing information
 
 **Content Quality:**
+
 - [ ] App stable and responsive
 - [ ] Accurate description and screenshots
 - [ ] No spam or copycat behavior
@@ -223,6 +238,7 @@ Balance searchability with readability. Structure:
 7. Call to action
 
 **Key Differences:**
+
 - iOS: Optimize for persuasion and conversion
 - Android: Optimize for search while maintaining readability
 - Android: Strategic keyword placement throughout
@@ -233,6 +249,7 @@ Balance searchability with readability. Structure:
 **iOS Product Page Optimization:**
 
 Available in App Store Connect:
+
 - Test: app icon, screenshots, app preview video
 - Up to 3 variations
 - 90 days maximum per test
@@ -241,12 +258,14 @@ Available in App Store Connect:
 **Google Play Store Experiments:**
 
 Available in Play Console:
+
 - Test: icon, feature graphic, screenshots, video, short description
 - Up to 3 variants + control
 - 90 days maximum per test
 - Localized experiments supported
 
 **Testing Best Practices:**
+
 - Test one element at a time for clear insights
 - Run to statistical significance
 - Start with highest-impact elements (icon, first 3 screenshots)
@@ -254,6 +273,7 @@ Available in Play Console:
 - Track conversion rate as primary metric
 
 **Key Metrics:**
+
 - Conversion Rate: Product page views → installs (target: 20-30%+)
 - Tap-Through Rate: Search impressions → page visits (target: 5-10%+)
 - Performance by traffic source (browse vs. search)
@@ -287,16 +307,19 @@ Utility tools in `scripts/`:
 ### iOS Unique Features
 
 **Promotional Text (170 chars):**
+
 - Updatable without new app review
 - Appears above description
 - Use for limited-time offers or feature highlights
 
 **App Store Connect Analytics:**
+
 - Track impressions, product page views, downloads
 - Monitor conversion rates
 - Analyze traffic sources
 
 **Product Page Optimization:**
+
 - Built-in A/B testing tool
 - Test icon and screenshots
 - Statistical analysis provided
@@ -304,17 +327,20 @@ Utility tools in `scripts/`:
 ### Android Unique Features
 
 **Feature Graphic (1024x500 px):**
+
 - Banner at top of listing
 - First visual impression
 - Should include app name and key visual
 
 **Early Access / Beta Programs:**
+
 - Internal testing (100 testers)
 - Closed testing tracks
 - Open testing for public betas
 - Test in production-like environment
 
 **Pre-Launch Report:**
+
 - Automated testing on real devices
 - Identifies crashes and issues
 - Security vulnerability scanning
@@ -326,12 +352,14 @@ Utility tools in `scripts/`:
 
 **Diagnosis:**
 Check rejection reason for specific issue:
+
 - Privacy policy URL not provided
 - URL not accessible
 - Policy doesn't cover data collection
 - No user consent for tracking
 
 **Solution:**
+
 1. Create comprehensive privacy policy covering:
    - All data types collected
    - How data is used
@@ -351,11 +379,13 @@ Consult `references/app-store-guidelines.md` (section 5.1) or `references/play-s
 
 **Diagnosis:**
 Compare conversion rate (page views → installs) to benchmarks:
+
 - Below 20%: Significant optimization opportunity
 - 20-30%: Good, room for improvement
 - 30%+: Excellent
 
 **Solution:**
+
 1. Analyze first impressions:
    - Is icon distinctive and clear?
    - Do first 2-3 screenshots highlight key value?
@@ -380,12 +410,14 @@ Consult `references/aso-strategies.md` (A/B Testing section) for detailed testin
 
 **Diagnosis:**
 Identify ranking position for target keywords:
+
 - Not ranking: Keyword not present or insufficient
 - Ranking 50+: Present but low optimization
 - Ranking 11-50: Moderate optimization
 - Top 10: Good optimization
 
 **Solution for iOS:**
+
 1. Review current keywords in App Name, Subtitle, and Keyword Field
 2. Identify high-volume, low-competition opportunities
 3. Update App Name or Subtitle if not using primary keyword
@@ -397,6 +429,7 @@ Identify ranking position for target keywords:
 6. Monitor rankings weekly
 
 **Solution for Android:**
+
 1. Analyze description with keyword analyzer:
    ```bash
    python scripts/keyword-analyzer.py description.txt -k "target,keywords,here"
@@ -413,6 +446,7 @@ Consult `references/aso-strategies.md` (Keyword Research & Optimization section)
 ### Scenario: Creating Effective Screenshots
 
 **Process:**
+
 1. Determine approach:
    - Device frames with UI + text overlays (most common)
    - Full-screen UI with captions
@@ -451,18 +485,21 @@ Consult `references/visual-assets-guide.md` for detailed specifications and desi
 **Regular Schedule:**
 
 **Weekly:**
+
 - Monitor keyword rankings (top 10-20 keywords)
 - Track conversion metrics
 - Respond to user reviews
 - Check competitor changes
 
 **Monthly:**
+
 - Comprehensive metrics review
 - Plan metadata updates
 - Research new keywords
 - Analyze A/B test results
 
 **Quarterly:**
+
 - Major optimization cycle
 - Update screenshots/video if needed
 - Complete metadata refresh
@@ -470,6 +507,7 @@ Consult `references/visual-assets-guide.md` for detailed specifications and desi
 - Plan seasonal campaigns
 
 **With Each App Update:**
+
 - Update "What's New" section (highlight features, not just "bug fixes")
 - Consider adding new screenshots for major features
 - Update promotional text (iOS)
@@ -478,28 +516,33 @@ Consult `references/visual-assets-guide.md` for detailed specifications and desi
 ## Best Practices Summary
 
 **Keyword Optimization:**
+
 - iOS: Front-load keywords in Name/Subtitle, use full 100-char Keyword Field
 - Android: Strategic placement throughout description, 2-3% density
 - Both: Research competitors, track rankings, iterate based on data
 
 **Visual Assets:**
+
 - Icon: Simple, recognizable, high contrast, unique in category
 - Screenshots: First 2-3 critical, benefit-focused captions, consistent style
 - Video: 30 seconds, grab attention in first 3 seconds, design for silent viewing
 
 **Compliance:**
+
 - Privacy policy required and comprehensive
 - iOS: App Tracking Transparency, In-App Purchase for digital goods
 - Android: Data Safety form accurate, Google Play Billing
 - Use compliance checklist before every submission
 
 **Testing:**
+
 - Test one element at a time
 - Start with highest-impact items (icon, first 3 screenshots)
 - Run to statistical significance
 - Implement winners and continue testing
 
 **Description:**
+
 - iOS: Focus on conversion (not indexed)
 - Android: Balance search optimization with readability
 - Both: Front-load key benefits, include social proof, clear CTA

@@ -5,6 +5,7 @@ Entity interpolation is the technique of smoothly rendering networked entities (
 ## The Problem
 
 Without interpolation:
+
 1. Server sends position updates at 20Hz (every 50ms)
 2. Client renders at 60fps (every 16ms)
 3. Entity position updates only every 50ms
@@ -15,6 +16,7 @@ Without interpolation:
 ## The Solution
 
 With interpolation:
+
 1. Server sends updates at 20Hz
 2. Client buffers recent updates
 3. Client renders entity at a slight delay (e.g., 100ms in the past)
@@ -58,8 +60,8 @@ class EntityStateBuffer {
         id: e.id,
         position: { ...e.position },
         rotation: e.rotation,
-        velocity: { ...e.velocity }
-      }))
+        velocity: { ...e.velocity },
+      })),
     });
 
     // Sort by timestamp
@@ -77,8 +79,10 @@ class EntityStateBuffer {
     let after = null;
 
     for (let i = 0; i < this.snapshots.length - 1; i++) {
-      if (this.snapshots[i].timestamp <= renderTime &&
-          this.snapshots[i + 1].timestamp >= renderTime) {
+      if (
+        this.snapshots[i].timestamp <= renderTime &&
+        this.snapshots[i + 1].timestamp >= renderTime
+      ) {
         before = this.snapshots[i];
         after = this.snapshots[i + 1];
         break;
@@ -147,7 +151,7 @@ class EntityInterpolator {
     return {
       id: entityId,
       position: position,
-      rotation: rotation
+      rotation: rotation,
     };
   }
 
@@ -155,7 +159,7 @@ class EntityInterpolator {
     return {
       x: a.x + (b.x - a.x) * t,
       y: a.y + (b.y - a.y) * t,
-      z: a.z + (b.z - a.z) * t
+      z: a.z + (b.z - a.z) * t,
     };
   }
 
@@ -300,10 +304,12 @@ Extrapolation is a fallback for packet loss or jitter. Use sparingly.
 ## Interpolation Delay Tuning
 
 ### Too Short Delay
+
 - Symptom: Frequent extrapolation, stuttering during packet loss
 - Solution: Increase delay to 2-3x server update interval
 
 ### Too Long Delay
+
 - Symptom: Entities feel "laggy," slow to respond to actual movement
 - Solution: Decrease delay, but not below 2x server update interval
 
@@ -422,7 +428,7 @@ class DeadReckoningEntity {
     return {
       x: this.position.x + this.velocity.x * dt,
       y: this.position.y + this.velocity.y * dt,
-      z: this.position.z + this.velocity.z * dt
+      z: this.position.z + this.velocity.z * dt,
     };
   }
 }
@@ -433,22 +439,27 @@ Dead reckoning continues movement prediction between updates. Useful for racing 
 ## Common Pitfalls
 
 **Pitfall 1: Interpolating Local Player**
+
 - Symptom: Local player movement feels laggy
 - Solution: Never interpolate local player; use client prediction instead
 
 **Pitfall 2: Interpolation Delay Too Short**
+
 - Symptom: Stuttering, frequent extrapolation
 - Solution: Use 2-3x server update interval as delay
 
 **Pitfall 3: Not Handling Entity Spawn/Despawn**
+
 - Symptom: Entities interpolate from (0,0,0) when spawning
 - Solution: Snap to position on spawn, don't interpolate
 
 **Pitfall 4: Interpolating Fast-Changing Values**
+
 - Symptom: Actions (shooting, jumping) look delayed
 - Solution: Send discrete events for actions, don't interpolate them
 
 **Pitfall 5: Lerping Angles Incorrectly**
+
 - Symptom: Rotation takes the long path (e.g., 350° → 10° goes backwards)
 - Solution: Normalize angle differences, or use quaternions with slerp
 
@@ -467,7 +478,9 @@ class InterpolationDebugger {
       console.log(`  Before: t=${before.timestamp}, pos=${JSON.stringify(before.position)}`);
       console.log(`  After:  t=${after.timestamp}, pos=${JSON.stringify(after.position)}`);
       console.log(`  Render: t=${renderTime}`);
-      console.log(`  Interp factor: ${(renderTime - before.timestamp) / (after.timestamp - before.timestamp)}`);
+      console.log(
+        `  Interp factor: ${(renderTime - before.timestamp) / (after.timestamp - before.timestamp)}`
+      );
     }
   }
 }
@@ -485,7 +498,7 @@ class InterpolationDebugger {
 
 **CPU**: Interpolation is cheap (simple lerp calculations). Cost scales linearly with entity count.
 
-**Memory**: Storing snapshot buffer. At 20Hz for 1 second: 20 snapshots * (entities * 50 bytes). Very manageable.
+**Memory**: Storing snapshot buffer. At 20Hz for 1 second: 20 snapshots _ (entities _ 50 bytes). Very manageable.
 
 **Optimization**: Use spatial culling to avoid interpolating off-screen entities.
 

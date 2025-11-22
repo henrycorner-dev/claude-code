@@ -84,7 +84,6 @@ For tasks spanning multiple context windows:
 3. **Set up quality of life tools**: Encourage Claude to create setup scripts (e.g., `init.sh`) to gracefully start servers, run test suites, and linters. This prevents repeated work when continuing from a fresh context window.
 
 4. **Starting fresh vs compacting**: When a context window is cleared, consider starting with a brand new context window rather than using compaction. Claude 4.5 models are extremely effective at discovering state from the local filesystem. In some cases, you may want to take advantage of this over compaction. Be prescriptive about how it should start:
-
    - "Call pwd; you can only read and write files in this directory."
    - "Review progress.txt, tests.json, and the git logs."
    - "Manually run through a fundamental integration test before moving on to implementing new features."
@@ -203,12 +202,10 @@ Do not jump into implementatation or changes files unless clearly instructed to 
 There are a few ways that we have found to be particularly effective in steering output formatting in Claude 4.x models:
 
 1. **Tell Claude what to do instead of what not to do**
-
    - Instead of: "Do not use markdown in your response"
    - Try: "Your response should be composed of smoothly flowing prose paragraphs."
 
 2. **Use XML format indicators**
-
    - Try: "Write the prose sections of your response in \<smoothly_flowing_prose_paragraphs\> tags."
 
 3. **Match your prompt style to the desired output**

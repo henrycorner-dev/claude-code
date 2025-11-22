@@ -31,6 +31,7 @@ Basic sitemap structure:
 ```
 
 Must be:
+
 - Absolute URL (include protocol and domain)
 - Properly encoded (& becomes &amp;)
 - Under 2,048 characters
@@ -44,6 +45,7 @@ Must be:
 ```
 
 Formats:
+
 - `YYYY-MM-DD` - Date only
 - `YYYY-MM-DDThh:mm:ss+00:00` - Date and time with timezone
 
@@ -54,6 +56,7 @@ Formats:
 ```
 
 Values:
+
 - `always` - Changes every access
 - `hourly` - Hourly updates
 - `daily` - Daily updates
@@ -109,6 +112,7 @@ Escape special characters:
 ```
 
 **Entity escaping:**
+
 - `&` → `&amp;`
 - `'` → `&apos;`
 - `"` → `&quot;`
@@ -138,12 +142,14 @@ Use sitemap index when you have multiple sitemaps:
 ```
 
 **Benefits:**
+
 - Organize by content type
 - Easier to maintain
 - Track section-specific indexing
 - Stay within size limits
 
 **Structure example:**
+
 ```
 /sitemap-index.xml (main index)
 ├── /sitemap-posts.xml
@@ -176,6 +182,7 @@ Include images in sitemap for better image search visibility:
 ```
 
 **Image properties:**
+
 - `image:loc` (required) - Image URL
 - `image:title` (optional) - Image title
 - `image:caption` (optional) - Image caption
@@ -183,6 +190,7 @@ Include images in sitemap for better image search visibility:
 - `image:license` (optional) - License URL
 
 **Limits:**
+
 - Maximum 1,000 images per page
 - Images must be crawlable (not blocked by robots.txt)
 
@@ -219,6 +227,7 @@ Include video metadata for video search:
 ```
 
 **Required video properties:**
+
 - `thumbnail_loc` - Thumbnail image URL
 - `title` - Video title (max 100 characters)
 - `description` - Video description (max 2,048 characters)
@@ -247,6 +256,7 @@ For news publishers (requires Google News approval):
 ```
 
 **Requirements:**
+
 - Only include articles from last 2 days
 - Update continuously
 - Match publication date
@@ -289,8 +299,8 @@ async function generateSitemap() {
         {
           url: post.featuredImage,
           title: post.title,
-        }
-      ]
+        },
+      ],
     });
   });
 
@@ -394,16 +404,19 @@ export default function SiteMap() {
 WordPress can generate sitemaps automatically:
 
 **Built-in (WordPress 5.5+):**
+
 - Available at `/wp-sitemap.xml`
 - No configuration needed
 - Basic functionality
 
 **Plugins (recommended):**
+
 - **Yoast SEO** - Advanced sitemap features
 - **Rank Math** - Comprehensive SEO including sitemaps
 - **All in One SEO** - Sitemap generation and management
 
 **Manual generation:**
+
 ```php
 <?php
 function generate_custom_sitemap() {
@@ -446,6 +459,7 @@ Sitemap: https://example.com/sitemap-images.xml
 ```
 
 **Benefits:**
+
 - Helps search engines discover sitemap
 - Works for all search engines
 - Simple to implement
@@ -460,6 +474,7 @@ Submit sitemap directly:
 4. Click Submit
 
 **Monitor:**
+
 - Discovered URLs
 - Indexed URLs
 - Errors and warnings
@@ -477,6 +492,7 @@ Similar process to Google:
 ### Automatic Discovery
 
 Search engines also discover sitemaps by:
+
 - Crawling robots.txt
 - Following sitemap links in HTML
 - Finding common locations (`/sitemap.xml`)
@@ -486,6 +502,7 @@ Search engines also discover sitemaps by:
 ### Include
 
 ✅ **Pages you want indexed:**
+
 - Important content pages
 - Blog posts and articles
 - Product pages
@@ -493,17 +510,20 @@ Search engines also discover sitemaps by:
 - Landing pages
 
 ✅ **Updated content:**
+
 - Recently published pages
 - Recently updated pages
 - Active pages
 
 ✅ **Canonical URLs:**
+
 - Only include the canonical version
 - Not URL parameters or variations
 
 ### Exclude
 
 ❌ **Pages you don't want indexed:**
+
 - Admin pages
 - Login/logout pages
 - Thank you pages
@@ -513,11 +533,13 @@ Search engines also discover sitemaps by:
 - Pages with noindex meta tag
 
 ❌ **Low-value pages:**
+
 - Tag pages with little content
 - Paginated pages (include canonical only)
 - Author archives (unless substantial)
 
 ❌ **Blocked content:**
+
 - Pages blocked by robots.txt
 - Pages requiring authentication
 - Pages with redirect
@@ -539,11 +561,13 @@ Use separate sitemaps for content types:
 ### Keep Sitemaps Fresh
 
 **Update frequency:**
+
 - Real-time for critical updates (e-commerce inventory)
 - Daily for frequently updated sites
 - Weekly/monthly for mostly static sites
 
 **Automatic regeneration:**
+
 - On content publish/update
 - Scheduled cron jobs
 - On-demand generation
@@ -565,6 +589,7 @@ Inaccurate dates can hurt crawl efficiency.
 ### Remove Dead URLs
 
 Regularly audit sitemap:
+
 - Check for 404 errors
 - Remove redirected URLs
 - Remove deleted content
@@ -575,12 +600,14 @@ Regularly audit sitemap:
 ### Sitemap Not Found (404)
 
 **Causes:**
+
 - Incorrect file location
 - File not publicly accessible
 - Permissions issues
 - Wrong URL in robots.txt
 
 **Solution:**
+
 - Verify file exists at specified URL
 - Check file permissions (should be readable)
 - Test URL in browser
@@ -591,6 +618,7 @@ Regularly audit sitemap:
 **Problem:** Exceeds 50MB or 50,000 URLs
 
 **Solution:**
+
 - Split into multiple sitemaps
 - Create sitemap index
 - Organize by content type or date
@@ -600,6 +628,7 @@ Regularly audit sitemap:
 **Problem:** Special characters not properly encoded
 
 **Solution:**
+
 - Use UTF-8 encoding
 - Escape XML entities
 - Validate XML syntax
@@ -621,6 +650,7 @@ function escapeXml(url) {
 **Problem:** Sitemap contains URLs that redirect
 
 **Solution:**
+
 - Only include final destination URLs
 - Update sitemap when URLs change
 - Remove old URLs after redirect
@@ -630,6 +660,7 @@ function escapeXml(url) {
 **Problem:** URLs in sitemap blocked by robots.txt
 
 **Solution:**
+
 - Review robots.txt rules
 - Remove blocked URLs from sitemap
 - Or update robots.txt to allow
@@ -661,6 +692,7 @@ grep -c "<loc>" sitemap.xml
 ### Common Validation Errors
 
 **Invalid XML:**
+
 ```xml
 <!-- Wrong: Unescaped ampersand -->
 <loc>https://example.com?id=1&color=red</loc>
@@ -670,6 +702,7 @@ grep -c "<loc>" sitemap.xml
 ```
 
 **Wrong namespace:**
+
 ```xml
 <!-- Wrong -->
 <urlset xmlns="http://www.google.com/schemas/sitemap/0.9">
@@ -679,6 +712,7 @@ grep -c "<loc>" sitemap.xml
 ```
 
 **Invalid date format:**
+
 ```xml
 <!-- Wrong -->
 <lastmod>01/15/2025</lastmod>
@@ -692,17 +726,20 @@ grep -c "<loc>" sitemap.xml
 ### Regular Tasks
 
 **Weekly:**
+
 - Check Search Console for errors
 - Verify sitemap is accessible
 - Review newly discovered URLs
 
 **Monthly:**
+
 - Audit sitemap for accuracy
 - Remove dead URLs
 - Update content priorities
 - Check indexing status
 
 **Quarterly:**
+
 - Review sitemap strategy
 - Optimize structure
 - Update automation
@@ -711,6 +748,7 @@ grep -c "<loc>" sitemap.xml
 ### Key Metrics
 
 Monitor in Search Console:
+
 - Discovered URLs vs Submitted
 - Indexed URLs vs Submitted
 - Coverage errors
@@ -718,6 +756,7 @@ Monitor in Search Console:
 - Error rate
 
 **Healthy sitemap:**
+
 - 90%+ submission indexed
 - Low error rate (<5%)
 - Read within 7 days
@@ -726,6 +765,7 @@ Monitor in Search Console:
 ## Best Practices Summary
 
 ✅ **DO:**
+
 - Include all important indexable pages
 - Use sitemap index for large sites
 - Keep sitemaps under 50MB and 50,000 URLs
@@ -737,6 +777,7 @@ Monitor in Search Console:
 - Monitor sitemap health regularly
 
 ❌ **DON'T:**
+
 - Include pages with noindex meta tag
 - Include redirected or 404 URLs
 - Include duplicate content
@@ -750,17 +791,20 @@ Monitor in Search Console:
 ## Tools and Resources
 
 **Generation:**
+
 - **sitemap.js** - Node.js sitemap generator
 - **next-sitemap** - Next.js sitemap plugin
 - **Yoast SEO** - WordPress sitemap plugin
 - **Screaming Frog** - Desktop tool for large sites
 
 **Validation:**
+
 - **Google Search Console** - Primary validation tool
 - **XML Sitemaps Validator** - Online validation
 - **xmllint** - Command-line validation
 
 **Documentation:**
+
 - **Sitemaps.org** - Official protocol documentation
 - **Google Search Central** - Google-specific guidelines
 - **Bing Webmaster** - Bing sitemap documentation

@@ -18,6 +18,7 @@ This document provides comprehensive patterns for customizing Henry Orchestrator
 **Problem**: Standard command runs too many agents; only need specific subset
 
 **Use Cases**:
+
 - Time-sensitive reviews needing quick feedback
 - Focused audits on specific concerns
 - Cost optimization by running fewer agents
@@ -26,11 +27,13 @@ This document provides comprehensive patterns for customizing Henry Orchestrator
 **Implementation**:
 
 **Inline approach:**
+
 ```
 /henry-orchestrator:henry-audit Security and performance only, skip accessibility and SEO
 ```
 
 **Fork approach - `.claude/commands/sec-perf-audit.md`:**
+
 ```markdown
 ---
 description: Security and performance audit only
@@ -45,6 +48,7 @@ Focused audit for security vulnerabilities and performance bottlenecks.
 **Goal**: Identify security vulnerabilities
 
 **Actions**:
+
 1. Launch security-engineer to scan for vulnerabilities
 2. Check for OWASP Top 10 issues
 3. Review authentication and authorization
@@ -59,6 +63,7 @@ Focused audit for security vulnerabilities and performance bottlenecks.
 **Goal**: Baseline performance and identify bottlenecks
 
 **Actions**:
+
 1. Launch performance-engineer to measure metrics
 2. Identify performance bottlenecks
 3. Generate optimization recommendations
@@ -71,11 +76,13 @@ Focused audit for security vulnerabilities and performance bottlenecks.
 ## Summary
 
 Focused audit complete:
+
 - Security vulnerabilities identified and prioritized
 - Performance bottlenecks mapped with recommendations
 ```
 
 **Tradeoffs**:
+
 - ✅ Faster execution, lower cost, focused results
 - ❌ May miss issues outside selected scope
 
@@ -86,6 +93,7 @@ Focused audit complete:
 **Problem**: Standard command missing phases needed for workflow
 
 **Use Cases**:
+
 - Adding documentation generation after implementation
 - Including deployment preparation in feature development
 - Adding user research before design phase
@@ -96,6 +104,7 @@ Focused audit complete:
 **Example: Adding documentation to henry-feature**
 
 `.claude/commands/feature-with-docs.md`:
+
 ```markdown
 ---
 description: Feature development with comprehensive documentation
@@ -104,6 +113,7 @@ description: Feature development with comprehensive documentation
 # Feature Development with Documentation
 
 ## Phase 1-7: Standard Feature Development
+
 [Include all phases from henry-feature]
 
 ## Phase 8: Documentation Generation
@@ -111,6 +121,7 @@ description: Feature development with comprehensive documentation
 **Goal**: Create comprehensive feature documentation
 
 **Actions**:
+
 1. Generate API documentation from code
 2. Create user-facing usage guides
 3. Document architecture decisions (ADRs)
@@ -120,6 +131,7 @@ description: Feature development with comprehensive documentation
 **Agents**: backend-engineer, frontend-engineer
 
 **Deliverables**:
+
 - API documentation (auto-generated)
 - User guides with examples
 - Architecture decision records
@@ -128,6 +140,7 @@ description: Feature development with comprehensive documentation
 ## Summary
 
 Complete feature with implementation and documentation:
+
 - Fully implemented and tested feature
 - API documentation for developers
 - User guides for end users
@@ -135,6 +148,7 @@ Complete feature with implementation and documentation:
 ```
 
 **Tradeoffs**:
+
 - ✅ More complete deliverables, better handoff
 - ❌ Longer execution time
 
@@ -145,6 +159,7 @@ Complete feature with implementation and documentation:
 **Problem**: Phase too complex or doing too many things
 
 **Use Cases**:
+
 - Phase with 10+ actions becoming unwieldy
 - Phase mixing concerns (design + implementation)
 - Need checkpoint between related activities
@@ -153,10 +168,12 @@ Complete feature with implementation and documentation:
 **Implementation**:
 
 **Before - Monolithic phase:**
+
 ```markdown
 ## Phase 2: Implementation
 
 **Actions**:
+
 1. Design database schema
 2. Implement data models
 3. Create API endpoints
@@ -168,10 +185,12 @@ Complete feature with implementation and documentation:
 ```
 
 **After - Split into focused phases:**
+
 ```markdown
 ## Phase 2: Backend Implementation
 
 **Actions**:
+
 1. Design database schema
 2. Implement data models
 3. Create API endpoints
@@ -184,6 +203,7 @@ Complete feature with implementation and documentation:
 ## Phase 3: Frontend Implementation
 
 **Actions**:
+
 1. Build frontend components
 2. Connect frontend to API
 3. Write component tests
@@ -195,6 +215,7 @@ Complete feature with implementation and documentation:
 ## Phase 4: Integration Testing
 
 **Actions**:
+
 1. Write integration tests
 2. Test end-to-end workflows
 3. Manual exploratory testing
@@ -205,6 +226,7 @@ Complete feature with implementation and documentation:
 ```
 
 **Benefits**:
+
 - Clear separation of concerns
 - Better progress tracking
 - Easier to parallelize or reorder
@@ -218,6 +240,7 @@ Complete feature with implementation and documentation:
 **Problem**: Standard command runs agents in parallel; need sequential with feedback loops
 
 **Use Cases**:
+
 - Each phase depends on previous completion
 - Need to address issues before proceeding
 - Iterative refinement workflows
@@ -226,10 +249,12 @@ Complete feature with implementation and documentation:
 **Implementation**:
 
 **Original henry-audit (parallel):**
+
 ```markdown
 ## Phase 1: Comprehensive Audit
 
 Launch all agents in parallel:
+
 - security-engineer
 - performance-engineer
 - a11y-specialist
@@ -238,6 +263,7 @@ Launch all agents in parallel:
 ```
 
 **Sequential version - `.claude/commands/sequential-audit.md`:**
+
 ```markdown
 # Sequential Audit with Remediation
 
@@ -252,6 +278,7 @@ Launch all agents in parallel:
 **Goal**: Fix blocking security vulnerabilities
 
 **Actions**:
+
 1. Review security findings
 2. Fix critical (CVSS >= 9.0) issues
 3. Re-scan to verify fixes
@@ -269,6 +296,7 @@ Launch all agents in parallel:
 **Goal**: Optimize without compromising security
 
 **Actions**:
+
 1. Implement optimizations
 2. Re-run security scan to ensure no regressions
 3. Verify performance improvements
@@ -282,12 +310,14 @@ Launch all agents in parallel:
 ## Summary
 
 Sequential audit with fixes:
+
 - Security issues addressed before proceeding
 - Performance optimized on secure baseline
 - Accessibility validated on final implementation
 ```
 
 **Tradeoffs**:
+
 - ✅ Issues addressed immediately, no rework
 - ❌ Longer total execution time
 
@@ -298,6 +328,7 @@ Sequential audit with fixes:
 **Problem**: Need to skip phases based on conditions
 
 **Use Cases**:
+
 - Skip phases if no issues found
 - Optional phases based on user choice
 - Different paths for different project types
@@ -308,6 +339,7 @@ Sequential audit with fixes:
 **Example: Conditional optimization**
 
 `.claude/commands/audit-optimize.md`:
+
 ```markdown
 # Audit with Conditional Optimization
 
@@ -324,6 +356,7 @@ Sequential audit with fixes:
 **Goal**: Determine if optimization needed
 
 **Actions**:
+
 1. Review audit findings
 2. Categorize by severity (critical, major, minor)
 3. Decision point:
@@ -347,6 +380,7 @@ Sequential audit with fixes:
 **Condition**: Only if Phase 3 executed
 
 **Actions**:
+
 1. Re-run affected audits
 2. Verify critical issues resolved
 3. Ensure no regressions
@@ -356,6 +390,7 @@ Sequential audit with fixes:
 **Goal**: Create prioritized improvement backlog
 
 **Actions**:
+
 1. Document remaining issues
 2. Prioritize by impact and effort
 3. Create tickets for future work
@@ -363,11 +398,13 @@ Sequential audit with fixes:
 ## Summary
 
 Audit complete with conditional optimization:
+
 - Critical issues addressed immediately (if any)
 - Prioritized backlog for remaining improvements
 ```
 
 **Benefits**:
+
 - Efficient execution path
 - User control over workflow
 - Handles variability gracefully
@@ -379,6 +416,7 @@ Audit complete with conditional optimization:
 **Problem**: Need multiple rounds of work with feedback
 
 **Use Cases**:
+
 - Design iterations with user feedback
 - Performance optimization cycles
 - Bug fixing with verification
@@ -389,6 +427,7 @@ Audit complete with conditional optimization:
 **Example: Iterative performance optimization**
 
 `.claude/commands/perf-optimization-cycles.md`:
+
 ```markdown
 # Iterative Performance Optimization
 
@@ -405,6 +444,7 @@ Audit complete with conditional optimization:
 **Goal**: Focus on highest-impact optimizations
 
 **Actions**:
+
 1. Analyze baseline data
 2. Identify top 3 bottlenecks by impact
 3. Estimate improvement potential
@@ -414,6 +454,7 @@ Audit complete with conditional optimization:
 **Goal**: Address #1 bottleneck
 
 **Actions**:
+
 1. Implement optimization
 2. Measure impact
 3. If target met → Proceed
@@ -436,6 +477,7 @@ Audit complete with conditional optimization:
 **Goal**: Verify overall performance targets met
 
 **Actions**:
+
 1. Measure final metrics
 2. Compare to baseline
 3. Compare to targets
@@ -444,6 +486,7 @@ Audit complete with conditional optimization:
 ## Summary
 
 Iterative optimization results:
+
 - Baseline: [metrics]
 - After optimization: [metrics]
 - Improvement: [percentage]
@@ -459,6 +502,7 @@ Iterative optimization results:
 **Problem**: Need to integrate with external tools or services
 
 **Use Cases**:
+
 - Running specialized analysis tools
 - Integrating with CI/CD pipelines
 - Triggering deployments
@@ -469,7 +513,8 @@ Iterative optimization results:
 **Example: Integration with external security scanner**
 
 `.claude/commands/security-with-scanner.md`:
-```markdown
+
+````markdown
 # Security Review with External Scanner
 
 ## Phase 1: Static Analysis
@@ -485,10 +530,13 @@ Iterative optimization results:
 **Goal**: Run specialized security tools
 
 **Actions**:
+
 1. Run SAST tool (e.g., Snyk, Checkmarx)
    ```bash
    snyk test --severity-threshold=high
    ```
+````
+
 2. Run dependency vulnerability scan
    ```bash
    npm audit --audit-level=high
@@ -505,6 +553,7 @@ Iterative optimization results:
 **Goal**: Combine internal and external findings
 
 **Actions**:
+
 1. Launch security-engineer to review tool outputs
 2. Deduplicate findings
 3. Prioritize by risk
@@ -515,10 +564,12 @@ Iterative optimization results:
 ## Summary
 
 Comprehensive security review:
+
 - Internal code review findings
 - External tool scan results
 - Unified, prioritized remediation plan
-```
+
+````
 
 ---
 
@@ -562,7 +613,8 @@ Comprehensive security review:
 1. Switch to service A repository
    ```bash
    cd ../service-a
-   ```
+````
+
 2. Implement feature in Service A
 3. Write tests
 4. Create PR
@@ -580,6 +632,7 @@ Comprehensive security review:
 **Goal**: Test services together
 
 **Actions**:
+
 1. Deploy both services to integration environment
 2. Run end-to-end tests
 3. Verify API contracts
@@ -592,6 +645,7 @@ Comprehensive security review:
 **Goal**: Deploy changes to production
 
 **Actions**:
+
 1. Deploy in correct order (dependencies first)
 2. Verify each deployment
 3. Monitor for issues
@@ -599,11 +653,13 @@ Comprehensive security review:
 ## Summary
 
 Multi-service feature deployed:
+
 - Service A changes: [PR link]
 - Service B changes: [PR link]
 - Integration tests passing
 - Production deployment successful
-```
+
+````
 
 ---
 
@@ -683,7 +739,7 @@ React Native feature ready:
 - Tested on iOS and Android
 - Performance targets met
 - Platform-specific variations handled
-```
+````
 
 ---
 
@@ -692,6 +748,7 @@ React Native feature ready:
 **Problem**: Need workflow tailored to specific domain
 
 **Use Cases**:
+
 - Healthcare (HIPAA compliance)
 - Finance (PCI DSS, SOX)
 - E-commerce (payment processing)
@@ -702,6 +759,7 @@ React Native feature ready:
 **Example: Healthcare feature with HIPAA**
 
 `.claude/commands/healthcare-feature.md`:
+
 ```markdown
 # HIPAA-Compliant Feature Development
 
@@ -710,6 +768,7 @@ React Native feature ready:
 **Goal**: Assess HIPAA compliance requirements
 
 **Actions**:
+
 1. Identify PHI (Protected Health Information) involved
 2. Determine safeguards needed
 3. Plan encryption strategy (at-rest, in-transit)
@@ -724,6 +783,7 @@ React Native feature ready:
 **Goal**: Implement with HIPAA safeguards
 
 **Actions**:
+
 1. Launch backend-engineer for implementation
 2. Implement encryption for PHI
 3. Add audit logging for all PHI access
@@ -737,6 +797,7 @@ React Native feature ready:
 **Goal**: Verify HIPAA compliance
 
 **Actions**:
+
 1. Verify encryption implementation
 2. Review access controls
 3. Validate audit logging
@@ -750,6 +811,7 @@ React Native feature ready:
 **Goal**: Validate security controls
 
 **Actions**:
+
 1. Penetration testing
 2. Encryption validation
 3. Access control testing
@@ -760,6 +822,7 @@ React Native feature ready:
 ## Summary
 
 HIPAA-compliant feature:
+
 - PHI encrypted at rest and in transit
 - Audit logging for all PHI access
 - Access controls verified
@@ -776,6 +839,7 @@ HIPAA-compliant feature:
 **Problem**: Need to orchestrate multiple commands as macro workflow
 
 **Use Cases**:
+
 - Product launch (multiple commands in sequence)
 - Major refactoring (design → implement → test → optimize)
 - Release preparation workflow
@@ -785,6 +849,7 @@ HIPAA-compliant feature:
 **Example: Full product launch**
 
 `.claude/commands/product-launch.md`:
+
 ```markdown
 # Complete Product Launch Workflow
 
@@ -792,13 +857,17 @@ HIPAA-compliant feature:
 
 ### Step 1: Product Strategy
 ```
+
 /henry-orchestrator:henry-product [product-name]
+
 ```
 **Deliverable**: Product strategy document
 
 ### Step 2: Design
 ```
+
 /henry-orchestrator:henry-design [feature-name]
+
 ```
 **Deliverable**: UX/UI designs
 
@@ -806,13 +875,17 @@ HIPAA-compliant feature:
 
 ### Step 3: Feature Development
 ```
+
 /henry-orchestrator:henry-feature [feature-name]
+
 ```
 **Deliverable**: Implemented feature
 
 ### Step 4: Code Review
 ```
+
 /henry-orchestrator:henry-review [pr-number]
+
 ```
 **Deliverable**: Reviewed and merged code
 
@@ -820,19 +893,25 @@ HIPAA-compliant feature:
 
 ### Step 5: Comprehensive Audit
 ```
+
 /henry-orchestrator:henry-audit
+
 ```
 **Deliverable**: Health check report
 
 ### Step 6: Optimization
 ```
+
 /henry-orchestrator:henry-optimize
+
 ```
 **Deliverable**: Optimized application
 
 ### Step 7: Launch Preparation
 ```
+
 /henry-orchestrator:henry-launch
+
 ```
 **Deliverable**: Production deployment
 
@@ -840,7 +919,9 @@ HIPAA-compliant feature:
 
 ### Step 8: Monitor and Iterate
 ```
+
 /henry-orchestrator:henry-team data-analytics-engineer
+
 ```
 **Deliverable**: Launch metrics and insights
 
@@ -857,6 +938,7 @@ Each phase builds on previous deliverables.
 **Problem**: Need configurable workflow based on arguments
 
 **Use Cases**:
+
 - Different workflows for different project types
 - Configurable agent selection
 - Variable scope based on inputs
@@ -866,6 +948,7 @@ Each phase builds on previous deliverables.
 **Example: Flexible audit command**
 
 `.claude/commands/flex-audit.md`:
+
 ```markdown
 ---
 description: Customizable audit - specify agents and focus areas
@@ -887,6 +970,7 @@ Custom audit with specified agents focusing on: $2
 (e.g., "API security and response times")
 
 **Actions**:
+
 1. Launch specified agents: $1
 2. Focus analysis on: $2
 3. Generate targeted report
@@ -896,6 +980,7 @@ Custom audit with specified agents focusing on: $2
 ## Summary
 
 Flexible audit complete:
+
 - Agents used: $1
 - Focus areas: $2
 - Findings and recommendations
@@ -906,26 +991,35 @@ Flexible audit complete:
 
 **Security and performance:**
 ```
+
 /flex-audit "security-engineer performance-engineer" "API security and response times"
+
 ```
 
 **Accessibility only:**
 ```
+
 /flex-audit "a11y-specialist" "WCAG 2.1 AA compliance"
+
 ```
 
 **Full stack review:**
 ```
+
 /flex-audit "backend-engineer frontend-engineer devops-sre-architect" "Architecture and deployment"
+
 ```
+
 ```
 
 **Benefits**:
+
 - Single command, many configurations
 - User has full control
 - Reduces command proliferation
 
 **Tradeoffs**:
+
 - More complex to use
 - Requires understanding arguments
 - Less guided than dedicated commands
@@ -936,20 +1030,20 @@ Flexible audit complete:
 
 Choose customization pattern based on:
 
-| Pattern | Use When | Complexity | Reusability |
-|---------|----------|------------|-------------|
-| Subset Agent Selection | Need fewer agents | Low | Medium |
-| Extended Workflow | Need additional phases | Medium | High |
-| Phase Splitting | Phase too complex | Medium | High |
-| Parallel → Sequential | Need feedback loops | Medium | Medium |
-| Conditional Phases | Variable workflow | High | Medium |
-| Iterative Refinement | Multiple rounds needed | High | High |
-| External Tool Integration | Need specific tools | Medium | Medium |
-| Multi-Repository | Cross-repo changes | High | Low |
-| Technology-Specific | Platform-specialized | Medium | High |
-| Domain-Specific | Compliance needs | High | High |
-| Command Composition | Macro workflow | Low | Medium |
-| Parameterized | Configurable workflow | High | High |
+| Pattern                   | Use When               | Complexity | Reusability |
+| ------------------------- | ---------------------- | ---------- | ----------- |
+| Subset Agent Selection    | Need fewer agents      | Low        | Medium      |
+| Extended Workflow         | Need additional phases | Medium     | High        |
+| Phase Splitting           | Phase too complex      | Medium     | High        |
+| Parallel → Sequential     | Need feedback loops    | Medium     | Medium      |
+| Conditional Phases        | Variable workflow      | High       | Medium      |
+| Iterative Refinement      | Multiple rounds needed | High       | High        |
+| External Tool Integration | Need specific tools    | Medium     | Medium      |
+| Multi-Repository          | Cross-repo changes     | High       | Low         |
+| Technology-Specific       | Platform-specialized   | Medium     | High        |
+| Domain-Specific           | Compliance needs       | High       | High        |
+| Command Composition       | Macro workflow         | Low        | Medium      |
+| Parameterized             | Configurable workflow  | High       | High        |
 
 ## Related Documentation
 

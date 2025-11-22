@@ -1,10 +1,10 @@
 # Pathfinding Algorithms
 
-Comprehensive guide to pathfinding algorithms for game AI, including A*, Dijkstra, Jump Point Search, and navmesh-based pathfinding.
+Comprehensive guide to pathfinding algorithms for game AI, including A\*, Dijkstra, Jump Point Search, and navmesh-based pathfinding.
 
-## A* (A-Star) Algorithm
+## A\* (A-Star) Algorithm
 
-A* is the most popular pathfinding algorithm, offering optimal paths with excellent performance through heuristic-guided search.
+A\* is the most popular pathfinding algorithm, offering optimal paths with excellent performance through heuristic-guided search.
 
 ### Core Implementation
 
@@ -90,10 +90,10 @@ function reconstructPath(cameFrom, current) {
 function getNeighbors(node, grid) {
   const neighbors = [];
   const directions = [
-    { x: 1, y: 0 },   // Right
-    { x: -1, y: 0 },  // Left
-    { x: 0, y: 1 },   // Down
-    { x: 0, y: -1 }   // Up
+    { x: 1, y: 0 }, // Right
+    { x: -1, y: 0 }, // Left
+    { x: 0, y: 1 }, // Down
+    { x: 0, y: -1 }, // Up
   ];
 
   for (const dir of directions) {
@@ -142,7 +142,7 @@ function chebyshevDistance(a, b) {
 function diagonalDistance(a, b) {
   const dx = Math.abs(a.x - b.x);
   const dy = Math.abs(a.y - b.y);
-  const D = 1;      // Cost of straight move
+  const D = 1; // Cost of straight move
   const D2 = 1.414; // Cost of diagonal move (sqrt(2))
   return D * (dx + dy) + (D2 - 2 * D) * Math.min(dx, dy);
 }
@@ -156,21 +156,21 @@ Include diagonal neighbors:
 function getNeighbors8(node, grid) {
   const neighbors = [];
   const directions = [
-    { x: 1, y: 0, cost: 1 },      // Right
-    { x: -1, y: 0, cost: 1 },     // Left
-    { x: 0, y: 1, cost: 1 },      // Down
-    { x: 0, y: -1, cost: 1 },     // Up
-    { x: 1, y: 1, cost: 1.414 },  // Down-Right
+    { x: 1, y: 0, cost: 1 }, // Right
+    { x: -1, y: 0, cost: 1 }, // Left
+    { x: 0, y: 1, cost: 1 }, // Down
+    { x: 0, y: -1, cost: 1 }, // Up
+    { x: 1, y: 1, cost: 1.414 }, // Down-Right
     { x: -1, y: 1, cost: 1.414 }, // Down-Left
     { x: 1, y: -1, cost: 1.414 }, // Up-Right
-    { x: -1, y: -1, cost: 1.414 } // Up-Left
+    { x: -1, y: -1, cost: 1.414 }, // Up-Left
   ];
 
   for (const dir of directions) {
     const neighbor = {
       x: node.x + dir.x,
       y: node.y + dir.y,
-      cost: dir.cost
+      cost: dir.cost,
     };
 
     if (grid.isWalkable(neighbor.x, neighbor.y)) {
@@ -193,7 +193,7 @@ function getNeighbors8(node, grid) {
 }
 ```
 
-### Weighted A* (Faster but Suboptimal)
+### Weighted A\* (Faster but Suboptimal)
 
 Use weighted heuristic for faster pathfinding at cost of optimality:
 
@@ -211,7 +211,7 @@ function weightedAStar(start, goal, grid, weight = 1.5) {
 
 ## Dijkstra's Algorithm
 
-Dijkstra guarantees shortest path but explores more nodes than A* (no heuristic guidance).
+Dijkstra guarantees shortest path but explores more nodes than A\* (no heuristic guidance).
 
 ```javascript
 function dijkstra(start, goal, grid) {
@@ -247,6 +247,7 @@ function dijkstra(start, goal, grid) {
 ```
 
 **When to use:**
+
 - Need guaranteed shortest path
 - Heuristic is unreliable or unavailable
 - Finding paths to multiple goals from single start
@@ -254,7 +255,7 @@ function dijkstra(start, goal, grid) {
 
 ## Jump Point Search (JPS)
 
-Optimized A* for uniform-cost grids, dramatically reducing nodes explored.
+Optimized A\* for uniform-cost grids, dramatically reducing nodes explored.
 
 ### Core Concept
 
@@ -302,7 +303,7 @@ function jumpPointSearch(start, goal, grid) {
 function jump(current, direction, goal, grid) {
   const next = {
     x: current.x + direction.x,
-    y: current.y + direction.y
+    y: current.y + direction.y,
   };
 
   if (!grid.isWalkable(next.x, next.y)) {
@@ -318,16 +319,18 @@ function jump(current, direction, goal, grid) {
     // Diagonal direction
     if (
       (grid.isWalkable(next.x - direction.x, next.y + direction.y) &&
-       !grid.isWalkable(next.x - direction.x, next.y)) ||
+        !grid.isWalkable(next.x - direction.x, next.y)) ||
       (grid.isWalkable(next.x + direction.x, next.y - direction.y) &&
-       !grid.isWalkable(next.x, next.y - direction.y))
+        !grid.isWalkable(next.x, next.y - direction.y))
     ) {
       return next;
     }
 
     // Check horizontal and vertical
-    if (jump(next, { x: direction.x, y: 0 }, goal, grid) ||
-        jump(next, { x: 0, y: direction.y }, goal, grid)) {
+    if (
+      jump(next, { x: direction.x, y: 0 }, goal, grid) ||
+      jump(next, { x: 0, y: direction.y }, goal, grid)
+    ) {
       return next;
     }
   } else {
@@ -335,18 +338,16 @@ function jump(current, direction, goal, grid) {
     if (direction.x !== 0) {
       if (
         (grid.isWalkable(next.x + direction.x, next.y + 1) &&
-         !grid.isWalkable(next.x, next.y + 1)) ||
-        (grid.isWalkable(next.x + direction.x, next.y - 1) &&
-         !grid.isWalkable(next.x, next.y - 1))
+          !grid.isWalkable(next.x, next.y + 1)) ||
+        (grid.isWalkable(next.x + direction.x, next.y - 1) && !grid.isWalkable(next.x, next.y - 1))
       ) {
         return next;
       }
     } else {
       if (
         (grid.isWalkable(next.x + 1, next.y + direction.y) &&
-         !grid.isWalkable(next.x + 1, next.y)) ||
-        (grid.isWalkable(next.x - 1, next.y + direction.y) &&
-         !grid.isWalkable(next.x - 1, next.y))
+          !grid.isWalkable(next.x + 1, next.y)) ||
+        (grid.isWalkable(next.x - 1, next.y + direction.y) && !grid.isWalkable(next.x - 1, next.y))
       ) {
         return next;
       }
@@ -358,7 +359,8 @@ function jump(current, direction, goal, grid) {
 ```
 
 **Performance:**
-- 10-40x faster than A* on large open grids
+
+- 10-40x faster than A\* on large open grids
 - Best for uniform-cost grids
 - Less benefit on irregular terrain
 
@@ -380,7 +382,7 @@ class NavMesh {
       id: this.polygons.length,
       vertices: vertices,
       center: this.calculateCenter(vertices),
-      neighbors: []
+      neighbors: [],
     };
 
     this.polygons.push(polygon);
@@ -409,11 +411,15 @@ class NavMesh {
   pointInPolygon(point, vertices) {
     let inside = false;
     for (let i = 0, j = vertices.length - 1; i < vertices.length; j = i++) {
-      const xi = vertices[i].x, yi = vertices[i].y;
-      const xj = vertices[j].x, yj = vertices[j].y;
+      const xi = vertices[i].x,
+        yi = vertices[i].y;
+      const xj = vertices[j].x,
+        yj = vertices[j].y;
 
-      if (((yi > point.y) !== (yj > point.y)) &&
-          (point.x < (xj - xi) * (point.y - yi) / (yj - yi) + xi)) {
+      if (
+        yi > point.y !== yj > point.y &&
+        point.x < ((xj - xi) * (point.y - yi)) / (yj - yi) + xi
+      ) {
         inside = !inside;
       }
     }
@@ -421,7 +427,8 @@ class NavMesh {
   }
 
   calculateCenter(vertices) {
-    let sumX = 0, sumY = 0;
+    let sumX = 0,
+      sumY = 0;
     for (const v of vertices) {
       sumX += v.x;
       sumY += v.y;
@@ -451,8 +458,10 @@ class NavMesh {
   }
 
   edgesEqual(a1, a2, b1, b2) {
-    return (this.pointsEqual(a1, b1) && this.pointsEqual(a2, b2)) ||
-           (this.pointsEqual(a1, b2) && this.pointsEqual(a2, b1));
+    return (
+      (this.pointsEqual(a1, b1) && this.pointsEqual(a2, b2)) ||
+      (this.pointsEqual(a1, b2) && this.pointsEqual(a2, b1))
+    );
   }
 
   pointsEqual(p1, p2) {
@@ -462,7 +471,7 @@ class NavMesh {
 }
 ```
 
-### A* on Navmesh
+### A\* on Navmesh
 
 ```javascript
 function navmeshAStar(start, goal, navmesh) {
@@ -507,14 +516,12 @@ function aStarPolygons(startPoly, goalPoly, navmesh) {
 
     for (const neighborId of current.neighbors) {
       const neighbor = navmesh.polygons[neighborId];
-      const tentativeGScore = gScore.get(current.id) +
-                              distance(current.center, neighbor.center);
+      const tentativeGScore = gScore.get(current.id) + distance(current.center, neighbor.center);
 
       if (!gScore.has(neighbor.id) || tentativeGScore < gScore.get(neighbor.id)) {
         cameFrom.set(neighbor.id, current);
         gScore.set(neighbor.id, tentativeGScore);
-        fScore.set(neighbor.id, tentativeGScore +
-                   distance(neighbor.center, goalPoly.center));
+        fScore.set(neighbor.id, tentativeGScore + distance(neighbor.center, goalPoly.center));
         openSet.enqueue(neighbor, fScore.get(neighbor.id));
       }
     }
@@ -695,7 +702,7 @@ function quadraticBezier(p0, p1, p2, t) {
   const u = 1 - t;
   return {
     x: u * u * p0.x + 2 * u * t * p1.x + t * t * p2.x,
-    y: u * u * p0.y + 2 * u * t * p1.y + t * t * p2.y
+    y: u * u * p0.y + 2 * u * t * p1.y + t * t * p2.y,
   };
 }
 ```
@@ -763,7 +770,7 @@ class HierarchicalPathfinder {
   getRegion(point) {
     return {
       x: Math.floor(point.x / this.regionSize),
-      y: Math.floor(point.y / this.regionSize)
+      y: Math.floor(point.y / this.regionSize),
     };
   }
 
@@ -771,13 +778,13 @@ class HierarchicalPathfinder {
     // Find best entry point for region
     return {
       x: region.x * this.regionSize + this.regionSize / 2,
-      y: region.y * this.regionSize + this.regionSize / 2
+      y: region.y * this.regionSize + this.regionSize / 2,
     };
   }
 }
 ```
 
-### Incremental Pathfinding (D* Lite)
+### Incremental Pathfinding (D\* Lite)
 
 Efficiently recompute paths when environment changes:
 
@@ -805,10 +812,7 @@ class DStarLite {
     const gVal = this.g.get(coordToKey(node)) || Infinity;
     const rhsVal = this.rhs.get(coordToKey(node)) || Infinity;
     const minVal = Math.min(gVal, rhsVal);
-    return [
-      minVal + this.heuristic(this.start, node) + this.km,
-      minVal
-    ];
+    return [minVal + this.heuristic(this.start, node) + this.km, minVal];
   }
 
   // Update costs when terrain changes
@@ -915,7 +919,7 @@ class AsyncPathfinder {
       gScore: new Map(),
       fScore: new Map(),
       cameFrom: new Map(),
-      initialized: false
+      initialized: false,
     });
   }
 
@@ -951,15 +955,15 @@ class AsyncPathfinder {
         for (const neighbor of getNeighbors(current, grid)) {
           const neighborKey = coordToKey(neighbor);
           const currentKey = coordToKey(current);
-          const tentativeGScore = request.gScore.get(currentKey) +
-                                  distance(current, neighbor);
+          const tentativeGScore = request.gScore.get(currentKey) + distance(current, neighbor);
 
-          if (!request.gScore.has(neighborKey) ||
-              tentativeGScore < request.gScore.get(neighborKey)) {
+          if (
+            !request.gScore.has(neighborKey) ||
+            tentativeGScore < request.gScore.get(neighborKey)
+          ) {
             request.cameFrom.set(neighborKey, current);
             request.gScore.set(neighborKey, tentativeGScore);
-            request.fScore.set(neighborKey,
-                              tentativeGScore + heuristic(neighbor, request.goal));
+            request.fScore.set(neighborKey, tentativeGScore + heuristic(neighbor, request.goal));
             request.openSet.enqueue(neighbor, request.fScore.get(neighborKey));
           }
         }
@@ -977,15 +981,15 @@ class AsyncPathfinder {
 
 ## Algorithm Comparison
 
-| Algorithm | Optimality | Speed | Memory | Best Use Case |
-|-----------|------------|-------|--------|---------------|
-| A* | Optimal | Fast | Medium | General purpose, most games |
-| Dijkstra | Optimal | Slow | High | Multiple goals, all-pairs |
-| JPS | Optimal | Very Fast | Medium | Uniform grids, large maps |
-| Weighted A* | Suboptimal | Very Fast | Medium | Real-time, less critical paths |
-| Navmesh | Near-optimal | Fast | Low | 3D environments, complex geometry |
-| Hierarchical | Near-optimal | Very Fast | High | Very large maps, MMOs |
-| D* Lite | Optimal | Fast (updates) | High | Dynamic environments |
+| Algorithm    | Optimality   | Speed          | Memory | Best Use Case                     |
+| ------------ | ------------ | -------------- | ------ | --------------------------------- |
+| A\*          | Optimal      | Fast           | Medium | General purpose, most games       |
+| Dijkstra     | Optimal      | Slow           | High   | Multiple goals, all-pairs         |
+| JPS          | Optimal      | Very Fast      | Medium | Uniform grids, large maps         |
+| Weighted A\* | Suboptimal   | Very Fast      | Medium | Real-time, less critical paths    |
+| Navmesh      | Near-optimal | Fast           | Low    | 3D environments, complex geometry |
+| Hierarchical | Near-optimal | Very Fast      | High   | Very large maps, MMOs             |
+| D\* Lite     | Optimal      | Fast (updates) | High   | Dynamic environments              |
 
 ## Common Pitfalls
 

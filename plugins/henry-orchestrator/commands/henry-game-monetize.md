@@ -1,6 +1,6 @@
 ---
 description: Integrates IAP/ads; balances progression.
-allowed-tools: ["Read", "Glob", "Grep", "Write", "Edit", "Bash", "TodoWrite"]
+allowed-tools: ['Read', 'Glob', 'Grep', 'Write', 'Edit', 'Bash', 'TodoWrite']
 ---
 
 You are tasked with integrating monetization features into a game project, including In-App Purchases (IAP) and ads, while maintaining balanced progression. Follow these steps:
@@ -8,6 +8,7 @@ You are tasked with integrating monetization features into a game project, inclu
 ## 1. Identify Game Engine and Existing Structure
 
 First, ask the user:
+
 - Which game engine are they using (Unity, Godot, Unreal Engine, or other)?
 - What type of game is it (mobile, PC, console)?
 - What platforms are they targeting (iOS, Android, Steam, etc.)?
@@ -18,23 +19,27 @@ First, ask the user:
 Based on the game type, recommend and implement appropriate monetization:
 
 ### Free-to-Play (F2P) Model:
+
 - Freemium with IAP (consumables, cosmetics, convenience items)
 - Ad-supported with optional ad removal via IAP
 - Battle Pass / Season Pass system
 - Gacha / Loot box system (if appropriate and legal in target regions)
 
 ### Premium Model:
+
 - One-time purchase with optional DLC/expansions
 - Cosmetic-only IAP
 - Ad-free experience
 
 ### Hybrid Model:
+
 - Initial purchase + cosmetic IAP
 - Premium currency system
 
 ## 3. Implement In-App Purchases (IAP)
 
 ### For Unity:
+
 - Integrate Unity IAP package (com.unity.purchasing)
 - Create an IAP Manager script to handle:
   - Product catalog setup (consumable, non-consumable, subscriptions)
@@ -46,6 +51,7 @@ Based on the game type, recommend and implement appropriate monetization:
 - Implement purchase UI and confirmation dialogs
 
 ### For Godot:
+
 - Use Godot's in-app purchase plugins for iOS/Android
 - Create a singleton/autoload for IAP management
 - Implement purchase flow with proper error handling
@@ -53,6 +59,7 @@ Based on the game type, recommend and implement appropriate monetization:
 - Handle purchase restoration for non-consumables
 
 ### For Unreal Engine:
+
 - Use platform-specific plugins (Apple StoreKit, Google Play)
 - Implement IAP blueprint nodes or C++ classes
 - Create purchase manager subsystem
@@ -62,12 +69,14 @@ Based on the game type, recommend and implement appropriate monetization:
 ## 4. Implement Ad Integration
 
 ### Common Ad Networks:
+
 - Unity Ads (Unity)
 - Google AdMob (cross-platform)
 - IronSource / AppLovin MAX (mediation)
 - Facebook Audience Network
 
 ### Ad Types to Implement:
+
 1. **Rewarded Video Ads**: Grant in-game rewards (currency, lives, boosts)
    - Place at strategic points (after level failure, low resources, optional boosts)
    - Ensure rewards are balanced and meaningful
@@ -84,6 +93,7 @@ Based on the game type, recommend and implement appropriate monetization:
    - Make them feel natural to the game's aesthetic
 
 ### Implementation Steps:
+
 - Add ad SDK to the project (Unity Ads SDK, AdMob SDK, etc.)
 - Create an Ad Manager singleton to handle:
   - Ad initialization
@@ -100,6 +110,7 @@ Based on the game type, recommend and implement appropriate monetization:
 A well-balanced progression system is crucial for monetization without frustrating players:
 
 ### Currency System:
+
 - **Soft Currency**: Earned through gameplay (coins, gold)
   - Should be reasonably attainable through play
   - Can be boosted via ads or IAP
@@ -110,6 +121,7 @@ A well-balanced progression system is crucial for monetization without frustrati
   - Should offer meaningful shortcuts but not be required
 
 ### Progression Balance:
+
 1. **Early Game (Tutorial & Hook)**:
    - Fast progression to hook players
    - Generous rewards to build habit
@@ -126,7 +138,9 @@ A well-balanced progression system is crucial for monetization without frustrati
    - Premium options for time-saving, not pay-to-win
 
 ### Implement Economy Formulas:
+
 Create scripts/configurations for:
+
 - Level reward scaling: `base_reward * (1 + level * 0.1)`
 - Upgrade costs: `base_cost * (multiplier ^ upgrade_level)`
 - Time gates with optional skips (via ads or premium currency)
@@ -135,6 +149,7 @@ Create scripts/configurations for:
 ## 6. Create Monetization Manager System
 
 Implement a centralized monetization manager that coordinates:
+
 - IAP system
 - Ad system
 - Player inventory/wallet
@@ -145,6 +160,7 @@ Implement a centralized monetization manager that coordinates:
   - Progression funnel drop-offs
 
 Example structure:
+
 ```
 MonetizationManager
 ├── IAPManager (handles purchases)
@@ -167,6 +183,7 @@ MonetizationManager
 ## 8. User Interface for Monetization
 
 Create or update UI elements:
+
 - Shop/Store interface with tabs (IAP, currency packs, items)
 - Ad button for rewarded videos with countdown timer
 - Currency display (soft and hard currency)
@@ -178,6 +195,7 @@ Create or update UI elements:
 ## 9. Testing and Optimization
 
 Before launch:
+
 - Test all IAP products on development/sandbox accounts
 - Verify ad loading and display on different devices
 - A/B test pricing tiers and offer placement
@@ -188,6 +206,7 @@ Before launch:
 ## 10. Documentation
 
 Create or update documentation:
+
 - Monetization strategy overview
 - IAP product catalog and pricing tiers
 - Ad placement strategy and frequency caps
@@ -198,6 +217,7 @@ Create or update documentation:
 ## Output
 
 After implementation is complete:
+
 1. Show the created/modified file structure
 2. List all integrated systems (IAP products, ad types)
 3. Provide testing instructions for sandbox/development mode

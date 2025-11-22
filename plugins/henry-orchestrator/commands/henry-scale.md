@@ -1,6 +1,6 @@
 ---
 description: Optimizes for production scale; caching, DB sharding.
-allowed-tools: ["Read", "Glob", "Grep", "Edit", "Write", "Bash", "TodoWrite", "WebFetch"]
+allowed-tools: ['Read', 'Glob', 'Grep', 'Edit', 'Write', 'Bash', 'TodoWrite', 'WebFetch']
 ---
 
 You are tasked with optimizing the application for production scale by implementing caching strategies and database sharding.

@@ -10,12 +10,14 @@ This skill guides you in assembling and running custom teams of Henry Orchestrat
 ## Overview
 
 The `henry-team` command allows flexible agent orchestration:
+
 - Select specific agents for your task
 - Let the system suggest appropriate agents based on task description
 - Execute agents in parallel (faster) or sequentially (clearer handoffs)
 - Synthesize outputs from multiple perspectives
 
 **Basic syntax:**
+
 ```
 /henry-orchestrator:henry-team [agent-1] [agent-2] ... - [task description]
 /henry-orchestrator:henry-team [task description that implies needed agents]
@@ -26,16 +28,19 @@ The `henry-team` command allows flexible agent orchestration:
 ### Team Size Recommendations
 
 **Small teams (2-3 agents)**: Focused, specific reviews
+
 - **Best for**: Targeted audits, specific feature reviews, quick assessments
 - **Advantages**: Fast execution, clear outputs, easy to synthesize
 - **Examples**: security + backend review, frontend + performance optimization
 
 **Medium teams (4-5 agents)**: Comprehensive workflows
+
 - **Best for**: Complete feature development, thorough audits, end-to-end workflows
 - **Advantages**: Balanced coverage, manageable coordination, good depth
 - **Examples**: Complete design workflow (UX research + UX/UI + visual + a11y), full code review
 
 **Large teams (6+ agents)**: Rare, for major initiatives
+
 - **Best for**: Product launches, major refactors, complete system audits
 - **Advantages**: Complete coverage across all domains
 - **Disadvantages**: Longer execution time, complex synthesis required
@@ -50,25 +55,31 @@ The `henry-team` command allows flexible agent orchestration:
 ### Pattern 1: Review Teams
 
 **Security + Backend Review**
+
 ```
 /henry-orchestrator:henry-team security-engineer backend-engineer - Review API authentication
 ```
+
 **Use for**: Security-critical backend code  
 **Why this combo**: Security expert identifies threats, backend expert assesses implementation quality  
 **Output**: Security vulnerabilities + code quality issues + remediation plan
 
 **QA + Performance Review**
+
 ```
 /henry-orchestrator:henry-team qa-tester performance-engineer - Review checkout flow
 ```
+
 **Use for**: User-facing flows with performance requirements  
 **Why this combo**: QA validates functionality, performance engineer optimizes speed  
 **Output**: Test coverage analysis + performance bottlenecks + optimization recommendations
 
 **Security + QA + Performance (Comprehensive Review)**
+
 ```
 /henry-orchestrator:henry-team security-engineer qa-tester performance-engineer - Review payment integration
 ```
+
 **Use for**: Critical features requiring thorough validation  
 **Why this combo**: Covers security, functionality, and performance simultaneously  
 **Output**: Security audit + test strategy + performance baseline + prioritized fixes
@@ -76,25 +87,31 @@ The `henry-team` command allows flexible agent orchestration:
 ### Pattern 2: Design Teams
 
 **Research + UX Design**
+
 ```
 /henry-orchestrator:henry-team ux-researcher ux-ui-designer - Design onboarding flow
 ```
+
 **Use for**: New features needing user research  
 **Why this combo**: Research informs design decisions  
 **Output**: User personas + journey maps + wireframes + prototypes
 
 **Complete Design Workflow**
+
 ```
 /henry-orchestrator:henry-team ux-researcher ux-ui-designer ui-visual-designer a11y-specialist - Design checkout
 ```
+
 **Use for**: Major user flows requiring complete design  
 **Why this combo**: Full design pipeline from research to accessible implementation  
 **Output**: Research insights + UX flows + visual design + accessibility compliance
 
 **Design + Accessibility**
+
 ```
 /henry-orchestrator:henry-team ux-ui-designer a11y-specialist - Review dashboard designs
 ```
+
 **Use for**: Validating existing designs for accessibility  
 **Why this combo**: UX designer makes changes, a11y specialist validates compliance  
 **Output**: Revised designs meeting WCAG 2.1 AA standards
@@ -102,25 +119,31 @@ The `henry-team` command allows flexible agent orchestration:
 ### Pattern 3: Implementation Teams
 
 **Frontend + Performance**
+
 ```
 /henry-orchestrator:henry-team frontend-engineer performance-engineer - Build landing page
 ```
+
 **Use for**: Performance-critical UI development  
 **Why this combo**: Frontend engineer builds, performance engineer ensures speed  
 **Output**: Optimized implementation meeting Core Web Vitals targets
 
 **Frontend + Backend (Full-Stack)**
+
 ```
 /henry-orchestrator:henry-team frontend-engineer backend-engineer - Build user dashboard
 ```
+
 **Use for**: Features requiring both UI and API work  
 **Why this combo**: Coordinated full-stack development  
 **Output**: Complete feature with UI + API implementation
 
 **Backend + Security + DevOps**
+
 ```
 /henry-orchestrator:henry-team backend-engineer security-engineer devops-sre-architect - Build auth service
 ```
+
 **Use for**: Critical backend services  
 **Why this combo**: Backend implementation + security hardening + deployment strategy  
 **Output**: Secure, production-ready service with deployment plan
@@ -128,17 +151,21 @@ The `henry-team` command allows flexible agent orchestration:
 ### Pattern 4: Optimization Teams
 
 **Performance + Frontend + Backend**
+
 ```
 /henry-orchestrator:henry-team performance-engineer frontend-engineer backend-engineer - Optimize app performance
 ```
+
 **Use for**: System-wide performance optimization  
 **Why this combo**: Performance engineer identifies issues, engineers implement fixes  
 **Output**: Performance baseline + optimizations + benchmark improvements
 
 **SEO + Frontend + Performance**
+
 ```
 /henry-orchestrator:henry-team seo-specialist frontend-engineer performance-engineer - Optimize landing pages
 ```
+
 **Use for**: Public-facing pages needing SEO  
 **Why this combo**: SEO structure + technical implementation + Core Web Vitals  
 **Output**: SEO-optimized pages with fast load times
@@ -146,17 +173,21 @@ The `henry-team` command allows flexible agent orchestration:
 ### Pattern 5: Audit Teams
 
 **Complete Pre-Launch Audit**
+
 ```
 /henry-orchestrator:henry-team security-engineer performance-engineer a11y-specialist seo-specialist devops-sre-architect - Audit before production launch
 ```
+
 **Use for**: Production readiness checks  
 **Why this combo**: Comprehensive coverage across quality dimensions  
 **Output**: Security report + performance audit + a11y compliance + SEO check + ops readiness
 
 **Quality Triad (QA + Security + Performance)**
+
 ```
 /henry-orchestrator:henry-team qa-tester security-engineer performance-engineer - Quality audit
 ```
+
 **Use for**: Quality-focused audits  
 **Why this combo**: Core quality dimensions covered  
 **Output**: Test coverage + security vulnerabilities + performance issues
@@ -164,17 +195,21 @@ The `henry-team` command allows flexible agent orchestration:
 ### Pattern 6: Product Teams
 
 **Strategy + Design + Analytics**
+
 ```
 /henry-orchestrator:henry-team product-strategist ux-ui-designer data-analytics-engineer - Plan new feature
 ```
+
 **Use for**: Feature planning and design  
 **Why this combo**: Business strategy + UX design + metrics planning  
 **Output**: PRD + wireframes + analytics plan + success metrics
 
 **Strategy + Analytics + SEO**
+
 ```
 /henry-orchestrator:henry-team product-strategist data-analytics-engineer seo-specialist - Growth strategy
 ```
+
 **Use for**: Growth and acquisition planning  
 **Why this combo**: Business strategy + data analysis + organic acquisition  
 **Output**: Growth plan + experiment backlog + SEO strategy + tracking implementation
@@ -184,6 +219,7 @@ The `henry-team` command allows flexible agent orchestration:
 ### Method 1: Explicit Agent Selection
 
 Specify exact agents needed:
+
 ```
 /henry-orchestrator:henry-team frontend-engineer performance-engineer - Optimize dashboard
 ```
@@ -194,6 +230,7 @@ Specify exact agents needed:
 ### Method 2: Task-Based Selection
 
 Describe task, let system suggest agents:
+
 ```
 /henry-orchestrator:henry-team Review authentication for security and user experience
 ```
@@ -204,6 +241,7 @@ Describe task, let system suggest agents:
 ### Method 3: Hybrid Approach
 
 Specify some agents, add task description for additional suggestions:
+
 ```
 /henry-orchestrator:henry-team security-engineer - Complete security audit including infrastructure
 ```
@@ -220,6 +258,7 @@ Specify some agents, add task description for additional suggestions:
 **Example**: Security, performance, and a11y auditing same codebase simultaneously
 
 **Team structure:**
+
 ```
 All agents receive same context → Work independently → Outputs synthesized
 ```
@@ -231,6 +270,7 @@ All agents receive same context → Work independently → Outputs synthesized
 **Example**: Research → Design → Implementation pipeline
 
 **Team structure:**
+
 ```
 Agent 1 completes → Output passed to Agent 2 → Agent 2 completes → Continue
 ```
@@ -241,6 +281,7 @@ Agent 1 completes → Output passed to Agent 2 → Agent 2 completes → Continu
 **Example**: Parallel research and design system audit, then sequential implementation and testing
 
 **Team structure:**
+
 ```
 (Research + Design System Audit in parallel) → Implementation → Testing
 ```
@@ -269,14 +310,17 @@ When agents provide conflicting recommendations:
 ### Common Conflicts
 
 **Performance engineer wants lazy loading, A11y specialist concerned about keyboard nav:**
+
 - **Resolution**: Implement lazy loading with keyboard-accessible controls and skip links
 - **Rationale**: Can achieve both performance and accessibility with proper implementation
 
 **Security engineer recommends strict CSP, Frontend engineer concerned about third-party widgets:**
+
 - **Resolution**: Security prevails - find compliant third-party solutions or build in-house
 - **Rationale**: Security is non-negotiable, features must work within security constraints
 
 **UX designer wants animation, Performance engineer concerned about CLS:**
+
 - **Resolution**: Implement animations that don't cause layout shift (transform/opacity only)
 - **Rationale**: User experience and performance both achievable with CSS best practices
 
@@ -285,30 +329,39 @@ When agents provide conflicting recommendations:
 After team execution, synthesize agent outputs:
 
 ### Step 1: Collect Outputs
+
 Gather all agent deliverables (reports, code, designs, recommendations)
 
 ### Step 2: Identify Themes
+
 Find common patterns across agent outputs:
+
 - Issues multiple agents flagged
 - Consistent recommendations
 - Complementary suggestions
 
 ### Step 3: Prioritize
+
 Rank by impact and effort:
+
 - **Critical**: Security vulnerabilities, a11y blockers, major performance issues
 - **High**: Important UX problems, moderate security/performance issues
 - **Medium**: Nice-to-have improvements, minor optimizations
 - **Low**: Future enhancements, polish items
 
 ### Step 4: Create Action Plan
+
 Structured implementation plan:
+
 1. Immediate fixes (critical issues)
 2. Short-term improvements (high priority)
 3. Medium-term enhancements
 4. Long-term roadmap items
 
 ### Step 5: Document
+
 Comprehensive documentation including:
+
 - Executive summary
 - Agent findings by category
 - Prioritized recommendations
@@ -373,24 +426,26 @@ Use `henry-team` when you need custom combinations not covered by these commands
 
 ## Quick Reference
 
-| Task Type | Recommended Team | Size |
-|-----------|------------------|------|
-| Security review | security-engineer + backend-engineer | 2 |
-| Performance optimization | performance-engineer + frontend-engineer | 2 |
-| UX design | ux-researcher + ux-ui-designer + a11y-specialist | 3 |
-| Code review | qa-tester + security-engineer + performance-engineer | 3 |
-| Full-stack feature | frontend-engineer + backend-engineer + qa-tester | 3 |
-| Pre-launch audit | security-engineer + performance-engineer + a11y-specialist + seo-specialist + devops-sre-architect | 5 |
-| Product planning | product-strategist + data-analytics-engineer | 2 |
-| Design + implementation | ux-ui-designer + frontend-engineer + a11y-specialist | 3 |
+| Task Type                | Recommended Team                                                                                   | Size |
+| ------------------------ | -------------------------------------------------------------------------------------------------- | ---- |
+| Security review          | security-engineer + backend-engineer                                                               | 2    |
+| Performance optimization | performance-engineer + frontend-engineer                                                           | 2    |
+| UX design                | ux-researcher + ux-ui-designer + a11y-specialist                                                   | 3    |
+| Code review              | qa-tester + security-engineer + performance-engineer                                               | 3    |
+| Full-stack feature       | frontend-engineer + backend-engineer + qa-tester                                                   | 3    |
+| Pre-launch audit         | security-engineer + performance-engineer + a11y-specialist + seo-specialist + devops-sre-architect | 5    |
+| Product planning         | product-strategist + data-analytics-engineer                                                       | 2    |
+| Design + implementation  | ux-ui-designer + frontend-engineer + a11y-specialist                                               | 3    |
 
 ## Examples
 
 **Note:** For detailed, end-to-end examples with complete workflows, conflict resolution, and success metrics, see the `examples/` directory:
+
 - `examples/authentication-review.md` - Comprehensive security review workflow
 - `examples/landing-page-optimization.md` - SEO + performance + frontend coordination
 
 ### Example 1: Authentication Review
+
 ```
 /henry-orchestrator:henry-team security-engineer backend-engineer qa-tester - Review authentication implementation
 
@@ -406,6 +461,7 @@ Expected outputs:
 ```
 
 ### Example 2: Landing Page Optimization
+
 ```
 /henry-orchestrator:henry-team seo-specialist frontend-engineer performance-engineer - Optimize landing page
 
@@ -421,6 +477,7 @@ Expected outputs:
 ```
 
 ### Example 3: Mobile App Feature
+
 ```
 /henry-orchestrator:henry-team product-strategist ux-ui-designer mobile-app-engineer - Build offline-first notes feature
 
@@ -442,7 +499,9 @@ For more examples and detailed command documentation, see `/henry-orchestrator:h
 This skill includes comprehensive supporting materials organized for progressive disclosure:
 
 ### Examples Directory
+
 Complete, real-world examples with full workflows:
+
 - **authentication-review.md** - Security + backend + QA team reviewing authentication system
   - Team composition rationale
   - Phase-by-phase workflow
@@ -457,6 +516,7 @@ Complete, real-world examples with full workflows:
   - Lighthouse score improvements
 
 ### References Directory
+
 In-depth technical references for advanced usage:
 
 - **team-patterns.md** - Comprehensive catalog of team composition patterns

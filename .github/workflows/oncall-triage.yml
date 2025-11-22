@@ -3,7 +3,7 @@ description: Automatically identify and label critical blocking issues requiring
 on:
   push:
     branches:
-      - add-oncall-triage-workflow  # Temporary: for testing only
+      - add-oncall-triage-workflow # Temporary: for testing only
   schedule:
     # Run every 6 hours
     - cron: '0 */6 * * *'
@@ -112,8 +112,8 @@ jobs:
         uses: anthropics/claude-code-base-action@beta
         with:
           prompt_file: /tmp/claude-prompts/oncall-triage-prompt.txt
-          allowed_tools: "mcp__github__list_issues,mcp__github__get_issue,mcp__github__get_issue_comments,mcp__github__update_issue"
-          timeout_minutes: "10"
+          allowed_tools: 'mcp__github__list_issues,mcp__github__get_issue,mcp__github__get_issue_comments,mcp__github__update_issue'
+          timeout_minutes: '10'
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           mcp_config: /tmp/mcp-config/mcp-servers.json
           claude_env: |

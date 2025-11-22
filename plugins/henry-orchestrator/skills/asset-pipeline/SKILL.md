@@ -29,12 +29,14 @@ Invoke this skill when:
 ### 1. Asset Import and Validation
 
 **Import Process:**
+
 - Validate source asset formats (PNG, PSD, FBX, OBJ, WAV, MP3, etc.)
 - Check for naming conventions and directory structure
 - Verify asset dimensions, bit depth, and technical specifications
 - Detect and flag potential issues (incorrect color spaces, missing alpha channels)
 
 **Validation Checklist:**
+
 - Source resolution meets minimum quality thresholds
 - File formats are supported by target engine
 - Naming follows project conventions (e.g., `character_idle_01.png`)
@@ -45,6 +47,7 @@ Invoke this skill when:
 **Purpose:** Combine multiple small textures/sprites into larger atlas textures to reduce draw calls and improve rendering performance.
 
 **Process:**
+
 1. Collect all sprites requiring atlas packing (UI elements, character sprites, tile sets)
 2. Analyze sprite dimensions and determine optimal packing strategy
 3. Apply packing algorithm (MaxRects, Guillotine, Shelf)
@@ -53,6 +56,7 @@ Invoke this skill when:
 6. Export in engine-specific format (Unity Sprite Atlas, Godot AtlasTexture, TexturePacker JSON)
 
 **Optimization Techniques:**
+
 - Power-of-two atlas sizes for better GPU compatibility (512, 1024, 2048, 4096)
 - Add padding (1-2 pixels) between sprites to prevent texture bleeding
 - Group sprites by usage frequency (frequently used sprites in same atlas)
@@ -60,6 +64,7 @@ Invoke this skill when:
 - Consider mipmapping requirements when sizing atlases
 
 **Tool Integration:**
+
 - Use `scripts/generate_atlas.py` for automated atlas generation
 - Configure packing parameters in `examples/atlas_config.json`
 - Consult `references/texture-atlas-guide.md` for advanced techniques
@@ -69,12 +74,14 @@ Invoke this skill when:
 **Purpose:** Create multiple versions of 3D models and textures at different detail levels to optimize rendering performance based on camera distance.
 
 **LOD Levels:**
+
 - **LOD0:** Highest detail, used when close to camera
 - **LOD1:** Medium detail, used at medium distances (typically 50% triangle count)
 - **LOD2:** Low detail, used at far distances (typically 25% triangle count)
 - **LOD3+:** Minimal detail or billboard, used at extreme distances
 
 **Process:**
+
 1. Load source high-poly model (LOD0)
 2. Apply mesh simplification algorithms (edge collapse, vertex decimation)
 3. Generate reduced-poly versions (LOD1, LOD2, LOD3)
@@ -84,6 +91,7 @@ Invoke this skill when:
 7. Export LOD chain with metadata for engine import
 
 **Best Practices:**
+
 - Preserve silhouette quality in lower LOD levels
 - Test LOD transitions to avoid popping artifacts
 - Balance quality vs. performance (measure frame time impact)
@@ -91,6 +99,7 @@ Invoke this skill when:
 - Consider using impostors/billboards for distant objects
 
 **Tool Integration:**
+
 - Use `scripts/generate_lod.py` for automated LOD chain generation
 - Configure LOD parameters in `examples/lod_config.json`
 - Reference `references/lod-optimization-guide.md` for platform-specific settings
@@ -100,12 +109,14 @@ Invoke this skill when:
 **Purpose:** Compress and convert audio files to appropriate formats and quality levels for different use cases (music, SFX, voice).
 
 **Audio Categories:**
+
 - **Music:** Long-form, streaming, requires higher quality (compressed formats: OGG, MP3)
 - **Sound Effects:** Short, loaded into memory, can tolerate more compression
 - **Voice/Dialogue:** Speech-optimized compression, varies by language
 - **Ambient:** Looping sounds, medium priority
 
 **Process:**
+
 1. Categorize audio files by type (music/SFX/voice/ambient)
 2. Apply appropriate compression settings per category:
    - Music: OGG Vorbis at 128-192 kbps, stereo
@@ -117,6 +128,7 @@ Invoke this skill when:
 6. Create audio banks for efficient loading
 
 **Optimization Techniques:**
+
 - Convert stereo to mono for 3D positioned sounds (50% size reduction)
 - Use lower sample rates for non-critical sounds (22kHz vs 44.1kHz)
 - Implement audio streaming for long music tracks (>30 seconds)
@@ -127,6 +139,7 @@ Invoke this skill when:
 - Trim silence from beginning/end of audio files
 
 **Tool Integration:**
+
 - Use `scripts/optimize_audio.py` for batch audio processing
 - Configure audio settings in `examples/audio_config.json`
 - Reference `references/audio-optimization-guide.md` for codec comparisons
@@ -136,6 +149,7 @@ Invoke this skill when:
 **Purpose:** Optimize sprite-based animations and generate efficient sprite sheets.
 
 **Process:**
+
 1. Extract animation frames from sprite strips or individual files
 2. Remove duplicate frames (for file size reduction)
 3. Apply frame optimization (crop to minimal bounding box per frame)
@@ -144,6 +158,7 @@ Invoke this skill when:
 6. Export in engine-specific format (Unity Animation Clip, Godot SpriteFrames)
 
 **Optimization Techniques:**
+
 - Crop individual frames to minimum bounding box with consistent pivot point
 - Share common frames across animations when possible
 - Use frame skipping for less critical animations
@@ -151,6 +166,7 @@ Invoke this skill when:
 - Separate animation layers that change at different rates
 
 **Tool Integration:**
+
 - Use `scripts/process_animation.py` for sprite animation optimization
 - See `examples/animation_pipeline/` for complete animation workflow
 - Reference `references/animation-optimization-guide.md` for frame optimization strategies
@@ -211,6 +227,7 @@ project/
 ### Common Tasks
 
 **Generate Texture Atlas:**
+
 ```bash
 python scripts/generate_atlas.py \
   --input assets_source/sprites/ui/ \
@@ -219,6 +236,7 @@ python scripts/generate_atlas.py \
 ```
 
 **Create LOD Chain:**
+
 ```bash
 python scripts/generate_lod.py \
   --input assets_source/models/character.fbx \
@@ -228,6 +246,7 @@ python scripts/generate_lod.py \
 ```
 
 **Optimize Audio:**
+
 ```bash
 python scripts/optimize_audio.py \
   --input assets_source/audio/ \
@@ -236,6 +255,7 @@ python scripts/optimize_audio.py \
 ```
 
 **Process Sprite Animation:**
+
 ```bash
 python scripts/process_animation.py \
   --input assets_source/animations/character_walk/ \
@@ -246,21 +266,25 @@ python scripts/process_animation.py \
 ### Performance Targets
 
 **Texture Memory:**
+
 - Mobile: 512MB-1GB max texture memory
 - PC: 2GB-4GB typical, 8GB+ high-end
 - Console: Platform-specific (2GB-6GB)
 
 **Draw Calls:**
+
 - Mobile: <100 draw calls per frame
 - PC: <500-1000 draw calls per frame
 - Use atlases to batch sprites into single draw calls
 
 **Audio Memory:**
+
 - Keep loaded SFX under 50MB total
 - Stream music tracks (don't load into memory)
 - Mobile: Be conservative, limit to 20-30MB
 
 **LOD Switching Distances:**
+
 - Small props: LOD0 (0-10m), LOD1 (10-30m), LOD2 (30m+)
 - Characters: LOD0 (0-15m), LOD1 (15-50m), LOD2 (50m+)
 - Large environment: LOD0 (0-50m), LOD1 (50-150m), LOD2 (150m+)
@@ -268,18 +292,21 @@ python scripts/process_animation.py \
 ## Integration with Game Engines
 
 ### Unity
+
 - Import atlases using Unity Sprite Atlas system
 - Configure LOD Groups on models
 - Use Audio Import Settings for compression
 - Leverage Unity Asset Import Pipeline for automation
 
 ### Godot
+
 - Use AtlasTexture resources for sprite atlases
 - Configure LOD on MeshInstance nodes
 - Import audio with import presets
 - Use Godot's resource import system
 
 ### Custom Engines
+
 - Implement custom importers for processed assets
 - Load metadata files to configure runtime behavior
 - Integrate with build system for automated processing
@@ -317,30 +344,35 @@ Automation tools for asset processing:
 ## Best Practices Summary
 
 **Texture Atlases:**
+
 - Use power-of-two dimensions for GPU compatibility
 - Add 1-2 pixel padding to prevent bleeding
 - Group sprites by usage frequency and material
 - Separate opaque and transparent sprites when beneficial
 
 **LOD Generation:**
+
 - Preserve silhouettes in lower LOD levels
 - Test transitions to avoid visible popping
 - More aggressive LODs for small/distant objects
 - Bake normal maps to retain visual detail on low-poly LODs
 
 **Audio Optimization:**
+
 - Convert 3D positional sounds to mono
 - Stream long music tracks (>30 seconds)
 - Use appropriate codecs per platform
 - Normalize audio levels across all assets
 
 **Animation Processing:**
+
 - Crop frames to minimal bounding boxes
 - Remove duplicate frames
 - Share common frames across animations
 - Separate animation layers with different update rates
 
 **Pipeline Automation:**
+
 - Monitor source directories for changes
 - Apply consistent naming conventions
 - Validate assets before processing
@@ -350,21 +382,25 @@ Automation tools for asset processing:
 ## Troubleshooting
 
 **Atlas Bleeding Issues:**
+
 - Increase padding between sprites (try 2-4 pixels)
 - Disable mipmapping if bleeding persists
 - Use "clamp" texture wrapping mode
 
 **LOD Popping:**
+
 - Adjust LOD transition distances
 - Use cross-fade transitions if engine supports
 - Test LOD levels at target distances
 
 **Audio Crackling/Distortion:**
+
 - Check for clipping in source audio
 - Reduce compression ratio
 - Use higher bitrate for complex sounds
 
 **Large File Sizes:**
+
 - Review compression settings (may be too conservative)
 - Check for unused assets in build
 - Consider more aggressive LOD strategies

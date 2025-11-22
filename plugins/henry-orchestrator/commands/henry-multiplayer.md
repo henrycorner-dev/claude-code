@@ -1,6 +1,6 @@
 ---
 description: Adds netcode; syncs lobbies, real-time state.
-allowed-tools: ["Read", "Write", "Edit", "Grep", "Glob", "Bash", "WebFetch", "TodoWrite", "Task"]
+allowed-tools: ['Read', 'Write', 'Edit', 'Grep', 'Glob', 'Bash', 'WebFetch', 'TodoWrite', 'Task']
 ---
 
 Implement multiplayer functionality with the following requirements:

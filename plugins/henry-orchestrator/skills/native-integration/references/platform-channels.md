@@ -214,7 +214,7 @@ import { NativeEventEmitter, NativeModules } from 'react-native';
 const { LocationModule } = NativeModules;
 const locationEmitter = new NativeEventEmitter(LocationModule);
 
-locationEmitter.addListener('onLocationUpdate', (location) => {
+locationEmitter.addListener('onLocationUpdate', location => {
   console.log(location);
 });
 ```
@@ -308,13 +308,13 @@ public class CameraPlugin extends Plugin {
 
 ```javascript
 // JavaScript interface
-cordova.define("com.example.camera", function(require, exports, module) {
+cordova.define('com.example.camera', function (require, exports, module) {
   var exec = require('cordova/exec');
 
   var Camera = {
-    takePicture: function(success, error, options) {
-      exec(success, error, "Camera", "takePicture", [options]);
-    }
+    takePicture: function (success, error, options) {
+      exec(success, error, 'Camera', 'takePicture', [options]);
+    },
   };
 
   module.exports = Camera;
@@ -364,9 +364,7 @@ import { PermissionsAndroid, Platform } from 'react-native';
 
 export const requestCameraPermission = async () => {
   if (Platform.OS === 'android') {
-    const granted = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.CAMERA
-    );
+    const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA);
     return granted === PermissionsAndroid.RESULTS.GRANTED;
   }
   return true; // iOS handles permissions differently
@@ -376,6 +374,7 @@ export const requestCameraPermission = async () => {
 ### Native Permission Requests
 
 **Android (manifest + runtime):**
+
 ```xml
 <!-- AndroidManifest.xml -->
 <uses-permission android:name="android.permission.CAMERA" />
@@ -393,6 +392,7 @@ if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
 ```
 
 **iOS (Info.plist):**
+
 ```xml
 <key>NSCameraUsageDescription</key>
 <string>This app needs camera access to take pictures</string>
@@ -457,6 +457,7 @@ const takePicture = async () => {
 ### Background Thread Execution
 
 **Flutter (Android):**
+
 ```kotlin
 MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL)
   .setMethodCallHandler { call, result ->
@@ -476,6 +477,7 @@ MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL)
 ```
 
 **React Native (iOS):**
+
 ```objc
 RCT_EXPORT_METHOD(heavyOperation:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)

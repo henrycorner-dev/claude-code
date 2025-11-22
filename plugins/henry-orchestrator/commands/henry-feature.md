@@ -1,7 +1,7 @@
 ---
 description: Orchestrate complete feature development using specialist agents from strategy to optimization
 argument-hint: Feature description, goals, constraints
-allowed-tools: ["Glob", "Read", "Grep", "Bash", "Task", "TodoWrite"]
+allowed-tools: ['Glob', 'Read', 'Grep', 'Bash', 'Task', 'TodoWrite']
 ---
 
 # Henry Feature Development Orchestration

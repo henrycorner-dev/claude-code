@@ -1,7 +1,7 @@
 ---
 description: Sets up cross-platform app (React Native/Flutter); handles platform setup
 argument-hint: Optional project name or framework preference (React Native/Flutter)
-allowed-tools: ["Read", "Write", "Edit", "Grep", "Glob", "Bash", "TodoWrite", "AskUserQuestion"]
+allowed-tools: ['Read', 'Write', 'Edit', 'Grep', 'Glob', 'Bash', 'TodoWrite', 'AskUserQuestion']
 ---
 
 # Cross-Platform Mobile App Scaffolding
@@ -78,6 +78,7 @@ Guide the user through scaffolding a complete cross-platform mobile application 
 **Actions**:
 
 1. Present the auto-selected framework in a clear format:
+
    ```
    Auto-Selected Mobile Technology Stack:
 
@@ -140,6 +141,7 @@ Guide the user through scaffolding a complete cross-platform mobile application 
    - VS Code or Android Studio IDE
 
 3. Run system checks:
+
    ```bash
    # Node.js version (for React Native)
    node --version
@@ -166,6 +168,7 @@ Guide the user through scaffolding a complete cross-platform mobile application 
 5. Determine scaffolding commands:
 
    **React Native with Expo**:
+
    ```bash
    npx create-expo-app [project-name] --template blank-typescript
    # OR for JavaScript:
@@ -173,6 +176,7 @@ Guide the user through scaffolding a complete cross-platform mobile application 
    ```
 
    **React Native CLI**:
+
    ```bash
    npx react-native@latest init [ProjectName] --template react-native-template-typescript
    # OR for JavaScript:
@@ -180,6 +184,7 @@ Guide the user through scaffolding a complete cross-platform mobile application 
    ```
 
    **Flutter**:
+
    ```bash
    flutter create [project_name] --org com.example --platforms ios,android
    ```
@@ -199,30 +204,36 @@ Guide the user through scaffolding a complete cross-platform mobile application 
 2. Execute the scaffolding command based on chosen framework:
 
    **For React Native with Expo**:
+
    ```bash
    npx create-expo-app [project-name] --template blank-typescript
    ```
+
    - Creates project with Expo SDK
    - Includes Metro bundler configuration
    - Sets up app.json and package.json
    - Includes TypeScript configuration
 
    **For React Native CLI**:
+
    ```bash
    npx react-native@latest init [ProjectName] --template react-native-template-typescript
    ```
+
    - Creates native iOS and Android projects
    - Sets up Metro bundler
    - Configures iOS workspace and Podfile
    - Configures Android Gradle build
 
    **For Flutter**:
+
    ```bash
    flutter create [project_name] \
      --org com.example \
      --platforms ios,android \
      --description "Mobile app description"
    ```
+
    - Creates Flutter project structure
    - Generates iOS and Android native projects
    - Sets up pubspec.yaml for dependencies
@@ -255,6 +266,7 @@ Guide the user through scaffolding a complete cross-platform mobile application 
 1. Update TodoWrite: Mark "Configure platform-specific settings (iOS/Android)" as in_progress
 
 2. **For React Native CLI** (iOS setup on macOS):
+
    ```bash
    # Navigate to iOS directory
    cd [project-name]/ios
@@ -267,6 +279,7 @@ Guide the user through scaffolding a complete cross-platform mobile application 
    ```
 
 3. **For Flutter** (if needed, usually auto-configured):
+
    ```bash
    # Flutter automatically runs pub get
    # Verify with:
@@ -341,6 +354,7 @@ Guide the user through scaffolding a complete cross-platform mobile application 
 1. Update TodoWrite: Mark "Install dependencies and set up development tools" as in_progress
 
 2. Navigate to project directory:
+
    ```bash
    cd [project-name]
    ```
@@ -348,6 +362,7 @@ Guide the user through scaffolding a complete cross-platform mobile application 
 3. Install dependencies (if not already done):
 
    **React Native**:
+
    ```bash
    npm install
    # or
@@ -355,6 +370,7 @@ Guide the user through scaffolding a complete cross-platform mobile application 
    ```
 
    **Flutter**:
+
    ```bash
    flutter pub get
    ```
@@ -362,6 +378,7 @@ Guide the user through scaffolding a complete cross-platform mobile application 
 4. Add commonly useful packages based on framework:
 
    **React Native Essential Packages**:
+
    ```bash
    # Navigation
    npm install @react-navigation/native @react-navigation/native-stack
@@ -389,6 +406,7 @@ Guide the user through scaffolding a complete cross-platform mobile application 
 
    **Flutter Essential Packages**:
    Edit pubspec.yaml:
+
    ```yaml
    dependencies:
      flutter:
@@ -420,6 +438,7 @@ Guide the user through scaffolding a complete cross-platform mobile application 
    ```
 
    Then run:
+
    ```bash
    flutter pub get
    ```
@@ -440,6 +459,7 @@ Guide the user through scaffolding a complete cross-platform mobile application 
 
    **React Native**:
    Create .env.example:
+
    ```
    API_BASE_URL=https://api.example.com
    APP_ENV=development
@@ -474,6 +494,7 @@ Guide the user through scaffolding a complete cross-platform mobile application 
 1. Update TodoWrite: Mark "Verify installation and test on emulators" as in_progress
 
 2. **For React Native with Expo**:
+
    ```bash
    # Start Expo development server
    npm start
@@ -489,6 +510,7 @@ Guide the user through scaffolding a complete cross-platform mobile application 
 3. **For React Native CLI**:
 
    **iOS** (macOS only):
+
    ```bash
    npx react-native run-ios
    # or specify simulator:
@@ -496,6 +518,7 @@ Guide the user through scaffolding a complete cross-platform mobile application 
    ```
 
    **Android**:
+
    ```bash
    # Start Android emulator first via Android Studio
    # OR use command line:
@@ -506,6 +529,7 @@ Guide the user through scaffolding a complete cross-platform mobile application 
    ```
 
 4. **For Flutter**:
+
    ```bash
    # List available devices/emulators
    flutter devices
@@ -560,10 +584,12 @@ Guide the user through scaffolding a complete cross-platform mobile application 
 1. Mark all todos as completed
 
 2. Create MOBILE_SETUP.md in project root:
+
    ```markdown
    # [Project Name] - Mobile App Setup
 
    ## Technology Stack
+
    - Framework: [React Native with Expo / React Native CLI / Flutter]
    - Language: [TypeScript / JavaScript / Dart]
    - Platforms: iOS, Android
@@ -574,36 +600,36 @@ Guide the user through scaffolding a complete cross-platform mobile application 
    [For React Native]
    \`\`\`
    project-name/
-   ├── App.tsx              # Main app component
-   ├── app.json             # Expo configuration (if Expo)
-   ├── package.json         # Dependencies and scripts
-   ├── tsconfig.json        # TypeScript configuration
-   ├── ios/                 # iOS native code
-   ├── android/             # Android native code
-   ├── assets/              # Images, fonts, etc.
-   └── src/                 # Application source code
-       ├── components/      # Reusable components
-       ├── screens/         # Screen components
-       ├── navigation/      # Navigation setup
-       ├── services/        # API services
-       └── utils/           # Utility functions
+   ├── App.tsx # Main app component
+   ├── app.json # Expo configuration (if Expo)
+   ├── package.json # Dependencies and scripts
+   ├── tsconfig.json # TypeScript configuration
+   ├── ios/ # iOS native code
+   ├── android/ # Android native code
+   ├── assets/ # Images, fonts, etc.
+   └── src/ # Application source code
+   ├── components/ # Reusable components
+   ├── screens/ # Screen components
+   ├── navigation/ # Navigation setup
+   ├── services/ # API services
+   └── utils/ # Utility functions
    \`\`\`
 
    [For Flutter]
    \`\`\`
    project_name/
    ├── lib/
-   │   ├── main.dart        # App entry point
-   │   ├── screens/         # Screen widgets
-   │   ├── widgets/         # Reusable widgets
-   │   ├── models/          # Data models
-   │   ├── services/        # API services
-   │   └── utils/           # Utilities
-   ├── ios/                 # iOS native code
-   ├── android/             # Android native code
-   ├── assets/              # Images, fonts, etc.
-   ├── pubspec.yaml         # Dependencies and assets
-   └── test/                # Unit tests
+   │ ├── main.dart # App entry point
+   │ ├── screens/ # Screen widgets
+   │ ├── widgets/ # Reusable widgets
+   │ ├── models/ # Data models
+   │ ├── services/ # API services
+   │ └── utils/ # Utilities
+   ├── ios/ # iOS native code
+   ├── android/ # Android native code
+   ├── assets/ # Images, fonts, etc.
+   ├── pubspec.yaml # Dependencies and assets
+   └── test/ # Unit tests
    \`\`\`
 
    ## Getting Started
@@ -612,36 +638,36 @@ Guide the user through scaffolding a complete cross-platform mobile application 
 
    [React Native with Expo]
    \`\`\`bash
-   npm start          # Start Expo dev server
-   npm run ios        # Run on iOS simulator
-   npm run android    # Run on Android emulator
+   npm start # Start Expo dev server
+   npm run ios # Run on iOS simulator
+   npm run android # Run on Android emulator
    \`\`\`
 
    [React Native CLI]
    \`\`\`bash
-   npm start                    # Start Metro bundler
-   npx react-native run-ios     # Build and run on iOS
+   npm start # Start Metro bundler
+   npx react-native run-ios # Build and run on iOS
    npx react-native run-android # Build and run on Android
    \`\`\`
 
    [Flutter]
    \`\`\`bash
-   flutter run              # Run on connected device
-   flutter run -d ios       # Run on iOS simulator
-   flutter run -d android   # Run on Android emulator
+   flutter run # Run on connected device
+   flutter run -d ios # Run on iOS simulator
+   flutter run -d android # Run on Android emulator
    \`\`\`
 
    ### Testing
 
    [React Native]
    \`\`\`bash
-   npm test                # Run Jest tests
-   npm run test:watch      # Run tests in watch mode
+   npm test # Run Jest tests
+   npm run test:watch # Run tests in watch mode
    \`\`\`
 
    [Flutter]
    \`\`\`bash
-   flutter test            # Run all tests
+   flutter test # Run all tests
    flutter test --coverage # Run tests with coverage
    \`\`\`
 
@@ -649,7 +675,7 @@ Guide the user through scaffolding a complete cross-platform mobile application 
 
    [React Native with Expo]
    \`\`\`bash
-   eas build --platform ios     # Cloud build for iOS
+   eas build --platform ios # Cloud build for iOS
    eas build --platform android # Cloud build for Android
    \`\`\`
 
@@ -657,8 +683,8 @@ Guide the user through scaffolding a complete cross-platform mobile application 
    \`\`\`bash
    cd ios
    xcodebuild -workspace [ProjectName].xcworkspace \
-     -scheme [ProjectName] \
-     -configuration Release
+    -scheme [ProjectName] \
+    -configuration Release
    \`\`\`
 
    [React Native CLI - Android]
@@ -669,19 +695,21 @@ Guide the user through scaffolding a complete cross-platform mobile application 
 
    [Flutter]
    \`\`\`bash
-   flutter build ios       # Build for iOS
-   flutter build apk       # Build APK for Android
+   flutter build ios # Build for iOS
+   flutter build apk # Build APK for Android
    flutter build appbundle # Build App Bundle for Google Play
    \`\`\`
 
    ## Platform Configuration
 
    ### iOS
+
    - Minimum iOS version: 13.0
    - Bundle Identifier: [com.example.app]
    - Configuration: ios/Runner/Info.plist (Flutter) or ios/[ProjectName]/Info.plist (RN)
 
    ### Android
+
    - Minimum SDK: 21 (Android 5.0)
    - Package name: [com.example.app]
    - Configuration: android/app/build.gradle
@@ -707,23 +735,29 @@ Guide the user through scaffolding a complete cross-platform mobile application 
    ```
 
 3. Create development guide for common tasks:
+
    ```markdown
    ## Common Development Tasks
 
    ### Adding a new screen
+
    [Framework-specific instructions]
 
    ### Adding dependencies
+
    [Package installation commands]
 
    ### Debugging
+
    [Debugging tools and techniques]
 
    ### Performance optimization
+
    [Performance tips]
    ```
 
 4. Provide summary to user:
+
    ```
    Cross-Platform Mobile App Setup Complete!
 
@@ -822,25 +856,30 @@ Guide the user through scaffolding a complete cross-platform mobile application 
    ```
 
 5. Create quick reference for platform-specific issues:
+
    ```markdown
    ## Troubleshooting Guide
 
    ### iOS Issues
+
    - "No provisioning profile found" → Configure signing in Xcode
    - Pod install fails → Update CocoaPods, run pod repo update
    - Build fails → Clean build folder, delete DerivedData
 
    ### Android Issues
+
    - Emulator won't start → Check ANDROID_HOME, AVD configuration
    - Build fails → Clear Gradle cache, sync project
    - App won't install → Uninstall old version, clean build
 
    ### React Native Specific
+
    - Metro bundler issues → Clear cache: npx react-native start --reset-cache
    - Red screen errors → Check logs, verify imports
    - Native module errors → Re-run pod install (iOS), rebuild (Android)
 
    ### Flutter Specific
+
    - "Waiting for another flutter command" → Delete .flutter-plugins-dependencies
    - Gradle issues → Delete .gradle folder, run flutter clean
    - iOS build fails → Update CocoaPods, run pod repo update
@@ -855,6 +894,7 @@ Guide the user through scaffolding a complete cross-platform mobile application 
 ### Framework Selection Guidance
 
 **Choose React Native (Expo) when**:
+
 - Team has React/JavaScript experience
 - Rapid prototyping needed
 - Want managed build service
@@ -862,6 +902,7 @@ Guide the user through scaffolding a complete cross-platform mobile application 
 - Want easier OTA updates
 
 **Choose React Native (CLI) when**:
+
 - Need full native module access
 - Have specific native requirements
 - Want complete control over native code
@@ -869,6 +910,7 @@ Guide the user through scaffolding a complete cross-platform mobile application 
 - Need advanced performance optimization
 
 **Choose Flutter when**:
+
 - Team prefers Dart or wants to learn it
 - Need highly performant UI animations
 - Want single codebase for mobile + web + desktop
@@ -879,12 +921,14 @@ Guide the user through scaffolding a complete cross-platform mobile application 
 ### Platform Support Requirements
 
 **iOS Development Requirements** (macOS only):
+
 - Xcode (latest stable version)
 - iOS Simulator (included with Xcode)
 - CocoaPods (for React Native CLI)
 - Active Apple Developer Account (for device testing & deployment)
 
 **Android Development Requirements** (any OS):
+
 - Android Studio
 - Android SDK (API level 21+)
 - Android Emulator or physical device
@@ -911,27 +955,32 @@ Guide the user through scaffolding a complete cross-platform mobile application 
 ### Essential Tools & Services
 
 **Development**:
+
 - VS Code with relevant extensions
 - Android Studio for Android development
 - Xcode for iOS development (macOS)
 
 **Testing**:
+
 - Jest (React Native)
 - Flutter Test (Flutter)
 - Detox / Maestro for E2E testing
 
 **Backend & Services**:
+
 - Firebase (auth, database, analytics, crash reporting)
 - AWS Amplify
 - Supabase
 
 **Deployment & CI/CD**:
+
 - Expo EAS (for Expo apps)
 - Fastlane (automation)
 - GitHub Actions / Bitrise / Codemagic
 - App Center
 
 **Monitoring**:
+
 - Sentry (error tracking)
 - Firebase Crashlytics
 - Firebase Analytics / Google Analytics

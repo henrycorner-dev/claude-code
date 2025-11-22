@@ -1,7 +1,7 @@
 ---
 description: Product launch preparation with DevOps, SEO, analytics, QA, security
 argument-hint: Launch date, type (beta/full), platform
-allowed-tools: ["Glob", "Read", "Grep", "Bash", "Task", "TodoWrite", "Write"]
+allowed-tools: ['Glob', 'Read', 'Grep', 'Bash', 'Task', 'TodoWrite', 'Write']
 ---
 
 # Henry Launch Preparation
@@ -366,7 +366,6 @@ You are orchestrating a comprehensive product launch preparation using the Henry
 **Actions**:
 
 1. Create launch day checklist:
-
    - **Pre-Deployment** (T-24h):
      - [ ] Code freeze confirmed
      - [ ] All tests passing
@@ -397,7 +396,6 @@ You are orchestrating a comprehensive product launch preparation using the Henry
      - [ ] Team postmortem scheduled
 
 2. Team coordination:
-
    - Deployment owner assigned
    - Communication plan (Slack channel, status page)
    - Stakeholder notifications scheduled
@@ -419,7 +417,6 @@ You are orchestrating a comprehensive product launch preparation using the Henry
 **Actions**:
 
 1. Consolidate all readiness assessments:
-
    - ✅ DevOps/Infrastructure
    - ✅ SEO (if applicable)
    - ✅ Analytics
@@ -451,7 +448,6 @@ You are orchestrating a comprehensive product launch preparation using the Henry
    ```
 
 3. Review go/no-go criteria:
-
    - All critical tests passing ✓
    - No critical security issues ✓
    - Performance within budget ✓
@@ -473,7 +469,6 @@ You are orchestrating a comprehensive product launch preparation using the Henry
 **Actions**:
 
 1. Define launch success metrics:
-
    - **Reliability**: Uptime >99.9%, error rate <0.1%
    - **Performance**: Core Web Vitals passing
    - **Adoption**: X signups/day, Y active users
@@ -481,14 +476,12 @@ You are orchestrating a comprehensive product launch preparation using the Henry
    - **User Satisfaction**: NPS, CSAT scores
 
 2. Monitoring schedule:
-
    - **First hour**: Real-time monitoring (all hands)
    - **First 24h**: Hourly checks
    - **First week**: Daily reviews
    - **First month**: Weekly analytics review
 
 3. Incident thresholds:
-
    - **P0** (Critical): Complete outage, data loss
    - **P1** (High): Degraded performance, high error rate
    - **P2** (Medium): Minor issues, workarounds available

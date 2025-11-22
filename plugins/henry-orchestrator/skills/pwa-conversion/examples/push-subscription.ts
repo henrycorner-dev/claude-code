@@ -21,11 +21,7 @@ function urlBase64ToUint8Array(base64String: string): Uint8Array {
  * Check if push notifications are supported
  */
 export function isPushNotificationSupported(): boolean {
-  return (
-    'serviceWorker' in navigator &&
-    'PushManager' in window &&
-    'Notification' in window
-  );
+  return 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
 }
 
 /**
@@ -80,7 +76,7 @@ export async function subscribeToPushNotifications(
       // Subscribe to push notifications
       subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(vapidPublicKey)
+        applicationServerKey: urlBase64ToUint8Array(vapidPublicKey),
       });
 
       console.log('Push subscription created:', subscription);
@@ -152,9 +148,9 @@ async function sendSubscriptionToServer(subscription: PushSubscription): Promise
   const response = await fetch('/api/push/subscribe', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify(subscription)
+    body: JSON.stringify(subscription),
   });
 
   if (!response.ok) {
@@ -171,9 +167,9 @@ async function removeSubscriptionFromServer(endpoint: string): Promise<void> {
   const response = await fetch('/api/push/unsubscribe', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ endpoint })
+    body: JSON.stringify({ endpoint }),
   });
 
   if (!response.ok) {
@@ -202,19 +198,19 @@ export async function showTestNotification(): Promise<void> {
     vibrate: [200, 100, 200],
     data: {
       url: '/',
-      timestamp: Date.now()
+      timestamp: Date.now(),
     },
     actions: [
       {
         action: 'open',
-        title: 'Open App'
+        title: 'Open App',
       },
       {
         action: 'dismiss',
-        title: 'Dismiss'
-      }
+        title: 'Dismiss',
+      },
     ],
-    tag: 'test-notification'
+    tag: 'test-notification',
   });
 }
 
@@ -280,7 +276,7 @@ export function usePushNotifications(vapidPublicKey: string) {
     error,
     subscribe,
     unsubscribe,
-    testNotification
+    testNotification,
   };
 }
 

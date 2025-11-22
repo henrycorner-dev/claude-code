@@ -44,6 +44,7 @@ This example demonstrates how to assemble and coordinate a team to comprehensive
 All three agents independently review the authentication codebase:
 
 **Security Engineer focuses on:**
+
 - Authentication flow security
 - Token generation and validation
 - Password hashing implementation
@@ -53,6 +54,7 @@ All three agents independently review the authentication codebase:
 - Secure password reset flow
 
 **Backend Engineer focuses on:**
+
 - Code organization and structure
 - Error handling and logging
 - API endpoint design
@@ -62,6 +64,7 @@ All three agents independently review the authentication codebase:
 - Performance considerations
 
 **QA Tester focuses on:**
+
 - Existing test coverage
 - Missing test scenarios
 - Edge cases (expired tokens, invalid inputs, etc.)
@@ -97,21 +100,25 @@ Collect and integrate findings from all three agents:
 Synthesize findings into prioritized action items:
 
 **Critical (Immediate):**
+
 - Fix: Missing rate limiting on login endpoint (security)
 - Fix: Weak token expiration (1 year vs 1 hour) (security)
 - Add: CSRF protection on state-changing endpoints (security)
 
 **High (This Sprint):**
+
 - Improve: Error messages leaking user existence (security)
 - Refactor: Duplicate validation logic across routes (code quality)
 - Add: Security test cases for token expiration (testing)
 
 **Medium (Next Sprint):**
+
 - Enhance: Logging for security events (security/ops)
 - Optimize: Database queries for user lookups (performance)
 - Add: Integration tests for complete auth flows (testing)
 
 **Low (Backlog):**
+
 - Consider: Implementing refresh tokens (feature)
 - Improve: Password strength requirements (UX/security)
 - Add: Account lockout after failed attempts (security)
@@ -131,6 +138,7 @@ Synthesize findings into prioritized action items:
 
 **Resolution:**
 Implement generic user-facing errors with detailed server-side logging:
+
 - User sees: "Invalid credentials"
 - Server logs: Specific reason (wrong password, user not found, account locked)
 - Tests verify: No information leakage in responses, proper logging occurs
@@ -140,16 +148,19 @@ Implement generic user-facing errors with detailed server-side logging:
 ## Success Metrics
 
 **Security:**
+
 - Zero critical or high-severity vulnerabilities
 - All OWASP authentication best practices implemented
 - Successful penetration testing
 
 **Code Quality:**
+
 - Code maintainability score > 80%
 - No duplicate authentication logic
 - Consistent error handling
 
 **Testing:**
+
 - Test coverage for auth code > 90%
 - All security test cases passing
 - Edge cases covered
@@ -189,15 +200,19 @@ Implement generic user-facing errors with detailed server-side logging:
 ## Variations
 
 ### Smaller Team (2 agents)
+
 ```
 /henry-orchestrator:henry-team security-engineer backend-engineer - Quick security and code review
 ```
+
 Use when: Time-constrained, less critical system
 
 ### Larger Team (4-5 agents)
+
 ```
 /henry-orchestrator:henry-team security-engineer backend-engineer qa-tester devops-sre-architect performance-engineer - Complete auth system audit
 ```
+
 Use when: Production launch, critical system, need deployment and performance review too
 
 ## Related Examples

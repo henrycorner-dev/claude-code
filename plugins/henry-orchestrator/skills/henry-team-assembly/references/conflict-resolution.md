@@ -7,6 +7,7 @@ When assembling teams of specialists, conflicts in recommendations are inevitabl
 ### Why Conflicts Arise
 
 **Different optimization goals:**
+
 - Security optimizes for protection
 - Performance optimizes for speed
 - UX optimizes for user experience
@@ -14,6 +15,7 @@ When assembling teams of specialists, conflicts in recommendations are inevitabl
 - SEO optimizes for discoverability
 
 **Different trade-off perspectives:**
+
 - Short-term vs long-term impact
 - User experience vs technical constraints
 - Business goals vs technical best practices
@@ -21,6 +23,7 @@ When assembling teams of specialists, conflicts in recommendations are inevitabl
 - Cost vs capability
 
 **Different risk tolerances:**
+
 - Security engineers are risk-averse
 - Product strategists accept calculated risks
 - Performance engineers balance speed vs features
@@ -28,24 +31,28 @@ When assembling teams of specialists, conflicts in recommendations are inevitabl
 ### Types of Conflicts
 
 **1. Direct Contradiction**
+
 ```
 Agent A: "Use approach X"
 Agent B: "Never use approach X, use Y instead"
 ```
 
 **2. Priority Disagreement**
+
 ```
 Agent A: "This is critical, must fix immediately"
 Agent B: "This is low priority, can defer"
 ```
 
 **3. Scope Conflict**
+
 ```
 Agent A: "Add features X, Y, Z"
 Agent B: "Keep it simple, only feature X"
 ```
 
 **4. Technical Approach Conflict**
+
 ```
 Agent A: "Implement using library/pattern A"
 Agent B: "Implement using library/pattern B"
@@ -56,6 +63,7 @@ Agent B: "Implement using library/pattern B"
 ### Step 1: Identify the Conflict Clearly
 
 **Template:**
+
 ```
 Conflict: [Brief description]
 
@@ -76,24 +84,16 @@ Impact if Agent B's approach chosen: [Consequences]
 **Default Priority Framework:**
 
 **Tier 1: Non-Negotiable (Veto Power)**
+
 1. **Security** - Critical vulnerabilities, data breaches, compliance violations
 2. **Accessibility** - Legal compliance (WCAG 2.1 AA minimum for public sites)
 3. **Legal/Regulatory** - GDPR, CCPA, industry regulations
 
-**Tier 2: High Priority**
-4. **Performance** - Core Web Vitals, user experience impact
-5. **Data Integrity** - Data loss prevention, backup/recovery
-6. **Reliability** - Uptime, error handling
+**Tier 2: High Priority** 4. **Performance** - Core Web Vitals, user experience impact 5. **Data Integrity** - Data loss prevention, backup/recovery 6. **Reliability** - Uptime, error handling
 
-**Tier 3: Important**
-7. **User Experience** - Usability, user satisfaction
-8. **Maintainability** - Code quality, technical debt
-9. **SEO** - Organic traffic, discoverability
+**Tier 3: Important** 7. **User Experience** - Usability, user satisfaction 8. **Maintainability** - Code quality, technical debt 9. **SEO** - Organic traffic, discoverability
 
-**Tier 4: Nice to Have**
-10. **Features** - Additional functionality beyond core requirements
-11. **Polish** - Visual refinements, micro-interactions
-12. **Future-proofing** - Scalability beyond current needs
+**Tier 4: Nice to Have** 10. **Features** - Additional functionality beyond core requirements 11. **Polish** - Visual refinements, micro-interactions 12. **Future-proofing** - Scalability beyond current needs
 
 **Context-Specific Adjustments:**
 
@@ -125,18 +125,21 @@ Bring in additional specialist or stakeholder to decide.
 ### Conflict 1: Lazy Loading vs Accessibility
 
 **Setup:**
+
 ```
 Team: performance-engineer, a11y-specialist
 Context: Image-heavy product gallery
 ```
 
 **Conflict:**
+
 ```
 performance-engineer: "Lazy load all images to improve LCP and reduce initial load"
 a11y-specialist: "Lazy loading breaks keyboard navigation and screen reader announcement of new content"
 ```
 
 **Resolution (Strategy 2: Synthesis):**
+
 ```
 Solution: Implement lazy loading with accessibility enhancements
 
@@ -170,18 +173,21 @@ Result: Performance improvement (LCP 3.2s → 1.8s) + Full accessibility
 ### Conflict 2: Strict CSP vs Third-Party Widgets
 
 **Setup:**
+
 ```
 Team: security-engineer, frontend-engineer
 Context: Marketing landing page with chat widget, analytics
 ```
 
 **Conflict:**
+
 ```
 security-engineer: "Implement strict Content Security Policy: no inline scripts, only trusted domains"
 frontend-engineer: "Third-party widgets (chat, analytics, A/B testing) require inline scripts and external domains"
 ```
 
 **Resolution (Strategy 1: Hierarchy):**
+
 ```
 Decision: Security takes priority (Tier 1 > Tier 3 features)
 
@@ -211,18 +217,21 @@ Alternative if business requires specific widget:
 ### Conflict 3: Rich Animations vs Cumulative Layout Shift
 
 **Setup:**
+
 ```
 Team: ux-ui-designer, performance-engineer
 Context: Landing page with animated hero section
 ```
 
 **Conflict:**
+
 ```
 ux-ui-designer: "Animated hero with sliding text, parallax background, and fade-in elements for engaging experience"
 performance-engineer: "Animations causing CLS of 0.35 (target: <0.1). Harming performance score and user experience on slow devices"
 ```
 
 **Resolution (Strategy 2: Synthesis):**
+
 ```
 Solution: Performance-friendly animations that preserve design intent
 
@@ -282,12 +291,14 @@ Results:
 ### Conflict 4: Generic vs Specific Error Messages
 
 **Setup:**
+
 ```
 Team: security-engineer, backend-engineer, ux-ui-designer
 Context: User authentication flow
 ```
 
 **Conflict:**
+
 ```
 security-engineer: "All auth failures return 'Invalid credentials' to prevent user enumeration"
 backend-engineer: "Generic errors make debugging impossible. Need specific errors in logs."
@@ -295,6 +306,7 @@ ux-ui-designer: "Generic errors create poor UX. Users don't know if username or 
 ```
 
 **Resolution (Strategy 2: Synthesis):**
+
 ```
 Solution: Generic user-facing messages + detailed server-side logging + helpful UX
 
@@ -335,12 +347,14 @@ Result:
 ### Conflict 5: Build In-House vs Use Third-Party Library
 
 **Setup:**
+
 ```
 Team: backend-engineer, devops-sre-architect, security-engineer
 Context: Implementing OAuth authentication
 ```
 
 **Conflict:**
+
 ```
 backend-engineer: "Use Passport.js - battle-tested, community-supported, handles edge cases"
 security-engineer: "Third-party dependencies increase attack surface. Build minimal custom solution."
@@ -348,6 +362,7 @@ devops-sre-architect: "Third-party libraries require monitoring for CVEs and upd
 ```
 
 **Resolution (Strategy 3: Data-Driven):**
+
 ```
 Evaluation criteria:
 1. Security posture
@@ -403,18 +418,21 @@ Compromise:
 ### Conflict 6: Optimize Now vs Ship Fast
 
 **Setup:**
+
 ```
 Team: performance-engineer, product-strategist
 Context: New feature launch deadline in 2 weeks
 ```
 
 **Conflict:**
+
 ```
 performance-engineer: "LCP is 4.1s (target <2.5s). Need 1 week to optimize images, code splitting, caching."
 product-strategist: "Competitive launch window closes in 2 weeks. Ship now, optimize later. First-mover advantage critical."
 ```
 
 **Resolution (Strategy 4: Incremental):**
+
 ```
 Solution: Launch with minimum viable performance, optimize post-launch
 
@@ -510,18 +528,21 @@ Can the conflict be resolved incrementally?
 Sometimes you need additional input:
 
 **Escalate to additional specialist when:**
+
 - Technical solution isn't obvious
 - Both agents have valid points at same priority level
 - Decision requires domain expertise you don't have
 - Business impact is unclear
 
 **Escalate to stakeholder when:**
+
 - Involves business strategy decisions
 - Requires budget/resource allocation
 - Has significant user impact
 - Affects product roadmap
 
 **Example escalations:**
+
 ```
 # Technical escalation
 Conflict: security-engineer vs performance-engineer
@@ -541,16 +562,19 @@ Escalate to: ux-researcher for user testing validation
 After resolving conflicts, track outcomes:
 
 **Immediate metrics:**
+
 - Was decision clear and documented?
 - Were both perspectives considered?
 - Was rationale provided?
 
 **Short-term metrics (1-2 weeks):**
+
 - Did solution work as expected?
 - Were there implementation issues?
 - Did losing perspective's concerns materialize?
 
 **Long-term metrics (1-3 months):**
+
 - Was the right decision made in retrospect?
 - Would we make same decision again?
 - What did we learn for next time?
@@ -558,6 +582,7 @@ After resolving conflicts, track outcomes:
 ## Conclusion
 
 Effective conflict resolution:
+
 1. **Acknowledges** that conflicts are valuable, not problematic
 2. **Categorizes** conflicts by priority framework
 3. **Explores** synthesis solutions before choosing one perspective

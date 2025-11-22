@@ -11,6 +11,7 @@ version: 0.1.0
 Game UI design encompasses the visual and interactive elements that connect players with game systems. Effective game UI balances information delivery with aesthetic appeal while adapting to various platforms, input methods, and screen configurations.
 
 This skill covers:
+
 - **HUD Design**: Health bars, mini-maps, crosshairs, objective markers, and in-game overlays
 - **Menu Systems**: Main menus, pause screens, settings interfaces, and inventory management
 - **Input Handling**: Keyboard/mouse, controller/gamepad, touch controls, and cross-platform input
@@ -19,6 +20,7 @@ This skill covers:
 ## When to Use This Skill
 
 Apply this skill when:
+
 - Designing or implementing HUD elements (health bars, ammo counters, mini-maps)
 - Creating menu systems (main menu, pause menu, settings)
 - Implementing input handling for multiple devices (controller, touch, keyboard/mouse)
@@ -33,16 +35,19 @@ Apply this skill when:
 Organize information by importance:
 
 **Primary Information** (largest, highest contrast):
+
 - Player health and status
 - Current objective
 - Critical alerts
 
 **Secondary Information** (visible but less prominent):
+
 - Resources (ammo, currency)
 - Mini-map or radar
 - Ability cooldowns
 
 **Tertiary Information** (contextual):
+
 - Interaction prompts
 - Tutorial hints
 - Damage indicators
@@ -50,6 +55,7 @@ Organize information by importance:
 ### Screen Layout
 
 Position elements strategically:
+
 - **Top-Left**: Health, shields (most critical for LTR readers)
 - **Top-Right**: Resources, mini-map
 - **Bottom-Left**: Inventory, buffs
@@ -60,6 +66,7 @@ Position elements strategically:
 ### Clarity and Readability
 
 Ensure UI remains readable in all conditions:
+
 - Use high-contrast colors and fonts
 - Add outlines or drop shadows to text
 - Minimum font sizes: 18-24px (console), 14-16px (PC), 14px+ (mobile)
@@ -69,6 +76,7 @@ Ensure UI remains readable in all conditions:
 ### Feedback and Response
 
 Provide immediate feedback for all interactions:
+
 - **Visual**: Scale, color change, animation
 - **Audio**: Click sounds, confirmation chimes
 - **Haptic**: Controller rumble, mobile vibration
@@ -78,23 +86,27 @@ Provide immediate feedback for all interactions:
 ### Common HUD Elements
 
 **Health Bars:**
+
 - Linear, segmented, or radial displays
 - Color coding: Green (healthy) → Yellow (caution) → Red (critical)
 - Damage feedback: Flash, shake, pulse
 - Support multiple layers (health + shields + armor)
 
 **Resource Management:**
+
 - Ammunition displays with reserves
 - Cooldown indicators (numerical or circular fill)
 - Stamina/mana bars with regeneration visualization
 
 **Mini-Maps:**
+
 - Player position (centered or dynamic)
 - Objective markers
 - Enemy/ally indicators
 - Fog of war for unexplored areas
 
 **Damage Indicators:**
+
 - Directional arrows or screen-edge vignettes
 - Color-coded by threat level
 - Fade based on time and distance
@@ -127,38 +139,45 @@ Use state management to track current menu, previous menu, and navigation stack 
 ### Essential Menu Components
 
 **Buttons:**
+
 - Clear states: Normal, hover, pressed, disabled, focused
 - Minimum touch target: 44x44 pixels
 - Visual feedback for all interactions
 - Consistent sizing within menus
 
 **Input Fields:**
+
 - Placeholder text and character limits
 - Real-time validation feedback
 - Virtual keyboard support (mobile/console)
 
 **Sliders:**
+
 - Show current value (percentage or label)
 - Immediate feedback (e.g., audio playback for volume)
 - Large enough handles for touch/controller
 
 **Toggle Switches:**
+
 - Clear ON/OFF states with animation
 - Use in addition to color (accessibility)
 
 ### Navigation Patterns
 
 **Linear Navigation:**
+
 - Wrap-around: Last item → First item
 - Arrow keys/D-pad for movement
 - Enter/A to confirm, ESC/B to cancel
 
 **Grid Navigation:**
+
 - Two-dimensional movement
 - Support both D-pad and analog stick
 - Visual focus indicators
 
 **Tab Navigation:**
+
 - Shoulder buttons (LB/RB) for tab switching
 - Remember last selected item in each tab
 - Clear active tab indicator
@@ -181,18 +200,21 @@ Consult **`references/menu-systems.md`** for comprehensive menu architecture pat
 Design for all input methods simultaneously:
 
 **Keyboard and Mouse:**
+
 - Arrow keys + Tab navigation
 - Mouse hover and click
 - Show keyboard shortcuts on buttons
 - Support rebinding
 
 **Controller/Gamepad:**
+
 - D-pad or analog stick for navigation
 - Face buttons for confirm/cancel (A/× confirm, B/◯ cancel)
 - Shoulder buttons for tab switching
 - Show platform-specific button icons (Xbox vs PlayStation)
 
 **Touch Input:**
+
 - Large touch targets (minimum 44x44px)
 - Swipe gestures for common actions
 - Virtual joysticks and button overlays
@@ -202,15 +224,18 @@ Design for all input methods simultaneously:
 ### Input Systems
 
 **Unity New Input System:**
+
 - Define Input Actions (Player, UI, Vehicle)
 - Switch action maps based on context (gameplay vs menu)
 - Support multiple devices simultaneously
 
 **Unreal Enhanced Input:**
+
 - Input Actions and Input Mapping Contexts
 - Swap contexts when entering/exiting menus
 
 **Web-based:**
+
 - Gamepad API for controller support
 - Touch events for mobile
 - Keyboard event listeners
@@ -219,6 +244,7 @@ Design for all input methods simultaneously:
 ### Controller Navigation
 
 Optimize for controller:
+
 - Radial menus for quick access
 - Shoulder buttons for tab switching
 - Trigger buttons for fast scrolling
@@ -243,6 +269,7 @@ Consult **`references/input-handling.md`** for detailed input implementation, co
 Adapt UI for each platform:
 
 **Mobile:**
+
 - Larger touch targets (44x44px minimum)
 - Bottom-sheet modals instead of center dialogs
 - Simplified layouts (fewer columns)
@@ -250,12 +277,14 @@ Adapt UI for each platform:
 - Respect safe areas (notches, home indicators)
 
 **Tablet:**
+
 - Multi-column layouts
 - Split-screen for menus
 - Support both touch and mouse/trackpad
 - Utilize extra screen space
 
 **Desktop/Console:**
+
 - Smaller UI elements (more screen space)
 - Higher information density
 - Hover states and tooltips
@@ -264,16 +293,19 @@ Adapt UI for each platform:
 ### Screen Size Handling
 
 **Breakpoints:**
+
 - Mobile: < 768px
 - Tablet: 768px - 1024px
 - Desktop/Console: > 1024px
 
 **Unity Canvas Scaler:**
+
 - Use "Scale With Screen Size" mode
 - Set reference resolution (e.g., 1920x1080)
 - Adjust match width/height (0.5 for balanced)
 
 **Anchors and Constraints:**
+
 - Anchor UI elements to appropriate corners
 - Use stretch anchors for full-screen panels
 - Test at multiple aspect ratios (16:9, 21:9, 4:3, 19.5:9)
@@ -283,11 +315,13 @@ Adapt UI for each platform:
 Respect device safe zones:
 
 **Mobile Safe Areas:**
+
 - Avoid notches and camera cutouts
 - Account for home indicators
-- Use Screen.safeArea (Unity) or env(safe-area-inset-*) (CSS)
+- Use Screen.safeArea (Unity) or env(safe-area-inset-\*) (CSS)
 
 **Console Safe Zones:**
+
 - TV overscan: Keep important UI within 90% (action safe)
 - Text within 80% (title safe)
 - 5% margin recommended
@@ -295,6 +329,7 @@ Respect device safe zones:
 ### Orientation Handling
 
 Support both orientations:
+
 - Detect portrait vs landscape
 - Adapt layout dynamically
 - Lock orientation if game requires it
@@ -316,6 +351,7 @@ Consult **`references/responsive-design.md`** for detailed responsive techniques
 ### Unity Health Bar
 
 See **`examples/unity-health-bar.cs`** for a complete Unity health bar implementation featuring:
+
 - Smooth lerp animation
 - Damage bar (shows recent damage)
 - Color gradient based on health
@@ -323,6 +359,7 @@ See **`examples/unity-health-bar.cs`** for a complete Unity health bar implement
 - Text display
 
 Key features:
+
 - Configurable animation speeds
 - Damage flash feedback
 - Progressive disclosure
@@ -331,6 +368,7 @@ Key features:
 ### Unreal Pause Menu
 
 See **`examples/unreal-pause-menu.cpp`** for a complete UMG pause menu implementation featuring:
+
 - Resume, Settings, Main Menu, Quit buttons
 - Controller navigation with ESC/B to close
 - Fade in/out animations
@@ -338,6 +376,7 @@ See **`examples/unreal-pause-menu.cpp`** for a complete UMG pause menu implement
 - Input mode switching
 
 Key features:
+
 - Event-driven button callbacks
 - Animation support
 - Mouse cursor handling
@@ -346,6 +385,7 @@ Key features:
 ### Web Touch Controls
 
 See **`examples/web-touch-controls.js`** for a complete web-based touch control system featuring:
+
 - Virtual joystick with deadzone
 - Action buttons with visual feedback
 - Swipe gesture detection
@@ -353,6 +393,7 @@ See **`examples/web-touch-controls.js`** for a complete web-based touch control 
 - Haptic feedback
 
 Key features:
+
 - Responsive layout
 - Desktop mouse support (testing)
 - Debug display
@@ -375,6 +416,7 @@ For detailed patterns and techniques, consult:
 ### Working Examples
 
 Practical implementations in **`examples/`**:
+
 - **`unity-health-bar.cs`** - Animated health bar with damage feedback
 - **`unreal-pause-menu.cpp`** - Complete pause menu system with UMG
 - **`web-touch-controls.js`** - Mobile touch controls for web games
@@ -382,6 +424,7 @@ Practical implementations in **`examples/`**:
 ## Platform-Specific Notes
 
 ### Unity
+
 - Use Canvas Scaler with "Scale With Screen Size"
 - New Input System for modern input handling
 - TextMeshPro for high-quality text
@@ -389,6 +432,7 @@ Practical implementations in **`examples/`**:
 - Profile canvas rebuilds for performance
 
 ### Unreal Engine
+
 - UMG (Unreal Motion Graphics) for UI
 - Enhanced Input System for input handling
 - Widget Blueprints for visual design
@@ -396,6 +440,7 @@ Practical implementations in **`examples/`**:
 - Use Invalidation Boxes for performance
 
 ### Web-based Games
+
 - CSS Flexbox or Grid for layout
 - Gamepad API for controller support
 - Touch events for mobile
@@ -405,6 +450,7 @@ Practical implementations in **`examples/`**:
 ## Common Pitfalls to Avoid
 
 ❌ **Don't:**
+
 - Hard-code positions and sizes
 - Ignore safe areas on mobile
 - Use tiny text or touch targets
@@ -414,6 +460,7 @@ Practical implementations in **`examples/`**:
 - Ignore performance (excessive redraws)
 
 ✅ **Do:**
+
 - Use anchors and relative sizing
 - Test on real devices
 - Provide accessibility options

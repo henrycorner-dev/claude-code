@@ -254,7 +254,7 @@ class ClassName {
 
 ### TypeScript with JSDoc
 
-```typescript
+````typescript
 /**
  * Brief summary of function.
  *
@@ -295,7 +295,7 @@ interface ConfigOptions {
     value: string;
   };
 }
-```
+````
 
 ### Extracting JSDoc
 
@@ -394,7 +394,7 @@ godoc -http=:6060
 
 ### Rust Standard (Rustdoc)
 
-```rust
+````rust
 //! Module-level documentation.
 //!
 //! This is a longer description of the module.
@@ -472,7 +472,7 @@ impl StructName {
         // implementation
     }
 }
-```
+````
 
 ### Extracting Rust Docs
 
@@ -711,20 +711,20 @@ private:
 
 Common tags across languages:
 
-| Tag | Purpose | Example |
-|-----|---------|---------|
-| `@param` / `@arg` | Parameter description | `@param name User's name` |
-| `@return` / `@returns` | Return value | `@returns User object` |
-| `@throws` / `@raise` | Exception/error | `@throws ValueError` |
-| `@example` | Usage example | `@example result = func()` |
-| `@see` / `@link` | Related items | `@see other_function` |
-| `@since` | Version added | `@since 1.2.0` |
-| `@deprecated` | Deprecation notice | `@deprecated Use new_func` |
-| `@author` | Author name | `@author John Doe` |
-| `@version` | Version | `@version 1.0.0` |
-| `@note` | Additional notes | `@note This is important` |
-| `@warning` | Warning | `@warning Experimental` |
-| `@todo` | TODO item | `@todo Add validation` |
+| Tag                    | Purpose               | Example                    |
+| ---------------------- | --------------------- | -------------------------- |
+| `@param` / `@arg`      | Parameter description | `@param name User's name`  |
+| `@return` / `@returns` | Return value          | `@returns User object`     |
+| `@throws` / `@raise`   | Exception/error       | `@throws ValueError`       |
+| `@example`             | Usage example         | `@example result = func()` |
+| `@see` / `@link`       | Related items         | `@see other_function`      |
+| `@since`               | Version added         | `@since 1.2.0`             |
+| `@deprecated`          | Deprecation notice    | `@deprecated Use new_func` |
+| `@author`              | Author name           | `@author John Doe`         |
+| `@version`             | Version               | `@version 1.0.0`           |
+| `@note`                | Additional notes      | `@note This is important`  |
+| `@warning`             | Warning               | `@warning Experimental`    |
+| `@todo`                | TODO item             | `@todo Add validation`     |
 
 ## Best Practices
 

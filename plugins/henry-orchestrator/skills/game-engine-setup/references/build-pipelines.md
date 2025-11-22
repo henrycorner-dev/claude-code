@@ -7,24 +7,29 @@ Complete guide to building game projects for multiple platforms (iOS, Android, W
 ### Target Platforms
 
 **Mobile:**
+
 - iOS (iPhone, iPad)
 - Android (phones, tablets)
 
 **Desktop:**
+
 - Windows (DirectX, Vulkan)
 - macOS (Metal)
 - Linux (Vulkan, OpenGL)
 
 **Console:**
+
 - PlayStation 5
 - Xbox Series X/S
 - Nintendo Switch
 
 **Web:**
+
 - WebGL (Unity, Godot)
 - HTML5
 
 **VR/AR:**
+
 - Meta Quest
 - PlayStation VR2
 - Apple Vision Pro
@@ -32,16 +37,19 @@ Complete guide to building game projects for multiple platforms (iOS, Android, W
 ### Platform Requirements
 
 **iOS:**
+
 - Mac with Xcode
 - Apple Developer account ($99/year)
 - Provisioning profiles and certificates
 
 **Android:**
+
 - Android SDK and NDK
 - Java JDK
 - Keystore for signing
 
 **Console:**
+
 - Platform-specific SDK (requires approval and NDA)
 - Development kit hardware
 - Publisher/developer license
@@ -55,6 +63,7 @@ Edit → Project Settings → Player
 ```
 
 **Cross-Platform Settings:**
+
 ```
 Company Name: YourCompany
 Product Name: GameName
@@ -66,6 +75,7 @@ Default Cursor: (optional)
 ### Windows Build
 
 **Player Settings → PC, Mac & Linux Standalone:**
+
 ```
 Architecture: x86_64 (64-bit)
 Fullscreen Mode: Fullscreen Window
@@ -75,6 +85,7 @@ Resizable Window: True
 ```
 
 **Build:**
+
 ```
 File → Build Settings
 Platform: Windows
@@ -83,6 +94,7 @@ Click "Build" or "Build And Run"
 ```
 
 **Command-line build:**
+
 ```bash
 Unity -quit -batchmode \
   -projectPath /path/to/project \
@@ -93,12 +105,14 @@ Unity -quit -batchmode \
 ### macOS Build
 
 **Player Settings → Mac:**
+
 ```
 Bundle Identifier: com.yourcompany.gamename
 Signing Team ID: (from Apple Developer)
 ```
 
 **Build:**
+
 ```
 Platform: Mac
 Architecture: Intel 64-bit or Apple Silicon
@@ -106,6 +120,7 @@ Click "Build"
 ```
 
 **Command-line:**
+
 ```bash
 Unity -quit -batchmode \
   -projectPath /path/to/project \
@@ -116,6 +131,7 @@ Unity -quit -batchmode \
 ### Linux Build
 
 **Build:**
+
 ```
 Platform: Linux
 Architecture: x86_64
@@ -123,6 +139,7 @@ Click "Build"
 ```
 
 **Command-line:**
+
 ```bash
 Unity -quit -batchmode \
   -projectPath /path/to/project \
@@ -133,6 +150,7 @@ Unity -quit -batchmode \
 ### iOS Build
 
 **Player Settings → iOS:**
+
 ```
 Bundle Identifier: com.yourcompany.gamename
 Signing Team ID: (from Apple Developer)
@@ -142,6 +160,7 @@ Architecture: ARM64
 ```
 
 **Build:**
+
 ```
 Platform: iOS
 Click "Build"
@@ -149,6 +168,7 @@ Opens Xcode project → Build and run from Xcode
 ```
 
 **Automation with Fastlane:**
+
 ```ruby
 # Fastfile
 lane :build do
@@ -163,6 +183,7 @@ end
 ### Android Build
 
 **Player Settings → Android:**
+
 ```
 Package Name: com.yourcompany.gamename
 Version: 1.0.0
@@ -174,6 +195,7 @@ Target Architectures: ARM64
 ```
 
 **Keystore Setup:**
+
 ```
 Publishing Settings → Keystore Manager
   → Create New Keystore
@@ -183,6 +205,7 @@ Publishing Settings → Keystore Manager
 ```
 
 **Build:**
+
 ```
 Platform: Android
 Build App Bundle (AAB): For Google Play
@@ -191,6 +214,7 @@ Click "Build"
 ```
 
 **Command-line:**
+
 ```bash
 Unity -quit -batchmode \
   -projectPath /path/to/project \
@@ -199,6 +223,7 @@ Unity -quit -batchmode \
 ```
 
 **BuildScript.cs:**
+
 ```csharp
 using UnityEditor;
 
@@ -225,12 +250,14 @@ public class BuildScript
 ### WebGL Build
 
 **Player Settings → WebGL:**
+
 ```
 Compression Format: Gzip or Brotli
 Memory Size: 512 MB (or more for complex games)
 ```
 
 **Build:**
+
 ```
 Platform: WebGL
 Click "Build"
@@ -238,6 +265,7 @@ Upload generated folder to web server
 ```
 
 **Hosting:**
+
 - Upload to itch.io, Newgrounds, or own server
 - Serve with correct MIME types (WASM, gzip)
 
@@ -256,12 +284,14 @@ Edit → Project Settings → Project → Description
 ### Windows Build
 
 **Project Settings → Platforms → Windows:**
+
 ```
 Target RHIs: DirectX 12, DirectX 11
 Default RHI: DirectX 12
 ```
 
 **Package:**
+
 ```
 File → Package Project → Windows → Windows (64-bit)
 Choose output directory
@@ -269,6 +299,7 @@ Wait for packaging (can take 10-60 minutes)
 ```
 
 **Command-line (RunUAT):**
+
 ```bash
 RunUAT BuildCookRun \
   -project="C:/Projects/MyGame/MyGame.uproject" \
@@ -287,15 +318,18 @@ RunUAT BuildCookRun \
 ### macOS Build
 
 **Requirements:**
+
 - Mac for signing (can build on Windows with cross-compile)
 
 **Package:**
+
 ```
 File → Package Project → Mac
 Choose output directory
 ```
 
 **Command-line:**
+
 ```bash
 RunUAT BuildCookRun \
   -project="MyGame.uproject" \
@@ -307,6 +341,7 @@ RunUAT BuildCookRun \
 ### iOS Build
 
 **Project Settings → Platforms → iOS:**
+
 ```
 Bundle Identifier: com.yourcompany.gamename
 Mobile Provision: (upload provision file)
@@ -314,6 +349,7 @@ Certificate: (upload certificate)
 ```
 
 **Package:**
+
 ```
 File → Package Project → iOS
 Builds Xcode project
@@ -323,6 +359,7 @@ Open in Xcode and build to device
 ### Android Build
 
 **Project Settings → Platforms → Android:**
+
 ```
 Package Name: com.yourcompany.gamename
 Store Version: 1
@@ -332,6 +369,7 @@ Target SDK Version: 31
 ```
 
 **Install Android SDK:**
+
 ```
 Edit → Project Settings → Platforms → Android SDK
 Set paths:
@@ -341,6 +379,7 @@ Set paths:
 ```
 
 **Keystore:**
+
 ```
 Distribution Signing:
   Key Store: (path to keystore)
@@ -349,6 +388,7 @@ Distribution Signing:
 ```
 
 **Package:**
+
 ```
 File → Package Project → Android → Android (ASTC)
 Outputs APK or AAB
@@ -357,11 +397,13 @@ Outputs APK or AAB
 ### Console Builds
 
 **Requirements:**
+
 - Platform-specific SDK (PlayStation, Xbox, Switch)
 - Signed NDA with platform holder
 - Development kit hardware
 
 **General workflow:**
+
 1. Install platform SDK
 2. Configure Project Settings → Platforms → [Platform]
 3. Package Project → [Platform]
@@ -372,6 +414,7 @@ Outputs APK or AAB
 ### Export Templates
 
 **Install export templates:**
+
 ```
 Editor → Manage Export Templates → Download and Install
 ```
@@ -379,6 +422,7 @@ Editor → Manage Export Templates → Download and Install
 ### Windows Export
 
 **Project → Export:**
+
 1. Add → Windows Desktop
 2. Configure:
    - Runnable: True
@@ -386,6 +430,7 @@ Editor → Manage Export Templates → Download and Install
 3. Click "Export Project"
 
 **Command-line:**
+
 ```bash
 godot --export "Windows Desktop" builds/windows/game.exe
 ```
@@ -393,11 +438,13 @@ godot --export "Windows Desktop" builds/windows/game.exe
 ### Linux Export
 
 **Project → Export:**
+
 1. Add → Linux/X11
 2. Export Path: builds/linux/game.x86_64
 3. Export Project
 
 **Command-line:**
+
 ```bash
 godot --export "Linux/X11" builds/linux/game.x86_64
 ```
@@ -405,11 +452,13 @@ godot --export "Linux/X11" builds/linux/game.x86_64
 ### macOS Export
 
 **Project → Export:**
+
 1. Add → Mac OSX
 2. Export Path: builds/mac/game.zip
 3. Export Project
 
 **Command-line:**
+
 ```bash
 godot --export "Mac OSX" builds/mac/game.zip
 ```
@@ -417,6 +466,7 @@ godot --export "Mac OSX" builds/mac/game.zip
 ### Android Export
 
 **Setup Android SDK:**
+
 ```
 Editor → Editor Settings → Export → Android
   Android SDK Path: /path/to/android-sdk
@@ -424,6 +474,7 @@ Editor → Editor Settings → Export → Android
 ```
 
 **Project → Export:**
+
 1. Add → Android
 2. Configure:
    - Package → Unique Name: com.yourcompany.gamename
@@ -432,6 +483,7 @@ Editor → Editor Settings → Export → Android
 3. Export Project
 
 **Command-line:**
+
 ```bash
 godot --export "Android" builds/android/game.apk
 ```
@@ -439,10 +491,12 @@ godot --export "Android" builds/android/game.apk
 ### iOS Export
 
 **Requirements:**
+
 - Xcode installed
 - Apple Developer account
 
 **Project → Export:**
+
 1. Add → iOS
 2. Configure:
    - Application → Bundle Identifier: com.yourcompany.gamename
@@ -453,11 +507,13 @@ godot --export "Android" builds/android/game.apk
 ### Web (HTML5) Export
 
 **Project → Export:**
+
 1. Add → HTML5
 2. Export Path: builds/web/index.html
 3. Export Project
 
 **Host on web server:**
+
 ```bash
 cd builds/web
 python3 -m http.server 8000
@@ -469,6 +525,7 @@ python3 -m http.server 8000
 ### Reduce Build Size
 
 **Unity:**
+
 ```
 Player Settings → Other Settings
   Managed Stripping Level: High (IL2CPP)
@@ -482,6 +539,7 @@ Use Addressables for on-demand asset loading
 ```
 
 **Unreal:**
+
 ```
 Project Settings → Packaging
   Create compressed cooked packages: True
@@ -495,6 +553,7 @@ Remove unused assets
 ```
 
 **Godot:**
+
 ```
 Project → Export → Resources
   Filters to export non-resource files: (specify only needed files)
@@ -506,15 +565,18 @@ Export → Features
 ### Optimize Texture Compression
 
 **Unity:**
+
 - Android: ASTC
 - iOS: ASTC
 - Desktop: DXT (BC7)
 
 **Unreal:**
+
 - Use high-quality texture compression
 - LOD Bias for distant textures
 
 **Godot:**
+
 - Import → Compress: VRAM Compressed
 - Detect 3D: True (for 3D textures)
 
@@ -523,14 +585,15 @@ Export → Features
 ### GitHub Actions for Unity
 
 **.github/workflows/build.yml:**
+
 ```yaml
 name: Build Unity Project
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
@@ -561,6 +624,7 @@ jobs:
 ```
 
 **Obtain Unity license:**
+
 ```bash
 # Generate activation file
 unity-editor -quit -batchmode -nographics -createManualActivationFile
@@ -573,6 +637,7 @@ unity-editor -quit -batchmode -nographics -createManualActivationFile
 ### GitLab CI for Unreal
 
 **.gitlab-ci.yml:**
+
 ```yaml
 stages:
   - build
@@ -597,6 +662,7 @@ build-windows:
 ### Jenkins for Multi-Platform
 
 **Jenkinsfile:**
+
 ```groovy
 pipeline {
     agent any
@@ -633,6 +699,7 @@ pipeline {
 ### Docker for Unity Builds
 
 **Dockerfile:**
+
 ```dockerfile
 FROM unityci/editor:ubuntu-2022.3.10f1-windows-mono-1.0.1
 
@@ -650,6 +717,7 @@ RUN unity-editor \
 ```
 
 **Build:**
+
 ```bash
 docker build -t unity-build .
 docker run -v $(pwd):/project unity-build
@@ -660,6 +728,7 @@ docker run -v $(pwd):/project unity-build
 ### Unity Build Script
 
 **Assets/Editor/BuildScript.cs:**
+
 ```csharp
 using UnityEditor;
 using UnityEngine;
@@ -741,6 +810,7 @@ public class BuildScript
 ### Godot Build Script
 
 **build.sh:**
+
 ```bash
 #!/bin/bash
 
@@ -765,27 +835,32 @@ echo "All builds complete!"
 ## Troubleshooting
 
 **Unity - Build fails:**
+
 - Check Console for errors
 - Ensure all scenes added to Build Settings
 - Verify platform module installed (Unity Hub → Installs → Add Modules)
 
 **Unreal - Packaging fails:**
+
 - Check Output Log (Window → Developer Tools → Output Log)
 - Clear Intermediate and Saved folders
 - Regenerate project files
 - Ensure all assets have valid references
 
 **Godot - Export fails:**
+
 - Check Output tab for errors
 - Ensure export templates installed for engine version
 - Verify Android SDK/NDK paths correct
 
 **Android - Keystore issues:**
+
 - Use consistent keystore for updates (can't change)
 - Keep keystore password secure
 - Backup keystore (losing it means can't update app)
 
 **iOS - Provisioning errors:**
+
 - Ensure Bundle ID matches provisioning profile
 - Certificates not expired
 - Device UDID registered for ad-hoc builds

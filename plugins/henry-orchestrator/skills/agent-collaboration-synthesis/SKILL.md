@@ -23,6 +23,7 @@ Without synthesis, outputs remain fragmented and hard to act on. Synthesis creat
 ### Step 1: Collect All Outputs
 
 Gather deliverables from each agent:
+
 - Reports and findings
 - Code and designs
 - Recommendations and action items
@@ -34,16 +35,19 @@ Organize by agent to see the full picture before consolidating.
 ### Step 2: Identify Themes
 
 **Cross-agent patterns**: Look for issues multiple agents identified
+
 - Security and QA both flagged authentication edge cases
 - Performance and frontend both noted bundle size issues
 - A11y and UX both identified navigation problems
 
 **Complementary findings**: Identify where agents complement each other
+
 - Security identified auth vulnerabilities → QA can create security test cases
 - Performance found slow queries → Backend can optimize database
 - UX designed new flow → Frontend implements, A11y validates
 
 **Conflicting recommendations**: Note disagreements to resolve
+
 - Performance wants lazy loading vs. A11y concerned about keyboard nav
 - Security wants strict CSP vs. Frontend needs third-party widgets
 - UX wants animations vs. Performance concerned about CLS
@@ -53,26 +57,31 @@ Organize by agent to see the full picture before consolidating.
 Apply severity framework:
 
 **Critical (P0)**: Fix immediately
+
 - Security vulnerabilities exploitable in production
 - WCAG A violations (accessibility blockers)
 - Performance issues causing >5s load times
 - Complete feature failures
 
 **High (P1)**: Fix before launch
+
 - Important security hardening
 - WCAG AA violations
 - Performance issues preventing targets
 - Major UX problems
 
 **Medium (P2)**: Fix in near term
+
 - Defense-in-depth security improvements
 - Performance optimizations beyond targets
 - UX enhancements, code quality improvements
 
 **Low (P3)**: Backlog
+
 - Future enhancements, nice-to-have optimizations, polish
 
 Use **Impact × Effort matrix**:
+
 - High Impact, Low Effort → Do first (Quick wins)
 - High Impact, High Effort → Schedule next (Major improvements)
 - Low Impact, Low Effort → Do if time (Easy polish)
@@ -81,6 +90,7 @@ Use **Impact × Effort matrix**:
 ### Step 4: Resolve Conflicts
 
 **Priority order** when conflicts arise:
+
 1. **Security** > Everything (non-negotiable)
 2. **Accessibility** = Security (legal/ethical requirement)
 3. **Functionality** > Performance (must work, then optimize)
@@ -88,6 +98,7 @@ Use **Impact × Effort matrix**:
 5. **UX** guided by data and research
 
 **Resolution strategies**:
+
 - **Find Both/And**: Lazy loading + keyboard nav = Lazy loading with accessible indicators
 - **Security/A11y Prevails**: When security or a11y conflicts with features, security/a11y wins
 - **Data-Driven**: Use product-strategist for business trade-offs, A/B test if needed
@@ -102,10 +113,12 @@ See [references/best-practices.md](references/best-practices.md) for detailed co
 **Detailed findings**: Organized by category (Security, Performance, Quality, etc.)
 
 **Integrated recommendations**: Not separate agent recommendations, but unified plan
+
 - Group related recommendations (e.g., "Authentication Hardening" combining security + QA)
 - Sequence logically (foundational fixes first)
 
 **Action plan**: Phases with owners and deadlines
+
 - Immediate actions (P0 critical)
 - Short-term plan (P1 high priority)
 - Medium-term backlog (P2)
@@ -116,6 +129,7 @@ See [references/best-practices.md](references/best-practices.md) for detailed co
 ## Common Synthesis Scenarios
 
 ### Multi-Agent Review
+
 **Agents**: Security + Performance + QA
 **Focus**: Prioritization, conflict resolution
 **Output**: Action plan by priority with phases
@@ -123,6 +137,7 @@ See [references/best-practices.md](references/best-practices.md) for detailed co
 **Example**: E-commerce checkout review finds 5 critical issues (2 security, 3 performance), 8 high priority. Synthesis identifies authentication as cross-cutting theme (security vulnerability + QA test gap), creates integrated auth fix + test plan.
 
 ### Design Workflow
+
 **Agents**: UX Research → UX/UI Design → Visual Design → A11y
 **Focus**: Integration, handoff clarity
 **Output**: Design handoff package
@@ -130,6 +145,7 @@ See [references/best-practices.md](references/best-practices.md) for detailed co
 **Example**: Research insights inform UX flows, visual designs incorporate a11y requirements, complete package includes personas, flows, mockups, component specs, and implementation notes.
 
 ### Feature Development
+
 **Agents**: Product → Design → Frontend + Backend → QA
 **Focus**: Validation, coherence
 **Output**: Feature completion report
@@ -137,6 +153,7 @@ See [references/best-practices.md](references/best-practices.md) for detailed co
 **Example**: Validate frontend matches designs, backend API aligns with frontend, all features tested, success metrics instrumented.
 
 ### Pre-Launch Audit
+
 **Agents**: Security + Performance + A11y + SEO + Ops
 **Focus**: Risk assessment, go/no-go
 **Output**: Launch readiness report
@@ -148,6 +165,7 @@ See [references/synthesis-patterns.md](references/synthesis-patterns.md) for det
 ## Best Practices
 
 ### DO:
+
 ✅ Consolidate, don't just list (unified view, not separate reports)
 ✅ Prioritize ruthlessly (clear P0/P1/P2/P3 with rationale)
 ✅ Resolve conflicts explicitly (document decisions and trade-offs)
@@ -156,6 +174,7 @@ See [references/synthesis-patterns.md](references/synthesis-patterns.md) for det
 ✅ Highlight cross-cutting themes (where agents agree or complement)
 
 ### DON'T:
+
 ❌ Copy-paste agent outputs (synthesis means integration, not concatenation)
 ❌ Ignore conflicts (address disagreements, don't hide them)
 ❌ Create vague action items ("Improve performance" → "Reduce bundle size to <500KB")
@@ -178,13 +197,13 @@ See [references/synthesis-templates.md](references/synthesis-templates.md) for c
 
 ## Quick Reference
 
-| Scenario | Synthesis Focus | Key Output |
-|----------|----------------|------------|
-| Multi-agent review | Prioritization, conflict resolution | Action plan by priority |
-| Design workflow | Integration, handoff clarity | Design handoff package |
-| Feature development | Validation, coherence | Feature completion report |
-| Pre-launch audit | Risk assessment, go/no-go | Launch readiness report |
-| Optimization sprint | Before/after, impact | Optimization impact report |
+| Scenario            | Synthesis Focus                     | Key Output                 |
+| ------------------- | ----------------------------------- | -------------------------- |
+| Multi-agent review  | Prioritization, conflict resolution | Action plan by priority    |
+| Design workflow     | Integration, handoff clarity        | Design handoff package     |
+| Feature development | Validation, coherence               | Feature completion report  |
+| Pre-launch audit    | Risk assessment, go/no-go           | Launch readiness report    |
+| Optimization sprint | Before/after, impact                | Optimization impact report |
 
 ## Integration with Henry Commands
 
@@ -201,6 +220,7 @@ The henry commands already include synthesis phases, but this skill provides det
 ## Working Example
 
 See [examples/multi-agent-review/](examples/multi-agent-review/) for a complete example:
+
 - Individual agent findings (security, performance, QA)
 - Synthesis process walkthrough
 - Final synthesized report

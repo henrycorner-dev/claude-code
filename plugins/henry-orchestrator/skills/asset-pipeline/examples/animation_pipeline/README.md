@@ -69,11 +69,13 @@ python ../scripts/process_animation.py \
 ### 4. Output Files
 
 **Sprite Sheet (`character_walk.png`):**
+
 - Combined texture atlas of all animation frames
 - Frames cropped to minimal bounding box
 - Packed efficiently with padding
 
 **Metadata (`character_walk.json`):**
+
 ```json
 {
   "animation": "character_walk",
@@ -101,16 +103,19 @@ python ../scripts/process_animation.py \
 ### Frame Optimization
 
 **Duplicate Removal:**
+
 - Detects identical frames via hash comparison
 - Adjusts frame durations to maintain animation timing
 - Example: 10 frames with duplicates → 7 unique frames
 
 **Cropping:**
+
 - Removes transparent pixels from each frame
 - Stores original size and offset in metadata
 - Reduces texture memory by 30-70% typical
 
 **Consistent Pivot Points:**
+
 - Calculates consistent pivot for all frames
 - Prevents jittering during playback
 - Stored in metadata
@@ -118,11 +123,13 @@ python ../scripts/process_animation.py \
 ### Sprite Sheet Generation
 
 **Packing:**
+
 - Uses MaxRects algorithm for efficient packing
 - 2-4 pixel padding with edge extrusion
 - Power-of-two texture sizes (512, 1024, 2048)
 
 **Multi-Resolution:**
+
 - Generates @1x, @2x, @3x versions
 - Single metadata with normalized UVs
 - Load appropriate resolution per platform
@@ -130,11 +137,13 @@ python ../scripts/process_animation.py \
 ### Compression
 
 **Texture Compression:**
+
 - PC: DXT5 (BC3)
 - Mobile: ASTC 6x6 or ETC2
 - Web: PNG or WebP
 
 **Settings:**
+
 ```json
 {
   "compression": {
@@ -285,6 +294,7 @@ class Animation:
 **Cause:** Inconsistent pivot points across frames
 
 **Solution:**
+
 - Enable consistent pivot point calculation in config
 - Manually specify pivot point in config
 
@@ -293,6 +303,7 @@ class Animation:
 **Cause:** Frames not cropped, too much transparent space
 
 **Solution:**
+
 - Enable frame trimming in config
 - Check that source frames have transparent backgrounds
 
@@ -301,6 +312,7 @@ class Animation:
 **Cause:** Frame rate too low or uneven frame durations
 
 **Solution:**
+
 - Increase frame count or adjust frame_duration
 - Ensure consistent frame timing
 
@@ -309,6 +321,7 @@ class Animation:
 **Cause:** Insufficient padding or texture filtering
 
 **Solution:**
+
 - Increase padding to 4 pixels
 - Use edge extrusion padding
 - Disable mipmapping for sprite sheets

@@ -99,7 +99,7 @@ module.exports = {
   ValidationError,
   NotFoundError,
   UnauthorizedError,
-  ForbiddenError
+  ForbiddenError,
 };
 ```
 
@@ -115,14 +115,14 @@ module.exports = (err, req, res, next) => {
     message: err.message,
     stack: err.stack,
     path: req.path,
-    method: req.method
+    method: req.method,
   });
 
   // Handle known operational errors
   if (err.isOperational) {
     return res.status(err.statusCode).json({
       status: 'error',
-      message: err.message
+      message: err.message,
     });
   }
 
@@ -131,7 +131,7 @@ module.exports = (err, req, res, next) => {
     return res.status(400).json({
       status: 'error',
       message: 'Validation failed',
-      errors: err.details
+      errors: err.details,
     });
   }
 
@@ -139,21 +139,21 @@ module.exports = (err, req, res, next) => {
   if (err.name === 'JsonWebTokenError') {
     return res.status(401).json({
       status: 'error',
-      message: 'Invalid token'
+      message: 'Invalid token',
     });
   }
 
   if (err.name === 'TokenExpiredError') {
     return res.status(401).json({
       status: 'error',
-      message: 'Token expired'
+      message: 'Token expired',
     });
   }
 
   // Unknown errors
   res.status(500).json({
     status: 'error',
-    message: 'Internal server error'
+    message: 'Internal server error',
   });
 };
 ```
@@ -162,7 +162,7 @@ module.exports = (err, req, res, next) => {
 
 ```javascript
 // utils/asyncHandler.js
-module.exports = (fn) => (req, res, next) => {
+module.exports = fn => (req, res, next) => {
   Promise.resolve(fn(req, res, next)).catch(next);
 };
 ```
@@ -181,12 +181,12 @@ exports.getUsers = asyncHandler(async (req, res) => {
   const users = await userService.getUsers({
     page: parseInt(page),
     limit: parseInt(limit),
-    search
+    search,
   });
 
   res.status(200).json({
     status: 'success',
-    data: users
+    data: users,
   });
 });
 
@@ -200,7 +200,7 @@ exports.getUserById = asyncHandler(async (req, res) => {
 
   res.status(200).json({
     status: 'success',
-    data: user
+    data: user,
   });
 });
 
@@ -210,7 +210,7 @@ exports.createUser = asyncHandler(async (req, res) => {
 
   res.status(201).json({
     status: 'success',
-    data: user
+    data: user,
   });
 });
 
@@ -226,7 +226,7 @@ exports.updateUser = asyncHandler(async (req, res) => {
 
   res.status(200).json({
     status: 'success',
-    data: user
+    data: user,
   });
 });
 
@@ -252,12 +252,8 @@ class UserService {
     const query = search ? { name: new RegExp(search, 'i') } : {};
 
     const [users, total] = await Promise.all([
-      User.find(query)
-        .select('-password')
-        .skip(skip)
-        .limit(limit)
-        .lean(),
-      User.countDocuments(query)
+      User.find(query).select('-password').skip(skip).limit(limit).lean(),
+      User.countDocuments(query),
     ]);
 
     return {
@@ -266,8 +262,8 @@ class UserService {
         page,
         limit,
         total,
-        pages: Math.ceil(total / limit)
-      }
+        pages: Math.ceil(total / limit),
+      },
     };
   }
 
@@ -291,7 +287,7 @@ class UserService {
     const user = await User.create({
       email,
       password: hashedPassword,
-      name
+      name,
     });
 
     // Return without password
@@ -303,11 +299,10 @@ class UserService {
     // Don't allow password updates through this method
     const { password, ...safeUpdates } = updates;
 
-    const user = await User.findByIdAndUpdate(
-      id,
-      safeUpdates,
-      { new: true, runValidators: true }
-    ).select('-password');
+    const user = await User.findByIdAndUpdate(id, safeUpdates, {
+      new: true,
+      runValidators: true,
+    }).select('-password');
 
     return user;
   }
@@ -383,14 +378,14 @@ exports.authorize = (...roles) => {
 const Joi = require('joi');
 const { ValidationError } = require('../utils/errors');
 
-module.exports = (schema) => {
+module.exports = schema => {
   return (req, res, next) => {
     const { error } = schema.validate(req.body, { abortEarly: false });
 
     if (error) {
       const errors = error.details.map(detail => ({
         field: detail.path.join('.'),
-        message: detail.message
+        message: detail.message,
       }));
 
       throw new ValidationError('Validation failed', errors);
@@ -411,17 +406,17 @@ exports.createUserSchema = Joi.object({
   name: Joi.string().min(2).max(50).required(),
   email: Joi.string().email().required(),
   password: Joi.string().min(8).required(),
-  role: Joi.string().valid('user', 'admin').default('user')
+  role: Joi.string().valid('user', 'admin').default('user'),
 });
 
 exports.updateUserSchema = Joi.object({
   name: Joi.string().min(2).max(50),
-  email: Joi.string().email()
+  email: Joi.string().email(),
 }).min(1);
 
 exports.loginSchema = Joi.object({
   email: Joi.string().email().required(),
-  password: Joi.string().required()
+  password: Joi.string().required(),
 });
 ```
 
@@ -437,11 +432,7 @@ const validate = require('../middleware/validate');
 const { createUserSchema, updateUserSchema } = require('../validators/userValidators');
 
 // Public routes
-router.post(
-  '/register',
-  validate(createUserSchema),
-  userController.createUser
-);
+router.post('/register', validate(createUserSchema), userController.createUser);
 
 // Protected routes
 router.use(authenticate);
@@ -450,18 +441,9 @@ router.get('/', userController.getUsers);
 router.get('/:id', userController.getUserById);
 
 // Admin only routes
-router.patch(
-  '/:id',
-  authorize('admin'),
-  validate(updateUserSchema),
-  userController.updateUser
-);
+router.patch('/:id', authorize('admin'), validate(updateUserSchema), userController.updateUser);
 
-router.delete(
-  '/:id',
-  authorize('admin'),
-  userController.deleteUser
-);
+router.delete('/:id', authorize('admin'), userController.deleteUser);
 
 module.exports = router;
 ```
@@ -493,7 +475,7 @@ exports.connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGODB_URI, {
       useNewUrlParser: true,
-      useUnifiedTopology: true
+      useUnifiedTopology: true,
     });
     console.log('MongoDB connected');
   } catch (error) {
@@ -516,8 +498,8 @@ const sequelize = new Sequelize(process.env.DATABASE_URL, {
     max: 5,
     min: 0,
     acquire: 30000,
-    idle: 10000
-  }
+    idle: 10000,
+  },
 });
 
 exports.connectDB = async () => {
@@ -545,36 +527,39 @@ exports.sequelize = sequelize;
 // models/User.js
 const mongoose = require('mongoose');
 
-const userSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    trim: true
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+    },
+    password: {
+      type: String,
+      required: true,
+      minlength: 8,
+    },
+    role: {
+      type: String,
+      enum: ['user', 'admin'],
+      default: 'user',
+    },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
   },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    lowercase: true,
-    trim: true
-  },
-  password: {
-    type: String,
-    required: true,
-    minlength: 8
-  },
-  role: {
-    type: String,
-    enum: ['user', 'admin'],
-    default: 'user'
-  },
-  isActive: {
-    type: Boolean,
-    default: true
+  {
+    timestamps: true,
   }
-}, {
-  timestamps: true
-});
+);
 
 // Indexes
 userSchema.index({ email: 1 });
@@ -590,43 +575,44 @@ module.exports = mongoose.model('User', userSchema);
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/database');
 
-const User = sequelize.define('User', {
-  id: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
-    primaryKey: true
+const User = sequelize.define(
+  'User',
+  {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+      validate: {
+        isEmail: true,
+      },
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    role: {
+      type: DataTypes.ENUM('user', 'admin'),
+      defaultValue: 'user',
+    },
+    isActive: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+    },
   },
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true,
-    validate: {
-      isEmail: true
-    }
-  },
-  password: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  role: {
-    type: DataTypes.ENUM('user', 'admin'),
-    defaultValue: 'user'
-  },
-  isActive: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: true
+  {
+    timestamps: true,
+    indexes: [{ fields: ['email'] }, { fields: ['createdAt'] }],
   }
-}, {
-  timestamps: true,
-  indexes: [
-    { fields: ['email'] },
-    { fields: ['createdAt'] }
-  ]
-});
+);
 
 module.exports = User;
 ```
@@ -642,11 +628,9 @@ const { UnauthorizedError, ValidationError } = require('../utils/errors');
 
 class AuthService {
   generateToken(userId) {
-    return jwt.sign(
-      { userId },
-      process.env.JWT_SECRET,
-      { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
-    );
+    return jwt.sign({ userId }, process.env.JWT_SECRET, {
+      expiresIn: process.env.JWT_EXPIRES_IN || '7d',
+    });
   }
 
   async register(userData) {
@@ -665,7 +649,7 @@ class AuthService {
     const user = await User.create({
       email,
       password: hashedPassword,
-      name
+      name,
     });
 
     // Generate token
@@ -676,9 +660,9 @@ class AuthService {
         id: user._id,
         email: user.email,
         name: user.name,
-        role: user.role
+        role: user.role,
       },
-      token
+      token,
     };
   }
 
@@ -703,9 +687,9 @@ class AuthService {
         id: user._id,
         email: user.email,
         name: user.name,
-        role: user.role
+        role: user.role,
       },
-      token
+      token,
     };
   }
 }
@@ -724,14 +708,14 @@ exports.apiLimiter = rateLimit({
   max: 100, // Limit each IP to 100 requests per windowMs
   message: 'Too many requests from this IP, please try again later',
   standardHeaders: true,
-  legacyHeaders: false
+  legacyHeaders: false,
 });
 
 exports.authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 5, // Limit each IP to 5 login attempts per windowMs
   message: 'Too many login attempts, please try again later',
-  skipSuccessfulRequests: true
+  skipSuccessfulRequests: true,
 });
 ```
 
@@ -748,9 +732,9 @@ const storage = multer.diskStorage({
     cb(null, 'uploads/');
   },
   filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
     cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
-  }
+  },
 });
 
 const fileFilter = (req, file, cb) => {
@@ -767,8 +751,8 @@ exports.upload = multer({
   storage,
   fileFilter,
   limits: {
-    fileSize: 5 * 1024 * 1024 // 5MB
-  }
+    fileSize: 5 * 1024 * 1024, // 5MB
+  },
 });
 ```
 
@@ -800,13 +784,10 @@ describe('User API', () => {
       const userData = {
         name: 'Test User',
         email: 'test@example.com',
-        password: 'password123'
+        password: 'password123',
       };
 
-      const response = await request(app)
-        .post('/api/users/register')
-        .send(userData)
-        .expect(201);
+      const response = await request(app).post('/api/users/register').send(userData).expect(201);
 
       expect(response.body.status).toBe('success');
       expect(response.body.data.user.email).toBe(userData.email);
@@ -817,13 +798,10 @@ describe('User API', () => {
       const userData = {
         name: 'Test User',
         email: 'invalid-email',
-        password: 'password123'
+        password: 'password123',
       };
 
-      const response = await request(app)
-        .post('/api/users/register')
-        .send(userData)
-        .expect(400);
+      const response = await request(app).post('/api/users/register').send(userData).expect(400);
 
       expect(response.body.status).toBe('error');
     });
@@ -834,7 +812,7 @@ describe('User API', () => {
       const user = await User.create({
         name: 'Test User',
         email: 'test@example.com',
-        password: 'hashed_password'
+        password: 'hashed_password',
       });
 
       const token = generateToken(user._id);

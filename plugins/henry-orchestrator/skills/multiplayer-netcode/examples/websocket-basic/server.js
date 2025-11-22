@@ -28,7 +28,7 @@ class GameServer {
   }
 
   setupServer() {
-    this.wss.on('connection', (ws) => {
+    this.wss.on('connection', ws => {
       const clientId = this.nextClientId++;
       console.log(`Client ${clientId} connected`);
 
@@ -37,7 +37,7 @@ class GameServer {
         id: clientId,
         position: { x: 0, y: 0 },
         velocity: { x: 0, y: 0 },
-        lastProcessedInput: 0
+        lastProcessedInput: 0,
       };
 
       this.clients.set(clientId, { ws, player });
@@ -47,11 +47,11 @@ class GameServer {
       this.sendMessage(ws, {
         type: 'connected',
         clientId: clientId,
-        player: player
+        player: player,
       });
 
       // Handle messages
-      ws.on('message', (data) => {
+      ws.on('message', data => {
         try {
           const message = JSON.parse(data);
           this.handleMessage(clientId, message);
@@ -69,7 +69,7 @@ class GameServer {
         // Notify others
         this.broadcast({
           type: 'playerLeft',
-          playerId: clientId
+          playerId: clientId,
         });
       });
     });
@@ -144,7 +144,7 @@ class GameServer {
     // Send pong back
     this.sendMessage(client.ws, {
       type: 'pong',
-      sentAt: message.sentAt
+      sentAt: message.sentAt,
     });
   }
 
@@ -163,8 +163,8 @@ class GameServer {
         id: player.id,
         position: player.position,
         velocity: player.velocity,
-        lastProcessedInput: player.lastProcessedInput
-      }))
+        lastProcessedInput: player.lastProcessedInput,
+      })),
     };
 
     // Broadcast to all clients

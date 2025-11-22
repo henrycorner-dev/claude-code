@@ -1,7 +1,7 @@
 ---
 description: Adds third-party services (Stripe, Analytics); API keys prompt.
 argument-hint: Optional service name (stripe, analytics, auth, etc.) or preferences
-allowed-tools: ["Read", "Write", "Edit", "Grep", "Glob", "Bash", "TodoWrite", "AskUserQuestion"]
+allowed-tools: ['Read', 'Write', 'Edit', 'Grep', 'Glob', 'Bash', 'TodoWrite', 'AskUserQuestion']
 ---
 
 # Third-Party Service Integration
@@ -107,6 +107,7 @@ Guide the user through integrating third-party services into their application b
 **Actions**:
 
 1. Present recommended services in a clear format:
+
    ```
    Recommended Third-Party Services:
 
@@ -145,9 +146,9 @@ Guide the user through integrating third-party services into their application b
 3. Service-specific credential requirements:
 
    **Stripe**:
-   - Publishable Key (pk_test_... or pk_live_...)
-   - Secret Key (sk_test_... or sk_live_...)
-   - Webhook Secret (whsec_...) - optional initially
+   - Publishable Key (pk*test*... or pk*live*...)
+   - Secret Key (sk*test*... or sk*live*...)
+   - Webhook Secret (whsec\_...) - optional initially
 
    **Google Analytics**:
    - Measurement ID (G-XXXXXXXXXX)
@@ -179,6 +180,7 @@ Guide the user through integrating third-party services into their application b
    - Client Secret
 
 4. Provide guidance for obtaining credentials:
+
    ```
    To get your Stripe API keys:
    1. Go to https://dashboard.stripe.com/test/apikeys
@@ -203,6 +205,7 @@ Guide the user through integrating third-party services into their application b
 1. Update TodoWrite: Mark "Install required packages" as in_progress
 
 2. Determine package manager (npm, yarn, or pnpm):
+
    ```bash
    # Check for lock files
    ls package-lock.json yarn.lock pnpm-lock.yaml
@@ -211,57 +214,68 @@ Guide the user through integrating third-party services into their application b
 3. Install packages based on selected services:
 
    **Stripe**:
+
    ```bash
    npm install stripe @stripe/stripe-js
    npm install -D @types/stripe
    ```
 
    **Google Analytics (Next.js)**:
+
    ```bash
    npm install @next/third-parties
    ```
 
    **Google Analytics (React)**:
+
    ```bash
    npm install react-ga4
    ```
 
    **Sentry**:
+
    ```bash
    npm install @sentry/nextjs  # or @sentry/react, @sentry/node
    ```
 
    **SendGrid**:
+
    ```bash
    npm install @sendgrid/mail
    ```
 
    **Supabase**:
+
    ```bash
    npm install @supabase/supabase-js
    ```
 
    **OpenAI**:
+
    ```bash
    npm install openai
    ```
 
    **Clerk**:
+
    ```bash
    npm install @clerk/nextjs  # or @clerk/clerk-react
    ```
 
    **Auth0**:
+
    ```bash
    npm install @auth0/nextjs-auth0  # or auth0-js
    ```
 
    **PostHog**:
+
    ```bash
    npm install posthog-js
    ```
 
    **Mixpanel**:
+
    ```bash
    npm install mixpanel-browser
    ```
@@ -293,16 +307,17 @@ Guide the user through integrating third-party services into their application b
    **For Next.js**:
    - Use .env.local for local development (gitignored)
    - Use .env.example for template
-   - Use NEXT_PUBLIC_ prefix for client-side variables
+   - Use NEXT*PUBLIC* prefix for client-side variables
 
    **For other frameworks**:
    - Use .env for local development (gitignored)
    - Use .env.example for template
-   - Use VITE_ or REACT_APP_ prefix if applicable
+   - Use VITE* or REACT_APP* prefix if applicable
 
 4. Add environment variables for each service:
 
    **Stripe (.env.local)**:
+
    ```
    # Stripe
    STRIPE_PUBLISHABLE_KEY=pk_test_...
@@ -314,12 +329,14 @@ Guide the user through integrating third-party services into their application b
    ```
 
    **Google Analytics**:
+
    ```
    # Google Analytics
    NEXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX
    ```
 
    **Sentry**:
+
    ```
    # Sentry
    SENTRY_DSN=https://...@sentry.io/...
@@ -327,12 +344,14 @@ Guide the user through integrating third-party services into their application b
    ```
 
    **SendGrid**:
+
    ```
    # SendGrid
    SENDGRID_API_KEY=SG...
    ```
 
    **Supabase**:
+
    ```
    # Supabase
    NEXT_PUBLIC_SUPABASE_URL=https://....supabase.co
@@ -341,6 +360,7 @@ Guide the user through integrating third-party services into their application b
    ```
 
 5. Update .env.example with placeholder values:
+
    ```
    # Stripe (get from https://dashboard.stripe.com/test/apikeys)
    STRIPE_PUBLISHABLE_KEY=pk_test_your_key_here
@@ -375,6 +395,7 @@ Guide the user through integrating third-party services into their application b
 **For Next.js (App Router)**:
 
 Create `lib/stripe.ts`:
+
 ```typescript
 import Stripe from 'stripe';
 
@@ -385,17 +406,17 @@ export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 ```
 
 Create `lib/stripe-client.ts`:
+
 ```typescript
 import { loadStripe } from '@stripe/stripe-js';
 
-export const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
-);
+export const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 ```
 
 **For Express/Node backend**:
 
 Create `config/stripe.js` or `stripe.ts`:
+
 ```typescript
 import Stripe from 'stripe';
 
@@ -409,6 +430,7 @@ export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 **For Next.js (App Router)**:
 
 Update `app/layout.tsx`:
+
 ```typescript
 import { GoogleAnalytics } from '@next/third-parties/google';
 
@@ -431,6 +453,7 @@ export default function RootLayout({
 **For React (with react-ga4)**:
 
 Create `lib/analytics.ts`:
+
 ```typescript
 import ReactGA from 'react-ga4';
 
@@ -448,6 +471,7 @@ export const logPageView = () => {
 **For Next.js**:
 
 Run Sentry wizard:
+
 ```bash
 npx @sentry/wizard@latest -i nextjs
 ```
@@ -457,15 +481,13 @@ Or create `sentry.client.config.ts` and `sentry.server.config.ts` manually.
 **For React**:
 
 Create `lib/sentry.ts`:
+
 ```typescript
 import * as Sentry from '@sentry/react';
 
 Sentry.init({
   dsn: process.env.REACT_APP_SENTRY_DSN,
-  integrations: [
-    Sentry.browserTracingIntegration(),
-    Sentry.replayIntegration(),
-  ],
+  integrations: [Sentry.browserTracingIntegration(), Sentry.replayIntegration()],
   tracesSampleRate: 1.0,
   replaysSessionSampleRate: 0.1,
   replaysOnErrorSampleRate: 1.0,
@@ -477,6 +499,7 @@ Sentry.init({
 **For Next.js API Routes**:
 
 Create `lib/sendgrid.ts`:
+
 ```typescript
 import sgMail from '@sendgrid/mail';
 
@@ -503,6 +526,7 @@ export const sendEmail = async (to: string, subject: string, html: string) => {
 ### Supabase Integration
 
 Create `lib/supabase.ts`:
+
 ```typescript
 import { createClient } from '@supabase/supabase-js';
 
@@ -517,6 +541,7 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 **For Next.js (App Router)**:
 
 Update `app/layout.tsx`:
+
 ```typescript
 import { ClerkProvider } from '@clerk/nextjs';
 
@@ -536,6 +561,7 @@ export default function RootLayout({
 ```
 
 Create `middleware.ts`:
+
 ```typescript
 import { authMiddleware } from '@clerk/nextjs';
 
@@ -551,6 +577,7 @@ export const config = {
 ### OpenAI Integration
 
 Create `lib/openai.ts`:
+
 ```typescript
 import OpenAI from 'openai';
 
@@ -588,6 +615,7 @@ export const openai = new OpenAI({
 
    **Sentry Test**:
    - Trigger a test error to verify error tracking works
+
    ```typescript
    // Add to a test page
    throw new Error('Test Sentry integration');
@@ -602,6 +630,7 @@ export const openai = new OpenAI({
    - Verify authentication if applicable
 
 3. Run the development server:
+
    ```bash
    npm run dev
    ```
@@ -626,12 +655,14 @@ export const openai = new OpenAI({
 1. Mark all todos as completed
 
 2. Create or update INTEGRATIONS.md in project root:
+
    ```markdown
    # Third-Party Service Integrations
 
    ## Configured Services
 
    ### Stripe (Payments)
+
    - **Status**: Configured
    - **Mode**: Test Mode
    - **Files**:
@@ -644,6 +675,7 @@ export const openai = new OpenAI({
    - **Dashboard**: https://dashboard.stripe.com
 
    ### Google Analytics
+
    - **Status**: Configured
    - **Measurement ID**: G-XXXXXXXXXX
    - **Files**: `app/layout.tsx`
@@ -659,24 +691,26 @@ export const openai = new OpenAI({
    ## Usage Examples
 
    ### Stripe Payment Example
+
    \`\`\`typescript
    import { stripe } from '@/lib/stripe';
 
    // Create a payment intent
    const paymentIntent = await stripe.paymentIntents.create({
-     amount: 2000,
-     currency: 'usd',
+   amount: 2000,
+   currency: 'usd',
    });
    \`\`\`
 
    ### Send Email with SendGrid
+
    \`\`\`typescript
    import { sendEmail } from '@/lib/sendgrid';
 
    await sendEmail(
-     'user@example.com',
-     'Welcome!',
-     '<h1>Welcome to our app!</h1>'
+   'user@example.com',
+   'Welcome!',
+   '<h1>Welcome to our app!</h1>'
    );
    \`\`\`
 
@@ -697,10 +731,12 @@ export const openai = new OpenAI({
    ```
 
 3. Update README.md with integration information:
+
    ```markdown
    ## Third-Party Services
 
    This project uses the following services:
+
    - **Stripe** for payments
    - **Google Analytics** for analytics
    - **Sentry** for error tracking
@@ -709,6 +745,7 @@ export const openai = new OpenAI({
    ```
 
 4. Present summary to user:
+
    ```
    Third-Party Service Integration Complete!
 
@@ -785,7 +822,7 @@ export const openai = new OpenAI({
 2. **API Key Safety**:
    - Use test/sandbox keys during development
    - Never expose secret keys to client-side code
-   - Use NEXT_PUBLIC_ prefix only for truly public keys
+   - Use NEXT*PUBLIC* prefix only for truly public keys
    - Rotate keys if accidentally committed
 
 3. **Webhook Security**:
@@ -803,18 +840,21 @@ export const openai = new OpenAI({
 ### Common Service Combinations
 
 **E-commerce Stack**:
+
 - Stripe (payments)
 - SendGrid (transactional emails)
 - Google Analytics (tracking)
 - Sentry (error monitoring)
 
 **SaaS Stack**:
+
 - Clerk or Auth0 (authentication)
 - Stripe (subscriptions)
 - PostHog or Mixpanel (product analytics)
 - Sentry (error tracking)
 
 **Content Platform**:
+
 - Supabase (database + auth)
 - Cloudinary (media storage)
 - Google Analytics (analytics)
@@ -830,16 +870,19 @@ export const openai = new OpenAI({
 ### Framework-Specific Considerations
 
 **Next.js**:
+
 - Use .env.local for local development
-- Use NEXT_PUBLIC_ for client-side variables
+- Use NEXT*PUBLIC* for client-side variables
 - API routes for server-side service calls
 
 **React (CRA/Vite)**:
-- Use REACT_APP_ or VITE_ prefixes
+
+- Use REACT*APP* or VITE\_ prefixes
 - Use .env for local development
 - Backend required for secret API keys
 
 **Express/Node**:
+
 - Use dotenv package
 - All services can be server-side
 - Implement CORS for frontend communication

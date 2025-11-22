@@ -27,6 +27,7 @@ Phase 1 → Phase 2 → Phase 3 → Phase 4 → Phase 5
 **Agent**: product-strategist
 
 **Deliverables**:
+
 - Product Requirements Document (PRD)
 - User stories and acceptance criteria
 - Success metrics (DAU, engagement rate, feature adoption)
@@ -47,6 +48,7 @@ Phase 1 → Phase 2 → Phase 3 → Phase 4 → Phase 5
 **Agents**: ux-researcher, ux-ui-designer, ui-visual-designer, a11y-specialist
 
 **Deliverables**:
+
 - User research insights
 - Wireframes and user flows
 - High-fidelity designs
@@ -70,6 +72,7 @@ Phase 1 → Phase 2 → Phase 3 → Phase 4 → Phase 5
 **Agents**: frontend-engineer, backend-engineer, qa-tester, security-engineer, performance-engineer
 
 **Deliverables**:
+
 - React dashboard components
 - WebSocket API for real-time updates
 - Database schema for analytics data
@@ -93,6 +96,7 @@ Phase 1 → Phase 2 → Phase 3 → Phase 4 → Phase 5
 **Agents**: qa-tester, security-engineer, performance-engineer, frontend-engineer, backend-engineer
 
 **Deliverables**:
+
 - Code review feedback
 - Security vulnerability assessment
 - Performance benchmark results
@@ -116,6 +120,7 @@ Phase 1 → Phase 2 → Phase 3 → Phase 4 → Phase 5
 **Agents**: devops-sre-architect, seo-specialist, data-analytics-engineer, qa-tester, security-engineer
 
 **Deliverables**:
+
 - Deployment plan
 - Monitoring dashboards
 - Alert configurations
@@ -150,12 +155,14 @@ Day 7: Launch
 ## When to Use Linear Workflow
 
 ✅ **Use when**:
+
 - Clear dependencies between phases
 - Later work requires earlier outputs
 - Building new features from scratch
 - Need comprehensive documentation at each stage
 
 ❌ **Avoid when**:
+
 - Phases can run independently
 - Need faster iteration
 - Working on small, isolated changes

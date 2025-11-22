@@ -18,9 +18,13 @@ class SpatialGrid {
     this.rows = Math.ceil(height / cellSize);
 
     // Grid cells - each cell contains array of entity IDs
-    this.cells = Array(this.rows).fill(null).map(() =>
-      Array(this.cols).fill(null).map(() => new Set())
-    );
+    this.cells = Array(this.rows)
+      .fill(null)
+      .map(() =>
+        Array(this.cols)
+          .fill(null)
+          .map(() => new Set())
+      );
 
     // Entity tracking
     this.entities = new Map(); // id -> entity
@@ -30,7 +34,7 @@ class SpatialGrid {
   cellCoords(x, y) {
     return {
       col: Math.floor(x / this.cellSize),
-      row: Math.floor(y / this.cellSize)
+      row: Math.floor(y / this.cellSize),
     };
   }
 
@@ -105,12 +109,7 @@ class SpatialGrid {
     const nearbyIds = new Set();
 
     // Get cells in query range
-    const cells = this.getCellsForBounds(
-      x - radius,
-      y - radius,
-      x + radius,
-      y + radius
-    );
+    const cells = this.getCellsForBounds(x - radius, y - radius, x + radius, y + radius);
 
     // Collect all entities in those cells
     for (const { col, row } of cells) {
@@ -170,7 +169,7 @@ class SpatialGrid {
       nonEmptyCells,
       totalEntities: this.entities.size,
       maxEntitiesInCell,
-      avgEntitiesPerCell: totalEntities / Math.max(1, nonEmptyCells)
+      avgEntitiesPerCell: totalEntities / Math.max(1, nonEmptyCells),
     };
   }
 }
@@ -259,7 +258,7 @@ class SpatialGridDemo {
     this.perfStats = {
       spatialGridTime: 0,
       bruteForceTime: 0,
-      collisionsFound: 0
+      collisionsFound: 0,
     };
 
     this.setupInput();
@@ -283,7 +282,7 @@ class SpatialGridDemo {
   }
 
   setupInput() {
-    this.canvas.addEventListener('click', (e) => {
+    this.canvas.addEventListener('click', e => {
       const rect = this.canvas.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
@@ -301,13 +300,13 @@ class SpatialGridDemo {
       this.grid.insert(entity);
     });
 
-    this.canvas.addEventListener('mousemove', (e) => {
+    this.canvas.addEventListener('mousemove', e => {
       const rect = this.canvas.getBoundingClientRect();
       this.queryX = e.clientX - rect.left;
       this.queryY = e.clientY - rect.top;
     });
 
-    window.addEventListener('keydown', (e) => {
+    window.addEventListener('keydown', e => {
       if (e.code === 'KeyG') {
         this.showGrid = !this.showGrid;
       }
@@ -434,12 +433,7 @@ class SpatialGridDemo {
           if (count > 0) {
             const intensity = Math.min(count / stats.maxEntitiesInCell, 1);
             ctx.fillStyle = `rgba(0, 255, 0, ${intensity * 0.2})`;
-            ctx.fillRect(
-              col * this.cellSize,
-              row * this.cellSize,
-              this.cellSize,
-              this.cellSize
-            );
+            ctx.fillRect(col * this.cellSize, row * this.cellSize, this.cellSize, this.cellSize);
           }
         }
       }
@@ -501,7 +495,11 @@ class SpatialGridDemo {
     }
     y += 25;
 
-    ctx.fillText(`Grid: ${this.grid.cols}x${this.grid.rows} (${gridStats.totalCells} cells)`, 20, y);
+    ctx.fillText(
+      `Grid: ${this.grid.cols}x${this.grid.rows} (${gridStats.totalCells} cells)`,
+      20,
+      y
+    );
     y += 20;
     ctx.fillText(`Non-empty cells: ${gridStats.nonEmptyCells}`, 20, y);
     y += 20;
@@ -533,13 +531,13 @@ class SpatialGridDemo {
     this.update(dt);
     this.render();
 
-    requestAnimationFrame((time) => this.gameLoop(time));
+    requestAnimationFrame(time => this.gameLoop(time));
   }
 
   start() {
     this.running = true;
     this.lastTime = performance.now();
-    requestAnimationFrame((time) => this.gameLoop(time));
+    requestAnimationFrame(time => this.gameLoop(time));
   }
 
   stop() {

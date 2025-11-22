@@ -7,6 +7,7 @@ Complete guide to setting up, organizing, and working with Unity projects. Cover
 ### Creating a New Project
 
 **Using Unity Hub (Recommended):**
+
 1. Open Unity Hub
 2. Click "New Project"
 3. Select template:
@@ -18,6 +19,7 @@ Complete guide to setting up, organizing, and working with Unity projects. Cover
 5. Click "Create Project"
 
 **Template Selection Guide:**
+
 - **Mobile game**: 3D (URP) or 2D
 - **PC/Console AAA**: 3D (HDRP)
 - **Stylized 3D**: 3D (URP)
@@ -29,6 +31,7 @@ Complete guide to setting up, organizing, and working with Unity projects. Cover
 After creating project, configure essential settings:
 
 **Editor Preferences:**
+
 ```
 Edit → Preferences → External Tools
 - Set External Script Editor (Visual Studio, VS Code, Rider)
@@ -38,6 +41,7 @@ Edit → Preferences → Colors
 ```
 
 **Project Settings:**
+
 ```
 Edit → Project Settings → Editor
 - Version Control Mode: Visible Meta Files
@@ -97,12 +101,14 @@ Assets/
 ### Naming Conventions
 
 **Files and Folders:**
+
 - **PascalCase** for scripts: `PlayerController.cs`, `GameManager.cs`
 - **PascalCase** for prefabs: `PlayerCharacter.prefab`, `EnemyZombie.prefab`
 - **PascalCase** for scenes: `MainMenu.unity`, `Level01.unity`
 - **lowercase with underscores** for textures: `player_diffuse.png`, `wall_normal.png`
 
 **Prefixes for Organization:**
+
 - Scenes: `_` prefix for main scenes: `_MainMenu.unity`, `_GameScene.unity`
 - UI: `UI_` prefix: `UI_HealthBar.prefab`
 - Managers: `Manager` suffix: `AudioManager.cs`, `GameManager.cs`
@@ -146,6 +152,7 @@ SampleScene
 ```
 
 **Benefits:**
+
 - Clear visual separation
 - Easy to find objects
 - Collapsible sections
@@ -156,6 +163,7 @@ SampleScene
 Use additive scene loading for large projects:
 
 **Scene Structure:**
+
 - `_Persistent.unity` - Managers, never unloaded
 - `MainMenu.unity` - Main menu UI
 - `Level01.unity` - Gameplay level
@@ -163,6 +171,7 @@ Use additive scene loading for large projects:
 - `Level01_Audio.unity` - Audio sources
 
 **Loading Scenes:**
+
 ```csharp
 using UnityEngine.SceneManagement;
 
@@ -182,6 +191,7 @@ SceneManager.SetActiveScene(scene);
 ### MonoBehaviour Basics
 
 **Standard MonoBehaviour Template:**
+
 ```csharp
 using UnityEngine;
 
@@ -268,6 +278,7 @@ Unity calls MonoBehaviour methods in specific order:
 ### Singleton Pattern (Manager)
 
 **Persistent singleton manager:**
+
 ```csharp
 public class GameManager : MonoBehaviour
 {
@@ -322,6 +333,7 @@ public class GameManager : MonoBehaviour
 ```
 
 **Usage:**
+
 ```csharp
 GameManager.Instance.AddScore(100);
 ```
@@ -329,6 +341,7 @@ GameManager.Instance.AddScore(100);
 ### ScriptableObject for Data
 
 **Defining data container:**
+
 ```csharp
 using UnityEngine;
 
@@ -353,6 +366,7 @@ public class WeaponData : ScriptableObject
 ```
 
 **Using ScriptableObject:**
+
 ```csharp
 public class Gun : MonoBehaviour
 {
@@ -376,6 +390,7 @@ public class Gun : MonoBehaviour
 ```
 
 **Benefits:**
+
 - Reusable data across scenes
 - Easy to tweak in Inspector
 - Saves memory (single instance)
@@ -384,6 +399,7 @@ public class Gun : MonoBehaviour
 ### Event System
 
 **Using UnityEvents:**
+
 ```csharp
 using UnityEngine;
 using UnityEngine.Events;
@@ -425,6 +441,7 @@ public class Health : MonoBehaviour
 ```
 
 **Connecting in Inspector or Code:**
+
 ```csharp
 health.OnHealthChanged.AddListener(UpdateHealthBar);
 health.OnDeath.AddListener(HandlePlayerDeath);
@@ -433,6 +450,7 @@ health.OnDeath.AddListener(HandlePlayerDeath);
 ### Coroutines
 
 **Basic coroutine pattern:**
+
 ```csharp
 using System.Collections;
 using UnityEngine;
@@ -479,6 +497,7 @@ public class CoroutineExample : MonoBehaviour
 ```
 
 **Common yield types:**
+
 - `yield return null;` - Wait one frame
 - `yield return new WaitForSeconds(1f);` - Wait 1 second
 - `yield return new WaitForFixedUpdate();` - Wait for next FixedUpdate
@@ -490,11 +509,13 @@ public class CoroutineExample : MonoBehaviour
 ### Creating Prefabs
 
 **Method 1: Drag to Project:**
+
 1. Configure GameObject in scene
 2. Drag from Hierarchy to Project window (Assets/Prefabs/)
 3. GameObject becomes blue (prefab instance)
 
 **Method 2: Prefab Mode:**
+
 1. Right-click in Project → Create → Prefab
 2. Double-click prefab to enter Prefab Mode
 3. Add components and configure
@@ -510,6 +531,7 @@ Create variations of base prefabs:
 4. Override properties (e.g., speed = 10)
 
 **Benefits:**
+
 - Inherit changes from base prefab
 - Override specific properties
 - Maintain consistency across variants
@@ -534,6 +556,7 @@ Changes to `Wheel.prefab` propagate to all car prefabs.
 ### Instantiating Prefabs
 
 **At runtime:**
+
 ```csharp
 [SerializeField] private GameObject enemyPrefab;
 [SerializeField] private Transform spawnPoint;
@@ -552,6 +575,7 @@ private void SpawnEnemy()
 ```
 
 **Object pooling for performance:**
+
 ```csharp
 using System.Collections.Generic;
 using UnityEngine;
@@ -602,6 +626,7 @@ public class ObjectPool : MonoBehaviour
 ### Attributes for Better Inspector
 
 **Common attributes:**
+
 ```csharp
 using UnityEngine;
 
@@ -638,6 +663,7 @@ public class InspectorExample : MonoBehaviour
 ### Custom Property Drawers
 
 **Simple custom drawer:**
+
 ```csharp
 using UnityEngine;
 
@@ -662,6 +688,7 @@ public class ReadOnlyDrawer : PropertyDrawer
 ```
 
 **Usage:**
+
 ```csharp
 [ReadOnly]
 [SerializeField] private int currentScore;
@@ -672,6 +699,7 @@ public class ReadOnlyDrawer : PropertyDrawer
 ### Installing Packages
 
 **Package Manager:**
+
 ```
 Window → Package Manager
 - Unity Registry: Official Unity packages
@@ -680,6 +708,7 @@ Window → Package Manager
 ```
 
 **Common packages:**
+
 - **TextMeshPro**: Better text rendering
 - **Cinemachine**: Advanced camera system
 - **Input System**: Modern input handling
@@ -687,6 +716,7 @@ Window → Package Manager
 - **Universal RP**: Modern rendering pipeline
 
 **Install via manifest.json:**
+
 ```json
 {
   "dependencies": {
@@ -728,6 +758,7 @@ Per-Platform Settings:
 ### Input Handling (New Input System)
 
 **Install Input System package, then:**
+
 ```csharp
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -770,6 +801,7 @@ public class PlayerInput : MonoBehaviour
 ### Animation with Animator
 
 **Set up Animator Controller:**
+
 1. Create Animator Controller: Assets → Create → Animator Controller
 2. Open Animator window: Window → Animation → Animator
 3. Create states: Right-click → Create State → Empty
@@ -777,6 +809,7 @@ public class PlayerInput : MonoBehaviour
 5. Add parameters: Parameters tab → + → Float/Int/Bool/Trigger
 
 **Controlling from code:**
+
 ```csharp
 private Animator animator;
 
@@ -804,18 +837,21 @@ private void Update()
 ## Performance Best Practices
 
 **General:**
+
 - Cache component references in Awake/Start (don't use GetComponent every frame)
 - Use object pooling for frequently instantiated objects
 - Disable unnecessary components when not needed
 - Use layers and tags for efficient queries
 
 **Physics:**
+
 - Use FixedUpdate() for physics
 - Reduce Rigidbody.maxAngularVelocity if not needed
 - Use Discrete collision detection for fast-moving objects
 - Simplify collision meshes
 
 **Rendering:**
+
 - Use static batching for non-moving objects
 - Enable GPU instancing on materials
 - Use atlased textures
@@ -824,20 +860,24 @@ private void Update()
 ## Troubleshooting
 
 **Script not working:**
+
 - Check Console for errors (Window → General → Console)
 - Ensure script attached to GameObject
 - Check spelling of methods (case-sensitive)
 
 **Prefab overrides not applying:**
+
 - Check if value is overridden (blue indicator)
 - Use "Apply All" to push changes to prefab
 
 **NullReferenceException:**
+
 - Component not assigned in Inspector
 - GetComponent() returning null
 - Object destroyed but still referenced
 
 **Scene not loading:**
+
 - Scene not added to Build Settings
 - Incorrect scene name in LoadScene()
 

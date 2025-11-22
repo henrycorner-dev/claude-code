@@ -13,6 +13,7 @@ Bridge mobile and desktop applications to native device APIs (camera, GPS, biome
 Native integration enables cross-platform applications to access platform-specific device capabilities that aren't available through standard web APIs. This skill provides guidance for implementing platform channels and native modules across Flutter, React Native, Capacitor, and Cordova frameworks.
 
 **Core capabilities covered:**
+
 - Platform channel implementation (Flutter, React Native, Capacitor, Cordova)
 - Device API access (camera, GPS, biometrics, sensors, Bluetooth)
 - Permission handling across platforms
@@ -22,6 +23,7 @@ Native integration enables cross-platform applications to access platform-specif
 ## When to Use This Skill
 
 Use this skill when implementing features that require:
+
 - **Camera access** - Taking photos, recording video, scanning QR codes
 - **Location services** - GPS tracking, geofencing, maps integration
 - **Biometric authentication** - Fingerprint, Face ID, Touch ID
@@ -36,38 +38,45 @@ Use this skill when implementing features that require:
 ### Communication Types
 
 **Method Channels** - One-off method calls from app to native code
+
 - Use for: Taking a photo, requesting current location, single operations
 - Pattern: Promise-based request/response
 
 **Event Channels** - Streaming data from native to app
+
 - Use for: GPS updates, sensor data, continuous monitoring
 - Pattern: Observable/stream-based data flow
 
 **Message Channels** - Bidirectional asynchronous messaging
+
 - Use for: Complex data structures, custom serialization
 - Pattern: Custom codec implementation
 
 ### Framework-Specific Implementation
 
 **Flutter:**
+
 - `MethodChannel` for method calls
 - `EventChannel` for streaming data
 - `BasicMessageChannel` for custom messaging
 - Platform-specific implementations in Kotlin/Swift
 
 **React Native:**
+
 - `NativeModules` for method calls
 - `NativeEventEmitter` for events
 - Promise-based APIs
 - Platform packages for registration
 
 **Capacitor:**
+
 - Plugin architecture with TypeScript definitions
 - Web fallback support
 - Automatic iOS/Android bridging
 - Consistent API across platforms
 
 **Cordova:**
+
 - Plugin.xml configuration
 - exec() bridge for communication
 - Callback-based APIs
@@ -86,6 +95,7 @@ Implement camera functionality with proper permission handling:
 5. **Handle errors** - Permission denied, hardware unavailable
 
 **Key considerations:**
+
 - iOS requires `NSCameraUsageDescription` in Info.plist
 - Android requires runtime permission requests (API 23+)
 - Handle different camera types (front/back, wide/telephoto)
@@ -102,6 +112,7 @@ Implement location tracking with accuracy options:
 5. **Handle background location** - Special permissions and considerations
 
 **Key considerations:**
+
 - Battery impact of accuracy settings
 - Background location requires additional permissions
 - Geofencing capabilities
@@ -118,6 +129,7 @@ Implement secure biometric authentication:
 5. **Error handling** - Locked out, not enrolled, cancelled
 
 **Key considerations:**
+
 - iOS requires `NSFaceIDUsageDescription` in Info.plist
 - Android BiometricPrompt API (API 28+)
 - Fallback authentication methods
@@ -134,6 +146,7 @@ Access accelerometer, gyroscope, and other sensors:
 5. **Unsubscribe when done** - Prevent battery drain
 
 **Common sensors:**
+
 - Accelerometer - Device motion and orientation
 - Gyroscope - Rotation rate
 - Magnetometer - Compass heading
@@ -145,12 +158,14 @@ Access accelerometer, gyroscope, and other sensors:
 ### Permission Model Differences
 
 **iOS:**
+
 - Declared in Info.plist with usage descriptions
 - Requested at runtime when feature is first used
 - Three states: Not Determined, Denied, Authorized
 - Cannot request permission again after denial (must direct to Settings)
 
 **Android:**
+
 - Declared in AndroidManifest.xml
 - Runtime permissions required for dangerous permissions (API 23+)
 - Can request permissions multiple times
@@ -165,6 +180,7 @@ Access accelerometer, gyroscope, and other sensors:
 5. **Direct to settings** if permanently denied
 
 **Best practices:**
+
 - Request permissions in context (when user taps "Take Photo")
 - Explain why permission is needed
 - Provide fallback functionality if permission denied
@@ -196,11 +212,13 @@ Handle missing features gracefully:
 ### Platform-Specific Error Handling
 
 **iOS:**
+
 - LAError codes for biometrics
 - CLError codes for location
 - AVError codes for camera
 
 **Android:**
+
 - BiometricPrompt error codes
 - LocationSettingsStatusCodes
 - Camera2 exceptions
@@ -212,20 +230,24 @@ Handle missing features gracefully:
 Long-running operations should run on background threads:
 
 **Flutter/Android:**
+
 - Use Kotlin coroutines or RxJava
 - Return results on main thread for UI updates
 
 **Flutter/iOS:**
+
 - Use Grand Central Dispatch (GCD)
 - Dispatch back to main queue for results
 
 **React Native:**
+
 - Native modules run on separate thread by default
 - Return results automatically marshalled to JS thread
 
 ### Memory Management
 
 **Important considerations:**
+
 - Release camera resources when done
 - Unsubscribe from location updates
 - Cancel pending operations on screen unmount
@@ -244,6 +266,7 @@ Long-running operations should run on background threads:
 ### Emulator Limitations
 
 Many features don't work in emulators:
+
 - Biometrics (fingerprint, Face ID)
 - Camera (limited functionality)
 - GPS (can simulate location)

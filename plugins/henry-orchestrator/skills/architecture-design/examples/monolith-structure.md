@@ -124,7 +124,7 @@ project-root/
 ```typescript
 // ✅ GOOD: Module depends on shared utilities
 // src/modules/users/domain/user.service.ts
-import { ValidationError } from '@/shared/types/common.types'
+import { ValidationError } from '@/shared/types/common.types';
 
 export class UserService {
   validateEmail(email: string) {
@@ -136,8 +136,8 @@ export class UserService {
 ```typescript
 // ✅ GOOD: Module uses infrastructure interface
 // src/modules/users/application/create-user.use-case.ts
-import { UserRepository } from '../domain/user.repository'
-import { EmailService } from '@/infrastructure/email/email.service'
+import { UserRepository } from '../domain/user.repository';
+import { EmailService } from '@/infrastructure/email/email.service';
 
 export class CreateUserUseCase {
   constructor(
@@ -152,7 +152,7 @@ export class CreateUserUseCase {
 ```typescript
 // ❌ BAD: Direct dependency between modules
 // src/modules/orders/domain/order.service.ts
-import { UserService } from '@/modules/users/domain/user.service' // NO!
+import { UserService } from '@/modules/users/domain/user.service'; // NO!
 
 export class OrderService {
   // Orders module should not directly import from Users module
@@ -164,24 +164,24 @@ export class OrderService {
 ```typescript
 // ✅ GOOD: Use events for cross-module communication
 // src/modules/orders/domain/order.service.ts
-import { EventBus } from '@/infrastructure/events/event-bus'
+import { EventBus } from '@/infrastructure/events/event-bus';
 
 export class OrderService {
   async createOrder(userId: string, items: Item[]) {
-    const order = await this.orderRepo.create({ userId, items })
+    const order = await this.orderRepo.create({ userId, items });
 
     // Emit event instead of calling UserService directly
     await this.eventBus.publish('order.created', {
       orderId: order.id,
-      userId: order.userId
-    })
+      userId: order.userId,
+    });
 
-    return order
+    return order;
   }
 }
 
 // src/modules/users/application/order-created.handler.ts
-import { EventHandler } from '@/infrastructure/events/event-handler'
+import { EventHandler } from '@/infrastructure/events/event-handler';
 
 export class OrderCreatedHandler implements EventHandler {
   async handle(event: OrderCreatedEvent) {
@@ -240,12 +240,14 @@ project-root/
 ```
 
 **When to use Layered:**
+
 - Simpler CRUD applications
 - Smaller teams
 - Rapid prototyping
 - Less complex domain logic
 
 **When to use Modular Monolith:**
+
 - Medium to large applications
 - Clear domain boundaries
 - Plan to potentially extract to microservices
@@ -269,17 +271,17 @@ export class User {
   updateEmail(newEmail: string): void {
     // Business rule: Email must be valid
     if (!this.isValidEmail(newEmail)) {
-      throw new Error('Invalid email format')
+      throw new Error('Invalid email format');
     }
-    this.email = newEmail
+    this.email = newEmail;
   }
 
   private isValidEmail(email: string): boolean {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   }
 
   verifyPassword(password: string, bcrypt: any): boolean {
-    return bcrypt.compareSync(password, this.passwordHash)
+    return bcrypt.compareSync(password, this.passwordHash);
   }
 }
 ```
@@ -287,10 +289,10 @@ export class User {
 ```typescript
 // src/modules/users/domain/user.repository.ts (interface)
 export interface UserRepository {
-  findById(id: string): Promise<User | null>
-  findByEmail(email: string): Promise<User | null>
-  save(user: User): Promise<void>
-  delete(id: string): Promise<void>
+  findById(id: string): Promise<User | null>;
+  findByEmail(email: string): Promise<User | null>;
+  save(user: User): Promise<void>;
+  delete(id: string): Promise<void>;
 }
 ```
 
@@ -298,37 +300,25 @@ export interface UserRepository {
 
 ```typescript
 // src/modules/users/infrastructure/user.repository.impl.ts
-import { UserRepository } from '../domain/user.repository'
-import { User } from '../domain/user.entity'
-import { db } from '@/infrastructure/database/connection'
+import { UserRepository } from '../domain/user.repository';
+import { User } from '../domain/user.entity';
+import { db } from '@/infrastructure/database/connection';
 
 export class PostgresUserRepository implements UserRepository {
   async findById(id: string): Promise<User | null> {
-    const row = await db.query('SELECT * FROM users WHERE id = $1', [id])
+    const row = await db.query('SELECT * FROM users WHERE id = $1', [id]);
 
-    if (!row) return null
+    if (!row) return null;
 
-    return new User(
-      row.id,
-      row.email,
-      row.name,
-      row.password_hash,
-      row.created_at
-    )
+    return new User(row.id, row.email, row.name, row.password_hash, row.created_at);
   }
 
   async findByEmail(email: string): Promise<User | null> {
-    const row = await db.query('SELECT * FROM users WHERE email = $1', [email])
+    const row = await db.query('SELECT * FROM users WHERE email = $1', [email]);
 
-    if (!row) return null
+    if (!row) return null;
 
-    return new User(
-      row.id,
-      row.email,
-      row.name,
-      row.password_hash,
-      row.created_at
-    )
+    return new User(row.id, row.email, row.name, row.password_hash, row.created_at);
   }
 
   async save(user: User): Promise<void> {
@@ -338,11 +328,11 @@ export class PostgresUserRepository implements UserRepository {
        ON CONFLICT (id) DO UPDATE
        SET email = $2, name = $3`,
       [user.id, user.email, user.name, user['passwordHash'], user.createdAt]
-    )
+    );
   }
 
   async delete(id: string): Promise<void> {
-    await db.query('DELETE FROM users WHERE id = $1', [id])
+    await db.query('DELETE FROM users WHERE id = $1', [id]);
   }
 }
 ```
@@ -351,11 +341,11 @@ export class PostgresUserRepository implements UserRepository {
 
 ```typescript
 // src/modules/users/application/create-user.use-case.ts
-import { UserRepository } from '../domain/user.repository'
-import { User } from '../domain/user.entity'
-import { EventBus } from '@/infrastructure/events/event-bus'
-import * as bcrypt from 'bcrypt'
-import { v4 as uuid } from 'uuid'
+import { UserRepository } from '../domain/user.repository';
+import { User } from '../domain/user.entity';
+import { EventBus } from '@/infrastructure/events/event-bus';
+import * as bcrypt from 'bcrypt';
+import { v4 as uuid } from 'uuid';
 
 export class CreateUserUseCase {
   constructor(
@@ -363,39 +353,29 @@ export class CreateUserUseCase {
     private eventBus: EventBus
   ) {}
 
-  async execute(data: {
-    email: string
-    name: string
-    password: string
-  }): Promise<User> {
+  async execute(data: { email: string; name: string; password: string }): Promise<User> {
     // Check if user exists
-    const existing = await this.userRepo.findByEmail(data.email)
+    const existing = await this.userRepo.findByEmail(data.email);
     if (existing) {
-      throw new Error('User already exists')
+      throw new Error('User already exists');
     }
 
     // Hash password
-    const passwordHash = await bcrypt.hash(data.password, 10)
+    const passwordHash = await bcrypt.hash(data.password, 10);
 
     // Create user entity
-    const user = new User(
-      uuid(),
-      data.email,
-      data.name,
-      passwordHash,
-      new Date()
-    )
+    const user = new User(uuid(), data.email, data.name, passwordHash, new Date());
 
     // Save to repository
-    await this.userRepo.save(user)
+    await this.userRepo.save(user);
 
     // Emit event (for sending welcome email, etc.)
     await this.eventBus.publish('user.created', {
       userId: user.id,
-      email: user.email
-    })
+      email: user.email,
+    });
 
-    return user
+    return user;
   }
 }
 ```
@@ -404,9 +384,9 @@ export class CreateUserUseCase {
 
 ```typescript
 // src/modules/users/api/users.controller.ts
-import { Request, Response } from 'express'
-import { CreateUserUseCase } from '../application/create-user.use-case'
-import { GetUserUseCase } from '../application/get-user.use-case'
+import { Request, Response } from 'express';
+import { CreateUserUseCase } from '../application/create-user.use-case';
+import { GetUserUseCase } from '../application/get-user.use-case';
 
 export class UsersController {
   constructor(
@@ -416,35 +396,35 @@ export class UsersController {
 
   async create(req: Request, res: Response) {
     try {
-      const user = await this.createUserUseCase.execute(req.body)
+      const user = await this.createUserUseCase.execute(req.body);
 
       res.status(201).json({
         id: user.id,
         email: user.email,
         name: user.name,
-        createdAt: user.createdAt
-      })
+        createdAt: user.createdAt,
+      });
     } catch (error) {
-      res.status(400).json({ error: error.message })
+      res.status(400).json({ error: error.message });
     }
   }
 
   async getById(req: Request, res: Response) {
     try {
-      const user = await this.getUserUseCase.execute(req.params.id)
+      const user = await this.getUserUseCase.execute(req.params.id);
 
       if (!user) {
-        return res.status(404).json({ error: 'User not found' })
+        return res.status(404).json({ error: 'User not found' });
       }
 
       res.json({
         id: user.id,
         email: user.email,
         name: user.name,
-        createdAt: user.createdAt
-      })
+        createdAt: user.createdAt,
+      });
     } catch (error) {
-      res.status(500).json({ error: error.message })
+      res.status(500).json({ error: error.message });
     }
   }
 }
@@ -454,144 +434,138 @@ export class UsersController {
 
 ```typescript
 // src/modules/users/index.ts
-import { PostgresUserRepository } from './infrastructure/user.repository.impl'
-import { CreateUserUseCase } from './application/create-user.use-case'
-import { GetUserUseCase } from './application/get-user.use-case'
-import { UsersController } from './api/users.controller'
-import { eventBus } from '@/infrastructure/events/event-bus'
+import { PostgresUserRepository } from './infrastructure/user.repository.impl';
+import { CreateUserUseCase } from './application/create-user.use-case';
+import { GetUserUseCase } from './application/get-user.use-case';
+import { UsersController } from './api/users.controller';
+import { eventBus } from '@/infrastructure/events/event-bus';
 
 // Create repository
-const userRepository = new PostgresUserRepository()
+const userRepository = new PostgresUserRepository();
 
 // Create use cases
-const createUserUseCase = new CreateUserUseCase(userRepository, eventBus)
-const getUserUseCase = new GetUserUseCase(userRepository)
+const createUserUseCase = new CreateUserUseCase(userRepository, eventBus);
+const getUserUseCase = new GetUserUseCase(userRepository);
 
 // Create controller
-const usersController = new UsersController(
-  createUserUseCase,
-  getUserUseCase
-)
+const usersController = new UsersController(createUserUseCase, getUserUseCase);
 
-export { usersController }
+export { usersController };
 ```
 
 ## Application Setup
 
 ```typescript
 // src/app.ts
-import express from 'express'
-import { usersController } from './modules/users'
-import { authController } from './modules/auth'
-import { ordersController } from './modules/orders'
-import { errorMiddleware } from './shared/middleware/error.middleware'
-import { authMiddleware } from './shared/middleware/auth.middleware'
+import express from 'express';
+import { usersController } from './modules/users';
+import { authController } from './modules/auth';
+import { ordersController } from './modules/orders';
+import { errorMiddleware } from './shared/middleware/error.middleware';
+import { authMiddleware } from './shared/middleware/auth.middleware';
 
-const app = express()
+const app = express();
 
-app.use(express.json())
+app.use(express.json());
 
 // Routes
-app.post('/api/users', (req, res) => usersController.create(req, res))
-app.get('/api/users/:id', authMiddleware, (req, res) =>
-  usersController.getById(req, res)
-)
+app.post('/api/users', (req, res) => usersController.create(req, res));
+app.get('/api/users/:id', authMiddleware, (req, res) => usersController.getById(req, res));
 
-app.post('/api/auth/login', (req, res) => authController.login(req, res))
+app.post('/api/auth/login', (req, res) => authController.login(req, res));
 
-app.post('/api/orders', authMiddleware, (req, res) =>
-  ordersController.create(req, res)
-)
+app.post('/api/orders', authMiddleware, (req, res) => ordersController.create(req, res));
 
 // Error handling
-app.use(errorMiddleware)
+app.use(errorMiddleware);
 
-export default app
+export default app;
 ```
 
 ## Testing
 
 ```typescript
 // tests/unit/modules/users/user.service.test.ts
-import { CreateUserUseCase } from '@/modules/users/application/create-user.use-case'
-import { UserRepository } from '@/modules/users/domain/user.repository'
-import { EventBus } from '@/infrastructure/events/event-bus'
+import { CreateUserUseCase } from '@/modules/users/application/create-user.use-case';
+import { UserRepository } from '@/modules/users/domain/user.repository';
+import { EventBus } from '@/infrastructure/events/event-bus';
 
 // Mock repository
 class MockUserRepository implements UserRepository {
-  private users = new Map()
+  private users = new Map();
 
   async findById(id: string) {
-    return this.users.get(id) || null
+    return this.users.get(id) || null;
   }
 
   async findByEmail(email: string) {
-    return Array.from(this.users.values()).find((u) => u.email === email) || null
+    return Array.from(this.users.values()).find(u => u.email === email) || null;
   }
 
   async save(user: any) {
-    this.users.set(user.id, user)
+    this.users.set(user.id, user);
   }
 
   async delete(id: string) {
-    this.users.delete(id)
+    this.users.delete(id);
   }
 }
 
 // Mock event bus
 class MockEventBus implements EventBus {
-  events: any[] = []
+  events: any[] = [];
 
   async publish(event: string, data: any) {
-    this.events.push({ event, data })
+    this.events.push({ event, data });
   }
 }
 
 describe('CreateUserUseCase', () => {
   it('should create a new user', async () => {
-    const mockRepo = new MockUserRepository()
-    const mockEventBus = new MockEventBus()
-    const useCase = new CreateUserUseCase(mockRepo, mockEventBus)
+    const mockRepo = new MockUserRepository();
+    const mockEventBus = new MockEventBus();
+    const useCase = new CreateUserUseCase(mockRepo, mockEventBus);
 
     const user = await useCase.execute({
       email: 'test@example.com',
       name: 'Test User',
-      password: 'password123'
-    })
+      password: 'password123',
+    });
 
-    expect(user.email).toBe('test@example.com')
-    expect(user.name).toBe('Test User')
-    expect(mockEventBus.events).toHaveLength(1)
-    expect(mockEventBus.events[0].event).toBe('user.created')
-  })
+    expect(user.email).toBe('test@example.com');
+    expect(user.name).toBe('Test User');
+    expect(mockEventBus.events).toHaveLength(1);
+    expect(mockEventBus.events[0].event).toBe('user.created');
+  });
 
   it('should throw error if user exists', async () => {
-    const mockRepo = new MockUserRepository()
-    const mockEventBus = new MockEventBus()
-    const useCase = new CreateUserUseCase(mockRepo, mockEventBus)
+    const mockRepo = new MockUserRepository();
+    const mockEventBus = new MockEventBus();
+    const useCase = new CreateUserUseCase(mockRepo, mockEventBus);
 
     // Create first user
     await useCase.execute({
       email: 'test@example.com',
       name: 'Test User',
-      password: 'password123'
-    })
+      password: 'password123',
+    });
 
     // Try to create duplicate
     await expect(
       useCase.execute({
         email: 'test@example.com',
         name: 'Another User',
-        password: 'password456'
+        password: 'password456',
       })
-    ).rejects.toThrow('User already exists')
-  })
-})
+    ).rejects.toThrow('User already exists');
+  });
+});
 ```
 
 ## Benefits of This Structure
 
 **Modular Monolith:**
+
 - ✅ Clear module boundaries
 - ✅ Can extract modules to microservices later
 - ✅ Team can own specific modules
@@ -599,6 +573,7 @@ describe('CreateUserUseCase', () => {
 - ✅ Testable in isolation
 
 **Layered Structure:**
+
 - ✅ Separation of concerns (domain, infrastructure, API)
 - ✅ Business logic independent of frameworks
 - ✅ Easy to swap infrastructure (database, queue, etc.)

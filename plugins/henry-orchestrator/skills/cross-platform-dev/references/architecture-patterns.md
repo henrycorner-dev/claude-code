@@ -40,6 +40,7 @@ Implement a strict layered architecture to maximize code reuse:
 ```
 
 **Key Principles:**
+
 - Inner layers should never depend on outer layers
 - Domain layer is pure business logic (no framework dependencies)
 - Dependencies point inward
@@ -453,17 +454,15 @@ export function setupDI() {
   // Repositories
   container.register(
     'userRepository',
-    () => new UserRepositoryImpl(
-      container.get('userRemoteDataSource'),
-      container.get('userLocalDataSource')
-    )
+    () =>
+      new UserRepositoryImpl(
+        container.get('userRemoteDataSource'),
+        container.get('userLocalDataSource')
+      )
   );
 
   // Use cases
-  container.register(
-    'getUserProfile',
-    () => new GetUserProfile(container.get('userRepository'))
-  );
+  container.register('getUserProfile', () => new GetUserProfile(container.get('userRepository')));
 }
 ```
 
@@ -537,6 +536,7 @@ my_app/
 ```
 
 **Benefits:**
+
 - Clear boundaries and dependencies
 - Easier to test individual packages
 - Can version packages independently

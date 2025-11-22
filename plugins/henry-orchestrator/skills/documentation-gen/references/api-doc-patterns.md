@@ -4,7 +4,7 @@ Detailed patterns and conventions for generating API documentation.
 
 ## General Structure
 
-```markdown
+````markdown
 # Module/Package Name
 
 Brief description of the module.
@@ -27,13 +27,16 @@ Description of the class and its purpose.
 ##### `new ClassName(param1, param2)`
 
 **Parameters:**
+
 - `param1` (Type): Description
 - `param2` (Type): Description
 
 **Example:**
+
 ```language
 const instance = new ClassName('value', 42);
 ```
+````
 
 #### Methods
 
@@ -42,14 +45,17 @@ const instance = new ClassName('value', 42);
 Description of what the method does.
 
 **Parameters:**
+
 - `param1` (Type): Description
 
 **Returns:** `ReturnType` - Description
 
 **Throws:**
+
 - `ErrorType` - When this error occurs
 
 **Example:**
+
 ```language
 instance.methodName('input');
 ```
@@ -69,16 +75,19 @@ instance.methodName('input');
 Description of the function.
 
 **Parameters:**
+
 - `param1` (Type): Description
 - `param2` (Type, optional): Description. Default: `defaultValue`
 
 **Returns:** `ReturnType` - Description
 
 **Example:**
+
 ```language
 const result = functionName('value', 42);
 ```
-```
+
+````
 
 ## Language-Specific Patterns
 
@@ -111,14 +120,16 @@ const response = await fetchData('https://api.example.com/data', {
   headers: { 'Content-Type': 'application/json' },
   timeout: 10000
 });
-```
+````
 
 **Since:** v1.2.0
 
 **See also:**
+
 - [Response](#response)
 - [RequestOptions](#requestoptions)
-```
+
+````
 
 ### Python
 
@@ -146,16 +157,18 @@ Fetch data from a URL.
 ```python
 response = fetch_data('https://api.example.com/data', method='POST', timeout=10.0)
 print(response['data'])
-```
+````
 
 **Note:** This function requires the `requests` library.
 
 **Since:** v1.2.0
 
 **See Also:**
+
 - [Response](#response)
 - [RequestOptions](#requestoptions)
-```
+
+````
 
 ### Go
 
@@ -166,19 +179,22 @@ print(response['data'])
 
 ```go
 func FetchData(url string, options *RequestOptions) (*Response, error)
-```
+````
 
 FetchData fetches data from a URL with optional configuration.
 
 **Parameters:**
+
 - `url` (string): The URL to fetch from
-- `options` (*RequestOptions): Configuration options (can be nil)
+- `options` (\*RequestOptions): Configuration options (can be nil)
 
 **Returns:**
+
 - `*Response`: The fetch response
 - `error`: Error if request fails
 
 **Example:**
+
 ```go
 response, err := FetchData("https://api.example.com/data", &RequestOptions{
     Method: "POST",
@@ -190,7 +206,8 @@ if err != nil {
 ```
 
 **Since:** v1.2.0
-```
+
+````
 
 ### Rust
 
@@ -201,26 +218,30 @@ if err != nil {
 
 ```rust
 pub fn fetch_data(url: &str, options: Option<RequestOptions>) -> Result<Response, Error>
-```
+````
 
 Fetches data from a URL with optional configuration.
 
 **Parameters:**
+
 - `url`: The URL to fetch from
 - `options`: Optional configuration
 
 **Returns:**
+
 - `Ok(Response)`: The fetch response on success
 - `Err(Error)`: Error if request fails
 
 **Errors:**
 
 Returns `Error` in the following cases:
+
 - `Error::Network`: When network request fails
 - `Error::Timeout`: When request exceeds timeout
 - `Error::InvalidUrl`: When URL is malformed
 
 **Example:**
+
 ```rust
 let response = fetch_data("https://api.example.com/data", Some(RequestOptions {
     method: Method::POST,
@@ -229,7 +250,8 @@ let response = fetch_data("https://api.example.com/data", Some(RequestOptions {
 ```
 
 **Since:** v1.2.0
-```
+
+````
 
 ## Documentation Sections
 
@@ -259,12 +281,13 @@ let response = fetch_data("https://api.example.com/data", Some(RequestOptions {
 - `name` (string): User's full name
 - `age` (number): User's age in years
 - `active` (boolean): Whether user is active
-```
+````
 
 ### Optional Parameters
 
 ```markdown
 **Parameters:**
+
 - `name` (string): User's full name
 - `age` (number, optional): User's age. Default: 0
 - `options` (Object, optional): Configuration options
@@ -274,6 +297,7 @@ let response = fetch_data("https://api.example.com/data", Some(RequestOptions {
 
 ```markdown
 **Parameters:**
+
 - `options` (Object): Configuration options
   - `name` (string): User's name
   - `age` (number, optional): User's age. Default: 0
@@ -287,6 +311,7 @@ let response = fetch_data("https://api.example.com/data", Some(RequestOptions {
 
 ```markdown
 **Parameters:**
+
 - `items` (Array<string>): List of item names
 - `users` (Array<User>): List of user objects
   - Each `User` has:
@@ -298,6 +323,7 @@ let response = fetch_data("https://api.example.com/data", Some(RequestOptions {
 
 ```markdown
 **Parameters:**
+
 - `callback` (Function): Callback function
   - Parameters:
     - `error` (Error|null): Error object or null
@@ -309,6 +335,7 @@ let response = fetch_data("https://api.example.com/data", Some(RequestOptions {
 
 ```markdown
 **Parameters:**
+
 - `value` (string | number): Input value
 - `mode` ('read' | 'write' | 'append'): File mode
 ```
@@ -325,6 +352,7 @@ let response = fetch_data("https://api.example.com/data", Some(RequestOptions {
 
 ```markdown
 **Returns:** `Object` - User data object
+
 - `id` (number): User ID
 - `name` (string): User name
 - `email` (string): User email
@@ -360,9 +388,9 @@ try {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer token'
+      Authorization: 'Bearer token',
     },
-    timeout: 10000
+    timeout: 10000,
   });
 
   console.log('Success:', result);
@@ -380,7 +408,7 @@ const user = new User('John Doe');
 // With options
 const user = new User('John Doe', {
   age: 30,
-  email: 'john@example.com'
+  email: 'john@example.com',
 });
 
 // Advanced usage
@@ -390,8 +418,8 @@ const user = new User('John Doe', {
   address: {
     street: '123 Main St',
     city: 'Anytown',
-    zip: '12345'
-  }
+    zip: '12345',
+  },
 });
 ```
 
@@ -399,7 +427,7 @@ const user = new User('John Doe', {
 
 ### Full Class Example
 
-```markdown
+````markdown
 ## User
 
 Represents a user in the system.
@@ -411,15 +439,18 @@ Represents a user in the system.
 Creates a new User instance.
 
 **Parameters:**
+
 - `name` (string): User's full name
 - `options` (Object, optional): Additional options
   - `age` (number): User's age
   - `email` (string): User's email
 
 **Example:**
+
 ```javascript
 const user = new User('John Doe', { age: 30, email: 'john@example.com' });
 ```
+````
 
 ### Properties
 
@@ -444,10 +475,12 @@ Saves the user to the database.
 **Returns:** `Promise<void>` - Resolves when save is complete
 
 **Throws:**
+
 - `ValidationError` - When user data is invalid
 - `DatabaseError` - When database operation fails
 
 **Example:**
+
 ```javascript
 await user.save();
 ```
@@ -459,6 +492,7 @@ Converts the user to a JSON-serializable object.
 **Returns:** `Object` - Plain object representation
 
 **Example:**
+
 ```javascript
 const json = user.toJSON();
 console.log(JSON.stringify(json));
@@ -471,15 +505,18 @@ console.log(JSON.stringify(json));
 Finds a user by ID.
 
 **Parameters:**
+
 - `id` (number): User ID to search for
 
 **Returns:** `Promise<User | null>` - User if found, null otherwise
 
 **Example:**
+
 ```javascript
 const user = await User.findById(123);
 ```
-```
+
+````
 
 ## Type/Interface Documentation
 
@@ -499,24 +536,27 @@ interface RequestOptions {
   timeout?: number;
   body?: any;
 }
-```
+````
 
 **Properties:**
+
 - `method` (string, optional): HTTP method. Default: 'GET'
 - `headers` (Object, optional): Request headers
 - `timeout` (number, optional): Timeout in milliseconds. Default: 5000
 - `body` (any, optional): Request body
 
 **Example:**
+
 ```typescript
 const options: RequestOptions = {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   timeout: 10000,
-  body: { name: 'John' }
+  body: { name: 'John' },
 };
 ```
-```
+
+````
 
 ## Constants and Enums
 
@@ -556,8 +596,9 @@ Available HTTP methods.
 import { HttpMethod } from 'package';
 
 const method = HttpMethod.POST;
-```
-```
+````
+
+````
 
 ## Deprecation Documentation
 
@@ -575,7 +616,8 @@ oldFunction('input');
 
 // New way
 newFunction('input');
-```
+````
+
 ```
 
 ## Organization Strategies
@@ -583,43 +625,59 @@ newFunction('input');
 ### By Module
 
 ```
+
 # Package Name
 
 ## Module: auth
+
 ### Functions
+
 ### Classes
 
 ## Module: database
+
 ### Functions
+
 ### Classes
+
 ```
 
 ### By Type
 
 ```
+
 # Package Name
 
 ## Classes
+
 ### ClassName1
+
 ### ClassName2
 
 ## Functions
+
 ### functionName1
+
 ### functionName2
+
 ```
 
 ### Alphabetical
 
 Useful for large APIs:
 ```
+
 # Package Name
 
 ## A
+
 - authenticate()
 - authorize()
 
 ## B
+
 - buildQuery()
+
 ```
 
 ## Best Practices
@@ -647,3 +705,4 @@ Useful for large APIs:
 - [ ] Code examples tested and working
 - [ ] Version information included (Since:)
 - [ ] Consistent formatting throughout
+```

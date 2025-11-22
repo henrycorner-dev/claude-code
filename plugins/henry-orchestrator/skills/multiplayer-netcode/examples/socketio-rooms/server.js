@@ -32,7 +32,7 @@ class GameRoom {
       position: { x: Math.random() * 20 - 10, y: Math.random() * 20 - 10 },
       velocity: { x: 0, y: 0 },
       score: 0,
-      lastProcessedInput: 0
+      lastProcessedInput: 0,
     };
 
     this.players.set(socketId, player);
@@ -98,8 +98,8 @@ class GameRoom {
         position: p.position,
         velocity: p.velocity,
         score: p.score,
-        lastProcessedInput: p.lastProcessedInput
-      }))
+        lastProcessedInput: p.lastProcessedInput,
+      })),
     };
   }
 }
@@ -113,9 +113,9 @@ class GameServer {
     this.server = http.createServer();
     this.io = socketIO(this.server, {
       cors: {
-        origin: "*",
-        methods: ["GET", "POST"]
-      }
+        origin: '*',
+        methods: ['GET', 'POST'],
+      },
     });
 
     this.setupHandlers();
@@ -123,14 +123,14 @@ class GameServer {
   }
 
   setupHandlers() {
-    this.io.on('connection', (socket) => {
+    this.io.on('connection', socket => {
       console.log(`Player ${socket.id} connected`);
 
-      socket.on('joinRoom', (data) => this.handleJoinRoom(socket, data));
+      socket.on('joinRoom', data => this.handleJoinRoom(socket, data));
       socket.on('leaveRoom', () => this.handleLeaveRoom(socket));
-      socket.on('createRoom', (data) => this.handleCreateRoom(socket, data));
+      socket.on('createRoom', data => this.handleCreateRoom(socket, data));
       socket.on('startGame', () => this.handleStartGame(socket));
-      socket.on('input', (data) => this.handleInput(socket, data));
+      socket.on('input', data => this.handleInput(socket, data));
       socket.on('disconnect', () => this.handleDisconnect(socket));
     });
   }
@@ -146,7 +146,7 @@ class GameServer {
 
     socket.emit('roomCreated', {
       roomId: roomId,
-      maxPlayers: maxPlayers
+      maxPlayers: maxPlayers,
     });
 
     // Auto-join creator to room
@@ -177,13 +177,13 @@ class GameServer {
     socket.emit('joinedRoom', {
       roomId: roomId,
       playerCount: room.players.size,
-      maxPlayers: room.maxPlayers
+      maxPlayers: room.maxPlayers,
     });
 
     // Notify others in room
     socket.to(roomId).emit('playerJoined', {
       playerId: socket.id,
-      playerCount: room.players.size
+      playerCount: room.players.size,
     });
 
     // Send current room state
@@ -210,7 +210,7 @@ class GameServer {
     // Notify others
     socket.to(roomId).emit('playerLeft', {
       playerId: socket.id,
-      playerCount: room.players.size
+      playerCount: room.players.size,
     });
 
     // Clean up empty rooms
@@ -233,7 +233,7 @@ class GameServer {
     // Notify all players in room
     this.io.to(roomId).emit('gameStarted', {
       roomId: roomId,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
   }
 

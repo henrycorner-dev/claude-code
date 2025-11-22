@@ -21,6 +21,7 @@ Henry Orchestrator commands are markdown files with YAML frontmatter that define
 ### Required Fields
 
 #### description
+
 - **Type:** String
 - **Purpose:** Brief description shown in `/help` command list
 - **Format:** Single line, 60-120 characters
@@ -29,12 +30,14 @@ Henry Orchestrator commands are markdown files with YAML frontmatter that define
 ### Optional Fields
 
 #### argument-hint
+
 - **Type:** String
 - **Purpose:** Shows expected arguments in command list
 - **Format:** `[arg1] [arg2]` or descriptive text
 - **Example:** `argument-hint: [feature-name] [optional-scope]`
 
 #### allowed-tools
+
 - **Type:** String or Array
 - **Purpose:** Restrict which tools can be used in command execution
 - **Format:** Comma-separated string or YAML array
@@ -42,6 +45,7 @@ Henry Orchestrator commands are markdown files with YAML frontmatter that define
 - **Note:** Use sparingly, as tool restrictions limit agent flexibility
 
 #### model
+
 - **Type:** String
 - **Purpose:** Specify which Claude model to use
 - **Format:** Model identifier (e.g., `sonnet`, `opus`, `haiku`)
@@ -49,6 +53,7 @@ Henry Orchestrator commands are markdown files with YAML frontmatter that define
 - **Note:** Usually unnecessary; defaults are typically optimal
 
 #### version
+
 - **Type:** String
 - **Purpose:** Track command version for maintenance
 - **Format:** Semantic versioning (e.g., `1.0.0`)
@@ -78,6 +83,7 @@ First heading should be command title (H1):
 ### Introduction Section
 
 Brief overview paragraph explaining:
+
 - Command purpose
 - Use cases
 - Expected outcomes
@@ -100,6 +106,7 @@ Each phase should be H2 heading with consistent structure:
 **Goal**: Create OpenAPI specification
 
 **Actions**:
+
 1. Launch backend-engineer to design REST API
 2. Define endpoints, request/response schemas
 3. Document authentication and authorization
@@ -115,24 +122,29 @@ Each phase should be H2 heading with consistent structure:
 #### Phase Components
 
 **Goal** (required):
+
 - Single sentence describing phase objective
 - Should be measurable/verifiable
 
 **Actions** (required):
+
 - Numbered list of steps
 - 3-7 actions per phase (more indicates phase should be split)
 - Action verbs: "Launch", "Create", "Review", "Implement", "Validate"
 
 **Agents** (required):
+
 - Which agents are invoked
 - Format: Agent names from `/agents` list
 - Multiple agents: `backend-engineer, security-engineer`
 
 **Deliverables** (required):
+
 - Concrete outputs produced by phase
 - Should be specific: "API implementation" not "code"
 
 **User Interaction** (optional):
+
 - When user approval or input needed
 - Format: Clear instruction for what user should do
 
@@ -144,6 +156,7 @@ Final H2 section synthesizing all phases:
 ## Summary
 
 Present complete API package:
+
 - OpenAPI specification with endpoint documentation
 - Implemented and tested API meeting security requirements
 - Security review sign-off with threat model
@@ -153,6 +166,7 @@ Next steps: Deploy to staging environment and run integration tests
 ```
 
 Should include:
+
 - Comprehensive list of all deliverables
 - How to verify completion
 - Suggested next steps
@@ -166,13 +180,18 @@ Show concrete command invocation examples:
 
 **E-commerce API:**
 ```
+
 /api-workflow user-management "CRUD API for user accounts"
+
 ```
 
 **Payment processing:**
 ```
+
 /api-workflow payment-processing "Stripe integration API"
+
 ```
+
 ```
 
 ## Agent Invocation Patterns
@@ -201,9 +220,9 @@ Launch security-engineer and performance-engineer in parallel to audit the imple
 
 ```markdown
 If critical security issues found:
-  → Launch security-engineer to provide remediation guidance
+→ Launch security-engineer to provide remediation guidance
 Otherwise:
-  → Proceed to performance optimization phase
+→ Proceed to performance optimization phase
 ```
 
 ### Agent Team Pattern
@@ -244,6 +263,7 @@ deployment architecture
 ### Accessing Arguments
 
 Commands can reference arguments using:
+
 - `$ARGUMENTS` - All arguments as single string
 - `$1`, `$2`, `$3` - Individual positional arguments
 
@@ -264,11 +284,13 @@ Design $1 feature following $2 platform guidelines...
 ```
 
 Invocation:
+
 ```
 /mobile-feature payment-flow iOS
 ```
 
 Expands to:
+
 ```
 # Mobile Feature Development: payment-flow
 
@@ -297,6 +319,7 @@ interface User {
 ### Lists
 
 Use numbered lists for sequential actions:
+
 ```markdown
 1. First action
 2. Second action
@@ -304,6 +327,7 @@ Use numbered lists for sequential actions:
 ```
 
 Use bulleted lists for non-sequential items:
+
 ```markdown
 - Security audit report
 - Performance baseline metrics
@@ -313,12 +337,13 @@ Use bulleted lists for non-sequential items:
 ### Emphasis
 
 - **Bold** for labels and important terms: `**Goal:**`, `**Actions:**`
-- *Italic* for emphasis or technical terms: `*security-engineer*`
+- _Italic_ for emphasis or technical terms: `*security-engineer*`
 - `Code formatting` for code, commands, file paths: `` `npm install` ``
 
 ### Links
 
 Reference other documentation:
+
 ```markdown
 For detailed patterns, see `references/customization-patterns.md`
 
@@ -369,22 +394,26 @@ Before finalizing command file:
 ## Common Issues
 
 **Command not appearing in /help:**
+
 - Check file location (must be in `.claude/commands/` or `~/.claude/commands/`)
 - Verify `.md` extension
 - Ensure valid YAML frontmatter (no syntax errors)
 - Restart Claude Code to refresh command list
 
 **Agents not invoked:**
+
 - Verify exact agent name spelling (check `/agents` list)
 - Ensure phase instructions are clear and explicit
 - Check for typos in agent names
 
 **Phases executing out of order:**
+
 - Explicitly state sequential dependencies
 - Use numbered lists for sequential actions
 - Add "wait for user confirmation" checkpoints
 
 **Arguments not substituting:**
+
 - Verify argument syntax: `$1`, `$2`, not `$arg1`
 - Check argument-hint matches expected arguments
 - Test command invocation with sample arguments
@@ -405,6 +434,7 @@ description: Quick security review for pull requests
 **Goal**: Identify security vulnerabilities in PR changes
 
 **Actions**:
+
 1. Launch security-engineer to review PR diff
 2. Check for OWASP Top 10 vulnerabilities
 3. Validate input sanitization
@@ -436,6 +466,7 @@ End-to-end implementation of $1 for $2 environment.
 **Goal**: Implement backend API for $1
 
 **Actions**:
+
 1. Launch backend-engineer to design API
 2. Implement endpoints and business logic
 3. Write unit and integration tests
@@ -450,6 +481,7 @@ End-to-end implementation of $1 for $2 environment.
 **Goal**: Build UI for $1
 
 **Actions**:
+
 1. Launch frontend-engineer to implement UI
 2. Integrate with backend API
 3. Add client-side validation and error handling
@@ -466,6 +498,7 @@ End-to-end implementation of $1 for $2 environment.
 **Goal**: Deploy $1 to $2 environment
 
 **Actions**:
+
 1. Launch devops-sre-architect to prepare deployment
 2. Set up CI/CD pipeline
 3. Deploy to $2 environment
@@ -478,6 +511,7 @@ End-to-end implementation of $1 for $2 environment.
 ## Summary
 
 $1 successfully implemented and deployed to $2:
+
 - Backend API with tests and documentation
 - Frontend UI integrated with backend
 - Automated deployment pipeline

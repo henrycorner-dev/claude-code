@@ -4,7 +4,7 @@ This template provides a comprehensive structure for generating README files.
 
 ## Basic Structure
 
-```markdown
+````markdown
 # Project Name
 
 [![Build Status](badge-url)](link)
@@ -35,6 +35,7 @@ npm install project-name
 # or
 pip install project-name
 ```
+````
 
 ## Quick Start
 
@@ -58,10 +59,10 @@ More complex examples and configurations.
 
 Explain configuration options:
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
+| Option  | Type   | Default   | Description  |
+| ------- | ------ | --------- | ------------ |
 | option1 | string | 'default' | What it does |
-| option2 | number | 42 | What it does |
+| option2 | number | 42        | What it does |
 
 ## API Reference
 
@@ -72,12 +73,14 @@ Link to full API documentation or provide brief overview:
 Description of what the function does.
 
 **Parameters:**
+
 - `param1` (type): Description
 - `param2` (type): Description
 
 **Returns:** Description of return value
 
 **Example:**
+
 ```language
 example code
 ```
@@ -102,7 +105,8 @@ This project is licensed under the [LICENSE_NAME](LICENSE) - see the LICENSE fil
 - Credit to contributors
 - Inspired by projects
 - Built with technologies
-```
+
+````
 
 ## Variations by Project Type
 
@@ -130,11 +134,12 @@ Description of command.
 ```bash
 command-name --flag input.txt
 command-name -o value arg1 arg2
-```
+````
 
 ### Library/Package README
 
 Focus on:
+
 - Installation methods (npm, pip, cargo, etc.)
 - Import/require examples
 - API surface area
@@ -142,7 +147,8 @@ Focus on:
 - Compatibility matrix
 
 Example:
-```markdown
+
+````markdown
 ## Installation
 
 ```bash
@@ -150,6 +156,7 @@ npm install package-name
 # or
 yarn add package-name
 ```
+````
 
 ## Import
 
@@ -164,6 +171,7 @@ const { feature } = require('package-name');
 ### Web Application README
 
 Additional sections:
+
 - Demo link
 - Screenshots/GIFs
 - Deployment instructions
@@ -171,6 +179,7 @@ Additional sections:
 - Database setup
 
 Example:
+
 ```markdown
 ## Demo
 
@@ -179,7 +188,7 @@ Example:
 ## Screenshots
 
 ![Screenshot 1](./docs/screenshot1.png)
-*Caption explaining the screenshot*
+_Caption explaining the screenshot_
 
 ## Deployment
 
@@ -187,19 +196,22 @@ Example:
 
 Create a `.env` file:
 ```
+
 DATABASE_URL=your_database_url
 API_KEY=your_api_key
-```
+
+````
 
 ### Deploy to Platform
 
 ```bash
 deployment commands
-```
+````
 
 ### API/Service README
 
 Focus on:
+
 - Endpoints overview
 - Authentication
 - Rate limiting
@@ -207,6 +219,7 @@ Focus on:
 - Error codes
 
 Example:
+
 ```markdown
 ## API Overview
 
@@ -216,8 +229,10 @@ Base URL: `https://api.example.com/v1`
 
 Include your API key in the header:
 ```
+
 Authorization: Bearer YOUR_API_KEY
-```
+
+````
 
 ### Endpoints
 
@@ -235,7 +250,7 @@ Description of endpoint.
   "data": {},
   "status": "success"
 }
-```
+````
 
 ## Badge Examples
 

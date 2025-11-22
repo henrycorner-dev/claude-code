@@ -44,11 +44,13 @@ CREATE TABLE vehicles (
 ```
 
 **Pros:**
+
 - Simple queries (no joins)
 - Easy to add common fields
 - Single table to maintain
 
 **Cons:**
+
 - Many NULL values for type-specific fields
 - Table becomes wide with many types
 - Harder to enforce constraints per type
@@ -88,11 +90,13 @@ CREATE TABLE motorcycles (
 ```
 
 **Pros:**
+
 - No NULL values
 - Type-specific constraints
 - Cleaner data model
 
 **Cons:**
+
 - Requires joins for full data
 - More complex queries
 - Multiple tables to maintain
@@ -120,15 +124,18 @@ CREATE TABLE orders (
 ```
 
 **Pros:**
+
 - Easy to add new values without migrations
 - Can add metadata (descriptions, display order)
 - Foreign key ensures valid values
 
 **Cons:**
+
 - Extra join for queries
 - Slight performance overhead
 
 **Alternative with ENUM (PostgreSQL):**
+
 ```sql
 CREATE TYPE order_status AS ENUM ('pending', 'processing', 'shipped', 'delivered');
 
@@ -162,21 +169,25 @@ INSERT INTO categories (id, name, parent_id) VALUES
 ```
 
 **Pros:**
+
 - Simple to implement
 - Easy to move nodes (update parent_id)
 - Easy to insert/delete
 
 **Cons:**
+
 - Recursive queries needed for full tree
 - Performance issues with deep trees
 - No depth information
 
 **Query children:**
+
 ```sql
 SELECT * FROM categories WHERE parent_id = 2;  -- Get direct children
 ```
 
 **Query entire subtree (PostgreSQL recursive CTE):**
+
 ```sql
 WITH RECURSIVE category_tree AS (
     SELECT id, name, parent_id, 1 as depth
@@ -200,6 +211,7 @@ SELECT * FROM category_tree ORDER BY depth, name;
 Store attributes as rows instead of columns.
 
 **Anti-pattern example:**
+
 ```sql
 -- DON'T DO THIS
 CREATE TABLE entity_attributes (
@@ -216,12 +228,14 @@ CREATE TABLE entity_attributes (
 ```
 
 **Why it's bad:**
+
 - No type safety (everything is TEXT)
 - No constraints on values
 - Queries become complex
 - Terrible performance
 
 **Better alternatives:**
+
 - Use JSONB for flexible attributes (PostgreSQL)
 - Create separate columns for known attributes
 - Use Single Table Inheritance with nullable columns
@@ -231,6 +245,7 @@ CREATE TABLE entity_attributes (
 Store multiple values in one column as comma-separated.
 
 **Anti-pattern example:**
+
 ```sql
 -- DON'T DO THIS
 CREATE TABLE posts (
@@ -241,12 +256,14 @@ CREATE TABLE posts (
 ```
 
 **Why it's bad:**
+
 - Can't use foreign keys
 - Hard to query ("find posts with tag 5")
 - No validation of values
 - Violates 1NF (non-atomic values)
 
 **Correct approach:**
+
 ```sql
 -- Use junction table
 CREATE TABLE posts (id SERIAL PRIMARY KEY, title VARCHAR(255));
@@ -263,6 +280,7 @@ CREATE TABLE post_tags (
 Foreign key that can reference multiple tables.
 
 **Anti-pattern example:**
+
 ```sql
 -- RISKY PATTERN
 CREATE TABLE comments (
@@ -274,12 +292,15 @@ CREATE TABLE comments (
 ```
 
 **Why it's risky:**
+
 - No referential integrity (can reference non-existent records)
 - Database can't enforce relationships
 - Orphaned records possible
 
 **Better alternatives:**
+
 1. **Separate foreign keys (recommended):**
+
 ```sql
 CREATE TABLE comments (
     id SERIAL PRIMARY KEY,
@@ -296,6 +317,7 @@ CREATE TABLE comments (
 ```
 
 2. **Exclusive Arc Pattern (PostgreSQL):**
+
 ```sql
 CREATE TABLE comments (
     id SERIAL PRIMARY KEY,
@@ -328,6 +350,7 @@ FOR EACH ROW EXECUTE FUNCTION check_exclusive_arc();
 Store currency as FLOAT or DOUBLE.
 
 **Anti-pattern example:**
+
 ```sql
 -- DON'T DO THIS
 CREATE TABLE products (
@@ -338,11 +361,13 @@ CREATE TABLE products (
 ```
 
 **Why it's bad:**
+
 - Floating point precision errors
 - 0.1 + 0.2 ≠ 0.3 in floating point
 - Accumulates errors in calculations
 
 **Correct approach:**
+
 ```sql
 -- Use DECIMAL/NUMERIC
 CREATE TABLE products (
@@ -368,6 +393,7 @@ CREATE TABLE products (
 Users following users, products related to products.
 
 **Example: Social network followers**
+
 ```sql
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
@@ -400,6 +426,7 @@ WHERE f.followee_id = (SELECT id FROM users WHERE username = 'alice');
 Junction table with metadata about the relationship.
 
 **Example: Team members with roles**
+
 ```sql
 CREATE TABLE teams (
     id SERIAL PRIMARY KEY,
@@ -432,6 +459,7 @@ CREATE INDEX idx_team_memberships_user ON team_memberships(user_id);
 Track when data is valid (business perspective).
 
 **Example: Price history**
+
 ```sql
 CREATE TABLE product_prices (
     id SERIAL PRIMARY KEY,
@@ -463,6 +491,7 @@ AND (valid_to IS NULL OR valid_to > '2024-01-15');
 Track when data was recorded in the database.
 
 **Example: Audit trail with history**
+
 ```sql
 CREATE TABLE customers (
     id SERIAL PRIMARY KEY,
@@ -540,11 +569,13 @@ CREATE POLICY tenant_isolation ON posts
 ```
 
 **Pros:**
+
 - Simple deployment (one database)
 - Easy to add new tenants
 - Cost-effective
 
 **Cons:**
+
 - Risk of data leakage between tenants
 - One tenant can affect others (noisy neighbor)
 - Harder to customize per tenant
@@ -574,11 +605,13 @@ SET search_path TO tenant_acme, public;
 ```
 
 **Pros:**
+
 - Better isolation than shared schema
 - Can customize schema per tenant
 - Easier to export/backup individual tenant
 
 **Cons:**
+
 - Schema changes must apply to all tenants
 - More complex migrations
 - Database connection limits
@@ -588,12 +621,14 @@ SET search_path TO tenant_acme, public;
 Each tenant gets their own database.
 
 **Pros:**
+
 - Complete isolation
 - Can use different database versions
 - Easy to scale out (different servers)
 - Easy to backup/restore individual tenant
 
 **Cons:**
+
 - More complex deployment
 - Higher infrastructure cost
 - Harder to do cross-tenant queries
@@ -631,16 +666,19 @@ AND deleted_at < NOW() - INTERVAL '90 days';
 ```
 
 **Pros:**
+
 - Can recover accidentally deleted data
 - Maintains referential integrity
 - Useful for auditing
 
 **Cons:**
+
 - Queries must always filter deleted_at
 - Indexes include deleted records
 - Unique constraints need to handle deleted records
 
 **Unique constraint with soft delete:**
+
 ```sql
 CREATE UNIQUE INDEX idx_posts_unique_slug
 ON posts(slug) WHERE deleted_at IS NULL;
@@ -694,11 +732,13 @@ SELECT * FROM categories WHERE lft < 3 AND rgt > 4 ORDER BY lft;
 ```
 
 **Pros:**
+
 - Fast reads (no recursion)
 - Easy to get entire subtree
 - Easy to get depth
 
 **Cons:**
+
 - Complex inserts/moves (must update many rows)
 - Can't use foreign keys easily
 - Better for read-heavy trees
@@ -733,11 +773,13 @@ CREATE INDEX idx_categories_path ON categories USING btree(path);
 ```
 
 **Pros:**
+
 - Simple queries
 - Easy to move subtrees
 - Works well with indexes
 
 **Cons:**
+
 - Path length limited
 - Harder to maintain path integrity
 

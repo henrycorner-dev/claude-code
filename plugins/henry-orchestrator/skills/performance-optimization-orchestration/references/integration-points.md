@@ -17,6 +17,7 @@ This guide covers integration with various performance, security, and quality to
 **Purpose**: Automated performance, accessibility, SEO auditing
 
 **Integration**:
+
 ```bash
 # CLI usage
 npm install -g lighthouse
@@ -48,6 +49,7 @@ async function runLighthouse(url) {
 ```
 
 **CI/CD Integration**:
+
 ```yaml
 # GitHub Actions
 name: Lighthouse CI
@@ -75,29 +77,34 @@ jobs:
 **Purpose**: Real-world performance testing from multiple locations
 
 **Integration**:
+
 ```javascript
 const WebPageTest = require('webpagetest');
 const wpt = new WebPageTest('www.webpagetest.org', process.env.WPT_API_KEY);
 
 async function runTest(url) {
   return new Promise((resolve, reject) => {
-    wpt.runTest(url, {
-      location: 'Dulles:Chrome',
-      connectivity: '4G',
-      runs: 3,
-      firstViewOnly: false,
-    }, (err, result) => {
-      if (err) return reject(err);
-
-      wpt.getTestResults(result.data.testId, (err, data) => {
+    wpt.runTest(
+      url,
+      {
+        location: 'Dulles:Chrome',
+        connectivity: '4G',
+        runs: 3,
+        firstViewOnly: false,
+      },
+      (err, result) => {
         if (err) return reject(err);
-        resolve({
-          testId: result.data.testId,
-          summary: data.data.summary,
-          median: data.data.median,
+
+        wpt.getTestResults(result.data.testId, (err, data) => {
+          if (err) return reject(err);
+          resolve({
+            testId: result.data.testId,
+            summary: data.data.summary,
+            median: data.data.median,
+          });
         });
-      });
-    });
+      }
+    );
   });
 }
 ```
@@ -107,6 +114,7 @@ async function runTest(url) {
 **Purpose**: Visualize bundle composition and identify optimization opportunities
 
 **Integration**:
+
 ```javascript
 // webpack.config.js
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
@@ -129,6 +137,7 @@ module.exports = {
 **Purpose**: Programmatic access to Chrome DevTools features
 
 **Integration**:
+
 ```javascript
 const puppeteer = require('puppeteer');
 
@@ -139,14 +148,14 @@ async function measurePerformance(url) {
   // Enable performance metrics
   await page.evaluateOnNewDocument(() => {
     window.perfMetrics = {};
-    new PerformanceObserver((list) => {
+    new PerformanceObserver(list => {
       for (const entry of list.getEntries()) {
         window.perfMetrics[entry.name] = entry;
       }
-    }).observe({entryTypes: ['measure', 'navigation', 'paint', 'largest-contentful-paint']});
+    }).observe({ entryTypes: ['measure', 'navigation', 'paint', 'largest-contentful-paint'] });
   });
 
-  await page.goto(url, {waitUntil: 'networkidle0'});
+  await page.goto(url, { waitUntil: 'networkidle0' });
 
   // Get metrics
   const metrics = await page.evaluate(() => window.perfMetrics);
@@ -168,6 +177,7 @@ async function measurePerformance(url) {
 **Purpose**: Scan dependencies for known vulnerabilities
 
 **Integration**:
+
 ```bash
 # Basic audit
 npm audit
@@ -203,6 +213,7 @@ async function runAudit() {
 **Purpose**: Comprehensive vulnerability scanning with remediation advice
 
 **Integration**:
+
 ```bash
 # Install Snyk CLI
 npm install -g snyk
@@ -238,6 +249,7 @@ async function scanProject() {
 **Purpose**: Dynamic application security testing (DAST)
 
 **Integration**:
+
 ```javascript
 const ZapClient = require('zaproxy');
 
@@ -275,6 +287,7 @@ async function runZapScan(targetUrl) {
 **Purpose**: Static application security testing (SAST) and code quality
 
 **Integration**:
+
 ```bash
 # Scanner CLI
 sonar-scanner \
@@ -296,22 +309,26 @@ sonar.exclusions=**/node_modules/**,**/dist/**
 ```
 
 **Programmatic usage**:
+
 ```javascript
 const scanner = require('sonarqube-scanner');
 
-scanner({
-  serverUrl: 'http://localhost:9000',
-  token: process.env.SONAR_TOKEN,
-  options: {
-    'sonar.projectKey': 'my-project',
-    'sonar.projectName': 'My Project',
-    'sonar.sources': 'src',
-    'sonar.tests': 'tests',
-    'sonar.javascript.lcov.reportPaths': 'coverage/lcov.info',
+scanner(
+  {
+    serverUrl: 'http://localhost:9000',
+    token: process.env.SONAR_TOKEN,
+    options: {
+      'sonar.projectKey': 'my-project',
+      'sonar.projectName': 'My Project',
+      'sonar.sources': 'src',
+      'sonar.tests': 'tests',
+      'sonar.javascript.lcov.reportPaths': 'coverage/lcov.info',
+    },
   },
-}, () => {
-  console.log('SonarQube analysis complete');
-});
+  () => {
+    console.log('SonarQube analysis complete');
+  }
+);
 ```
 
 ## Quality Tools
@@ -321,6 +338,7 @@ scanner({
 **Purpose**: JavaScript testing framework with coverage
 
 **Integration**:
+
 ```javascript
 // jest.config.js
 module.exports = {
@@ -342,6 +360,7 @@ module.exports = {
 ```
 
 **Programmatic usage**:
+
 ```javascript
 const jest = require('jest');
 
@@ -355,7 +374,7 @@ async function runTests() {
     [process.cwd()]
   );
 
-  const {numTotalTests, numPassedTests, numFailedTests} = results.results;
+  const { numTotalTests, numPassedTests, numFailedTests } = results.results;
   const passRate = (numPassedTests / numTotalTests) * 100;
 
   if (passRate < 95) {
@@ -371,37 +390,39 @@ async function runTests() {
 **Purpose**: End-to-end testing and browser automation
 
 **Integration**:
+
 ```javascript
-const {test, expect} = require('@playwright/test');
+const { test, expect } = require('@playwright/test');
 
 test.describe('Performance E2E', () => {
-  test('should meet Core Web Vitals', async ({page}) => {
+  test('should meet Core Web Vitals', async ({ page }) => {
     await page.goto('https://example.com');
 
     // Measure LCP
     const lcp = await page.evaluate(() => {
-      return new Promise((resolve) => {
-        new PerformanceObserver((list) => {
+      return new Promise(resolve => {
+        new PerformanceObserver(list => {
           const entries = list.getEntries();
           const lastEntry = entries[entries.length - 1];
           resolve(lastEntry.renderTime || lastEntry.loadTime);
-        }).observe({entryTypes: ['largest-contentful-paint']});
+        }).observe({ entryTypes: ['largest-contentful-paint'] });
       });
     });
 
     expect(lcp).toBeLessThan(2500);
 
     // Take screenshot for visual regression
-    await page.screenshot({path: 'screenshots/homepage.png', fullPage: true});
+    await page.screenshot({ path: 'screenshots/homepage.png', fullPage: true });
   });
 });
 ```
 
 **MCP Playwright Integration**:
+
 ```javascript
 // Using MCP Playwright tool in Henry Orchestrator
 use_mcp_tool(playwright, browser_navigate, {
-  url: "https://example.com"
+  url: 'https://example.com',
 });
 
 use_mcp_tool(playwright, browser_evaluate, {
@@ -412,7 +433,7 @@ use_mcp_tool(playwright, browser_evaluate, {
         resolve({lcp: lcp.renderTime || lcp.loadTime});
       }).observe({entryTypes: ['largest-contentful-paint']});
     });
-  }`
+  }`,
 });
 ```
 
@@ -421,6 +442,7 @@ use_mcp_tool(playwright, browser_evaluate, {
 **Purpose**: JavaScript linting and code quality
 
 **Integration**:
+
 ```javascript
 // .eslintrc.js
 module.exports = {
@@ -435,7 +457,7 @@ module.exports = {
 };
 
 // Programmatic usage
-const {ESLint} = require('eslint');
+const { ESLint } = require('eslint');
 
 async function lintCode() {
   const eslint = new ESLint();
@@ -447,7 +469,7 @@ async function lintCode() {
   const errorCount = results.reduce((sum, result) => sum + result.errorCount, 0);
   const warningCount = results.reduce((sum, result) => sum + result.warningCount, 0);
 
-  return {errorCount, warningCount, results: resultText};
+  return { errorCount, warningCount, results: resultText };
 }
 ```
 
@@ -456,6 +478,7 @@ async function lintCode() {
 ### GitHub Actions
 
 **Comprehensive quality workflow**:
+
 ```yaml
 name: Quality Checks
 on: [push, pull_request]
@@ -523,6 +546,7 @@ jobs:
 ### Performance Budgets
 
 **Lighthouse CI config**:
+
 ```json
 // .lighthouserc.json
 {
@@ -534,13 +558,13 @@ jobs:
     "assert": {
       "preset": "lighthouse:recommended",
       "assertions": {
-        "largest-contentful-paint": ["error", {"maxNumericValue": 2500}],
-        "cumulative-layout-shift": ["error", {"maxNumericValue": 0.1}],
-        "total-blocking-time": ["error", {"maxNumericValue": 300}],
-        "interactive": ["error", {"maxNumericValue": 3800}],
-        "categories:performance": ["error", {"minScore": 0.9}],
-        "resource-summary:script:size": ["error", {"maxNumericValue": 300000}],
-        "resource-summary:image:size": ["error", {"maxNumericValue": 800000}]
+        "largest-contentful-paint": ["error", { "maxNumericValue": 2500 }],
+        "cumulative-layout-shift": ["error", { "maxNumericValue": 0.1 }],
+        "total-blocking-time": ["error", { "maxNumericValue": 300 }],
+        "interactive": ["error", { "maxNumericValue": 3800 }],
+        "categories:performance": ["error", { "minScore": 0.9 }],
+        "resource-summary:script:size": ["error", { "maxNumericValue": 300000 }],
+        "resource-summary:image:size": ["error", { "maxNumericValue": 800000 }]
       }
     },
     "upload": {
@@ -551,6 +575,7 @@ jobs:
 ```
 
 **bundlesize config**:
+
 ```json
 // package.json
 {
@@ -576,8 +601,9 @@ jobs:
 ### Google Analytics 4
 
 **Core Web Vitals tracking**:
+
 ```javascript
-import {onLCP, onINP, onCLS} from 'web-vitals';
+import { onLCP, onINP, onCLS } from 'web-vitals';
 
 function sendToGA(metric) {
   gtag('event', metric.name, {
@@ -596,8 +622,9 @@ onCLS(sendToGA);
 ### Datadog
 
 **RUM and performance monitoring**:
+
 ```javascript
-import {datadogRum} from '@datadog/browser-rum';
+import { datadogRum } from '@datadog/browser-rum';
 
 datadogRum.init({
   applicationId: process.env.DD_APP_ID,
@@ -624,6 +651,7 @@ performance.measure('user-action', 'user-action-start', 'user-action-end');
 ### New Relic
 
 **Browser monitoring**:
+
 ```javascript
 // Browser agent snippet (add to <head>)
 <script type="text/javascript">
@@ -646,9 +674,10 @@ newrelic.interaction()
 ### Sentry
 
 **Error tracking with performance**:
+
 ```javascript
 import * as Sentry from '@sentry/react';
-import {BrowserTracing} from '@sentry/tracing';
+import { BrowserTracing } from '@sentry/tracing';
 
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
@@ -666,7 +695,7 @@ Sentry.init({
 });
 
 // Custom transaction
-const transaction = Sentry.startTransaction({name: 'checkout-flow'});
+const transaction = Sentry.startTransaction({ name: 'checkout-flow' });
 // ... checkout process
 transaction.finish();
 ```
@@ -675,36 +704,37 @@ transaction.finish();
 
 ### Performance Tools
 
-| Tool | Purpose | Strengths | Limitations |
-|------|---------|-----------|-------------|
-| Lighthouse | Automated audits | Comprehensive, easy to use, CI/CD integration | Synthetic only, single device |
-| WebPageTest | Real-world testing | Multiple locations, devices, connection speeds | Slower, requires API key |
-| Chrome DevTools | Development debugging | Real-time, detailed insights | Manual, not automated |
-| Webpack Bundle Analyzer | Bundle optimization | Visual breakdown, interactive | Build tool specific |
+| Tool                    | Purpose               | Strengths                                      | Limitations                   |
+| ----------------------- | --------------------- | ---------------------------------------------- | ----------------------------- |
+| Lighthouse              | Automated audits      | Comprehensive, easy to use, CI/CD integration  | Synthetic only, single device |
+| WebPageTest             | Real-world testing    | Multiple locations, devices, connection speeds | Slower, requires API key      |
+| Chrome DevTools         | Development debugging | Real-time, detailed insights                   | Manual, not automated         |
+| Webpack Bundle Analyzer | Bundle optimization   | Visual breakdown, interactive                  | Build tool specific           |
 
 ### Security Tools
 
-| Tool | Purpose | Strengths | Limitations |
-|------|---------|-----------|-------------|
-| npm audit | Dependency scanning | Free, built-in, fast | Basic reporting, limited remediation |
-| Snyk | Comprehensive security | Detailed remediation, integrations | Paid for advanced features |
-| OWASP ZAP | DAST | Free, comprehensive, active community | Requires running application |
-| SonarQube | SAST + quality | Code quality + security, detailed reports | Setup complexity |
+| Tool      | Purpose                | Strengths                                 | Limitations                          |
+| --------- | ---------------------- | ----------------------------------------- | ------------------------------------ |
+| npm audit | Dependency scanning    | Free, built-in, fast                      | Basic reporting, limited remediation |
+| Snyk      | Comprehensive security | Detailed remediation, integrations        | Paid for advanced features           |
+| OWASP ZAP | DAST                   | Free, comprehensive, active community     | Requires running application         |
+| SonarQube | SAST + quality         | Code quality + security, detailed reports | Setup complexity                     |
 
 ### Quality Tools
 
-| Tool | Purpose | Strengths | Limitations |
-|------|---------|-----------|-------------|
-| Jest | Unit/integration testing | Fast, great DX, built-in coverage | JavaScript/TypeScript only |
-| Playwright | E2E testing | Cross-browser, reliable, modern API | Slower than unit tests |
-| ESLint | Linting | Highly configurable, extensive plugins | Syntax only, not runtime |
-| Codecov | Coverage tracking | Visual diffs, PR integration | Requires external service |
+| Tool       | Purpose                  | Strengths                              | Limitations                |
+| ---------- | ------------------------ | -------------------------------------- | -------------------------- |
+| Jest       | Unit/integration testing | Fast, great DX, built-in coverage      | JavaScript/TypeScript only |
+| Playwright | E2E testing              | Cross-browser, reliable, modern API    | Slower than unit tests     |
+| ESLint     | Linting                  | Highly configurable, extensive plugins | Syntax only, not runtime   |
+| Codecov    | Coverage tracking        | Visual diffs, PR integration           | Requires external service  |
 
 ## Best Practices
 
 ### Tool Selection
 
 ✅ **DO**:
+
 - Choose tools that integrate with your existing workflow
 - Start with free/open-source tools before paid solutions
 - Automate quality checks in CI/CD
@@ -712,6 +742,7 @@ transaction.finish();
 - Combine multiple tools for comprehensive coverage
 
 ❌ **DON'T**:
+
 - Rely on a single tool for quality assurance
 - Ignore tool maintenance and updates
 - Use too many overlapping tools

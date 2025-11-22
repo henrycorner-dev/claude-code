@@ -25,30 +25,35 @@ Edge functions run on CDN edge nodes globally distributed close to users, provid
 ### Use Cases
 
 **Authentication & Authorization:**
+
 - Verify JWT tokens
 - Check session cookies
 - Enforce access control
 - Redirect unauthenticated users
 
 **Request/Response Transformation:**
+
 - Modify headers
 - Rewrite URLs
 - Add security headers
 - Compress responses
 
 **Geolocation:**
+
 - Redirect based on country
 - Serve localized content
 - Block regions
 - Route to regional APIs
 
 **A/B Testing:**
+
 - Assign test variants
 - Serve different content
 - Track experiments
 - Feature flags
 
 **Bot Protection:**
+
 - Detect bots
 - Rate limiting
 - CAPTCHA challenges
@@ -57,21 +62,25 @@ Edge functions run on CDN edge nodes globally distributed close to users, provid
 ### Edge Runtime Constraints
 
 **No Node.js APIs:**
+
 - No `fs`, `path`, `crypto` (Node version)
 - No native modules
 - Limited npm packages
 
 **Bundle Size Limits:**
+
 - 1-4 MB depending on platform
 - Tree shaking essential
 - Minimize dependencies
 
 **Execution Time Limits:**
+
 - 10-50 seconds maximum
 - Optimize for fast execution
 - Handle cold starts
 
 **Memory Limits:**
+
 - 128 MB typical
 - Optimize data structures
 - Stream large responses
@@ -82,53 +91,53 @@ Edge functions run on CDN edge nodes globally distributed close to users, provid
 
 ```typescript
 // middleware.ts
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
   // Authentication
-  const token = request.cookies.get('auth-token')
+  const token = request.cookies.get('auth-token');
 
   if (!token && request.nextUrl.pathname.startsWith('/dashboard')) {
-    return NextResponse.redirect(new URL('/login', request.url))
+    return NextResponse.redirect(new URL('/login', request.url));
   }
 
   // Add security headers
-  const response = NextResponse.next()
-  response.headers.set('X-Frame-Options', 'DENY')
-  response.headers.set('X-Content-Type-Options', 'nosniff')
-  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
+  const response = NextResponse.next();
+  response.headers.set('X-Frame-Options', 'DENY');
+  response.headers.set('X-Content-Type-Options', 'nosniff');
+  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
 
-  return response
+  return response;
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/api/:path*']
-}
+  matcher: ['/dashboard/:path*', '/api/:path*'],
+};
 ```
 
 ### Geolocation-Based Routing
 
 ```typescript
 // middleware.ts
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  const country = request.geo?.country || 'US'
-  const city = request.geo?.city || 'Unknown'
+  const country = request.geo?.country || 'US';
+  const city = request.geo?.city || 'Unknown';
 
   // Redirect EU users
   if (['DE', 'FR', 'GB', 'IT', 'ES'].includes(country)) {
-    return NextResponse.rewrite(new URL('/eu', request.url))
+    return NextResponse.rewrite(new URL('/eu', request.url));
   }
 
   // Add geo headers for downstream use
-  const response = NextResponse.next()
-  response.headers.set('x-user-country', country)
-  response.headers.set('x-user-city', city)
+  const response = NextResponse.next();
+  response.headers.set('x-user-country', country);
+  response.headers.set('x-user-city', city);
 
-  return response
+  return response;
 }
 ```
 
@@ -136,28 +145,29 @@ export function middleware(request: NextRequest) {
 
 ```typescript
 // middleware.ts
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
   // Check existing variant
-  let variant = request.cookies.get('ab-variant')?.value
+  let variant = request.cookies.get('ab-variant')?.value;
 
   if (!variant) {
     // Assign random variant
-    variant = Math.random() < 0.5 ? 'A' : 'B'
+    variant = Math.random() < 0.5 ? 'A' : 'B';
   }
 
-  const response = variant === 'B'
-    ? NextResponse.rewrite(new URL('/variant-b', request.url))
-    : NextResponse.next()
+  const response =
+    variant === 'B'
+      ? NextResponse.rewrite(new URL('/variant-b', request.url))
+      : NextResponse.next();
 
   // Set cookie for persistence
   response.cookies.set('ab-variant', variant, {
-    maxAge: 60 * 60 * 24 * 30 // 30 days
-  })
+    maxAge: 60 * 60 * 24 * 30, // 30 days
+  });
 
-  return response
+  return response;
 }
 ```
 
@@ -165,20 +175,17 @@ export function middleware(request: NextRequest) {
 
 ```typescript
 // app/api/hello/route.ts
-export const runtime = 'edge'
+export const runtime = 'edge';
 
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url)
-  const name = searchParams.get('name') || 'World'
+  const { searchParams } = new URL(request.url);
+  const name = searchParams.get('name') || 'World';
 
-  return new Response(
-    JSON.stringify({ message: `Hello, ${name}!` }),
-    {
-      headers: {
-        'content-type': 'application/json'
-      }
-    }
-  )
+  return new Response(JSON.stringify({ message: `Hello, ${name}!` }), {
+    headers: {
+      'content-type': 'application/json',
+    },
+  });
 }
 ```
 
@@ -186,31 +193,31 @@ export async function GET(request: Request) {
 
 ```typescript
 // middleware.ts
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
-import { jwtVerify } from 'jose'
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+import { jwtVerify } from 'jose';
 
 export async function middleware(request: NextRequest) {
-  const token = request.cookies.get('token')?.value
+  const token = request.cookies.get('token')?.value;
 
   if (!token) {
-    return NextResponse.redirect(new URL('/login', request.url))
+    return NextResponse.redirect(new URL('/login', request.url));
   }
 
   try {
     // Verify JWT at edge
-    const secret = new TextEncoder().encode(process.env.JWT_SECRET)
-    await jwtVerify(token, secret)
+    const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+    await jwtVerify(token, secret);
 
-    return NextResponse.next()
+    return NextResponse.next();
   } catch (error) {
-    return NextResponse.redirect(new URL('/login', request.url))
+    return NextResponse.redirect(new URL('/login', request.url));
   }
 }
 
 export const config = {
-  matcher: '/dashboard/:path*'
-}
+  matcher: '/dashboard/:path*',
+};
 ```
 
 ## Nuxt Edge Functions
@@ -219,35 +226,35 @@ export const config = {
 
 ```typescript
 // server/middleware/auth.ts
-export default defineEventHandler(async (event) => {
-  const token = getCookie(event, 'auth-token')
+export default defineEventHandler(async event => {
+  const token = getCookie(event, 'auth-token');
 
   if (!token && event.path.startsWith('/dashboard')) {
-    return sendRedirect(event, '/login')
+    return sendRedirect(event, '/login');
   }
 
   // Add user to event context
   if (token) {
-    event.context.user = await verifyToken(token)
+    event.context.user = await verifyToken(token);
   }
-})
+});
 ```
 
 ### Geolocation Handling
 
 ```typescript
 // server/middleware/geo.ts
-export default defineEventHandler((event) => {
+export default defineEventHandler(event => {
   // Cloudflare Workers headers
-  const country = getHeader(event, 'cf-ipcountry') || 'US'
+  const country = getHeader(event, 'cf-ipcountry') || 'US';
 
   // Vercel headers
-  const vercelCountry = getHeader(event, 'x-vercel-ip-country')
+  const vercelCountry = getHeader(event, 'x-vercel-ip-country');
 
-  const userCountry = vercelCountry || country
+  const userCountry = vercelCountry || country;
 
-  event.context.country = userCountry
-})
+  event.context.country = userCountry;
+});
 ```
 
 ### Edge-Cached API Routes
@@ -255,17 +262,17 @@ export default defineEventHandler((event) => {
 ```typescript
 // server/api/posts.get.ts
 export default defineCachedEventHandler(
-  async (event) => {
-    const posts = await db.posts.findMany()
+  async event => {
+    const posts = await db.posts.findMany();
 
-    return posts
+    return posts;
   },
   {
-    maxAge: 60 * 10,  // Cache 10 minutes
-    swr: true,         // Stale-while-revalidate
-    getKey: () => 'posts-list'
+    maxAge: 60 * 10, // Cache 10 minutes
+    swr: true, // Stale-while-revalidate
+    getKey: () => 'posts-list',
   }
-)
+);
 ```
 
 ### Nuxt on Edge Runtime
@@ -278,10 +285,10 @@ export default defineNuxtConfig({
     routeRules: {
       '/api/**': { cors: true, headers: { 'cache-control': 's-maxage=60' } },
       '/admin/**': { ssr: false },
-      '/blog/**': { swr: 3600 }
-    }
-  }
-})
+      '/blog/**': { swr: 3600 },
+    },
+  },
+});
 ```
 
 ## SvelteKit Edge Functions
@@ -290,64 +297,64 @@ export default defineNuxtConfig({
 
 ```typescript
 // src/hooks.server.ts
-import type { Handle } from '@sveltejs/kit'
+import type { Handle } from '@sveltejs/kit';
 
 export const handle: Handle = async ({ event, resolve }) => {
-  const sessionId = event.cookies.get('session')
+  const sessionId = event.cookies.get('session');
 
   if (sessionId) {
-    const user = await getUserFromSession(sessionId)
-    event.locals.user = user
+    const user = await getUserFromSession(sessionId);
+    event.locals.user = user;
   }
 
   // Protect routes
   if (event.url.pathname.startsWith('/dashboard') && !event.locals.user) {
     return new Response('Redirect', {
       status: 303,
-      headers: { Location: '/login' }
-    })
+      headers: { Location: '/login' },
+    });
   }
 
-  return resolve(event)
-}
+  return resolve(event);
+};
 ```
 
 ### Edge Deployment
 
 ```javascript
 // svelte.config.js
-import adapter from '@sveltejs/adapter-vercel'
+import adapter from '@sveltejs/adapter-vercel';
 
 export default {
   kit: {
     adapter: adapter({
       runtime: 'edge',
-      regions: ['iad1', 'sfo1'] // Deploy to specific regions
-    })
-  }
-}
+      regions: ['iad1', 'sfo1'], // Deploy to specific regions
+    }),
+  },
+};
 ```
 
 ### Edge API Routes
 
 ```typescript
 // src/routes/api/data/+server.ts
-import type { RequestHandler } from './$types'
+import type { RequestHandler } from './$types';
 
 export const config = {
-  runtime: 'edge'
-}
+  runtime: 'edge',
+};
 
 export const GET: RequestHandler = async ({ request }) => {
-  const data = await fetchFromAPI()
+  const data = await fetchFromAPI();
 
   return new Response(JSON.stringify(data), {
     headers: {
       'content-type': 'application/json',
-      'cache-control': 'public, max-age=60'
-    }
-  })
-}
+      'cache-control': 'public, max-age=60',
+    },
+  });
+};
 ```
 
 ## Remix Edge Functions
@@ -359,13 +366,13 @@ Remix can run on Cloudflare Workers or Vercel Edge:
 ```typescript
 // app/routes/_index.tsx
 export const config = {
-  runtime: 'edge'
-}
+  runtime: 'edge',
+};
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const country = request.headers.get('x-vercel-ip-country')
+  const country = request.headers.get('x-vercel-ip-country');
 
-  return json({ country })
+  return json({ country });
 }
 ```
 
@@ -373,17 +380,17 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 ```typescript
 // app/routes/dashboard.tsx
-import { redirect } from '@remix-run/node'
+import { redirect } from '@remix-run/node';
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const cookie = request.headers.get('Cookie')
-  const session = await getSessionFromCookie(cookie)
+  const cookie = request.headers.get('Cookie');
+  const session = await getSessionFromCookie(cookie);
 
   if (!session) {
-    throw redirect('/login')
+    throw redirect('/login');
   }
 
-  return json({ user: session.user })
+  return json({ user: session.user });
 }
 ```
 
@@ -394,19 +401,22 @@ export async function loader({ request }: LoaderFunctionArgs) {
 ```typescript
 // api/edge.ts
 export const config = {
-  runtime: 'edge'
-}
+  runtime: 'edge',
+};
 
 export default async function handler(request: Request) {
-  const { geo, ip } = request
+  const { geo, ip } = request;
 
-  return new Response(JSON.stringify({
-    country: geo?.country,
-    city: geo?.city,
-    ip
-  }), {
-    headers: { 'content-type': 'application/json' }
-  })
+  return new Response(
+    JSON.stringify({
+      country: geo?.country,
+      city: geo?.city,
+      ip,
+    }),
+    {
+      headers: { 'content-type': 'application/json' },
+    }
+  );
 }
 ```
 
@@ -415,13 +425,13 @@ export default async function handler(request: Request) {
 ```typescript
 // functions/api/hello.ts
 export async function onRequest(context) {
-  const { request, env } = context
+  const { request, env } = context;
 
-  const country = request.headers.get('cf-ipcountry')
+  const country = request.headers.get('cf-ipcountry');
 
   return new Response(JSON.stringify({ country }), {
-    headers: { 'content-type': 'application/json' }
-  })
+    headers: { 'content-type': 'application/json' },
+  });
 }
 ```
 
@@ -430,12 +440,12 @@ export async function onRequest(context) {
 ```typescript
 // netlify/edge-functions/hello.ts
 export default async (request: Request) => {
-  const country = request.headers.get('x-country')
+  const country = request.headers.get('x-country');
 
   return new Response(JSON.stringify({ country }), {
-    headers: { 'content-type': 'application/json' }
-  })
-}
+    headers: { 'content-type': 'application/json' },
+  });
+};
 ```
 
 ## Common Patterns
@@ -444,33 +454,31 @@ export default async (request: Request) => {
 
 ```typescript
 // Next.js middleware.ts
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
-const rateLimitMap = new Map()
+const rateLimitMap = new Map();
 
 export function middleware(request: NextRequest) {
-  const ip = request.ip || 'unknown'
-  const limit = 10 // requests per minute
-  const windowMs = 60 * 1000
+  const ip = request.ip || 'unknown';
+  const limit = 10; // requests per minute
+  const windowMs = 60 * 1000;
 
-  const now = Date.now()
-  const userRequests = rateLimitMap.get(ip) || []
+  const now = Date.now();
+  const userRequests = rateLimitMap.get(ip) || [];
 
   // Filter recent requests
-  const recentRequests = userRequests.filter(
-    (timestamp: number) => now - timestamp < windowMs
-  )
+  const recentRequests = userRequests.filter((timestamp: number) => now - timestamp < windowMs);
 
   if (recentRequests.length >= limit) {
-    return new NextResponse('Too Many Requests', { status: 429 })
+    return new NextResponse('Too Many Requests', { status: 429 });
   }
 
   // Add current request
-  recentRequests.push(now)
-  rateLimitMap.set(ip, recentRequests)
+  recentRequests.push(now);
+  rateLimitMap.set(ip, recentRequests);
 
-  return NextResponse.next()
+  return NextResponse.next();
 }
 ```
 
@@ -478,35 +486,35 @@ export function middleware(request: NextRequest) {
 
 ```typescript
 // middleware.ts
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
 const FEATURE_FLAGS = {
   newDashboard: 0.1, // 10% of users
-  betaFeature: 0.5   // 50% of users
-}
+  betaFeature: 0.5, // 50% of users
+};
 
 export function middleware(request: NextRequest) {
-  const userId = request.cookies.get('userId')?.value || 'anonymous'
+  const userId = request.cookies.get('userId')?.value || 'anonymous';
 
   // Deterministic feature flag based on user ID
-  const userHash = hashString(userId)
-  const enableNewDashboard = (userHash % 100) < (FEATURE_FLAGS.newDashboard * 100)
+  const userHash = hashString(userId);
+  const enableNewDashboard = userHash % 100 < FEATURE_FLAGS.newDashboard * 100;
 
   if (enableNewDashboard && request.nextUrl.pathname === '/dashboard') {
-    return NextResponse.rewrite(new URL('/dashboard-v2', request.url))
+    return NextResponse.rewrite(new URL('/dashboard-v2', request.url));
   }
 
-  return NextResponse.next()
+  return NextResponse.next();
 }
 
 function hashString(str: string): number {
-  let hash = 0
+  let hash = 0;
   for (let i = 0; i < str.length; i++) {
-    hash = ((hash << 5) - hash) + str.charCodeAt(i)
-    hash = hash & hash
+    hash = (hash << 5) - hash + str.charCodeAt(i);
+    hash = hash & hash;
   }
-  return Math.abs(hash)
+  return Math.abs(hash);
 }
 ```
 
@@ -514,19 +522,19 @@ function hashString(str: string): number {
 
 ```typescript
 export function middleware(request: NextRequest) {
-  const response = NextResponse.next()
+  const response = NextResponse.next();
 
   // Security headers
-  response.headers.set('X-Frame-Options', 'DENY')
-  response.headers.set('X-Content-Type-Options', 'nosniff')
-  response.headers.set('X-XSS-Protection', '1; mode=block')
-  response.headers.set('Strict-Transport-Security', 'max-age=31536000')
+  response.headers.set('X-Frame-Options', 'DENY');
+  response.headers.set('X-Content-Type-Options', 'nosniff');
+  response.headers.set('X-XSS-Protection', '1; mode=block');
+  response.headers.set('Strict-Transport-Security', 'max-age=31536000');
   response.headers.set(
     'Content-Security-Policy',
     "default-src 'self'; script-src 'self' 'unsafe-inline'"
-  )
+  );
 
-  return response
+  return response;
 }
 ```
 
@@ -540,15 +548,15 @@ export function middleware(request: NextRequest) {
 
 ```typescript
 // Instead of Node crypto
-import crypto from 'crypto'
-const hash = crypto.createHash('sha256').update(data).digest('hex')
+import crypto from 'crypto';
+const hash = crypto.createHash('sha256').update(data).digest('hex');
 
 // Use Web Crypto API
-const encoder = new TextEncoder()
-const data = encoder.encode('string')
-const hashBuffer = await crypto.subtle.digest('SHA-256', data)
-const hashArray = Array.from(new Uint8Array(hashBuffer))
-const hash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
+const encoder = new TextEncoder();
+const data = encoder.encode('string');
+const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+const hashArray = Array.from(new Uint8Array(hashBuffer));
+const hash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 ```
 
 ### Limited npm Packages
@@ -556,6 +564,7 @@ const hash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
 **Problem:** Many npm packages rely on Node.js APIs.
 
 **Workaround:** Use edge-compatible alternatives:
+
 - `jose` instead of `jsonwebtoken`
 - `@upstash/redis` instead of `ioredis`
 - Fetch API instead of `axios`
@@ -565,6 +574,7 @@ const hash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
 **Problem:** Traditional databases require persistent connections.
 
 **Workaround:** Use edge-compatible databases:
+
 - Upstash Redis (HTTP-based)
 - PlanetScale (MySQL over HTTP)
 - Cloudflare D1 (SQLite)
@@ -572,16 +582,16 @@ const hash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
 
 ```typescript
 // Using Upstash Redis at edge
-import { Redis } from '@upstash/redis'
+import { Redis } from '@upstash/redis';
 
 const redis = new Redis({
   url: process.env.UPSTASH_REDIS_URL!,
-  token: process.env.UPSTASH_REDIS_TOKEN!
-})
+  token: process.env.UPSTASH_REDIS_TOKEN!,
+});
 
 export async function GET() {
-  const data = await redis.get('key')
-  return Response.json({ data })
+  const data = await redis.get('key');
+  return Response.json({ data });
 }
 ```
 
@@ -594,13 +604,13 @@ export async function GET() {
 ```typescript
 // Cloudflare Workers
 export async function onRequest(context) {
-  const { env } = context
-  const apiKey = env.API_KEY
+  const { env } = context;
+  const apiKey = env.API_KEY;
 }
 
 // Vercel Edge
 export default async function handler(request: Request) {
-  const apiKey = process.env.API_KEY
+  const apiKey = process.env.API_KEY;
 }
 ```
 

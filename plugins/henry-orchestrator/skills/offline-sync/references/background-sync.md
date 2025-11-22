@@ -13,31 +13,31 @@ Background sync allows applications to synchronize data even when not actively i
 ```javascript
 // main.js - Register background sync
 async function registerBackgroundSync() {
-    if ('serviceWorker' in navigator && 'sync' in (await navigator.serviceWorker.ready)) {
-        try {
-            const registration = await navigator.serviceWorker.ready;
-            await registration.sync.register('sync-data');
-            console.log('Background sync registered');
-        } catch (error) {
-            console.error('Background sync registration failed:', error);
-            // Fallback to immediate sync
-            await sync();
-        }
-    } else {
-        // Background sync not supported, sync immediately
-        await sync();
+  if ('serviceWorker' in navigator && 'sync' in (await navigator.serviceWorker.ready)) {
+    try {
+      const registration = await navigator.serviceWorker.ready;
+      await registration.sync.register('sync-data');
+      console.log('Background sync registered');
+    } catch (error) {
+      console.error('Background sync registration failed:', error);
+      // Fallback to immediate sync
+      await sync();
     }
+  } else {
+    // Background sync not supported, sync immediately
+    await sync();
+  }
 }
 
 // Trigger sync on data change
 async function onDataChange() {
-    await registerBackgroundSync();
+  await registerBackgroundSync();
 }
 
 // Sync when coming back online
 window.addEventListener('online', async () => {
-    console.log('Back online, syncing...');
-    await registerBackgroundSync();
+  console.log('Back online, syncing...');
+  await registerBackgroundSync();
 });
 ```
 
@@ -45,110 +45,109 @@ window.addEventListener('online', async () => {
 
 ```javascript
 // sw.js
-self.addEventListener('sync', (event) => {
-    if (event.tag === 'sync-data') {
-        event.waitUntil(performSync());
-    }
+self.addEventListener('sync', event => {
+  if (event.tag === 'sync-data') {
+    event.waitUntil(performSync());
+  }
 });
 
 async function performSync() {
-    try {
-        console.log('[ServiceWorker] Performing background sync');
+  try {
+    console.log('[ServiceWorker] Performing background sync');
 
-        // Open IndexedDB
-        const db = await openIndexedDB();
+    // Open IndexedDB
+    const db = await openIndexedDB();
 
-        // Get unsynced items
-        const unsyncedItems = await getUnsyncedItems(db);
+    // Get unsynced items
+    const unsyncedItems = await getUnsyncedItems(db);
 
-        if (unsyncedItems.length === 0) {
-            console.log('[ServiceWorker] Nothing to sync');
-            return;
-        }
-
-        // Push to server
-        const response = await fetch('/api/sync/push', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${await getAuthToken()}`
-            },
-            body: JSON.stringify({ items: unsyncedItems })
-        });
-
-        if (!response.ok) {
-            throw new Error(`Sync failed: ${response.status}`);
-        }
-
-        const { accepted } = await response.json();
-
-        // Mark as synced
-        await markAsSynced(db, accepted);
-
-        console.log('[ServiceWorker] Sync completed:', accepted.length, 'items');
-
-        // Show notification to user
-        await self.registration.showNotification('Sync Complete', {
-            body: `Synced ${accepted.length} items`,
-            icon: '/icon.png',
-            tag: 'sync-complete'
-        });
-
-    } catch (error) {
-        console.error('[ServiceWorker] Sync failed:', error);
-        throw error; // Re-throw to trigger retry
+    if (unsyncedItems.length === 0) {
+      console.log('[ServiceWorker] Nothing to sync');
+      return;
     }
+
+    // Push to server
+    const response = await fetch('/api/sync/push', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${await getAuthToken()}`,
+      },
+      body: JSON.stringify({ items: unsyncedItems }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Sync failed: ${response.status}`);
+    }
+
+    const { accepted } = await response.json();
+
+    // Mark as synced
+    await markAsSynced(db, accepted);
+
+    console.log('[ServiceWorker] Sync completed:', accepted.length, 'items');
+
+    // Show notification to user
+    await self.registration.showNotification('Sync Complete', {
+      body: `Synced ${accepted.length} items`,
+      icon: '/icon.png',
+      tag: 'sync-complete',
+    });
+  } catch (error) {
+    console.error('[ServiceWorker] Sync failed:', error);
+    throw error; // Re-throw to trigger retry
+  }
 }
 
 // Helper functions
 async function openIndexedDB() {
-    return new Promise((resolve, reject) => {
-        const request = indexedDB.open('AppDatabase', 1);
-        request.onsuccess = () => resolve(request.result);
-        request.onerror = () => reject(request.error);
-    });
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open('AppDatabase', 1);
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
 }
 
 async function getUnsyncedItems(db) {
-    return new Promise((resolve) => {
-        const tx = db.transaction('items', 'readonly');
-        const store = tx.objectStore('items');
-        const index = store.index('dirty');
-        const request = index.getAll(IDBKeyRange.only(true));
+  return new Promise(resolve => {
+    const tx = db.transaction('items', 'readonly');
+    const store = tx.objectStore('items');
+    const index = store.index('dirty');
+    const request = index.getAll(IDBKeyRange.only(true));
 
-        request.onsuccess = () => resolve(request.result);
-    });
+    request.onsuccess = () => resolve(request.result);
+  });
 }
 
 async function markAsSynced(db, ids) {
-    const tx = db.transaction('items', 'readwrite');
-    const store = tx.objectStore('items');
+  const tx = db.transaction('items', 'readwrite');
+  const store = tx.objectStore('items');
 
-    for (const id of ids) {
-        const item = await new Promise((resolve) => {
-            const request = store.get(id);
-            request.onsuccess = () => resolve(request.result);
-        });
-
-        if (item) {
-            item.dirty = false;
-            item.synced_at = Date.now();
-            store.put(item);
-        }
-    }
-
-    return new Promise((resolve) => {
-        tx.oncomplete = resolve;
+  for (const id of ids) {
+    const item = await new Promise(resolve => {
+      const request = store.get(id);
+      request.onsuccess = () => resolve(request.result);
     });
+
+    if (item) {
+      item.dirty = false;
+      item.synced_at = Date.now();
+      store.put(item);
+    }
+  }
+
+  return new Promise(resolve => {
+    tx.oncomplete = resolve;
+  });
 }
 
 async function getAuthToken() {
-    const db = await openIndexedDB();
-    return new Promise((resolve) => {
-        const tx = db.transaction('sync_metadata', 'readonly');
-        const request = tx.objectStore('sync_metadata').get('auth_token');
-        request.onsuccess = () => resolve(request.result?.value);
-    });
+  const db = await openIndexedDB();
+  return new Promise(resolve => {
+    const tx = db.transaction('sync_metadata', 'readonly');
+    const request = tx.objectStore('sync_metadata').get('auth_token');
+    request.onsuccess = () => resolve(request.result?.value);
+  });
 }
 ```
 
@@ -157,47 +156,47 @@ async function getAuthToken() {
 ```javascript
 // main.js - Register periodic sync
 async function registerPeriodicSync() {
-    if ('serviceWorker' in navigator && 'periodicSync' in (await navigator.serviceWorker.ready)) {
-        try {
-            const registration = await navigator.serviceWorker.ready;
+  if ('serviceWorker' in navigator && 'periodicSync' in (await navigator.serviceWorker.ready)) {
+    try {
+      const registration = await navigator.serviceWorker.ready;
 
-            // Check permission
-            const status = await navigator.permissions.query({
-                name: 'periodic-background-sync'
-            });
+      // Check permission
+      const status = await navigator.permissions.query({
+        name: 'periodic-background-sync',
+      });
 
-            if (status.state === 'granted') {
-                await registration.periodicSync.register('sync-data-periodic', {
-                    minInterval: 24 * 60 * 60 * 1000 // 24 hours (minimum)
-                });
-                console.log('Periodic background sync registered');
-            } else {
-                console.log('Periodic background sync permission denied');
-            }
-        } catch (error) {
-            console.error('Periodic sync registration failed:', error);
-        }
+      if (status.state === 'granted') {
+        await registration.periodicSync.register('sync-data-periodic', {
+          minInterval: 24 * 60 * 60 * 1000, // 24 hours (minimum)
+        });
+        console.log('Periodic background sync registered');
+      } else {
+        console.log('Periodic background sync permission denied');
+      }
+    } catch (error) {
+      console.error('Periodic sync registration failed:', error);
     }
+  }
 }
 
 // sw.js - Handle periodic sync
-self.addEventListener('periodicsync', (event) => {
-    if (event.tag === 'sync-data-periodic') {
-        event.waitUntil(performSync());
-    }
+self.addEventListener('periodicsync', event => {
+  if (event.tag === 'sync-data-periodic') {
+    event.waitUntil(performSync());
+  }
 });
 
 // Check registered periodic syncs
 async function listPeriodicSyncs() {
-    const registration = await navigator.serviceWorker.ready;
-    const tags = await registration.periodicSync.getTags();
-    console.log('Registered periodic syncs:', tags);
+  const registration = await navigator.serviceWorker.ready;
+  const tags = await registration.periodicSync.getTags();
+  console.log('Registered periodic syncs:', tags);
 }
 
 // Unregister periodic sync
 async function unregisterPeriodicSync(tag) {
-    const registration = await navigator.serviceWorker.ready;
-    await registration.periodicSync.unregister(tag);
+  const registration = await navigator.serviceWorker.ready;
+  await registration.periodicSync.unregister(tag);
 }
 ```
 
@@ -546,65 +545,65 @@ import BackgroundFetch from 'react-native-background-fetch';
 
 // Configure background fetch
 async function initBackgroundFetch() {
-    const status = await BackgroundFetch.configure(
-        {
-            minimumFetchInterval: 15, // Minutes (iOS minimum is 15)
-            stopOnTerminate: false,   // Android: continue after app termination
-            startOnBoot: true,        // Android: start on device boot
-            enableHeadless: true,     // Android: allow headless execution
-            requiredNetworkType: BackgroundFetch.NETWORK_TYPE_ANY,
-            requiresCharging: false,
-            requiresDeviceIdle: false,
-            requiresBatteryNotLow: false,
-            requiresStorageNotLow: false
-        },
-        async (taskId) => {
-            console.log('[BackgroundFetch] Task:', taskId);
+  const status = await BackgroundFetch.configure(
+    {
+      minimumFetchInterval: 15, // Minutes (iOS minimum is 15)
+      stopOnTerminate: false, // Android: continue after app termination
+      startOnBoot: true, // Android: start on device boot
+      enableHeadless: true, // Android: allow headless execution
+      requiredNetworkType: BackgroundFetch.NETWORK_TYPE_ANY,
+      requiresCharging: false,
+      requiresDeviceIdle: false,
+      requiresBatteryNotLow: false,
+      requiresStorageNotLow: false,
+    },
+    async taskId => {
+      console.log('[BackgroundFetch] Task:', taskId);
 
-            try {
-                await sync();
-                BackgroundFetch.finish(taskId);
-            } catch (error) {
-                console.error('[BackgroundFetch] Sync failed:', error);
-                BackgroundFetch.finish(taskId);
-            }
-        },
-        (taskId) => {
-            // Task timeout (iOS only)
-            console.log('[BackgroundFetch] Timeout:', taskId);
-            BackgroundFetch.finish(taskId);
-        }
-    );
+      try {
+        await sync();
+        BackgroundFetch.finish(taskId);
+      } catch (error) {
+        console.error('[BackgroundFetch] Sync failed:', error);
+        BackgroundFetch.finish(taskId);
+      }
+    },
+    taskId => {
+      // Task timeout (iOS only)
+      console.log('[BackgroundFetch] Timeout:', taskId);
+      BackgroundFetch.finish(taskId);
+    }
+  );
 
-    console.log('[BackgroundFetch] Status:', status);
+  console.log('[BackgroundFetch] Status:', status);
 }
 
 // Schedule one-time background task
 async function scheduleBackgroundTask() {
-    await BackgroundFetch.scheduleTask({
-        taskId: 'com.app.sync',
-        delay: 5000,              // Milliseconds (minimum 5000)
-        periodic: false,          // One-time task
-        forceAlarmManager: false, // Android: use AlarmManager
-        stopOnTerminate: false,
-        enableHeadless: true
-    });
+  await BackgroundFetch.scheduleTask({
+    taskId: 'com.app.sync',
+    delay: 5000, // Milliseconds (minimum 5000)
+    periodic: false, // One-time task
+    forceAlarmManager: false, // Android: use AlarmManager
+    stopOnTerminate: false,
+    enableHeadless: true,
+  });
 }
 
 // Headless task (Android only)
 // index.js
 import BackgroundFetch from 'react-native-background-fetch';
 
-const BackgroundSyncTask = async (event) => {
-    console.log('[Headless] Background sync:', event.taskId);
+const BackgroundSyncTask = async event => {
+  console.log('[Headless] Background sync:', event.taskId);
 
-    try {
-        await sync();
-        BackgroundFetch.finish(event.taskId);
-    } catch (error) {
-        console.error('[Headless] Sync failed:', error);
-        BackgroundFetch.finish(event.taskId);
-    }
+  try {
+    await sync();
+    BackgroundFetch.finish(event.taskId);
+  } catch (error) {
+    console.error('[Headless] Sync failed:', error);
+    BackgroundFetch.finish(event.taskId);
+  }
 };
 
 BackgroundFetch.registerHeadlessTask(BackgroundSyncTask);
@@ -617,21 +616,21 @@ import NetInfo from '@react-native-community/netinfo';
 
 // Monitor network state
 const unsubscribe = NetInfo.addEventListener(state => {
-    console.log('Connection type:', state.type);
-    console.log('Is connected?', state.isConnected);
-    console.log('Is internet reachable?', state.isInternetReachable);
+  console.log('Connection type:', state.type);
+  console.log('Is connected?', state.isConnected);
+  console.log('Is internet reachable?', state.isInternetReachable);
 
-    if (state.isConnected && state.isInternetReachable) {
-        console.log('Network available, syncing...');
-        sync();
-    }
+  if (state.isConnected && state.isInternetReachable) {
+    console.log('Network available, syncing...');
+    sync();
+  }
 });
 
 // Get current network state
 NetInfo.fetch().then(state => {
-    if (state.isConnected) {
-        sync();
-    }
+  if (state.isConnected) {
+    sync();
+  }
 });
 
 // Cleanup
@@ -649,39 +648,39 @@ const schedule = require('node-schedule');
 let syncJob;
 
 app.on('ready', () => {
-    // Sync every 15 minutes
-    syncJob = schedule.scheduleJob('*/15 * * * *', async () => {
-        console.log('Scheduled sync running...');
-        await sync();
-    });
+  // Sync every 15 minutes
+  syncJob = schedule.scheduleJob('*/15 * * * *', async () => {
+    console.log('Scheduled sync running...');
+    await sync();
+  });
 
-    // Sync on app start
-    sync();
+  // Sync on app start
+  sync();
 });
 
 app.on('window-all-closed', () => {
-    // Keep app running in background for sync
-    // Don't quit on macOS
-    if (process.platform !== 'darwin') {
-        // Cancel sync job
-        if (syncJob) {
-            syncJob.cancel();
-        }
-        app.quit();
+  // Keep app running in background for sync
+  // Don't quit on macOS
+  if (process.platform !== 'darwin') {
+    // Cancel sync job
+    if (syncJob) {
+      syncJob.cancel();
     }
+    app.quit();
+  }
 });
 
 // System events
 const powerMonitor = require('electron').powerMonitor;
 
 powerMonitor.on('resume', () => {
-    console.log('System resumed, syncing...');
-    sync();
+  console.log('System resumed, syncing...');
+  sync();
 });
 
 powerMonitor.on('unlock-screen', () => {
-    console.log('Screen unlocked, syncing...');
-    sync();
+  console.log('Screen unlocked, syncing...');
+  sync();
 });
 ```
 
@@ -695,44 +694,47 @@ let tray;
 let syncInterval;
 
 app.on('ready', () => {
-    // Create system tray icon
-    tray = new Tray(path.join(__dirname, 'icon.png'));
+  // Create system tray icon
+  tray = new Tray(path.join(__dirname, 'icon.png'));
 
-    const contextMenu = Menu.buildFromTemplate([
-        {
-            label: 'Sync Now',
-            click: () => sync()
-        },
-        {
-            label: 'Sync Status',
-            click: () => showSyncStatus()
-        },
-        {
-            type: 'separator'
-        },
-        {
-            label: 'Quit',
-            click: () => app.quit()
-        }
-    ]);
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: 'Sync Now',
+      click: () => sync(),
+    },
+    {
+      label: 'Sync Status',
+      click: () => showSyncStatus(),
+    },
+    {
+      type: 'separator',
+    },
+    {
+      label: 'Quit',
+      click: () => app.quit(),
+    },
+  ]);
 
-    tray.setContextMenu(contextMenu);
-    tray.setToolTip('Sync App');
+  tray.setContextMenu(contextMenu);
+  tray.setToolTip('Sync App');
 
-    // Background sync every 15 minutes
-    syncInterval = setInterval(async () => {
-        await sync();
-        tray.setToolTip(`Last synced: ${new Date().toLocaleTimeString()}`);
-    }, 15 * 60 * 1000);
+  // Background sync every 15 minutes
+  syncInterval = setInterval(
+    async () => {
+      await sync();
+      tray.setToolTip(`Last synced: ${new Date().toLocaleTimeString()}`);
+    },
+    15 * 60 * 1000
+  );
 
-    // Initial sync
-    sync();
+  // Initial sync
+  sync();
 });
 
 app.on('before-quit', () => {
-    if (syncInterval) {
-        clearInterval(syncInterval);
-    }
+  if (syncInterval) {
+    clearInterval(syncInterval);
+  }
 });
 ```
 
@@ -799,16 +801,16 @@ Future<void> performSync() async {
 ```javascript
 // Check battery status before sync
 async function shouldSync() {
-    if ('getBattery' in navigator) {
-        const battery = await navigator.getBattery();
+  if ('getBattery' in navigator) {
+    const battery = await navigator.getBattery();
 
-        if (battery.level < 0.2 && !battery.charging) {
-            console.log('Low battery, skipping sync');
-            return false;
-        }
+    if (battery.level < 0.2 && !battery.charging) {
+      console.log('Low battery, skipping sync');
+      return false;
     }
+  }
 
-    return true;
+  return true;
 }
 
 // Use exponential backoff
@@ -816,17 +818,17 @@ let syncDelay = 1000;
 const maxDelay = 60000;
 
 async function syncWithBackoff() {
-    if (!await shouldSync()) {
-        return;
-    }
+  if (!(await shouldSync())) {
+    return;
+  }
 
-    try {
-        await sync();
-        syncDelay = 1000; // Reset delay on success
-    } catch (error) {
-        syncDelay = Math.min(syncDelay * 2, maxDelay);
-        setTimeout(syncWithBackoff, syncDelay);
-    }
+  try {
+    await sync();
+    syncDelay = 1000; // Reset delay on success
+  } catch (error) {
+    syncDelay = Math.min(syncDelay * 2, maxDelay);
+    setTimeout(syncWithBackoff, syncDelay);
+  }
 }
 ```
 
@@ -835,20 +837,20 @@ async function syncWithBackoff() {
 ```javascript
 // Check network type (Web)
 if ('connection' in navigator) {
-    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+  const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
 
-    if (connection.effectiveType === '4g' || connection.effectiveType === 'wifi') {
-        // Good network, sync large data
-        await fullSync();
-    } else {
-        // Slow network, sync only critical data
-        await minimalSync();
-    }
+  if (connection.effectiveType === '4g' || connection.effectiveType === 'wifi') {
+    // Good network, sync large data
+    await fullSync();
+  } else {
+    // Slow network, sync only critical data
+    await minimalSync();
+  }
 }
 
 // Check metered connection
 if (connection.saveData) {
-    console.log('Data saver enabled, skipping non-essential sync');
+  console.log('Data saver enabled, skipping non-essential sync');
 }
 ```
 
@@ -857,33 +859,33 @@ if (connection.saveData) {
 ```javascript
 // Allow users to configure sync
 const syncPreferences = {
-    enabled: true,
-    frequency: 15, // minutes
-    onlyOnWifi: false,
-    onlyWhenCharging: false,
-    syncInBackground: true
+  enabled: true,
+  frequency: 15, // minutes
+  onlyOnWifi: false,
+  onlyWhenCharging: false,
+  syncInBackground: true,
 };
 
 async function shouldSyncBasedOnPreferences() {
-    if (!syncPreferences.enabled) {
-        return false;
-    }
+  if (!syncPreferences.enabled) {
+    return false;
+  }
 
-    if (syncPreferences.onlyOnWifi) {
-        const connection = navigator.connection;
-        if (connection && connection.type !== 'wifi') {
-            return false;
-        }
+  if (syncPreferences.onlyOnWifi) {
+    const connection = navigator.connection;
+    if (connection && connection.type !== 'wifi') {
+      return false;
     }
+  }
 
-    if (syncPreferences.onlyWhenCharging) {
-        const battery = await navigator.getBattery();
-        if (!battery.charging) {
-            return false;
-        }
+  if (syncPreferences.onlyWhenCharging) {
+    const battery = await navigator.getBattery();
+    if (!battery.charging) {
+      return false;
     }
+  }
 
-    return true;
+  return true;
 }
 ```
 
@@ -892,62 +894,62 @@ async function shouldSyncBasedOnPreferences() {
 ```javascript
 // Show sync status to users
 const syncIndicator = {
-    show(message) {
-        // Show UI indicator
-        document.getElementById('sync-status').textContent = message;
-        document.getElementById('sync-status').classList.add('visible');
-    },
+  show(message) {
+    // Show UI indicator
+    document.getElementById('sync-status').textContent = message;
+    document.getElementById('sync-status').classList.add('visible');
+  },
 
-    hide() {
-        document.getElementById('sync-status').classList.remove('visible');
-    },
+  hide() {
+    document.getElementById('sync-status').classList.remove('visible');
+  },
 
-    showProgress(current, total) {
-        this.show(`Syncing ${current}/${total}...`);
-    },
+  showProgress(current, total) {
+    this.show(`Syncing ${current}/${total}...`);
+  },
 
-    showError(error) {
-        this.show(`Sync failed: ${error.message}`);
-        setTimeout(() => this.hide(), 5000);
-    },
+  showError(error) {
+    this.show(`Sync failed: ${error.message}`);
+    setTimeout(() => this.hide(), 5000);
+  },
 
-    showSuccess() {
-        this.show('Sync complete');
-        setTimeout(() => this.hide(), 2000);
-    }
+  showSuccess() {
+    this.show('Sync complete');
+    setTimeout(() => this.hide(), 2000);
+  },
 };
 
 // Use in sync function
 async function syncWithIndicators() {
-    syncIndicator.show('Syncing...');
+  syncIndicator.show('Syncing...');
 
-    try {
-        const unsyncedItems = await getUnsyncedItems();
+  try {
+    const unsyncedItems = await getUnsyncedItems();
 
-        for (let i = 0; i < unsyncedItems.length; i++) {
-            await syncItem(unsyncedItems[i]);
-            syncIndicator.showProgress(i + 1, unsyncedItems.length);
-        }
-
-        syncIndicator.showSuccess();
-    } catch (error) {
-        syncIndicator.showError(error);
+    for (let i = 0; i < unsyncedItems.length; i++) {
+      await syncItem(unsyncedItems[i]);
+      syncIndicator.showProgress(i + 1, unsyncedItems.length);
     }
+
+    syncIndicator.showSuccess();
+  } catch (error) {
+    syncIndicator.showError(error);
+  }
 }
 ```
 
 ## Platform Comparison
 
-| Platform | API | Min Interval | Battery Aware | Network Aware | Reliability |
-|----------|-----|--------------|---------------|---------------|-------------|
-| Web | Background Sync API | Event-based | Yes | Yes | High |
-| Web | Periodic Sync | 24 hours | Yes | Yes | Medium |
-| iOS | Background Fetch | 15 minutes | Yes | Yes | Medium |
-| iOS | Silent Push | Real-time | Yes | Yes | High |
-| Android | WorkManager | 15 minutes | Yes | Yes | High |
-| React Native | Background Fetch | 15 minutes | Yes | Yes | High |
-| Electron | Node.js Timers | Any | No | No | High |
-| Flutter | WorkManager | 15 minutes | Yes | Yes | High |
+| Platform     | API                 | Min Interval | Battery Aware | Network Aware | Reliability |
+| ------------ | ------------------- | ------------ | ------------- | ------------- | ----------- |
+| Web          | Background Sync API | Event-based  | Yes           | Yes           | High        |
+| Web          | Periodic Sync       | 24 hours     | Yes           | Yes           | Medium      |
+| iOS          | Background Fetch    | 15 minutes   | Yes           | Yes           | Medium      |
+| iOS          | Silent Push         | Real-time    | Yes           | Yes           | High        |
+| Android      | WorkManager         | 15 minutes   | Yes           | Yes           | High        |
+| React Native | Background Fetch    | 15 minutes   | Yes           | Yes           | High        |
+| Electron     | Node.js Timers      | Any          | No            | No            | High        |
+| Flutter      | WorkManager         | 15 minutes   | Yes           | Yes           | High        |
 
 ## Resources
 

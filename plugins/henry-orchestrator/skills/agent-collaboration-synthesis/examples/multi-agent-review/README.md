@@ -5,6 +5,7 @@ This example demonstrates synthesizing outputs from security, performance, and Q
 ## Scenario
 
 An e-commerce checkout feature needs review before launch. Three agents performed parallel reviews:
+
 - **Security Engineer**: Identified vulnerabilities
 - **Performance Engineer**: Analyzed performance metrics
 - **QA Tester**: Evaluated test coverage
@@ -12,6 +13,7 @@ An e-commerce checkout feature needs review before launch. Three agents performe
 ## Agent Outputs
 
 See individual agent reports:
+
 - [security-findings.md](security-findings.md) - Security vulnerabilities and recommendations
 - [performance-findings.md](performance-findings.md) - Performance metrics and optimization opportunities
 - [qa-findings.md](qa-findings.md) - Test coverage analysis and gaps
@@ -37,6 +39,7 @@ Use the analysis script to identify patterns:
 ```
 
 Output:
+
 - Cross-cutting themes (e.g., authentication issues)
 - Severity distribution
 - Duplicate findings

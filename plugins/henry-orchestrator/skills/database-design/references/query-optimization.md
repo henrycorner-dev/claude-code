@@ -31,6 +31,7 @@ This reference provides deep dive into query optimization, execution plans, and 
 ### Cost-Based Optimization
 
 Database chooses plan with lowest estimated cost based on:
+
 - Table size (number of rows)
 - Index availability
 - Data distribution (statistics)
@@ -38,6 +39,7 @@ Database chooses plan with lowest estimated cost based on:
 - CPU cost estimates
 
 **Update statistics regularly:**
+
 ```sql
 -- PostgreSQL
 ANALYZE users;
@@ -53,22 +55,26 @@ ANALYZE TABLE users;
 ### PostgreSQL EXPLAIN
 
 **Basic EXPLAIN:**
+
 ```sql
 EXPLAIN SELECT * FROM users WHERE email = 'john@example.com';
 ```
 
 **Output:**
+
 ```
 Seq Scan on users  (cost=0.00..35.50 rows=10 width=100)
   Filter: (email = 'john@example.com'::text)
 ```
 
 **EXPLAIN ANALYZE (actually runs query):**
+
 ```sql
 EXPLAIN ANALYZE SELECT * FROM users WHERE email = 'john@example.com';
 ```
 
 **Output:**
+
 ```
 Seq Scan on users  (cost=0.00..35.50 rows=10 width=100) (actual time=0.015..0.234 rows=1 loops=1)
   Filter: (email = 'john@example.com'::text)
@@ -80,18 +86,21 @@ Execution Time: 0.345 ms
 ### Key Metrics to Watch
 
 **Cost:** Estimated expense (lower is better)
+
 ```
 (cost=0.00..35.50 rows=10 width=100)
        ^start ^end  ^estimated rows  ^avg row size
 ```
 
 **Actual time:** Real execution time (with ANALYZE)
+
 ```
 (actual time=0.015..0.234 rows=1 loops=1)
              ^first row  ^last row  ^actual rows  ^iterations
 ```
 
 **Rows Removed:** Wasted work (should be low)
+
 ```
 Rows Removed by Filter: 999  -- BAD: scanned 1000 rows, kept 1
 ```
@@ -99,21 +108,25 @@ Rows Removed by Filter: 999  -- BAD: scanned 1000 rows, kept 1
 ### Common Plan Nodes
 
 **Seq Scan:** Full table scan (potentially slow)
+
 ```
 Seq Scan on users  -- Scans every row
 ```
 
 **Index Scan:** Uses index (usually fast)
+
 ```
 Index Scan using idx_users_email on users
 ```
 
 **Index Only Scan:** Satisfies query from index alone (very fast)
+
 ```
 Index Only Scan using idx_users_email on users
 ```
 
 **Bitmap Index Scan:** Uses index for multiple conditions
+
 ```
 Bitmap Heap Scan on users
   Recheck Cond: ((status = 'active') AND (created_at > '2024-01-01'))
@@ -123,6 +136,7 @@ Bitmap Heap Scan on users
 ```
 
 **Nested Loop:** For each row in outer, scan inner (good for small datasets)
+
 ```
 Nested Loop
   -> Seq Scan on users
@@ -130,6 +144,7 @@ Nested Loop
 ```
 
 **Hash Join:** Build hash table, probe (good for larger datasets)
+
 ```
 Hash Join
   Hash Cond: (posts.user_id = users.id)
@@ -139,6 +154,7 @@ Hash Join
 ```
 
 **Merge Join:** Sort both sides, merge (good for pre-sorted data)
+
 ```
 Merge Join
   Merge Cond: (users.id = posts.user_id)
@@ -161,56 +177,67 @@ Merge Join
 ### Index Types
 
 **B-tree (default):** Most common, supports ordering
+
 ```sql
 CREATE INDEX idx_users_email ON users(email);
 ```
 
 **Use for:**
+
 - Equality: `WHERE email = 'x'`
 - Range: `WHERE created_at > '2024-01-01'`
 - Sorting: `ORDER BY created_at`
 - Pattern matching: `WHERE name LIKE 'John%'`
 
 **Hash:** Equality only, slightly faster
+
 ```sql
 CREATE INDEX idx_users_email ON users USING hash (email);
 ```
 
 **Use for:**
+
 - Equality only: `WHERE email = 'x'`
 - Not useful for ranges or sorting
 
 **GIN (Generalized Inverted Index):** For arrays, JSONB, full-text
+
 ```sql
 CREATE INDEX idx_users_tags ON users USING gin (tags);
 ```
 
 **Use for (PostgreSQL):**
+
 - Arrays: `WHERE tags @> ARRAY['admin']`
 - JSONB: `WHERE metadata @> '{"premium": true}'`
 - Full-text: `WHERE to_tsvector(content) @@ to_tsquery('database')`
 
 **GiST (Generalized Search Tree):** For geometric data, ranges
+
 ```sql
 CREATE INDEX idx_events_date_range ON events USING gist (date_range);
 ```
 
 **Partial Index:** Index subset of rows
+
 ```sql
 CREATE INDEX idx_users_active_email ON users(email) WHERE deleted_at IS NULL;
 ```
 
 **Use for:**
+
 - Queries that always filter on same condition
 - Smaller index size
 - Faster updates (only updates matching rows)
 
 **Composite Index:** Multiple columns
+
 ```sql
 CREATE INDEX idx_users_status_created ON users(status, created_at);
 ```
 
 **Column order matters:**
+
 - Put equality conditions first
 - Put range conditions last
 - Consider query patterns
@@ -234,6 +261,7 @@ SELECT * FROM users WHERE gender = 'male';
 ### Composite Index Strategy
 
 **Query:**
+
 ```sql
 SELECT * FROM orders
 WHERE status = 'pending' AND created_at > '2024-01-01'
@@ -243,17 +271,21 @@ ORDER BY created_at DESC;
 **Index options:**
 
 **Option 1: status, created_at**
+
 ```sql
 CREATE INDEX idx_orders_status_created ON orders(status, created_at);
 ```
+
 - Efficiently filters by status
 - Then filters by created_at
 - Can use index for sorting
 
 **Option 2: created_at, status**
+
 ```sql
 CREATE INDEX idx_orders_created_status ON orders(created_at, status);
 ```
+
 - Filters by created_at range
 - Then filters by status
 - Can use index for sorting
@@ -265,6 +297,7 @@ CREATE INDEX idx_orders_created_status ON orders(created_at, status);
 **Unused indexes waste space and slow writes:**
 
 **Find unused indexes (PostgreSQL):**
+
 ```sql
 SELECT
     schemaname,
@@ -278,6 +311,7 @@ ORDER BY pg_relation_size(indexrelid) DESC;
 ```
 
 **Drop unused index:**
+
 ```sql
 DROP INDEX idx_users_old_field;
 ```
@@ -289,6 +323,7 @@ DROP INDEX idx_users_old_field;
 ### N+1 Query Problem
 
 **Anti-pattern:**
+
 ```ruby
 # Loads posts (1 query)
 posts = Post.all
@@ -301,6 +336,7 @@ end
 ```
 
 **Solution 1: JOIN**
+
 ```sql
 SELECT posts.*, users.name
 FROM posts
@@ -308,6 +344,7 @@ JOIN users ON posts.user_id = users.id;
 ```
 
 **Solution 2: Eager loading (ORM)**
+
 ```ruby
 posts = Post.includes(:user).all
 # SELECT * FROM posts
@@ -315,19 +352,22 @@ posts = Post.includes(:user).all
 # Total: 2 queries
 ```
 
-### SELECT *
+### SELECT \*
 
 **Anti-pattern:**
+
 ```sql
 SELECT * FROM users;  -- Fetches all columns
 ```
 
 **Problems:**
+
 - Network overhead for unused columns
 - Prevents index-only scans
 - Breaks when schema changes
 
 **Solution:**
+
 ```sql
 SELECT id, username, email FROM users;  -- Only what you need
 ```
@@ -335,6 +375,7 @@ SELECT id, username, email FROM users;  -- Only what you need
 ### OR Conditions on Different Columns
 
 **Anti-pattern:**
+
 ```sql
 SELECT * FROM users
 WHERE username = 'john' OR email = 'john@example.com';
@@ -342,6 +383,7 @@ WHERE username = 'john' OR email = 'john@example.com';
 ```
 
 **Solution: UNION**
+
 ```sql
 SELECT * FROM users WHERE username = 'john'
 UNION
@@ -352,6 +394,7 @@ SELECT * FROM users WHERE email = 'john@example.com';
 ### NOT IN with Subquery
 
 **Anti-pattern:**
+
 ```sql
 SELECT * FROM users
 WHERE id NOT IN (SELECT user_id FROM banned_users);
@@ -359,6 +402,7 @@ WHERE id NOT IN (SELECT user_id FROM banned_users);
 ```
 
 **Solution: NOT EXISTS**
+
 ```sql
 SELECT * FROM users u
 WHERE NOT EXISTS (
@@ -368,6 +412,7 @@ WHERE NOT EXISTS (
 ```
 
 **Alternative: LEFT JOIN**
+
 ```sql
 SELECT u.* FROM users u
 LEFT JOIN banned_users b ON u.id = b.user_id
@@ -377,6 +422,7 @@ WHERE b.user_id IS NULL;
 ### Using Functions in WHERE
 
 **Anti-pattern:**
+
 ```sql
 SELECT * FROM users
 WHERE LOWER(email) = 'john@example.com';
@@ -384,11 +430,13 @@ WHERE LOWER(email) = 'john@example.com';
 ```
 
 **Solution 1: Functional index**
+
 ```sql
 CREATE INDEX idx_users_email_lower ON users(LOWER(email));
 ```
 
 **Solution 2: Store lowercase**
+
 ```sql
 -- Store email in lowercase
 UPDATE users SET email = LOWER(email);
@@ -403,6 +451,7 @@ SELECT * FROM users WHERE email = 'john@example.com';
 ### Join Strategies
 
 **Nested Loop:** For each outer row, scan inner
+
 ```
 Nested Loop  (cost=0.29..24.62 rows=10 width=16)
   -> Seq Scan on users  (cost=0.00..10.70 rows=10 width=8)
@@ -411,11 +460,13 @@ Nested Loop  (cost=0.29..24.62 rows=10 width=16)
 ```
 
 **Good when:**
+
 - Small outer table
 - Inner table has index on join key
 - High selectivity
 
 **Hash Join:** Build hash table from smaller table, probe with larger
+
 ```
 Hash Join  (cost=25.88..67.73 rows=1000 width=16)
   Hash Cond: (posts.user_id = users.id)
@@ -425,11 +476,13 @@ Hash Join  (cost=25.88..67.73 rows=1000 width=16)
 ```
 
 **Good when:**
+
 - Medium to large tables
 - No suitable indexes
 - Enough memory for hash table
 
 **Merge Join:** Sort both tables, merge
+
 ```
 Merge Join  (cost=69.83..94.13 rows=1000 width=16)
   Merge Cond: (users.id = posts.user_id)
@@ -438,6 +491,7 @@ Merge Join  (cost=69.83..94.13 rows=1000 width=16)
 ```
 
 **Good when:**
+
 - Both inputs already sorted (indexes)
 - Large tables
 - Low memory
@@ -445,6 +499,7 @@ Merge Join  (cost=69.83..94.13 rows=1000 width=16)
 ### Join Order Matters
 
 **Bad order (large intermediate result):**
+
 ```sql
 SELECT * FROM
     large_table_a (1M rows)
@@ -455,6 +510,7 @@ WHERE c.status = 'active';  -- Filters to 10 rows
 ```
 
 **Good order (filter early):**
+
 ```sql
 SELECT * FROM
     small_table_c (100 rows)
@@ -465,6 +521,7 @@ WHERE c.status = 'active';  -- Filters to 10 rows
 ```
 
 **Database optimizer usually handles this, but can help with:**
+
 - Subqueries
 - CTEs (sometimes not optimized across)
 - Complex multi-table joins
@@ -472,6 +529,7 @@ WHERE c.status = 'active';  -- Filters to 10 rows
 ### Index for Joins
 
 **Always index foreign keys:**
+
 ```sql
 CREATE TABLE posts (
     id SERIAL PRIMARY KEY,
@@ -483,12 +541,14 @@ CREATE INDEX idx_posts_user_id ON posts(user_id);
 ```
 
 **Without index:**
+
 ```
 Hash Join  (cost=35.00..125.00 rows=1000 width=16)
   -> Seq Scan on posts  -- Full table scan
 ```
 
 **With index:**
+
 ```
 Nested Loop  (cost=0.29..24.62 rows=1000 width=16)
   -> Seq Scan on users
@@ -502,6 +562,7 @@ Nested Loop  (cost=0.29..24.62 rows=1000 width=16)
 ### Correlated vs Non-Correlated Subqueries
 
 **Non-correlated (runs once):**
+
 ```sql
 SELECT * FROM users
 WHERE id IN (SELECT user_id FROM posts WHERE created_at > '2024-01-01');
@@ -509,6 +570,7 @@ WHERE id IN (SELECT user_id FROM posts WHERE created_at > '2024-01-01');
 ```
 
 **Correlated (runs for each row):**
+
 ```sql
 SELECT * FROM users u
 WHERE EXISTS (
@@ -521,12 +583,14 @@ WHERE EXISTS (
 ### Convert Subquery to JOIN
 
 **Subquery:**
+
 ```sql
 SELECT * FROM users
 WHERE id IN (SELECT user_id FROM orders WHERE total > 1000);
 ```
 
 **JOIN (often faster):**
+
 ```sql
 SELECT DISTINCT users.* FROM users
 JOIN orders ON users.id = orders.user_id
@@ -536,6 +600,7 @@ WHERE orders.total > 1000;
 ### EXISTS vs IN
 
 **EXISTS (usually faster):**
+
 ```sql
 SELECT * FROM users u
 WHERE EXISTS (SELECT 1 FROM orders o WHERE o.user_id = u.id);
@@ -543,6 +608,7 @@ WHERE EXISTS (SELECT 1 FROM orders o WHERE o.user_id = u.id);
 ```
 
 **IN (can be slower):**
+
 ```sql
 SELECT * FROM users
 WHERE id IN (SELECT user_id FROM orders);
@@ -556,6 +622,7 @@ WHERE id IN (SELECT user_id FROM orders);
 Get top N related rows for each outer row.
 
 **Get 3 latest posts per user:**
+
 ```sql
 SELECT u.username, p.title, p.created_at
 FROM users u
@@ -575,6 +642,7 @@ CROSS JOIN LATERAL (
 ### OFFSET/LIMIT (Simple but Slow)
 
 **Query:**
+
 ```sql
 SELECT * FROM posts ORDER BY created_at DESC LIMIT 20 OFFSET 10000;
 ```
@@ -582,6 +650,7 @@ SELECT * FROM posts ORDER BY created_at DESC LIMIT 20 OFFSET 10000;
 **Problem:** Database scans and discards first 10,000 rows.
 
 **Performance:**
+
 - Page 1: Fast
 - Page 100: Slow
 - Page 10000: Very slow
@@ -591,6 +660,7 @@ SELECT * FROM posts ORDER BY created_at DESC LIMIT 20 OFFSET 10000;
 **Use last seen value as cursor:**
 
 **First page:**
+
 ```sql
 SELECT * FROM posts ORDER BY created_at DESC LIMIT 20;
 -- Returns posts with created_at from 2024-01-31 to 2024-01-20
@@ -598,6 +668,7 @@ SELECT * FROM posts ORDER BY created_at DESC LIMIT 20;
 ```
 
 **Next page:**
+
 ```sql
 SELECT * FROM posts
 WHERE created_at < '2024-01-20 10:30:00'
@@ -605,16 +676,19 @@ ORDER BY created_at DESC LIMIT 20;
 ```
 
 **Pros:**
+
 - Consistent performance (no offset)
 - Works with infinite scroll
 
 **Cons:**
+
 - Can't jump to arbitrary page
 - Requires stable sort key
 
 ### Pagination with Composite Keys
 
 **For non-unique sort columns:**
+
 ```sql
 SELECT * FROM posts
 WHERE (created_at, id) < ('2024-01-20 10:30:00', 12345)
@@ -629,21 +703,24 @@ CREATE INDEX idx_posts_created_id ON posts(created_at DESC, id DESC);
 
 ## Aggregate Optimization
 
-### COUNT(*)
+### COUNT(\*)
 
 **Slow on large tables:**
+
 ```sql
 SELECT COUNT(*) FROM users;
 -- PostgreSQL: Full table scan (MVCC)
 ```
 
 **Approximate count (PostgreSQL):**
+
 ```sql
 SELECT reltuples::bigint FROM pg_class WHERE relname = 'users';
 -- Fast, approximate
 ```
 
 **Cached count:**
+
 ```sql
 -- Maintain counter table
 CREATE TABLE table_counts (
@@ -670,12 +747,14 @@ $$ LANGUAGE plpgsql;
 ### GROUP BY Optimization
 
 **Slow:**
+
 ```sql
 SELECT user_id, COUNT(*) FROM posts GROUP BY user_id;
 -- Sequential scan, in-memory hash aggregate
 ```
 
 **Fast:**
+
 ```sql
 -- Add index on grouped column
 CREATE INDEX idx_posts_user_id ON posts(user_id);
@@ -685,6 +764,7 @@ SELECT user_id, COUNT(*) FROM posts GROUP BY user_id;
 ```
 
 **Covering index for aggregates:**
+
 ```sql
 -- Index includes aggregated column
 CREATE INDEX idx_posts_user_status ON posts(user_id, status);
@@ -700,6 +780,7 @@ GROUP BY user_id;
 Pre-compute expensive aggregates.
 
 **Create materialized view:**
+
 ```sql
 CREATE MATERIALIZED VIEW user_post_counts AS
 SELECT user_id, COUNT(*) as post_count
@@ -710,16 +791,19 @@ CREATE INDEX idx_user_post_counts_user ON user_post_counts(user_id);
 ```
 
 **Query (fast):**
+
 ```sql
 SELECT * FROM user_post_counts WHERE user_id = 123;
 ```
 
 **Refresh (periodically):**
+
 ```sql
 REFRESH MATERIALIZED VIEW user_post_counts;
 ```
 
 **Concurrent refresh (PostgreSQL):**
+
 ```sql
 REFRESH MATERIALIZED VIEW CONCURRENTLY user_post_counts;
 -- Requires unique index
@@ -732,24 +816,28 @@ REFRESH MATERIALIZED VIEW CONCURRENTLY user_post_counts;
 ### PostgreSQL to_tsvector
 
 **Basic full-text search:**
+
 ```sql
 SELECT * FROM posts
 WHERE to_tsvector('english', content) @@ to_tsquery('english', 'database');
 ```
 
 **Add GIN index:**
+
 ```sql
 CREATE INDEX idx_posts_content_fts ON posts
 USING gin(to_tsvector('english', content));
 ```
 
 **Query with index:**
+
 ```sql
 SELECT * FROM posts
 WHERE to_tsvector('english', content) @@ to_tsquery('english', 'database & (design | optimization)');
 ```
 
 **Stored tsvector column (faster):**
+
 ```sql
 ALTER TABLE posts ADD COLUMN content_tsv tsvector;
 
@@ -766,17 +854,20 @@ tsvector_update_trigger(content_tsv, 'pg_catalog.english', content);
 ### MySQL Full-Text Search
 
 **Create full-text index:**
+
 ```sql
 ALTER TABLE posts ADD FULLTEXT INDEX idx_posts_content (content);
 ```
 
 **Query:**
+
 ```sql
 SELECT * FROM posts
 WHERE MATCH(content) AGAINST('database' IN NATURAL LANGUAGE MODE);
 ```
 
 **Boolean mode:**
+
 ```sql
 SELECT * FROM posts
 WHERE MATCH(content) AGAINST('+database -mysql' IN BOOLEAN MODE);
@@ -789,6 +880,7 @@ WHERE MATCH(content) AGAINST('+database -mysql' IN BOOLEAN MODE);
 ### PostgreSQL
 
 **Parallel queries:**
+
 ```sql
 -- Enable parallel workers
 SET max_parallel_workers_per_gather = 4;
@@ -798,6 +890,7 @@ EXPLAIN SELECT COUNT(*) FROM large_table;
 ```
 
 **Partition tables:**
+
 ```sql
 CREATE TABLE events (
     id SERIAL,
@@ -813,6 +906,7 @@ CREATE TABLE events_2024_02 PARTITION OF events
 ```
 
 **BRIN indexes (block range indexes):**
+
 ```sql
 -- For large, naturally ordered tables
 CREATE INDEX idx_logs_created ON logs USING brin(created_at);
@@ -822,11 +916,13 @@ CREATE INDEX idx_logs_created ON logs USING brin(created_at);
 ### MySQL
 
 **Use EXPLAIN FORMAT=JSON:**
+
 ```sql
 EXPLAIN FORMAT=JSON SELECT * FROM users WHERE email = 'john@example.com'\G
 ```
 
 **Query cache (MySQL 5.7 and earlier):**
+
 ```sql
 -- Check cache status
 SHOW VARIABLES LIKE 'query_cache%';
@@ -836,6 +932,7 @@ SELECT SQL_NO_CACHE * FROM users;
 ```
 
 **Index hints:**
+
 ```sql
 -- Force index usage
 SELECT * FROM users FORCE INDEX (idx_users_email) WHERE email = 'john@example.com';
@@ -848,6 +945,7 @@ SELECT * FROM users FORCE INDEX (idx_users_email) WHERE email = 'john@example.co
 ### Slow Query Log
 
 **PostgreSQL:**
+
 ```sql
 -- Enable slow query log
 ALTER SYSTEM SET log_min_duration_statement = 1000;  -- Log queries > 1s
@@ -858,6 +956,7 @@ tail -f /var/log/postgresql/postgresql-*.log
 ```
 
 **MySQL:**
+
 ```sql
 -- Enable slow query log
 SET GLOBAL slow_query_log = 'ON';
@@ -870,6 +969,7 @@ tail -f /var/log/mysql/slow.log
 ### Query Statistics
 
 **PostgreSQL pg_stat_statements:**
+
 ```sql
 -- Enable extension
 CREATE EXTENSION pg_stat_statements;
@@ -890,10 +990,11 @@ LIMIT 10;
 ## Summary
 
 **Optimization Checklist:**
+
 - [ ] Analyze slow queries with EXPLAIN ANALYZE
 - [ ] Add indexes on WHERE, JOIN, ORDER BY columns
 - [ ] Use composite indexes for multi-column queries
-- [ ] Avoid SELECT *, fetch only needed columns
+- [ ] Avoid SELECT \*, fetch only needed columns
 - [ ] Fix N+1 queries with joins or eager loading
 - [ ] Use cursor-based pagination for large offsets
 - [ ] Pre-compute expensive aggregates

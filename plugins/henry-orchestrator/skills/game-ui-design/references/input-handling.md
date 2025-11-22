@@ -5,6 +5,7 @@
 ### Keyboard and Mouse
 
 **Standard PC Controls:**
+
 - WASD: Movement
 - Mouse: Look/aim
 - Left Click: Primary action
@@ -15,6 +16,7 @@
 - Space: Jump
 
 **Menu Navigation:**
+
 - Arrow Keys: Navigate options
 - Enter: Confirm
 - ESC: Back/cancel
@@ -22,6 +24,7 @@
 - Mouse hover + click: Direct selection
 
 **Best Practices:**
+
 - Support both keyboard-only and mouse-only navigation
 - Show keyboard shortcuts on buttons (e.g., "[E] Interact")
 - Highlight focused element for keyboard navigation
@@ -31,6 +34,7 @@
 ### Controller/Gamepad
 
 **Standard Controller Layout (Xbox/PlayStation):**
+
 ```
     [Y/△]              [RB/R1]
 [X/□]   [B/◯]          [RT/R2]
@@ -46,6 +50,7 @@
 ```
 
 **Common Mappings:**
+
 - A/×: Confirm, jump
 - B/◯: Cancel, back
 - X/□: Reload, interact
@@ -59,6 +64,7 @@
 - Right Stick Click (R3): Melee
 
 **Menu Navigation with Controller:**
+
 - Left Stick/D-Pad: Navigate options
 - A/×: Confirm
 - B/◯: Back
@@ -66,6 +72,7 @@
 - LT/RT: Fast scroll
 
 **Design Guidelines:**
+
 - Show controller button icons (not keyboard keys)
 - Support both D-Pad and analog stick for menus
 - Implement wrap-around navigation (last → first)
@@ -76,6 +83,7 @@
 ### Touch Input (Mobile/Tablet)
 
 **Touch Gestures:**
+
 - Tap: Select, interact
 - Double-tap: Zoom, quick action
 - Long-press: Context menu, hold action
@@ -85,6 +93,7 @@
 - Three-finger swipe: Special actions
 
 **Virtual Controls:**
+
 ```
 ┌─────────────────────────┐
 │                     [X] │  (Close button)
@@ -98,6 +107,7 @@
 ```
 
 **Design Considerations:**
+
 - Minimum touch target: 44x44 pixels (Apple) or 48x48dp (Android)
 - Adequate spacing between buttons (8px minimum)
 - Semi-transparent controls (don't obstruct view)
@@ -109,12 +119,14 @@
 ### Motion/Gyroscope
 
 **Use Cases:**
+
 - Camera control (aim assist)
 - Steering in racing games
 - Fine-tuning aim
 - VR head tracking
 
 **Design Guidelines:**
+
 - Provide toggle to enable/disable
 - Adjustable sensitivity
 - Calibration option
@@ -123,11 +135,13 @@
 ### Voice Input
 
 **Use Cases:**
+
 - Menu navigation ("Open inventory")
 - Commands ("Attack", "Heal")
 - Chat/communication
 
 **Design Guidelines:**
+
 - Provide visual feedback for recognized commands
 - Show available voice commands
 - Fallback to traditional input
@@ -138,6 +152,7 @@
 ### Unity New Input System
 
 **Input Actions Asset:**
+
 ```csharp
 using UnityEngine.InputSystem;
 
@@ -189,11 +204,13 @@ public class PlayerInput : MonoBehaviour
 ```
 
 **Action Maps:**
+
 - Player: Gameplay controls
 - UI: Menu navigation
 - Vehicle: Vehicle-specific controls
 
 **Switching Contexts:**
+
 ```csharp
 // Disable player controls when menu is open
 inputActions.Player.Disable();
@@ -207,6 +224,7 @@ inputActions.Player.Enable();
 ### Unreal Enhanced Input System
 
 **Input Action Setup:**
+
 ```cpp
 // InputActions
 IA_Navigate
@@ -220,6 +238,7 @@ IMC_UI
 ```
 
 **Binding Actions:**
+
 ```cpp
 void AMyPlayerController::SetupInputComponent()
 {
@@ -243,76 +262,79 @@ void AMyPlayerController::Navigate(const FInputActionValue& Value)
 ### Web-Based Input (JavaScript)
 
 **Keyboard Input:**
+
 ```javascript
-document.addEventListener('keydown', (event) => {
-    switch(event.key) {
-        case 'ArrowUp':
-            navigateUp();
-            break;
-        case 'ArrowDown':
-            navigateDown();
-            break;
-        case 'Enter':
-            confirm();
-            break;
-        case 'Escape':
-            cancel();
-            break;
-    }
+document.addEventListener('keydown', event => {
+  switch (event.key) {
+    case 'ArrowUp':
+      navigateUp();
+      break;
+    case 'ArrowDown':
+      navigateDown();
+      break;
+    case 'Enter':
+      confirm();
+      break;
+    case 'Escape':
+      cancel();
+      break;
+  }
 });
 ```
 
 **Gamepad API:**
+
 ```javascript
-window.addEventListener("gamepadconnected", (event) => {
-    console.log("Gamepad connected:", event.gamepad);
+window.addEventListener('gamepadconnected', event => {
+  console.log('Gamepad connected:', event.gamepad);
 });
 
 function updateGamepad() {
-    const gamepads = navigator.getGamepads();
-    if (gamepads[0]) {
-        const gp = gamepads[0];
+  const gamepads = navigator.getGamepads();
+  if (gamepads[0]) {
+    const gp = gamepads[0];
 
-        // Buttons
-        if (gp.buttons[0].pressed) {
-            // A button pressed
-            confirm();
-        }
-
-        // Axes
-        const horizontal = gp.axes[0];
-        const vertical = gp.axes[1];
-
-        if (Math.abs(horizontal) > 0.5) {
-            navigateHorizontal(horizontal);
-        }
+    // Buttons
+    if (gp.buttons[0].pressed) {
+      // A button pressed
+      confirm();
     }
 
-    requestAnimationFrame(updateGamepad);
+    // Axes
+    const horizontal = gp.axes[0];
+    const vertical = gp.axes[1];
+
+    if (Math.abs(horizontal) > 0.5) {
+      navigateHorizontal(horizontal);
+    }
+  }
+
+  requestAnimationFrame(updateGamepad);
 }
 ```
 
 **Touch Events:**
+
 ```javascript
-element.addEventListener('touchstart', (event) => {
-    const touch = event.touches[0];
-    touchStartX = touch.clientX;
-    touchStartY = touch.clientY;
+element.addEventListener('touchstart', event => {
+  const touch = event.touches[0];
+  touchStartX = touch.clientX;
+  touchStartY = touch.clientY;
 });
 
-element.addEventListener('touchmove', (event) => {
-    const touch = event.touches[0];
-    const deltaX = touch.clientX - touchStartX;
-    const deltaY = touch.clientY - touchStartY;
+element.addEventListener('touchmove', event => {
+  const touch = event.touches[0];
+  const deltaX = touch.clientX - touchStartX;
+  const deltaY = touch.clientY - touchStartY;
 
-    // Handle swipe
-    if (Math.abs(deltaX) > swipeThreshold) {
-        handleSwipe(deltaX > 0 ? 'right' : 'left');
-    }
+  // Handle swipe
+  if (Math.abs(deltaX) > swipeThreshold) {
+    handleSwipe(deltaX > 0 ? 'right' : 'left');
+  }
 });
 
-element.addEventListener('touchend', (event) => {
-    // Handle tap or release
+element.addEventListener('touchend', event => {
+  // Handle tap or release
 });
 ```
 
@@ -321,6 +343,7 @@ element.addEventListener('touchend', (event) => {
 ### Button Prompts
 
 **Context-Sensitive Prompts:**
+
 ```
 [A] Select
 [B] Back
@@ -329,6 +352,7 @@ element.addEventListener('touchend', (event) => {
 ```
 
 **Dynamic Platform Detection:**
+
 ```csharp
 public enum ControllerType
 {
@@ -356,6 +380,7 @@ public class InputIconManager
 ```
 
 **Auto-Switching:**
+
 - Detect last input method used
 - Switch icons dynamically (keyboard → controller)
 - Show appropriate prompts
@@ -363,6 +388,7 @@ public class InputIconManager
 ### Radial Menus
 
 **Controller-Optimized:**
+
 ```
         [Item 1]
           /   \
@@ -376,12 +402,14 @@ public class InputIconManager
 ```
 
 **Implementation:**
+
 - Use right analog stick for selection
 - Highlight sector as stick moves
 - Release to confirm
 - Center to cancel
 
 **Design Guidelines:**
+
 - 4-8 items maximum
 - Clear visual sectors
 - Large enough selection zones
@@ -390,6 +418,7 @@ public class InputIconManager
 ### Tab/Page Navigation
 
 **Shoulder Button Switching:**
+
 ```
 [LB] ← [Current Tab] → [RB]
 
@@ -399,6 +428,7 @@ Tab 3: Consumables
 ```
 
 **Trigger Scrolling:**
+
 ```
 [LT] Scroll Up
 [RT] Scroll Down
@@ -407,6 +437,7 @@ Tab 3: Consumables
 ### Nested Menus
 
 **Hierarchical Navigation:**
+
 ```
 Main Menu
   → Settings (A to enter)
@@ -416,6 +447,7 @@ Main Menu
 ```
 
 **Breadcrumb Indicator:**
+
 ```
 Main > Settings > Graphics
 ```
@@ -425,6 +457,7 @@ Main > Settings > Graphics
 ### Swipe Navigation
 
 **Full-Screen Swipe:**
+
 ```
 Swipe Right → Previous screen
 Swipe Left → Next screen
@@ -433,6 +466,7 @@ Swipe Up → More options
 ```
 
 **List Swipe Actions:**
+
 ```
 Swipe Left on Item → [Delete] [Archive]
 Swipe Right on Item → [Star] [Share]
@@ -441,6 +475,7 @@ Swipe Right on Item → [Star] [Share]
 ### Pull-to-Refresh
 
 **Common Pattern:**
+
 - Pull down from top of list
 - Release when threshold reached
 - Show loading indicator
@@ -449,134 +484,138 @@ Swipe Right on Item → [Star] [Share]
 ### Drag and Drop
 
 **Inventory Management:**
+
 ```javascript
-item.addEventListener('touchstart', (e) => {
-    isDragging = true;
-    dragItem = e.target;
+item.addEventListener('touchstart', e => {
+  isDragging = true;
+  dragItem = e.target;
 });
 
-item.addEventListener('touchmove', (e) => {
-    if (isDragging) {
-        const touch = e.touches[0];
-        dragItem.style.left = touch.clientX + 'px';
-        dragItem.style.top = touch.clientY + 'px';
-    }
+item.addEventListener('touchmove', e => {
+  if (isDragging) {
+    const touch = e.touches[0];
+    dragItem.style.left = touch.clientX + 'px';
+    dragItem.style.top = touch.clientY + 'px';
+  }
 });
 
-slot.addEventListener('touchend', (e) => {
-    if (isDragging && isOverSlot(dragItem, slot)) {
-        dropItemInSlot(dragItem, slot);
-    }
-    isDragging = false;
+slot.addEventListener('touchend', e => {
+  if (isDragging && isOverSlot(dragItem, slot)) {
+    dropItemInSlot(dragItem, slot);
+  }
+  isDragging = false;
 });
 ```
 
 ### Pinch and Zoom
 
 **Map Zoom:**
+
 ```javascript
 let initialDistance = 0;
 
-map.addEventListener('touchstart', (e) => {
-    if (e.touches.length === 2) {
-        initialDistance = getDistance(e.touches[0], e.touches[1]);
-    }
+map.addEventListener('touchstart', e => {
+  if (e.touches.length === 2) {
+    initialDistance = getDistance(e.touches[0], e.touches[1]);
+  }
 });
 
-map.addEventListener('touchmove', (e) => {
-    if (e.touches.length === 2) {
-        const currentDistance = getDistance(e.touches[0], e.touches[1]);
-        const scale = currentDistance / initialDistance;
-        applyZoom(scale);
-    }
+map.addEventListener('touchmove', e => {
+  if (e.touches.length === 2) {
+    const currentDistance = getDistance(e.touches[0], e.touches[1]);
+    const scale = currentDistance / initialDistance;
+    applyZoom(scale);
+  }
 });
 
 function getDistance(touch1, touch2) {
-    const dx = touch1.clientX - touch2.clientX;
-    const dy = touch1.clientY - touch2.clientY;
-    return Math.sqrt(dx * dx + dy * dy);
+  const dx = touch1.clientX - touch2.clientX;
+  const dy = touch1.clientY - touch2.clientY;
+  return Math.sqrt(dx * dx + dy * dy);
 }
 ```
 
 ### Long-Press
 
 **Context Menu:**
+
 ```javascript
 let pressTimer;
 
-element.addEventListener('touchstart', (e) => {
-    pressTimer = setTimeout(() => {
-        showContextMenu(e.touches[0].clientX, e.touches[0].clientY);
-    }, 500); // 500ms for long press
+element.addEventListener('touchstart', e => {
+  pressTimer = setTimeout(() => {
+    showContextMenu(e.touches[0].clientX, e.touches[0].clientY);
+  }, 500); // 500ms for long press
 });
 
 element.addEventListener('touchend', () => {
-    clearTimeout(pressTimer);
+  clearTimeout(pressTimer);
 });
 
 element.addEventListener('touchmove', () => {
-    clearTimeout(pressTimer); // Cancel if finger moves
+  clearTimeout(pressTimer); // Cancel if finger moves
 });
 ```
 
 ### Virtual Joystick
 
 **Implementation:**
+
 ```javascript
 class VirtualJoystick {
-    constructor(container) {
-        this.container = container;
-        this.stick = container.querySelector('.stick');
-        this.maxDistance = 50; // pixels
+  constructor(container) {
+    this.container = container;
+    this.stick = container.querySelector('.stick');
+    this.maxDistance = 50; // pixels
 
-        this.active = false;
-        this.startX = 0;
-        this.startY = 0;
+    this.active = false;
+    this.startX = 0;
+    this.startY = 0;
 
-        this.setupEvents();
-    }
+    this.setupEvents();
+  }
 
-    setupEvents() {
-        this.container.addEventListener('touchstart', (e) => {
-            this.active = true;
-            const touch = e.touches[0];
-            this.startX = touch.clientX;
-            this.startY = touch.clientY;
-        });
+  setupEvents() {
+    this.container.addEventListener('touchstart', e => {
+      this.active = true;
+      const touch = e.touches[0];
+      this.startX = touch.clientX;
+      this.startY = touch.clientY;
+    });
 
-        this.container.addEventListener('touchmove', (e) => {
-            if (!this.active) return;
+    this.container.addEventListener('touchmove', e => {
+      if (!this.active) return;
 
-            const touch = e.touches[0];
-            let deltaX = touch.clientX - this.startX;
-            let deltaY = touch.clientY - this.startY;
+      const touch = e.touches[0];
+      let deltaX = touch.clientX - this.startX;
+      let deltaY = touch.clientY - this.startY;
 
-            const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+      const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
-            if (distance > this.maxDistance) {
-                deltaX = (deltaX / distance) * this.maxDistance;
-                deltaY = (deltaY / distance) * this.maxDistance;
-            }
+      if (distance > this.maxDistance) {
+        deltaX = (deltaX / distance) * this.maxDistance;
+        deltaY = (deltaY / distance) * this.maxDistance;
+      }
 
-            this.stick.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+      this.stick.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
 
-            // Normalize to -1 to 1
-            const normalizedX = deltaX / this.maxDistance;
-            const normalizedY = deltaY / this.maxDistance;
+      // Normalize to -1 to 1
+      const normalizedX = deltaX / this.maxDistance;
+      const normalizedY = deltaY / this.maxDistance;
 
-            this.onMove(normalizedX, normalizedY);
-        });
+      this.onMove(normalizedX, normalizedY);
+    });
 
-        this.container.addEventListener('touchend', () => {
-            this.active = false;
-            this.stick.style.transform = 'translate(0, 0)';
-            this.onMove(0, 0);
-        });
-    }
+    this.container.addEventListener('touchend', () => {
+      this.active = false;
+      this.stick.style.transform = 'translate(0, 0)';
+      this.onMove(0, 0);
+    });
+  }
 
-    onMove(x, y) {
-        // Override this method to handle joystick movement
-    }
+  onMove(x, y) {
+    // Override this method to handle joystick movement
+  }
 }
 ```
 
@@ -585,6 +624,7 @@ class VirtualJoystick {
 ### Key Binding UI
 
 **Rebind Interface:**
+
 ```
 ┌────────────────────────────────┐
 │ Action        │ Binding         │
@@ -598,6 +638,7 @@ class VirtualJoystick {
 ```
 
 **Rebinding Flow:**
+
 1. Click [Edit]
 2. Show "Press any key..." prompt
 3. Capture key press
@@ -606,6 +647,7 @@ class VirtualJoystick {
 6. Update binding
 
 **Implementation Example:**
+
 ```csharp
 public class KeyRebinder : MonoBehaviour
 {
@@ -657,11 +699,13 @@ public class KeyRebinder : MonoBehaviour
 ### Controller Remapping
 
 **Challenges:**
+
 - Different controller layouts (Xbox, PlayStation, Switch)
 - Limited number of buttons
 - Analog vs digital inputs
 
 **Design Considerations:**
+
 - Show controller diagram
 - Highlight button being remapped
 - Test binding immediately
@@ -670,6 +714,7 @@ public class KeyRebinder : MonoBehaviour
 ### Saving Bindings
 
 **Persistence:**
+
 ```csharp
 public class InputSettings
 {
@@ -700,18 +745,21 @@ public class InputSettings
 ### Visual Feedback
 
 **Button Press:**
+
 - Scale down slightly
 - Change color/brightness
 - Show press animation
 - Highlight border
 
 **Hover:**
+
 - Scale up slightly
 - Change color
 - Show tooltip
 - Glow effect
 
 **Focus (Keyboard/Controller):**
+
 - Outline or border
 - Animated highlight
 - Color change
@@ -720,6 +768,7 @@ public class InputSettings
 ### Audio Feedback
 
 **Sound Effects:**
+
 - Navigate: Subtle tick or beep
 - Confirm: Positive chime
 - Cancel: Negative beep or whoosh
@@ -727,6 +776,7 @@ public class InputSettings
 - Hover: Quiet click
 
 **Volume Considerations:**
+
 - UI sounds should be quieter than gameplay
 - Provide volume slider for UI sounds
 - Don't play sound on every hover (only on change)
@@ -734,18 +784,21 @@ public class InputSettings
 ### Haptic Feedback
 
 **Controller Rumble:**
+
 - Light rumble on selection
 - Medium rumble on confirm
 - No rumble on cancel
 - Strong rumble on error
 
 **Mobile Haptics:**
+
 - Tap: Light haptic
 - Long-press: Medium haptic
 - Error: Strong haptic pattern
 - Success: Success haptic pattern
 
 **Implementation (Unity):**
+
 ```csharp
 #if UNITY_ANDROID || UNITY_IOS
 Handheld.Vibrate();
@@ -764,6 +817,7 @@ if (SystemInfo.supportsVibration)
 ### Input Alternatives
 
 **Options to Provide:**
+
 - Rebindable keys/buttons
 - Toggle vs hold (e.g., crouch)
 - Auto-run option
@@ -774,16 +828,19 @@ if (SystemInfo.supportsVibration)
 ### Input Assists
 
 **Aim Assist:**
+
 - Magnetism (pull towards targets)
 - Slowdown (reduce sensitivity near targets)
 - Sticky reticle (stick to target)
 
 **Navigation Assist:**
+
 - Larger selection areas
 - Sticky focus (harder to move off)
 - Auto-scroll to focused element
 
 **Timing Assists:**
+
 - Extended input windows
 - Button hold alternatives to rapid press
 - Reduced precision requirements
@@ -791,6 +848,7 @@ if (SystemInfo.supportsVibration)
 ### One-Handed Mode
 
 **Considerations:**
+
 - Cluster important actions
 - Provide one-handed layouts
 - Allow control scheme switching
@@ -801,6 +859,7 @@ if (SystemInfo.supportsVibration)
 ### Input Detection
 
 **Automatic Detection:**
+
 ```csharp
 public enum InputDevice
 {
@@ -849,6 +908,7 @@ public class InputDetector : MonoBehaviour
 ### Unified Input Handling
 
 **Abstraction Layer:**
+
 ```csharp
 public interface IInputProvider
 {
@@ -883,6 +943,7 @@ public class ControllerInput : IInputProvider
 ## Best Practices Summary
 
 ✅ **DO:**
+
 - Support multiple input methods simultaneously
 - Provide clear visual feedback for all inputs
 - Allow full key/button remapping
@@ -895,6 +956,7 @@ public class ControllerInput : IInputProvider
 - Use deadzone for analog sticks
 
 ❌ **DON'T:**
+
 - Assume only one input method
 - Hardcode button labels
 - Ignore input when menu is transitioning

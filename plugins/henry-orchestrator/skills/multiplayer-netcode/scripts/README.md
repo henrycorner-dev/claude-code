@@ -48,26 +48,31 @@ python latency-simulator.py --latency 100 --packet-loss 0.05
 ### Testing Scenarios
 
 **Good Connection:**
+
 ```bash
 python latency-simulator.py --latency 20 --jitter 5
 ```
 
 **Average Connection:**
+
 ```bash
 python latency-simulator.py --latency 80 --jitter 15 --packet-loss 0.02
 ```
 
 **Poor Connection:**
+
 ```bash
 python latency-simulator.py --latency 150 --jitter 50 --packet-loss 0.10
 ```
 
 **Mobile 4G:**
+
 ```bash
 python latency-simulator.py --latency 60 --jitter 30 --packet-loss 0.03
 ```
 
 **Satellite:**
+
 ```bash
 python latency-simulator.py --latency 600 --jitter 100 --packet-loss 0.05
 ```
@@ -157,6 +162,7 @@ node packet-inspector.js --port 3002 --target-port 3001
 ```
 
 This setup provides:
+
 - Network condition simulation (latency, packet loss, jitter)
 - Traffic analysis (bandwidth, message types, frequency)
 - Message logging for debugging
@@ -164,10 +170,12 @@ This setup provides:
 ## Dependencies
 
 **latency-simulator.py:**
+
 - Python 3.7+
 - No external dependencies (uses standard library)
 
 **packet-inspector.js:**
+
 - Node.js 12+
 - commander package: `npm install commander`
 
@@ -188,17 +196,21 @@ This setup provides:
 ## Troubleshooting
 
 **Simulator not forwarding traffic:**
+
 - Check target server is running on specified port
 - Verify client is connecting to simulator port, not server port directly
 
 **Packet inspector shows binary data:**
+
 - Messages are not JSON (e.g., binary protocol or compressed)
 - Use VERBOSE=1 to see raw data
 
 **High latency despite low simulator setting:**
+
 - Your actual network may add latency
 - Test locally (all on localhost) to isolate simulator effects
 
 **Excessive packet loss:**
+
 - Simulator is probabilistic; actual rate may vary slightly
 - Run longer tests for accurate statistics

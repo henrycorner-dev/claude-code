@@ -27,14 +27,14 @@ class PacketInspector {
         totalBytes: 0,
         messageCount: 0,
         messageTypes: new Map(),
-        lastMessageTime: Date.now()
+        lastMessageTime: Date.now(),
       },
       serverToClient: {
         totalBytes: 0,
         messageCount: 0,
         messageTypes: new Map(),
-        lastMessageTime: Date.now()
-      }
+        lastMessageTime: Date.now(),
+      },
     };
 
     this.startTime = Date.now();
@@ -54,7 +54,7 @@ class PacketInspector {
       const messageType = message.type || 'unknown';
       const typeStats = stats.messageTypes.get(messageType) || {
         count: 0,
-        totalBytes: 0
+        totalBytes: 0,
       };
 
       typeStats.count++;
@@ -67,20 +67,18 @@ class PacketInspector {
 
       console.log(
         `[${direction}] ${messageType.padEnd(20)} | ` +
-        `${data.length.toString().padStart(6)} bytes | ` +
-        `Δt: ${timeSinceLast.toString().padStart(4)}ms`
+          `${data.length.toString().padStart(6)} bytes | ` +
+          `Δt: ${timeSinceLast.toString().padStart(4)}ms`
       );
 
       // Log message content for debugging (optional)
       if (process.env.VERBOSE) {
         console.log('  Content:', JSON.stringify(message, null, 2));
       }
-
     } catch (e) {
       // Not JSON, log as binary
       console.log(
-        `[${direction}] <binary>             | ` +
-        `${data.length.toString().padStart(6)} bytes`
+        `[${direction}] <binary>             | ` + `${data.length.toString().padStart(6)} bytes`
       );
     }
   }
@@ -90,21 +88,24 @@ class PacketInspector {
     console.log(`Client: ${clientSocket.remoteAddress}:${clientSocket.remotePort}`);
 
     // Connect to target server
-    const serverSocket = net.createConnection({
-      host: this.targetHost,
-      port: this.targetPort
-    }, () => {
-      console.log(`Connected to target: ${this.targetHost}:${this.targetPort}\n`);
-    });
+    const serverSocket = net.createConnection(
+      {
+        host: this.targetHost,
+        port: this.targetPort,
+      },
+      () => {
+        console.log(`Connected to target: ${this.targetHost}:${this.targetPort}\n`);
+      }
+    );
 
     // Forward client → server
-    clientSocket.on('data', (data) => {
+    clientSocket.on('data', data => {
       this.analyzeMessage(data, 'C→S');
       serverSocket.write(data);
     });
 
     // Forward server → client
-    serverSocket.on('data', (data) => {
+    serverSocket.on('data', data => {
       this.analyzeMessage(data, 'S→C');
       clientSocket.write(data);
     });
@@ -122,12 +123,12 @@ class PacketInspector {
     });
 
     // Handle errors
-    clientSocket.on('error', (err) => {
+    clientSocket.on('error', err => {
       console.error('Client error:', err.message);
       serverSocket.destroy();
     });
 
-    serverSocket.on('error', (err) => {
+    serverSocket.on('error', err => {
       console.error('Server error:', err.message);
       clientSocket.destroy();
     });
@@ -160,22 +161,23 @@ class PacketInspector {
       console.log('\n  Message breakdown:');
 
       // Sort by byte count
-      const sorted = Array.from(stats.messageTypes.entries())
-        .sort((a, b) => b[1].totalBytes - a[1].totalBytes);
+      const sorted = Array.from(stats.messageTypes.entries()).sort(
+        (a, b) => b[1].totalBytes - a[1].totalBytes
+      );
 
       for (const [type, typeStats] of sorted) {
         const percentage = ((typeStats.totalBytes / stats.totalBytes) * 100).toFixed(1);
         console.log(
           `    ${type.padEnd(20)} | ` +
-          `${typeStats.count.toString().padStart(5)} msgs | ` +
-          `${typeStats.totalBytes.toString().padStart(8)} bytes (${percentage}%)`
+            `${typeStats.count.toString().padStart(5)} msgs | ` +
+            `${typeStats.totalBytes.toString().padStart(8)} bytes (${percentage}%)`
         );
       }
     }
   }
 
   start() {
-    const server = net.createServer((socket) => {
+    const server = net.createServer(socket => {
       this.handleConnection(socket);
     });
 
@@ -199,10 +201,13 @@ class PacketInspector {
     // Print periodic stats
     setInterval(() => {
       const runtime = (Date.now() - this.startTime) / 1000;
-      const totalBytes = this.stats.clientToServer.totalBytes + this.stats.serverToClient.totalBytes;
+      const totalBytes =
+        this.stats.clientToServer.totalBytes + this.stats.serverToClient.totalBytes;
       const bandwidth = (totalBytes / runtime / 1024).toFixed(2);
 
-      process.stdout.write(`\r[Stats] Runtime: ${runtime.toFixed(0)}s | Bandwidth: ${bandwidth} KB/s | Messages: ${this.stats.clientToServer.messageCount + this.stats.serverToClient.messageCount}`);
+      process.stdout.write(
+        `\r[Stats] Runtime: ${runtime.toFixed(0)}s | Bandwidth: ${bandwidth} KB/s | Messages: ${this.stats.clientToServer.messageCount + this.stats.serverToClient.messageCount}`
+      );
     }, 1000);
   }
 }

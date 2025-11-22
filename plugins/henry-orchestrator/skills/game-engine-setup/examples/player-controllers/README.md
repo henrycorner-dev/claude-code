@@ -7,6 +7,7 @@ Basic player controller implementations for Unity, Unreal Engine, and Godot demo
 **File:** `UnityPlayerController.cs`
 
 **Setup:**
+
 1. Create player GameObject
 2. Add CharacterController component
 3. Attach PlayerController script
@@ -17,6 +18,7 @@ Basic player controller implementations for Unity, Unreal Engine, and Godot demo
    - Camera Transform: Main Camera transform
 
 **Controls:**
+
 - WASD: Move
 - Space: Jump
 - Left Shift: Sprint
@@ -27,6 +29,7 @@ Basic player controller implementations for Unity, Unreal Engine, and Godot demo
 **File:** `GodotPlayerController.gd`
 
 **Setup:**
+
 1. Create KinematicBody node
 2. Add CollisionShape child (CapsuleShape)
 3. Add Camera child
@@ -40,6 +43,7 @@ Basic player controller implementations for Unity, Unreal Engine, and Godot demo
    - sprint: Shift
 
 **Controls:**
+
 - WASD: Move
 - Space: Jump
 - Shift: Sprint
@@ -51,6 +55,7 @@ Basic player controller implementations for Unity, Unreal Engine, and Godot demo
 **Note:** Unreal typically uses the Third Person or First Person template which includes a pre-built player controller. To create a custom one:
 
 **Blueprint Approach:**
+
 1. Create Blueprint Class → Character
 2. Add Input Events (Project Settings → Input):
    - MoveForward: W/S
@@ -64,6 +69,7 @@ See Unreal setup guide (`references/unreal-setup.md`) for complete C++ Character
 ## Common Patterns
 
 All implementations demonstrate:
+
 - **Input handling**: Getting player input (keyboard/mouse)
 - **Movement**: Translating input to character movement
 - **Gravity**: Applying downward force when not grounded
@@ -74,6 +80,7 @@ All implementations demonstrate:
 ## Extending Controllers
 
 Add features:
+
 - **Crouching**: Lower camera, reduce speed, modify collision
 - **Climbing**: Detect ladder, override gravity, vertical movement
 - **Swimming**: Detect water volume, modify physics
@@ -86,15 +93,18 @@ Add features:
 ## Performance Considerations
 
 **Unity:**
+
 - Use CharacterController instead of Rigidbody for player (simpler physics)
 - Cache component references in Awake()
 - Avoid GetComponent() in Update()
 
 **Godot:**
+
 - Use KinematicBody.move_and_slide() for predictable movement
 - Avoid creating new Vector3 each frame (reuse variables)
 
 **General:**
+
 - Separate input handling from physics (Input in Update, Physics in FixedUpdate/physics_process)
 - Use object pooling for frequently spawned objects (footstep particles, etc.)
 - Profile performance (Unity Profiler, Godot Debugger)

@@ -15,6 +15,7 @@ Generate comprehensive, well-structured documentation from code, comments, commi
 ## When to Use
 
 Use this skill when:
+
 - Generating new README files for projects
 - Creating API documentation from code
 - Building wiki pages from project information
@@ -175,6 +176,7 @@ Ensure all generated documentation:
 ### Reference Files
 
 For detailed patterns and conventions, consult:
+
 - **`references/readme-template.md`** - Complete README structure with examples
 - **`references/api-doc-patterns.md`** - API documentation formatting patterns
 - **`references/changelog-conventions.md`** - Changelog standards and conventional commits
@@ -183,6 +185,7 @@ For detailed patterns and conventions, consult:
 ### Example Files
 
 Working examples in `examples/`:
+
 - **`examples/README-python.md`** - Python project README
 - **`examples/README-nodejs.md`** - Node.js project README
 - **`examples/API-docs.md`** - Sample API documentation
@@ -192,6 +195,7 @@ Working examples in `examples/`:
 ### Scripts
 
 Utility scripts in `scripts/`:
+
 - **`scripts/generate_changelog.py`** - Generate changelog from git history
 - **`scripts/extract_python_docs.py`** - Extract Python docstrings to markdown
 - **`scripts/extract_js_docs.py`** - Extract JSDoc to markdown
@@ -213,6 +217,7 @@ Utility scripts in `scripts/`:
 ### Project README Structure
 
 Standard sections in order:
+
 1. Project name and badges
 2. Description (one-liner + expanded)
 3. Features
@@ -226,6 +231,7 @@ Standard sections in order:
 ### API Documentation Organization
 
 Organize API docs by:
+
 1. Module/namespace
 2. Class/interface
 3. Public methods/functions
@@ -238,13 +244,16 @@ Organize API docs by:
 ## [1.2.0] - 2025-01-15
 
 ### Added
+
 - New feature X for improved performance
 - Support for Y configuration option
 
 ### Fixed
+
 - Bug in Z causing incorrect behavior (#123)
 
 ### Changed
+
 - Updated dependency A to v2.0
 ```
 

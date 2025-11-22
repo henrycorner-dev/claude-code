@@ -1,7 +1,8 @@
 ---
 description: Adds i18n; extracts strings, translates via API.
 argument-hint: Optional target languages (e.g., "es fr de") or project path
-allowed-tools: ["Read", "Write", "Edit", "Grep", "Glob", "Bash", "TodoWrite", "AskUserQuestion", "WebFetch"]
+allowed-tools:
+  ['Read', 'Write', 'Edit', 'Grep', 'Glob', 'Bash', 'TodoWrite', 'AskUserQuestion', 'WebFetch']
 ---
 
 # Internationalization (i18n) & Localization Setup
@@ -86,6 +87,7 @@ Guide the user through adding internationalization support to their project, ext
 **Actions**:
 
 1. Present the auto-selected configuration:
+
    ```
    Internationalization Setup Plan:
 
@@ -120,27 +122,32 @@ Guide the user through adding internationalization support to their project, ext
 2. Install core i18n library based on selection:
 
    **For React/Next.js (react-i18next)**:
+
    ```bash
    npm install react-i18next i18next i18next-browser-languagedetector
    ```
 
    **For Vue (vue-i18n)**:
+
    ```bash
    npm install vue-i18n@9
    ```
 
    **For Angular (@angular/localize)**:
+
    ```bash
    ng add @angular/localize
    npm install @ngx-translate/core @ngx-translate/http-loader
    ```
 
    **For Svelte (svelte-i18n)**:
+
    ```bash
    npm install svelte-i18n
    ```
 
 3. Install translation API client:
+
    ```bash
    npm install @google-cloud/translate   # for Google Translate
    # OR
@@ -149,6 +156,7 @@ Guide the user through adding internationalization support to their project, ext
    ```
 
 4. Install development dependencies:
+
    ```bash
    npm install -D i18next-parser          # for extracting translation keys
    ```
@@ -173,6 +181,7 @@ Guide the user through adding internationalization support to their project, ext
 2. Create i18n configuration file based on framework:
 
    **For React/Next.js (i18n.ts or i18n.js)**:
+
    ```typescript
    import i18n from 'i18next';
    import { initReactI18next } from 'react-i18next';
@@ -198,6 +207,7 @@ Guide the user through adding internationalization support to their project, ext
    ```
 
    **For Vue (i18n.ts)**:
+
    ```typescript
    import { createI18n } from 'vue-i18n';
 
@@ -215,6 +225,7 @@ Guide the user through adding internationalization support to their project, ext
    ```
 
 3. Create locale directory structure:
+
    ```
    src/
      locales/
@@ -227,6 +238,7 @@ Guide the user through adding internationalization support to their project, ext
    ```
 
 4. Initialize empty translation files for base language (en):
+
    ```json
    {}
    ```
@@ -277,6 +289,7 @@ Guide the user through adding internationalization support to their project, ext
    - Alt text for images
 
 4. Create a mapping of strings to translation keys:
+
    ```
    "Welcome to our app" -> "welcome.title"
    "Sign In" -> "auth.signIn"
@@ -284,6 +297,7 @@ Guide the user through adding internationalization support to their project, ext
    ```
 
 5. Generate base translation file (en/translation.json):
+
    ```json
    {
      "welcome": {
@@ -325,6 +339,7 @@ Guide the user through adding internationalization support to their project, ext
 3. For each target language, use translation API:
 
    **Using Google Translate API**:
+
    ```javascript
    const { Translate } = require('@google-cloud/translate').v2;
    const translate = new Translate({ key: process.env.GOOGLE_TRANSLATE_API_KEY });
@@ -336,6 +351,7 @@ Guide the user through adding internationalization support to their project, ext
    ```
 
    **Using DeepL API**:
+
    ```javascript
    const deepl = require('deepl-node');
    const translator = new deepl.Translator(process.env.DEEPL_API_KEY);
@@ -384,6 +400,7 @@ Guide the user through adding internationalization support to their project, ext
 2. Replace hardcoded strings based on framework:
 
    **For React/Next.js**:
+
    ```tsx
    // Before
    <h1>Welcome to our app</h1>
@@ -404,6 +421,7 @@ Guide the user through adding internationalization support to their project, ext
    ```
 
    **For Vue**:
+
    ```vue
    <!-- Before -->
    <h1>Welcome to our app</h1>
@@ -415,6 +433,7 @@ Guide the user through adding internationalization support to their project, ext
    ```
 
    **For Angular**:
+
    ```html
    <!-- Before -->
    <h1>Welcome to our app</h1>
@@ -436,15 +455,13 @@ Guide the user through adding internationalization support to their project, ext
    - Dynamic content: Ensure variables are properly interpolated
 
 5. Create language switcher component:
+
    ```tsx
    function LanguageSwitcher() {
      const { i18n } = useTranslation();
 
      return (
-       <select
-         value={i18n.language}
-         onChange={(e) => i18n.changeLanguage(e.target.value)}
-       >
+       <select value={i18n.language} onChange={e => i18n.changeLanguage(e.target.value)}>
          <option value="en">English</option>
          <option value="es">Español</option>
          <option value="fr">Français</option>
@@ -466,6 +483,7 @@ Guide the user through adding internationalization support to their project, ext
 1. Update TodoWrite: Mark "Verify and test" as in_progress
 
 2. Run the development server:
+
    ```bash
    npm run dev
    ```
@@ -507,42 +525,52 @@ Guide the user through adding internationalization support to their project, ext
 1. Mark all todos as completed
 
 2. Create i18n documentation (I18N_GUIDE.md):
+
    ```markdown
    # Internationalization Guide
 
    ## Supported Languages
+
    - English (en) - Base language
    - Spanish (es)
    - French (fr)
    - German (de)
 
    ## Setup
+
    This project uses [library-name] for internationalization.
 
    ## Adding New Translations
 
    ### 1. Add strings to base file
+
    Edit `src/locales/en/translation.json`
 
    ### 2. Run translation script
+
    \`\`\`bash
    npm run translate
    \`\`\`
 
    ### 3. Use in code
+
    \`\`\`tsx
    const { t } = useTranslation();
+
    <div>{t('your.new.key')}</div>
    \`\`\`
 
    ## Language Switching
+
    Users can switch languages using the language selector in the header.
 
    ## Translation API
+
    We use [API name] for automatic translations.
    API Key: Set in environment variable `TRANSLATE_API_KEY`
 
    ## Best Practices
+
    - Keep translation keys descriptive and hierarchical
    - Use namespaces for different sections
    - Always add new strings to base file first
@@ -551,6 +579,7 @@ Guide the user through adding internationalization support to their project, ext
    ```
 
 3. Add translation scripts to package.json:
+
    ```json
    {
      "scripts": {
@@ -567,6 +596,7 @@ Guide the user through adding internationalization support to their project, ext
    - Updates only missing translations
 
 5. Present summary to user:
+
    ```
    Internationalization Setup Complete!
 
@@ -630,16 +660,19 @@ Guide the user through adding internationalization support to their project, ext
 ### Framework-Specific Considerations
 
 **React/Next.js**:
+
 - Use `useTranslation` hook in functional components
 - For Next.js SSR, configure language detection
 - Consider next-intl for better Next.js integration
 
 **Vue**:
+
 - Use `$t()` in templates, `t()` in script
 - Configure vue-i18n in main.js/main.ts
 - Use composition API: `useI18n()`
 
 **Angular**:
+
 - Use `translate` pipe in templates
 - Lazy load translations for better performance
 - Configure localeId for date/number formatting

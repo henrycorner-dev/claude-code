@@ -90,7 +90,7 @@ const LocationScreen = () => {
       return;
     }
 
-    locationService.startLocationUpdates((newLocation) => {
+    locationService.startLocationUpdates(newLocation => {
       setLocation(newLocation);
     });
 
@@ -133,17 +133,9 @@ const LocationScreen = () => {
         />
 
         {!isTracking ? (
-          <Button
-            title="Start Tracking"
-            onPress={handleStartTracking}
-            color="#4CAF50"
-          />
+          <Button title="Start Tracking" onPress={handleStartTracking} color="#4CAF50" />
         ) : (
-          <Button
-            title="Stop Tracking"
-            onPress={handleStopTracking}
-            color="#f44336"
-          />
+          <Button title="Stop Tracking" onPress={handleStopTracking} color="#f44336" />
         )}
       </View>
     </View>

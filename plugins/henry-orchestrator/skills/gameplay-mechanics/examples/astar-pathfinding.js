@@ -61,13 +61,17 @@ class PriorityQueue {
       const leftIndex = 2 * index + 1;
       const rightIndex = 2 * index + 2;
 
-      if (leftIndex < length &&
-          this.elements[leftIndex].priority < this.elements[minIndex].priority) {
+      if (
+        leftIndex < length &&
+        this.elements[leftIndex].priority < this.elements[minIndex].priority
+      ) {
         minIndex = leftIndex;
       }
 
-      if (rightIndex < length &&
-          this.elements[rightIndex].priority < this.elements[minIndex].priority) {
+      if (
+        rightIndex < length &&
+        this.elements[rightIndex].priority < this.elements[minIndex].priority
+      ) {
         minIndex = rightIndex;
       }
 
@@ -92,20 +96,22 @@ class NavGrid {
     this.cellSize = cellSize;
     this.cols = Math.floor(width / cellSize);
     this.rows = Math.floor(height / cellSize);
-    this.grid = Array(this.rows).fill(null).map(() => Array(this.cols).fill(true));
+    this.grid = Array(this.rows)
+      .fill(null)
+      .map(() => Array(this.cols).fill(true));
   }
 
   worldToGrid(x, y) {
     return {
       x: Math.floor(x / this.cellSize),
-      y: Math.floor(y / this.cellSize)
+      y: Math.floor(y / this.cellSize),
     };
   }
 
   gridToWorld(gridX, gridY) {
     return {
       x: gridX * this.cellSize + this.cellSize / 2,
-      y: gridY * this.cellSize + this.cellSize / 2
+      y: gridY * this.cellSize + this.cellSize / 2,
     };
   }
 
@@ -149,7 +155,7 @@ function getNeighbors(node, grid, allowDiagonal = true) {
     { x: 1, y: 0, cost: 1 },
     { x: -1, y: 0, cost: 1 },
     { x: 0, y: 1, cost: 1 },
-    { x: 0, y: -1, cost: 1 }
+    { x: 0, y: -1, cost: 1 },
   ];
 
   if (allowDiagonal) {
@@ -165,7 +171,7 @@ function getNeighbors(node, grid, allowDiagonal = true) {
     const neighbor = {
       x: node.x + dir.x,
       y: node.y + dir.y,
-      cost: dir.cost
+      cost: dir.cost,
     };
 
     if (!grid.isWalkable(neighbor.x, neighbor.y)) {
@@ -208,7 +214,7 @@ function aStar(start, goal, grid, heuristic = manhattanDistance) {
     if (current.x === goal.x && current.y === goal.y) {
       return {
         path: reconstructPath(cameFrom, current),
-        explored: closedSet.size
+        explored: closedSet.size,
       };
     }
 
@@ -351,12 +357,12 @@ class PathfindingDemo {
   }
 
   setupInput() {
-    this.canvas.addEventListener('mousedown', (e) => {
+    this.canvas.addEventListener('mousedown', e => {
       this.isDrawing = true;
       this.handleClick(e);
     });
 
-    this.canvas.addEventListener('mousemove', (e) => {
+    this.canvas.addEventListener('mousemove', e => {
       if (this.isDrawing && this.mode === 'wall') {
         this.handleClick(e);
       }
@@ -367,7 +373,7 @@ class PathfindingDemo {
     });
 
     // Mode buttons
-    document.addEventListener('keydown', (e) => {
+    document.addEventListener('keydown', e => {
       if (e.code === 'Digit1') this.mode = 'start';
       if (e.code === 'Digit2') this.mode = 'goal';
       if (e.code === 'Digit3') this.mode = 'wall';
@@ -434,12 +440,7 @@ class PathfindingDemo {
         const isWalkable = this.grid.isWalkable(x, y);
 
         ctx.fillStyle = isWalkable ? '#2a2a2a' : '#555';
-        ctx.fillRect(
-          x * this.cellSize,
-          y * this.cellSize,
-          this.cellSize - 1,
-          this.cellSize - 1
-        );
+        ctx.fillRect(x * this.cellSize, y * this.cellSize, this.cellSize - 1, this.cellSize - 1);
       }
     }
 
@@ -469,10 +470,7 @@ class PathfindingDemo {
       ctx.beginPath();
 
       for (let i = 0; i < this.smoothedPath.length; i++) {
-        const worldPos = this.grid.gridToWorld(
-          this.smoothedPath[i].x,
-          this.smoothedPath[i].y
-        );
+        const worldPos = this.grid.gridToWorld(this.smoothedPath[i].x, this.smoothedPath[i].y);
 
         if (i === 0) {
           ctx.moveTo(worldPos.x, worldPos.y);
@@ -531,7 +529,11 @@ class PathfindingDemo {
     ctx.fillText(`Mode: ${this.mode.toUpperCase()} | 1:Start 2:Goal 3:Wall C:Clear`, 10, 20);
 
     if (this.path) {
-      ctx.fillText(`Path length: ${this.path.length} | Smoothed: ${this.smoothedPath.length} | Explored: ${this.explored}`, 10, 40);
+      ctx.fillText(
+        `Path length: ${this.path.length} | Smoothed: ${this.smoothedPath.length} | Explored: ${this.explored}`,
+        10,
+        40
+      );
     } else {
       ctx.fillText('No path found!', 10, 40);
     }
@@ -564,6 +566,6 @@ if (typeof module !== 'undefined' && module.exports) {
     smoothPath,
     hasLineOfSight,
     manhattanDistance,
-    euclideanDistance
+    euclideanDistance,
   };
 }

@@ -60,11 +60,13 @@ Provides a structured 7-phase approach to feature development with specialized a
 These plugins are included in the Claude Code repository. To use them in your own projects:
 
 1. Install Claude Code globally:
+
 ```bash
 npm install -g @anthropic-ai/claude-code
 ```
 
 2. Navigate to your project and run Claude Code:
+
 ```bash
 claude
 ```

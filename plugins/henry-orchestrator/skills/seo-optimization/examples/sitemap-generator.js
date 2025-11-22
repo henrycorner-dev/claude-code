@@ -59,7 +59,7 @@ function generateUrlEntry(url) {
 
   // Add images if provided
   if (images && images.length > 0) {
-    images.forEach((image) => {
+    images.forEach(image => {
       entry += '    <image:image>\n';
       entry += `      <image:loc>${escapeXml(image.url)}</image:loc>\n`;
       if (image.title) {
@@ -90,7 +90,7 @@ function generateSitemap(urls, options = {}) {
 
   xml += '>\n';
 
-  urls.forEach((url) => {
+  urls.forEach(url => {
     xml += generateUrlEntry(url);
   });
 
@@ -104,7 +104,7 @@ function generateSitemapIndex(sitemaps) {
   let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
   xml += '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
 
-  sitemaps.forEach((sitemap) => {
+  sitemaps.forEach(sitemap => {
     xml += '  <sitemap>\n';
     xml += `    <loc>${escapeXml(sitemap.loc)}</loc>\n`;
     if (sitemap.lastmod) {

@@ -27,9 +27,11 @@ Meta tags provide essential information to search engines and social media platf
 5. **Robots** - Controls search engine crawling and indexing
 
 **Open Graph tags** for social media sharing:
+
 - `og:title`, `og:description`, `og:image`, `og:url`, `og:type`
 
 **Twitter Card tags** for Twitter sharing:
+
 - `twitter:card`, `twitter:title`, `twitter:description`, `twitter:image`
 
 For detailed meta tag implementations and best practices, consult `references/meta-tags.md`.
@@ -39,18 +41,21 @@ For detailed meta tag implementations and best practices, consult `references/me
 Choose rendering strategy based on content characteristics:
 
 **SSR (Server-Side Rendering):**
+
 - Dynamic content that changes frequently
 - Personalized user experiences
 - Real-time data requirements
 - E-commerce product pages with inventory
 
 **SSG (Static Site Generation):**
+
 - Content that changes infrequently
 - Marketing pages, blogs, documentation
 - Better performance and caching
 - Lower hosting costs
 
 **Hybrid Approach:**
+
 - Combine SSG for static pages with ISR (Incremental Static Regeneration)
 - Pre-render at build time, revalidate periodically
 
@@ -69,6 +74,7 @@ Sitemaps help search engines discover and crawl site content efficiently.
 5. **News Sitemap** - For news publishers
 
 **Key sitemap requirements:**
+
 - Maximum 50,000 URLs per sitemap
 - Maximum 50MB uncompressed size
 - Use sitemap index for larger sites
@@ -82,6 +88,7 @@ For sitemap generation code and validation, see `examples/sitemap-generator.js` 
 Structured data markup helps search engines understand page content and enables rich results in search.
 
 **Common schema types:**
+
 - **Article** - Blog posts, news articles
 - **Product** - E-commerce items with pricing, availability
 - **Organization** - Company information, logo, contact
@@ -94,6 +101,7 @@ Structured data markup helps search engines understand page content and enables 
 - **LocalBusiness** - Physical business locations
 
 **Implementation approach:**
+
 - Use JSON-LD format (recommended by Google)
 - Place in `<script type="application/ld+json">` tag
 - Validate with Google Rich Results Test
@@ -106,6 +114,7 @@ For complete schema implementations and examples, see `references/structured-dat
 ### Step 1: Audit Current SEO State
 
 Analyze existing implementation:
+
 - Check for meta tags on all pages
 - Verify canonical URLs are set correctly
 - Test mobile responsiveness
@@ -118,6 +127,7 @@ Use tools: Google Search Console, Lighthouse, Screaming Frog
 ### Step 2: Implement Meta Tags
 
 Add essential meta tags to all pages:
+
 - Dynamic title and description based on content
 - Canonical URLs to prevent duplication
 - Open Graph and Twitter Card tags for social sharing
@@ -128,6 +138,7 @@ Place meta tags in `<head>` section, prioritizing order for optimal parsing.
 ### Step 3: Choose and Configure Rendering Strategy
 
 Select SSR, SSG, or hybrid based on content characteristics:
+
 - Identify static vs dynamic pages
 - Configure framework for chosen strategy
 - Implement data fetching methods appropriately
@@ -136,6 +147,7 @@ Select SSR, SSG, or hybrid based on content characteristics:
 ### Step 4: Generate and Submit Sitemaps
 
 Create comprehensive sitemaps:
+
 - Generate XML sitemap automatically from routes
 - Include all indexable pages
 - Update sitemap on content changes
@@ -145,6 +157,7 @@ Create comprehensive sitemaps:
 ### Step 5: Add Structured Data
 
 Implement JSON-LD markup:
+
 - Identify relevant schema types for content
 - Add structured data to appropriate pages
 - Validate markup with testing tools
@@ -154,6 +167,7 @@ Implement JSON-LD markup:
 ### Step 6: Monitor and Iterate
 
 Track SEO performance:
+
 - Monitor search rankings for target keywords
 - Review click-through rates in Search Console
 - Analyze crawl errors and coverage issues
@@ -165,6 +179,7 @@ Track SEO performance:
 ### Performance Optimization
 
 Page speed is a ranking factor:
+
 - Optimize images (WebP, lazy loading, responsive images)
 - Minimize JavaScript and CSS
 - Enable compression (Gzip, Brotli)
@@ -174,6 +189,7 @@ Page speed is a ranking factor:
 ### Mobile-First Indexing
 
 Google primarily uses mobile version for indexing:
+
 - Ensure responsive design
 - Test mobile usability
 - Verify mobile page speed
@@ -183,6 +199,7 @@ Google primarily uses mobile version for indexing:
 ### URL Structure
 
 Clean, descriptive URLs improve SEO:
+
 - Use hyphens to separate words
 - Keep URLs concise and readable
 - Avoid unnecessary parameters
@@ -192,6 +209,7 @@ Clean, descriptive URLs improve SEO:
 ### Internal Linking
 
 Strategic internal links distribute page authority:
+
 - Link to important pages from high-authority pages
 - Use descriptive anchor text
 - Maintain reasonable link depth (3-4 clicks from homepage)
@@ -201,6 +219,7 @@ Strategic internal links distribute page authority:
 ### Security and Accessibility
 
 HTTPS and accessibility affect rankings:
+
 - Use HTTPS (SSL certificate required)
 - Ensure proper heading hierarchy (H1, H2, H3)
 - Add alt text to images
@@ -212,6 +231,7 @@ HTTPS and accessibility affect rankings:
 ### Next.js
 
 Next.js provides built-in SEO features:
+
 - Use `next/head` for meta tags
 - Implement `getStaticProps` for SSG
 - Use `getServerSideProps` for SSR
@@ -223,6 +243,7 @@ See `examples/nextjs-seo-example.jsx` for complete implementation.
 ### Nuxt.js
 
 Nuxt offers SEO modules:
+
 - Configure `head` in `nuxt.config.js`
 - Use `@nuxtjs/sitemap` module
 - Implement `asyncData` or `fetch` for data
@@ -232,6 +253,7 @@ Nuxt offers SEO modules:
 ### React (Client-Side)
 
 Client-side React requires additional setup:
+
 - Use React Helmet for meta tags
 - Consider prerendering with Prerender.io or Rendertron
 - Implement dynamic rendering for search bots
@@ -241,6 +263,7 @@ Client-side React requires additional setup:
 ### WordPress
 
 WordPress has strong SEO foundation:
+
 - Use Yoast SEO or Rank Math plugin
 - Configure permalinks structure
 - Generate XML sitemaps automatically
@@ -274,6 +297,7 @@ WordPress has strong SEO foundation:
 ### Reference Files
 
 For detailed implementation guidance:
+
 - **`references/meta-tags.md`** - Complete meta tag reference with HTML examples
 - **`references/ssr-ssg-implementation.md`** - Framework-specific rendering configurations
 - **`references/structured-data.md`** - Comprehensive JSON-LD schema examples
@@ -282,6 +306,7 @@ For detailed implementation guidance:
 ### Example Files
 
 Working implementations in `examples/`:
+
 - **`nextjs-seo-example.jsx`** - Next.js page with complete SEO setup
 - **`sitemap-generator.js`** - Node.js sitemap generation script
 - **`structured-data-examples.json`** - JSON-LD templates for common schemas
@@ -293,13 +318,13 @@ Working implementations in `examples/`:
 
 ```html
 <title>Page Title (50-60 chars)</title>
-<meta name="description" content="Page description (150-160 chars)">
-<link rel="canonical" href="https://example.com/page">
-<meta name="robots" content="index, follow">
-<meta property="og:title" content="Open Graph Title">
-<meta property="og:description" content="Open Graph Description">
-<meta property="og:image" content="https://example.com/image.jpg">
-<meta property="og:url" content="https://example.com/page">
+<meta name="description" content="Page description (150-160 chars)" />
+<link rel="canonical" href="https://example.com/page" />
+<meta name="robots" content="index, follow" />
+<meta property="og:title" content="Open Graph Title" />
+<meta property="og:description" content="Open Graph Description" />
+<meta property="og:image" content="https://example.com/image.jpg" />
+<meta property="og:url" content="https://example.com/page" />
 ```
 
 ### Basic JSON-LD Article Schema
@@ -310,7 +335,7 @@ Working implementations in `examples/`:
   "@type": "Article",
   "headline": "Article Title",
   "description": "Article description",
-  "author": {"@type": "Person", "name": "Author Name"},
+  "author": { "@type": "Person", "name": "Author Name" },
   "datePublished": "2025-01-15",
   "image": "https://example.com/image.jpg"
 }

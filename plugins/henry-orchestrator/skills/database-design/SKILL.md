@@ -36,6 +36,7 @@ Use this skill when users need to:
 ### Database Selection Criteria
 
 **Use SQL databases (PostgreSQL, MySQL) when:**
+
 - Data has clear relationships and structure
 - ACID compliance is required
 - Complex queries with joins are common
@@ -43,6 +44,7 @@ Use this skill when users need to:
 - Transactions span multiple tables
 
 **Use NoSQL databases (MongoDB, DynamoDB) when:**
+
 - Schema flexibility is needed
 - Horizontal scaling is a priority
 - Document-based data model fits naturally
@@ -52,12 +54,14 @@ Use this skill when users need to:
 ### Schema Design Principles
 
 **Normalization:** Organize data to reduce redundancy
+
 - 1NF: Atomic values, no repeating groups
 - 2NF: No partial dependencies on composite keys
 - 3NF: No transitive dependencies
 - Use for transactional systems, data integrity
 
 **Denormalization:** Intentionally add redundancy for performance
+
 - Reduce joins by duplicating data
 - Pre-compute aggregations
 - Use for read-heavy workloads, reporting
@@ -65,6 +69,7 @@ Use this skill when users need to:
 ### Common Relationships
 
 **One-to-Many:** Most common relationship type
+
 ```sql
 -- Users have many posts
 CREATE TABLE users (
@@ -80,6 +85,7 @@ CREATE TABLE posts (
 ```
 
 **Many-to-Many:** Requires junction table
+
 ```sql
 -- Students enroll in many courses
 CREATE TABLE students (id SERIAL PRIMARY KEY, name VARCHAR(255));
@@ -92,6 +98,7 @@ CREATE TABLE enrollments (
 ```
 
 **One-to-One:** Rare, often indicates data split
+
 ```sql
 -- User has one profile (extended attributes)
 CREATE TABLE users (id SERIAL PRIMARY KEY, email VARCHAR(255));
@@ -107,6 +114,7 @@ CREATE TABLE profiles (
 ### Step 1: Understand Requirements
 
 Identify entities, attributes, and relationships:
+
 - What data needs to be stored?
 - What queries will be performed?
 - What are the access patterns?
@@ -115,6 +123,7 @@ Identify entities, attributes, and relationships:
 ### Step 2: Design Entity-Relationship Model
 
 Create a conceptual model:
+
 - List all entities (tables)
 - Define attributes for each entity
 - Identify primary keys
@@ -124,6 +133,7 @@ Create a conceptual model:
 ### Step 3: Apply Normalization
 
 Normalize to 3NF by default:
+
 - Eliminate repeating groups
 - Remove partial dependencies
 - Remove transitive dependencies
@@ -132,6 +142,7 @@ Normalize to 3NF by default:
 ### Step 4: Add Constraints and Indexes
 
 Define data integrity rules:
+
 - Primary keys and foreign keys
 - NOT NULL constraints
 - UNIQUE constraints
@@ -141,6 +152,7 @@ Define data integrity rules:
 ### Step 5: Plan for Evolution
 
 Design for change:
+
 - Avoid over-engineering
 - Use migrations for schema changes
 - Version your schema
@@ -151,6 +163,7 @@ Design for change:
 ### Migration Best Practices
 
 **Always use migrations for schema changes:**
+
 - Create migration files with timestamps
 - Make migrations reversible (up and down)
 - Test migrations in development first
@@ -158,12 +171,14 @@ Design for change:
 - Run migrations in a transaction when possible
 
 **Safe migration patterns:**
+
 - Add columns with DEFAULT values to avoid NULL issues
 - Add indexes CONCURRENTLY (PostgreSQL) to avoid locks
 - Rename via multi-step process (add, migrate data, drop old)
 - Use feature flags for application code changes
 
 **Dangerous operations:**
+
 - Dropping columns with data
 - Changing column types without conversion
 - Adding NOT NULL to existing columns without DEFAULT
@@ -190,6 +205,7 @@ Design for change:
 ### Index Strategy
 
 **When to add indexes:**
+
 - Columns in WHERE clauses
 - Columns in JOIN conditions
 - Columns in ORDER BY clauses
@@ -197,6 +213,7 @@ Design for change:
 - Foreign key columns
 
 **Index types:**
+
 - **B-tree (default):** Most queries, equality and range
 - **Hash:** Equality comparisons only
 - **GIN/GiST:** Full-text search, JSON, arrays (PostgreSQL)
@@ -204,6 +221,7 @@ Design for change:
 - **Composite:** Multiple columns (order matters)
 
 **Index trade-offs:**
+
 - Improves read performance
 - Slows down writes (INSERT, UPDATE, DELETE)
 - Consumes disk space
@@ -212,6 +230,7 @@ Design for change:
 ### Common Query Patterns
 
 **N+1 Query Problem:**
+
 ```sql
 -- Bad: Loads posts, then queries for each user
 SELECT * FROM posts;  -- Returns 100 posts
@@ -223,6 +242,7 @@ JOIN users ON posts.user_id = users.id;
 ```
 
 **Pagination with OFFSET:**
+
 ```sql
 -- Inefficient for large offsets (scans and discards rows)
 SELECT * FROM posts ORDER BY created_at DESC
@@ -235,6 +255,7 @@ ORDER BY created_at DESC LIMIT 20;
 ```
 
 **Counting Rows:**
+
 ```sql
 -- Slow: Full table scan
 SELECT COUNT(*) FROM large_table;
@@ -246,6 +267,7 @@ SELECT reltuples::bigint FROM pg_class WHERE relname = 'large_table';
 ## Database-Specific Considerations
 
 ### PostgreSQL Strengths
+
 - Advanced features: JSONB, arrays, full-text search
 - Strong data integrity and ACID compliance
 - Excellent for complex queries and analytics
@@ -253,18 +275,21 @@ SELECT reltuples::bigint FROM pg_class WHERE relname = 'large_table';
 - Mature replication and extensions ecosystem
 
 ### MySQL Strengths
+
 - High read performance
 - Simple replication setup
 - Wide hosting support
 - Good for web applications with simple queries
 
 ### MongoDB Strengths
+
 - Flexible schema for evolving data models
 - Natural document storage for nested data
 - Horizontal scaling with sharding
 - Fast writes and simple queries
 
 ### SQLite Strengths
+
 - Serverless, embedded database
 - Single file, easy deployment
 - Perfect for mobile apps, desktop apps, prototypes
@@ -275,6 +300,7 @@ SELECT reltuples::bigint FROM pg_class WHERE relname = 'large_table';
 ### Reference Files
 
 For detailed patterns and advanced techniques:
+
 - **`references/schema-patterns.md`** - Common schema design patterns, anti-patterns, and real-world examples
 - **`references/migration-strategies.md`** - Advanced migration techniques, zero-downtime deployments, and rollback strategies
 - **`references/query-optimization.md`** - Deep dive into query optimization, execution plans, and performance tuning
@@ -282,6 +308,7 @@ For detailed patterns and advanced techniques:
 ### Example Files
 
 Working examples in `examples/`:
+
 - **`examples/ecommerce-schema.sql`** - Complete e-commerce database schema
 - **`examples/social-network-schema.sql`** - Social network with relationships
 - **`examples/saas-multi-tenant-schema.sql`** - Multi-tenant SaaS design
@@ -290,6 +317,7 @@ Working examples in `examples/`:
 ### Scripts
 
 Utility scripts in `scripts/`:
+
 - **`scripts/analyze-query.sh`** - Run EXPLAIN ANALYZE on queries
 - **`scripts/find-missing-indexes.sql`** - Identify missing indexes (PostgreSQL)
 - **`scripts/migration-template.sh`** - Generate migration file template
@@ -343,6 +371,7 @@ When helping users with database design:
 ## Best Practices Summary
 
 **Schema Design:**
+
 - Start with normalized design (3NF)
 - Denormalize only when performance requires it
 - Use foreign keys to enforce relationships
@@ -350,6 +379,7 @@ When helping users with database design:
 - Choose appropriate data types (don't over-size)
 
 **Migrations:**
+
 - Always use migration files, never manual changes
 - Make migrations reversible
 - Add DEFAULT when adding NOT NULL columns
@@ -357,6 +387,7 @@ When helping users with database design:
 - Use transactions when possible
 
 **Query Optimization:**
+
 - Add indexes based on actual query patterns
 - Use EXPLAIN to understand execution plans
 - Avoid N+1 queries (use joins or eager loading)
@@ -364,6 +395,7 @@ When helping users with database design:
 - Monitor slow query logs
 
 **General:**
+
 - Choose database technology based on requirements, not trends
 - Document schema decisions and trade-offs
 - Version control schema and migrations

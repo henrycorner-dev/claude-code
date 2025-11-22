@@ -23,12 +23,14 @@ Sometimes you discover additional needs during execution. You can dynamically ad
 ```
 
 **When to add agents:**
+
 - Unexpected complexity discovered
 - Quality issues in specific dimension (security, performance, a11y)
 - Stakeholder requests additional perspective
 - Technical blockers requiring specialist expertise
 
 **Best practices:**
+
 - Provide new agent with full context from previous agents
 - Synthesize previous work before bringing in new perspective
 - Consider if restart with full team is better than incremental addition
@@ -47,6 +49,7 @@ Sometimes you discover additional needs during execution. You can dynamically ad
 ```
 
 **When to swap agents:**
+
 - Requirements clarification reveals different needs
 - Technology choice changes
 - Agent deliverables don't match expectations
@@ -75,12 +78,14 @@ Use multiple passes where agents review each other's work:
 ```
 
 **Benefits:**
+
 - Iterative improvement
 - Specialist focus in each pass
 - Clear handoffs between phases
 - Quality improves with each iteration
 
 **Use when:**
+
 - Complex features requiring multiple refinement cycles
 - Learning from each phase informs next phase
 - Quality requirements are high
@@ -105,12 +110,14 @@ Have agents review each other's domains:
 ```
 
 **Benefits:**
+
 - Catches integration issues early
 - Ensures APIs are developer-friendly
 - Identifies assumptions and mismatches
 - Improves cross-team understanding
 
 **Best for:**
+
 - API-heavy applications
 - Microservices architectures
 - Teams with integration points
@@ -135,12 +142,14 @@ Explore multiple approaches simultaneously, then synthesize:
 ```
 
 **Benefits:**
+
 - Evaluates multiple options objectively
 - Uncovers trade-offs
 - Prevents premature optimization
 - Makes informed architectural decisions
 
 **Use when:**
+
 - Unclear best approach
 - High-stakes decisions
 - Multiple viable options
@@ -155,6 +164,7 @@ Not all agent perspectives have equal weight in all contexts:
 **Priority Framework by Context:**
 
 **Production Launch Context:**
+
 ```
 Security: 100% weight (absolute veto on critical issues)
 Performance: 90% weight (major ranking factor)
@@ -164,6 +174,7 @@ SEO: 60% weight (long-term, can improve post-launch)
 ```
 
 **Internal Tool Context:**
+
 ```
 UX: 90% weight (user productivity critical)
 Security: 85% weight (internal data protection)
@@ -210,6 +221,7 @@ Conflict: Frontend wants rich animations, performance concerned about frame rate
 ```
 
 **Resolution Strategies:**
+
 1. **Data-driven**: Use analytics to measure impact
 2. **User-driven**: User testing to validate assumptions
 3. **Business-driven**: Product strategy determines priority
@@ -239,6 +251,7 @@ Phase 5: qa-tester (validates everything)
 ```
 
 **Benefits:**
+
 - Clear execution order
 - Identifies parallel opportunities
 - Prevents blocking
@@ -270,6 +283,7 @@ Synthesis: Compare trade-offs, recommend approach based on weighted criteria
 ```
 
 **When to use:**
+
 - Architectural decisions
 - Technology selection
 - Build vs buy decisions
@@ -292,12 +306,14 @@ Adversarial review where teams have opposing goals:
 ```
 
 **Benefits:**
+
 - Finds vulnerabilities proactively
 - Stress-tests implementations
 - Improves security posture
 - Validates assumptions
 
 **Use for:**
+
 - Security-critical systems
 - Penetration testing
 - Compliance validation
@@ -324,6 +340,7 @@ Build multiple prototypes, compare, choose best:
 ```
 
 **Metrics for comparison:**
+
 - Developer experience
 - Performance benchmarks
 - Bundle size
@@ -347,6 +364,7 @@ Else:
 ```
 
 **Benefits:**
+
 - Reduces risk of wrong approach
 - Time-boxed exploration
 - Informed decision making
@@ -377,6 +395,7 @@ Sprint 3:
 ```
 
 **Benefits:**
+
 - Solid foundation from planning phase
 - Flexibility in implementation
 - Regular quality checkpoints
@@ -401,6 +420,7 @@ Instead of one big review at end:
 ```
 
 **Benefits:**
+
 - Catches issues early (cheaper to fix)
 - Prevents technical debt accumulation
 - Maintains quality throughout
@@ -428,6 +448,7 @@ Simultaneous work with constant communication:
 ```
 
 **Use when:**
+
 - Critical production incidents
 - Time-sensitive emergencies
 - Requires multiple perspectives simultaneously
@@ -438,18 +459,21 @@ Simultaneous work with constant communication:
 ### Metrics to Track
 
 **Team Efficiency:**
+
 - Time to completion vs estimate
 - Number of iterations needed
 - Blockers encountered
 - Rework percentage
 
 **Output Quality:**
+
 - Issues found in review
 - Post-launch bugs
 - Performance benchmarks met
 - Test coverage achieved
 
 **Collaboration Quality:**
+
 - Conflicts identified and resolved
 - Cross-team reviews conducted
 - Communication effectiveness
@@ -460,6 +484,7 @@ Simultaneous work with constant communication:
 After each team assembly, conduct retrospective:
 
 **Questions to ask:**
+
 1. Was the team right-sized? (Too many/few agents?)
 2. Was execution mode optimal? (Parallel vs sequential?)
 3. Were there unexpected needs? (Should we have included other agents?)
@@ -468,6 +493,7 @@ After each team assembly, conduct retrospective:
 6. What would we do differently next time?
 
 **Action items:**
+
 - Update team patterns based on learnings
 - Refine coordination strategies
 - Improve context-sharing processes
@@ -485,6 +511,7 @@ After each team assembly, conduct retrospective:
 ```
 
 **Fix:** Start minimal, add as needed
+
 ```bash
 # DO: Right-sized team
 /henry-orchestrator:henry-team frontend-engineer backend-engineer - Build contact form
@@ -503,6 +530,7 @@ researcher (8h) → designer (8h) → backend (8h) → frontend (8h) → qa (8h)
 ```
 
 **Fix:** Identify parallel opportunities
+
 ```bash
 # DO: Parallel where possible
 Phase 1: researcher (8h)
@@ -525,6 +553,7 @@ Figure it out yourself!
 ```
 
 **Fix:** Synthesize into actionable plan
+
 ```
 Synthesis:
 Critical Issues (Fix before launch):
@@ -551,6 +580,7 @@ Performance: bcrypt is too slow, use scrypt with 8 rounds
 ```
 
 **Fix:** Actively resolve conflicts
+
 ```
 Conflict: Password hashing strength vs performance
 

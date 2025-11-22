@@ -1,7 +1,7 @@
 ---
 description: Scaffolds/boots full-stack web app (React/Next/Remix/Angular/Vue/Nuxt/Svelte/SvelteKit/Astro + Node/Express/Nestjs); auto-selects stack.
 argument-hint: Optional project name or configuration preferences
-allowed-tools: ["Read", "Write", "Edit", "Grep", "Glob", "Bash", "TodoWrite", "AskUserQuestion"]
+allowed-tools: ['Read', 'Write', 'Edit', 'Grep', 'Glob', 'Bash', 'TodoWrite', 'AskUserQuestion']
 ---
 
 # Full-Stack Web Application Scaffolding
@@ -73,6 +73,7 @@ Guide the user through scaffolding a complete full-stack web application by inte
 **Actions**:
 
 1. Present the auto-selected stack in a clear format:
+
    ```
    Auto-Selected Technology Stack:
 
@@ -116,51 +117,61 @@ Guide the user through scaffolding a complete full-stack web application by inte
 3. Determine scaffolding commands based on confirmed stack:
 
    **Next.js**:
+
    ```bash
    npx create-next-app@latest [project-name] --typescript --tailwind --app --src-dir
    ```
 
    **React + Vite**:
+
    ```bash
    npm create vite@latest [project-name] -- --template react-ts
    ```
 
    **Remix**:
+
    ```bash
    npx create-remix@latest [project-name]
    ```
 
    **Vue + Vite**:
+
    ```bash
    npm create vue@latest [project-name]
    ```
 
    **Nuxt**:
+
    ```bash
    npx nuxi@latest init [project-name]
    ```
 
    **Angular**:
+
    ```bash
    npx @angular/cli@latest new [project-name]
    ```
 
    **Svelte + Vite**:
+
    ```bash
    npm create vite@latest [project-name] -- --template svelte-ts
    ```
 
    **SvelteKit**:
+
    ```bash
    npm create svelte@latest [project-name]
    ```
 
    **Astro**:
+
    ```bash
    npm create astro@latest [project-name]
    ```
 
    **Express (separate backend)**:
+
    ```bash
    mkdir [project-name]-backend && cd [project-name]-backend
    npm init -y
@@ -169,6 +180,7 @@ Guide the user through scaffolding a complete full-stack web application by inte
    ```
 
    **NestJS (separate backend)**:
+
    ```bash
    npm i -g @nestjs/cli
    nest new [project-name]-backend
@@ -199,7 +211,7 @@ Guide the user through scaffolding a complete full-stack web application by inte
      - Tailwind CSS: Yes for Next.js, optional for others
      - src/ directory: Yes
      - App Router: Yes (Next.js)
-     - Import alias: Yes (@/*)
+     - Import alias: Yes (@/\*)
 
 3. For separate frontend/backend setups:
    - Scaffold frontend first
@@ -224,6 +236,7 @@ Guide the user through scaffolding a complete full-stack web application by inte
 1. Update TodoWrite: Mark "Install dependencies" as in_progress
 
 2. Navigate to project directory and install dependencies:
+
    ```bash
    cd [project-name]
    npm install
@@ -275,6 +288,7 @@ Guide the user through scaffolding a complete full-stack web application by inte
 1. Update TodoWrite: Mark "Verify installation" as in_progress
 
 2. Run development server to verify:
+
    ```bash
    npm run dev
    ```
@@ -304,39 +318,47 @@ Guide the user through scaffolding a complete full-stack web application by inte
 1. Mark all todos as completed
 
 2. Create a project summary document in the project root (PROJECT_SETUP.md):
+
    ```markdown
    # [Project Name] - Setup Summary
 
    ## Technology Stack
+
    - Frontend: [framework]
    - Backend: [framework/runtime]
    - Language: [TypeScript/JavaScript]
    - Package Manager: [npm/yarn/pnpm]
 
    ## Project Structure
+
    [Brief overview of directory structure]
 
    ## Getting Started
 
    ### Development
+
    \`\`\`bash
    npm run dev
    \`\`\`
 
    ### Build
+
    \`\`\`bash
    npm run build
    \`\`\`
 
    ## Environment Variables
+
    [List required env vars]
 
    ## Next Steps
+
    1. [Suggested next tasks]
    2. [...]
    ```
 
 3. Present summary to user:
+
    ```
    Full-Stack Application Scaffolded Successfully!
 
@@ -388,6 +410,7 @@ Guide the user through scaffolding a complete full-stack web application by inte
 ### Default Recommendations
 
 For new projects without specific requirements:
+
 - **Simple full-stack**: Next.js 14+ (App Router)
 - **Complex enterprise**: NestJS backend + Next.js frontend
 - **Content-heavy**: Astro or Next.js

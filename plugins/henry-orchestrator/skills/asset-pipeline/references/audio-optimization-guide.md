@@ -9,23 +9,27 @@ Audio optimization is critical for game performance, load times, and memory usag
 ### Audio Properties
 
 **Sample Rate:**
+
 - Frequency of audio samples per second (Hz)
 - Common rates: 44100 Hz (CD quality), 48000 Hz (professional), 22050 Hz (low quality)
 - Higher sample rate = better quality, larger file size
 - Nyquist theorem: Sample rate must be 2x highest frequency to reproduce accurately
 
 **Bit Depth:**
+
 - Precision of each audio sample
 - Common depths: 16-bit (standard), 24-bit (high quality), 8-bit (retro/low quality)
 - Higher bit depth = better dynamic range, larger file size
 - 16-bit provides 96 dB dynamic range (sufficient for games)
 
 **Channels:**
+
 - Mono: 1 channel (single audio stream)
 - Stereo: 2 channels (left + right)
 - Multichannel: 5.1, 7.1 (surround sound)
 
 **Bitrate:**
+
 - Amount of data per second in compressed audio (kbps)
 - Higher bitrate = better quality, larger file size
 - Typical range: 64-320 kbps
@@ -33,6 +37,7 @@ Audio optimization is critical for game performance, load times, and memory usag
 ### File Size Calculation
 
 **Uncompressed (WAV, AIFF):**
+
 ```
 File Size = Sample Rate × Bit Depth × Channels × Duration / 8
 
@@ -43,6 +48,7 @@ Example: 10 seconds of stereo 16-bit 44.1kHz audio
 ```
 
 **Compressed (OGG, MP3):**
+
 ```
 File Size = Bitrate × Duration / 8
 
@@ -57,12 +63,14 @@ Example: 10 seconds at 128 kbps
 ### Music
 
 **Characteristics:**
+
 - Long duration (2-5 minutes typical)
 - Stereo (occasionally multichannel)
 - Requires good quality (music is focal)
 - Often looping
 
 **Optimization Strategy:**
+
 ```
 Format: OGG Vorbis or platform-native compressed
 Bitrate: 128-192 kbps (96 kbps acceptable for ambient music)
@@ -72,6 +80,7 @@ Streaming: Yes (always stream, don't load into memory)
 ```
 
 **Example:**
+
 ```
 Source: 3-minute music track, stereo, 16-bit, 44.1kHz WAV
 Uncompressed: 30 MB
@@ -79,6 +88,7 @@ Optimized: OGG Vorbis 160 kbps = 3.6 MB (88% reduction)
 ```
 
 **Best Practices:**
+
 - Always stream music (never load fully into memory)
 - Use looping metadata to avoid gap at loop point
 - Consider adaptive music systems (layers, stems)
@@ -88,12 +98,14 @@ Optimized: OGG Vorbis 160 kbps = 3.6 MB (88% reduction)
 ### Sound Effects (SFX)
 
 **Characteristics:**
+
 - Short duration (0.1-5 seconds typical)
 - Often mono (for 3D positioning)
 - Many instances playing simultaneously
 - Loaded into memory
 
 **Optimization Strategy:**
+
 ```
 Format: OGG Vorbis or platform-native compressed
 Bitrate: 64-96 kbps
@@ -103,6 +115,7 @@ Streaming: No (load into memory for instant playback)
 ```
 
 **Example:**
+
 ```
 Source: 1-second footstep sound, mono, 16-bit, 44.1kHz WAV
 Uncompressed: 88 KB
@@ -110,6 +123,7 @@ Optimized: OGG Vorbis 64 kbps = 8 KB (91% reduction)
 ```
 
 **Best Practices:**
+
 - Convert 3D positioned sounds to mono (50% size reduction)
 - Group SFX into audio banks (load/unload by scene)
 - Use lower sample rate for simple sounds (explosions, impacts)
@@ -120,12 +134,14 @@ Optimized: OGG Vorbis 64 kbps = 8 KB (91% reduction)
 ### Voice / Dialogue
 
 **Characteristics:**
+
 - Variable duration (2-30 seconds typical)
 - Mono or stereo
 - Speech content (benefits from speech codecs)
 - May be localized (multiple language versions)
 
 **Optimization Strategy:**
+
 ```
 Format: OGG Vorbis or speech-optimized codec
 Bitrate: 64-128 kbps (speech-optimized codecs can go lower)
@@ -135,6 +151,7 @@ Streaming: Optional (stream long dialogue, load short barks)
 ```
 
 **Example:**
+
 ```
 Source: 10-second voice line, mono, 16-bit, 44.1kHz WAV
 Uncompressed: 882 KB
@@ -142,6 +159,7 @@ Optimized: OGG Vorbis 64 kbps = 80 KB (91% reduction)
 ```
 
 **Best Practices:**
+
 - Use mono for all dialogue (positional audio)
 - Lower sample rate acceptable for speech (22050 Hz)
 - Stream long dialogue and cutscenes
@@ -152,12 +170,14 @@ Optimized: OGG Vorbis 64 kbps = 80 KB (91% reduction)
 ### Ambient / Loops
 
 **Characteristics:**
+
 - Medium to long duration (5-60 seconds)
 - Often stereo or positioned in 3D
 - Looping continuously
 - Background element
 
 **Optimization Strategy:**
+
 ```
 Format: OGG Vorbis
 Bitrate: 64-96 kbps
@@ -167,6 +187,7 @@ Streaming: Yes (for long loops), No (for short loops)
 ```
 
 **Example:**
+
 ```
 Source: 20-second ambient wind loop, stereo, 16-bit, 44.1kHz WAV
 Uncompressed: 3.5 MB
@@ -174,6 +195,7 @@ Optimized: OGG Vorbis 80 kbps = 200 KB (94% reduction)
 ```
 
 **Best Practices:**
+
 - Create seamless loops (no click/pop at loop point)
 - Use lower bitrate (ambient is background element)
 - Stream long ambient tracks (>30 seconds)
@@ -185,6 +207,7 @@ Optimized: OGG Vorbis 80 kbps = 200 KB (94% reduction)
 ### Uncompressed Formats
 
 **WAV (Waveform Audio File Format)**
+
 - Platform: PC, all platforms
 - Compression: None
 - Quality: Perfect (lossless)
@@ -192,6 +215,7 @@ Optimized: OGG Vorbis 80 kbps = 200 KB (94% reduction)
 - Use Case: Source audio, editing, platform with unlimited storage
 
 **AIFF (Audio Interchange File Format)**
+
 - Platform: Mac, iOS, all platforms
 - Compression: None
 - Quality: Perfect (lossless)
@@ -199,6 +223,7 @@ Optimized: OGG Vorbis 80 kbps = 200 KB (94% reduction)
 - Use Case: Same as WAV, preferred on Mac
 
 **When to Use Uncompressed:**
+
 - Source audio files (pre-optimization)
 - Audio editing and processing
 - Platform with no storage constraints
@@ -208,6 +233,7 @@ Optimized: OGG Vorbis 80 kbps = 200 KB (94% reduction)
 ### Lossy Compressed Formats
 
 **OGG Vorbis**
+
 - Platform: PC, Android, Web, Nintendo Switch
 - Compression: Lossy
 - Quality: Excellent (transparent at 128+ kbps)
@@ -216,16 +242,19 @@ Optimized: OGG Vorbis 80 kbps = 200 KB (94% reduction)
 - Best Use: Default choice for PC/Android/web
 
 **Pros:**
+
 - Open source, no licensing fees
 - Excellent quality-to-size ratio
 - Good CPU performance
 - Wide platform support
 
 **Cons:**
+
 - Not supported natively on iOS/Mac (requires decoding library)
 - Slightly larger than AAC at same quality
 
 **Recommended Settings:**
+
 ```
 Music: 128-192 kbps, stereo, 44.1kHz
 SFX: 64-96 kbps, mono, 44.1kHz
@@ -233,6 +262,7 @@ Voice: 64-96 kbps, mono, 22.05kHz or 44.1kHz
 ```
 
 **MP3 (MPEG-1 Audio Layer 3)**
+
 - Platform: Universal (all platforms)
 - Compression: Lossy
 - Quality: Good (but dated algorithm)
@@ -241,16 +271,19 @@ Voice: 64-96 kbps, mono, 22.05kHz or 44.1kHz
 - Best Use: Wide compatibility, legacy systems
 
 **Pros:**
+
 - Universal support
 - Hardware acceleration on many platforms
 - Predictable quality and size
 
 **Cons:**
+
 - Lower quality than OGG/AAC at same bitrate
 - Licensing fees (expired in some regions)
 - Less efficient than modern codecs
 
 **Recommended Settings:**
+
 ```
 Music: 160-192 kbps, stereo, 44.1kHz
 SFX: 96-128 kbps, mono, 44.1kHz
@@ -258,6 +291,7 @@ Voice: 96-128 kbps, mono, 44.1kHz
 ```
 
 **AAC (Advanced Audio Coding)**
+
 - Platform: iOS, Mac, Android, Web
 - Compression: Lossy
 - Quality: Excellent (better than MP3)
@@ -266,16 +300,19 @@ Voice: 96-128 kbps, mono, 44.1kHz
 - Best Use: Mobile platforms, especially iOS
 
 **Pros:**
+
 - Better quality than MP3 at same bitrate
 - Native support on Apple platforms
 - Hardware acceleration on iOS
 - Widely supported
 
 **Cons:**
+
 - Not supported on all platforms without library
 - Licensing fees (though widely licensed)
 
 **Recommended Settings:**
+
 ```
 Music: 128-160 kbps, stereo, 44.1kHz
 SFX: 64-96 kbps, mono, 44.1kHz
@@ -285,6 +322,7 @@ Voice: 48-64 kbps, mono, 22.05kHz or 44.1kHz
 **Platform-Native Formats**
 
 **ADPCM (Adaptive Differential Pulse Code Modulation)**
+
 - Platform: Console, PC (Unity, Unreal), some mobile
 - Compression: Lossy (mild)
 - Quality: Good
@@ -293,21 +331,25 @@ Voice: 48-64 kbps, mono, 22.05kHz or 44.1kHz
 - Best Use: Consoles, many short SFX
 
 **Pros:**
+
 - Very fast decompression (hardware accelerated)
 - Reasonable quality for SFX
 - Deterministic performance
 
 **Cons:**
+
 - Poor compression compared to OGG/AAC
 - Not ideal for music (quality degradation)
 - Platform-specific variants
 
 **Recommended Settings:**
+
 ```
 SFX: ADPCM, mono or stereo, 44.1kHz
 ```
 
 **Opus**
+
 - Platform: Web, modern platforms (with library)
 - Compression: Lossy
 - Quality: Excellent (best-in-class)
@@ -316,16 +358,19 @@ SFX: ADPCM, mono or stereo, 44.1kHz
 - Best Use: Web, low-bitrate applications, VoIP
 
 **Pros:**
+
 - Best quality-to-bitrate ratio
 - Excellent at low bitrates (good for voice)
 - Open source, royalty-free
 - Low latency
 
 **Cons:**
+
 - Less widespread support (requires library)
 - Higher CPU cost than OGG/MP3
 
 **Recommended Settings:**
+
 ```
 Music: 96-128 kbps, stereo, 48kHz
 SFX: 48-64 kbps, mono, 48kHz
@@ -335,6 +380,7 @@ Voice: 24-48 kbps, mono, 24kHz or 48kHz
 ### Lossless Compressed Formats
 
 **FLAC (Free Lossless Audio Codec)**
+
 - Platform: PC, Android, Web (with library)
 - Compression: Lossless
 - Quality: Perfect (bit-identical to source)
@@ -343,15 +389,18 @@ Voice: 24-48 kbps, mono, 24kHz or 48kHz
 - Best Use: High-quality music, archival
 
 **Pros:**
+
 - Lossless quality
 - Reasonable compression (better than uncompressed)
 - Open source, royalty-free
 
 **Cons:**
+
 - Still much larger than lossy formats
 - Not supported natively on all platforms
 
 **When to Use:**
+
 - High-quality music for premium audio experiences
 - Archival of source audio
 - Projects where file size is less critical than quality
@@ -361,54 +410,64 @@ Voice: 24-48 kbps, mono, 24kHz or 48kHz
 ### PC
 
 **Recommended:**
+
 - **Music:** OGG Vorbis 128-192 kbps
 - **SFX:** OGG Vorbis 64-96 kbps or ADPCM
 - **Voice:** OGG Vorbis 64-96 kbps
 
 **Alternative:**
+
 - MP3 for broader compatibility (older systems)
 - FLAC for audiophile/high-quality music mode
 
 ### iOS
 
 **Recommended:**
+
 - **Music:** AAC 128-160 kbps (hardware accelerated)
 - **SFX:** AAC 64-96 kbps or ADPCM
 - **Voice:** AAC 48-64 kbps
 
 **Alternative:**
+
 - MP3 (universally supported but less efficient)
 
 ### Android
 
 **Recommended:**
+
 - **Music:** OGG Vorbis 128-160 kbps or AAC 128-160 kbps
 - **SFX:** OGG Vorbis 64-96 kbps
 - **Voice:** OGG Vorbis 64-96 kbps
 
 **Alternative:**
+
 - MP3 (broader compatibility on older devices)
 
 ### Web
 
 **Recommended:**
+
 - **Music:** OGG Vorbis 128-160 kbps or AAC 128-160 kbps
 - **SFX:** OGG Vorbis 64-96 kbps
 - **Voice:** OGG Vorbis 64-96 kbps or Opus 48-64 kbps
 
 **Best Practice:**
+
 - Provide multiple formats (OGG + AAC/MP3) for browser compatibility
 - Use HTML5 Audio with fallback
 
 ### Consoles (PlayStation, Xbox, Switch)
 
 **Recommended:**
+
 - Use platform-native formats (engine handles conversion)
 - **Unity:** ADPCM for SFX, Vorbis/MP3 for music (platform converts)
 - **Unreal:** Platform-specific compression (ADPCM on console)
 - **Switch:** OGG Vorbis or ADPCM
 
 **Best Practice:**
+
 - Check platform-specific guidelines
 - Use engine's audio import pipeline
 
@@ -417,22 +476,26 @@ Voice: 24-48 kbps, mono, 24kHz or 48kHz
 ### When to Stream
 
 **Use Streaming For:**
+
 - Music tracks (always)
 - Long ambient loops (>30 seconds)
 - Long dialogue/narration (>30 seconds)
 - Cutscene audio
 
 **Benefits:**
+
 - Minimal memory usage (only buffer in memory)
 - Supports very long audio files
 - Fast load times (no need to load entire file)
 
 **Drawbacks:**
+
 - Requires file I/O during playback
 - Potential stutter if I/O slow (mitigate with buffering)
 - Can't play multiple instances simultaneously (usually)
 
 **Implementation:**
+
 ```csharp
 // Unity example
 AudioSource musicSource;
@@ -446,22 +509,26 @@ StartCoroutine(StreamAudio("music/theme.ogg"));
 ### When to Load into Memory
 
 **Load into Memory For:**
+
 - Sound effects (always)
 - Short voice barks (<5 seconds)
 - UI sounds
 - Any audio requiring instant playback or multiple simultaneous instances
 
 **Benefits:**
+
 - Instant playback (no latency)
 - Can play multiple instances simultaneously
 - No file I/O during playback (no stutter risk)
 
 **Drawbacks:**
+
 - Requires memory for entire audio file
 - Longer initial load times
 - Memory constraints for large audio collections
 
 **Implementation:**
+
 ```csharp
 // Unity example
 AudioClip footstepSFX = Resources.Load<AudioClip>("sfx/footstep");
@@ -471,17 +538,20 @@ AudioSource.PlayClipAtPoint(footstepSFX, position);
 ### Hybrid Approach
 
 **Strategy:**
+
 - Load essential SFX into memory at game start
 - Load level-specific SFX during level load
 - Stream all music
 - Load/unload audio banks as needed
 
 **Audio Bank System:**
+
 - Group related audio into banks (UI sounds, weapon sounds, character voices)
 - Load banks on demand (entering new area, equipping weapon)
 - Unload banks when no longer needed (leaving area)
 
 **Example Bank Organization:**
+
 ```
 Banks:
 - UI_Bank (10 MB): Button clicks, menu sounds
@@ -498,22 +568,26 @@ Banks:
 Ensure consistent volume across all audio files.
 
 **Targets:**
+
 - **Music:** -14 to -16 LUFS (Loudness Units Full Scale)
 - **SFX:** -12 to -18 LUFS (depending on importance)
 - **Voice:** -16 to -20 LUFS
 - **Ambient:** -18 to -24 LUFS
 
 **Process:**
+
 1. Measure LUFS of audio file (use tool like ffmpeg-normalize)
 2. Adjust gain to match target LUFS
 3. Apply limiter to prevent clipping (peak at -0.5 dB)
 
 **Tools:**
+
 - ffmpeg-normalize (command-line)
 - Adobe Audition (Loudness Normalization effect)
 - Audacity (Normalize effect)
 
 **Example (ffmpeg-normalize):**
+
 ```bash
 ffmpeg-normalize input.wav -o output.wav -t -16 -c:a libvorbis -b:a 128k
 ```
@@ -523,17 +597,20 @@ ffmpeg-normalize input.wav -o output.wav -t -16 -c:a libvorbis -b:a 128k
 Reduce dynamic range for better playback on various devices.
 
 **When to Apply:**
+
 - Mobile games (devices with weak speakers)
 - Background music (prevent quiet passages from being inaudible)
 - Voice (ensure dialogue is intelligible)
 
 **Settings:**
+
 - **Ratio:** 2:1 to 4:1 (mild to moderate compression)
 - **Threshold:** -20 to -12 dB
 - **Attack:** 5-20 ms (music), 1-5 ms (voice)
 - **Release:** 50-200 ms
 
 **Avoid Over-Compression:**
+
 - Preserve some dynamic range (2-3:1 ratio max for music)
 - Over-compression makes audio fatiguing
 - Test on target devices
@@ -543,11 +620,13 @@ Reduce dynamic range for better playback on various devices.
 Prevent audio from exceeding 0 dBFS (digital clipping).
 
 **Process:**
+
 1. Apply limiter as final step
 2. Set ceiling to -0.5 dB to -1.0 dB (safety margin)
 3. Visually inspect waveform for clipping
 
 **Limiter Settings:**
+
 - **Ceiling:** -0.5 dB
 - **Release:** 50-100 ms
 
@@ -558,17 +637,20 @@ Prevent audio from exceeding 0 dBFS (digital clipping).
 Remove silence from beginning and end of audio files.
 
 **Benefits:**
+
 - Reduce file size (especially for dialogue)
 - Faster loading
 - Tighter audio playback timing
 
 **Process:**
+
 ```bash
 # ffmpeg: Trim silence below -50dB for >0.5 seconds
 ffmpeg -i input.wav -af silenceremove=1:0:-50dB:1:0.5:-50dB output.wav
 ```
 
 **Considerations:**
+
 - Leave small amount of silence (0.01-0.05s) for natural decay
 - Be careful with ambient loops (may need leading/trailing silence for crossfade)
 
@@ -577,17 +659,20 @@ ffmpeg -i input.wav -af silenceremove=1:0:-50dB:1:0.5:-50dB output.wav
 Convert stereo to mono for 3D positioned sounds.
 
 **Why:**
+
 - 3D audio spatializes sound based on position (stereo pre-baked panning conflicts)
 - 50% file size reduction
 - Better performance (half the data)
 
 **Process:**
+
 ```bash
 # ffmpeg: Convert stereo to mono
 ffmpeg -i input_stereo.wav -ac 1 output_mono.wav
 ```
 
 **When to Keep Stereo:**
+
 - 2D UI sounds (not spatialized)
 - Music (non-diegetic)
 - Ambient loops (non-point-source sounds)
@@ -597,22 +682,26 @@ ffmpeg -i input_stereo.wav -ac 1 output_mono.wav
 Lower sample rate for appropriate audio types.
 
 **Targets:**
+
 - **Music:** 44100 Hz (maintain quality)
 - **Voice:** 22050 Hz (speech doesn't need high frequencies)
 - **Simple SFX:** 22050 Hz (explosions, impacts)
 - **Detailed SFX:** 44100 Hz (glass breaking, foliage rustling)
 
 **Process:**
+
 ```bash
 # ffmpeg: Resample to 22050 Hz
 ffmpeg -i input.wav -ar 22050 output.wav
 ```
 
 **Benefits:**
+
 - 50% file size reduction (44.1kHz → 22.05kHz)
 - Faster playback (less data to process)
 
 **Caution:**
+
 - Don't reduce below 22050 Hz (Nyquist theorem: can't reproduce >11kHz frequencies)
 - Test to ensure quality is acceptable
 
@@ -621,17 +710,20 @@ ffmpeg -i input.wav -ar 22050 output.wav
 Use variable bitrate instead of constant bitrate for better quality-to-size ratio.
 
 **How VBR Works:**
+
 - Allocates more bits to complex audio sections
 - Uses fewer bits for simple sections
 - Same average bitrate, better perceived quality
 
 **Example (OGG Vorbis):**
+
 ```bash
 # Use quality mode (VBR) instead of bitrate mode
 ffmpeg -i input.wav -c:a libvorbis -q:a 5 output.ogg  # Quality 5 ≈ 160 kbps average
 ```
 
 **Quality Settings (OGG Vorbis):**
+
 - q 0-1: ~64 kbps (low quality)
 - q 2-3: ~96 kbps (medium quality)
 - q 4-5: ~128-160 kbps (high quality)
@@ -645,11 +737,13 @@ ffmpeg -i input.wav -c:a libvorbis -q:a 5 output.ogg  # Quality 5 ≈ 160 kbps a
 Leverage psychoacoustic models for better compression.
 
 **Techniques:**
+
 - **High-Frequency Cutoff:** Reduce frequencies above 16-18 kHz (often inaudible)
 - **Joint Stereo:** Encode stereo efficiently by storing mid/side instead of left/right
 - **Temporal Masking:** Reduce precision during loud transients (masked by louder sounds)
 
 **Most codecs apply these automatically, but can configure:**
+
 ```bash
 # ffmpeg: Enable joint stereo for MP3
 ffmpeg -i input.wav -c:a libmp3lame -b:a 128k -joint_stereo 1 output.mp3
@@ -660,16 +754,19 @@ ffmpeg -i input.wav -c:a libmp3lame -b:a 128k -joint_stereo 1 output.mp3
 Store seamless loop information in audio file metadata.
 
 **Benefits:**
+
 - Perfect loops without clicks or gaps
 - No need for code-based looping logic
 - Works across platforms (if engine supports)
 
 **Implementation:**
+
 - Use loop points in audio editor (Audacity, Adobe Audition)
 - Export with loop metadata
 - Engine reads loop points and loops seamlessly
 
 **Unity Example:**
+
 ```csharp
 // Unity doesn't support loop metadata natively
 // Implement via script:
@@ -679,6 +776,7 @@ source.loop = true;  // Standard looping
 ```
 
 **Godot Example:**
+
 ```gdscript
 # Godot supports loop metadata in OGG files
 # Set loop points in audio editor
@@ -690,11 +788,13 @@ source.loop = true;  // Standard looping
 ### Mobile
 
 **Constraints:**
+
 - Limited memory (512MB-2GB total, ~50-100MB for audio)
 - Weak speakers (poor bass response)
 - Battery consumption (minimize CPU usage)
 
 **Optimizations:**
+
 - Use AAC (iOS) or OGG (Android) with modest bitrates (64-96 kbps)
 - Reduce sample rate to 22050 Hz where acceptable
 - Minimize audio memory footprint (<50 MB loaded audio)
@@ -705,11 +805,13 @@ source.loop = true;  // Standard looping
 ### Web
 
 **Constraints:**
+
 - Download size critical (user bandwidth)
 - Browser codec support varies
 - Streaming over network (latency)
 
 **Optimizations:**
+
 - Use aggressive compression (OGG Vorbis 64-96 kbps)
 - Provide multiple formats (OGG + MP3/AAC) for compatibility
 - Use Web Audio API for mixing and effects (offload to browser)
@@ -717,26 +819,29 @@ source.loop = true;  // Standard looping
 - Load essential audio first, defer non-critical audio
 
 **Audio Sprite Sheets:**
+
 - Combine multiple short SFX into one file
 - Store timing metadata (offset, duration per sound)
 - Load one file instead of many (reduces HTTP requests)
 
 ```json
 {
-  "footstep": {"offset": 0.0, "duration": 0.5},
-  "jump": {"offset": 0.5, "duration": 0.3},
-  "land": {"offset": 0.8, "duration": 0.4}
+  "footstep": { "offset": 0.0, "duration": 0.5 },
+  "jump": { "offset": 0.5, "duration": 0.3 },
+  "land": { "offset": 0.8, "duration": 0.4 }
 }
 ```
 
 ### VR
 
 **Constraints:**
+
 - High frame rate requirement (90-120 FPS, audio latency critical)
 - Spatialized 3D audio is essential
 - Immersion requires high-quality audio
 
 **Optimizations:**
+
 - Use low-latency audio formats (uncompressed or ADPCM)
 - Prioritize 3D spatialization over stereo music quality
 - Use HRTF (Head-Related Transfer Function) for realistic 3D audio
@@ -750,6 +855,7 @@ source.loop = true;  // Standard looping
 Automate audio optimization with FFmpeg.
 
 **Example Script (Bash):**
+
 ```bash
 #!/bin/bash
 # Convert all WAV files to OGG Vorbis at 128 kbps
@@ -761,6 +867,7 @@ done
 ```
 
 **Advanced Script with Categories:**
+
 ```bash
 #!/bin/bash
 
@@ -788,6 +895,7 @@ done
 More flexible processing with Python.
 
 **Example:**
+
 ```python
 import subprocess
 import os
@@ -840,17 +948,20 @@ for category, config in categories.items():
 ### Quality Testing
 
 **Listening Tests:**
+
 - Compare optimized audio to source
 - Test on target hardware (mobile speakers, headphones, TV speakers)
 - Listen for compression artifacts (warbling, metallic sound)
 - Verify loop points are seamless
 
 **Automated Testing:**
+
 - Measure Peak, RMS, LUFS with tools (ffmpeg, SoX)
 - Validate file size reductions
 - Check for clipping (peak > 0 dBFS)
 
 **A/B Testing:**
+
 ```bash
 # Play source and optimized side-by-side
 ffplay source.wav &
@@ -860,6 +971,7 @@ ffplay optimized.ogg
 ### Performance Testing
 
 **Metrics to Track:**
+
 - Total audio memory usage (loaded clips)
 - Streaming bandwidth (MB/s)
 - CPU usage for audio processing
@@ -867,10 +979,12 @@ ffplay optimized.ogg
 - Audio latency (input to playback)
 
 **Unity Profiler:**
+
 - Check "Audio" section for voice count, memory usage
 - Monitor "CPU Usage → Audio" for processing cost
 
 **Custom Profiling:**
+
 ```csharp
 // Unity example
 void LogAudioMemoryUsage() {
@@ -890,10 +1004,12 @@ void LogAudioMemoryUsage() {
 **Symptoms:** Warbling, underwater sound, metallic tones
 
 **Causes:**
+
 - Bitrate too low for complexity of audio
 - Low-quality encoder settings
 
 **Solutions:**
+
 - Increase bitrate (try +32 kbps)
 - Use higher-quality encoder (OGG instead of MP3)
 - Use VBR instead of CBR
@@ -902,10 +1018,12 @@ void LogAudioMemoryUsage() {
 ### Problem: Clicks/Pops at Loop Points
 
 **Causes:**
+
 - Loop point not at zero-crossing
 - Discontinuity in waveform at loop point
 
 **Solutions:**
+
 - Adjust loop points to zero-crossings in audio editor
 - Add crossfade at loop point (0.01-0.05s)
 - Use loop metadata instead of code-based looping
@@ -913,11 +1031,13 @@ void LogAudioMemoryUsage() {
 ### Problem: Audio Clipping/Distortion
 
 **Causes:**
+
 - Audio exceeds 0 dBFS (digital clipping)
 - Over-normalization
 - Too much compression/limiting
 
 **Solutions:**
+
 - Apply limiter with -0.5 dB ceiling
 - Reduce gain before limiting
 - Check for clipping in source audio
@@ -926,11 +1046,13 @@ void LogAudioMemoryUsage() {
 ### Problem: Inconsistent Volume Levels
 
 **Causes:**
+
 - No normalization applied
 - Different source audio levels
 - Mixing without gain staging
 
 **Solutions:**
+
 - Apply LUFS normalization to all audio
 - Create audio mixing categories (music, SFX, voice) with volume controls
 - Test volume levels in-game
@@ -938,11 +1060,13 @@ void LogAudioMemoryUsage() {
 ### Problem: High Memory Usage
 
 **Causes:**
+
 - Too many clips loaded into memory
 - Not streaming music
 - Uncompressed audio in build
 
 **Solutions:**
+
 - Stream long audio (music, ambient loops)
 - Use audio banks, load/unload by scene
 - Verify compressed audio in build (check import settings)

@@ -7,6 +7,7 @@ This example demonstrates adding phases or agents to a standard Henry command to
 ## Scenario
 
 **Standard henry-feature workflow (7 phases):**
+
 1. Requirements and scope
 2. Design
 3. Implementation
@@ -49,6 +50,7 @@ End-to-end feature development with comprehensive documentation generation.
 **Goal**: Define feature requirements and scope
 
 **Actions**:
+
 1. Clarify feature requirements with user
 2. Define success criteria
 3. Identify dependencies
@@ -63,6 +65,7 @@ End-to-end feature development with comprehensive documentation generation.
 **Goal**: Design feature architecture and UX
 
 **Actions**:
+
 1. Launch ux-ui-designer for UX design (if UI involved)
 2. Launch backend-engineer for API design (if backend involved)
 3. Launch frontend-engineer for component design (if frontend involved)
@@ -80,6 +83,7 @@ End-to-end feature development with comprehensive documentation generation.
 **Goal**: Implement the feature
 
 **Actions**:
+
 1. Launch backend-engineer to implement backend (if applicable)
 2. Launch frontend-engineer to implement frontend (if applicable)
 3. Implement business logic
@@ -95,6 +99,7 @@ End-to-end feature development with comprehensive documentation generation.
 **Goal**: Comprehensive testing
 
 **Actions**:
+
 1. Launch qa-tester for test strategy
 2. Write unit tests
 3. Write integration tests
@@ -110,6 +115,7 @@ End-to-end feature development with comprehensive documentation generation.
 **Goal**: Review code quality
 
 **Actions**:
+
 1. Launch backend-engineer to review backend code
 2. Launch frontend-engineer to review frontend code
 3. Check for best practices
@@ -125,6 +131,7 @@ End-to-end feature development with comprehensive documentation generation.
 **Goal**: Optimize feature performance
 
 **Actions**:
+
 1. Launch performance-engineer to measure baseline
 2. Identify bottlenecks
 3. Implement optimizations
@@ -139,6 +146,7 @@ End-to-end feature development with comprehensive documentation generation.
 **Goal**: Create comprehensive feature documentation
 
 **Actions**:
+
 1. Generate API documentation from code
    - OpenAPI/Swagger spec for REST APIs
    - GraphQL schema documentation
@@ -163,6 +171,7 @@ End-to-end feature development with comprehensive documentation generation.
 **Agents**: backend-engineer, frontend-engineer (depending on feature)
 
 **Deliverables**:
+
 - API documentation (auto-generated from code)
 - User guides with examples
 - Architecture decision records (ADRs)
@@ -176,11 +185,13 @@ End-to-end feature development with comprehensive documentation generation.
 Feature development complete with comprehensive documentation:
 
 **Implementation:**
+
 - ✅ Feature implemented and tested
 - ✅ Code reviewed and approved
 - ✅ Performance optimized
 
 **Documentation:**
+
 - ✅ API documentation generated
 - ✅ User guides created
 - ✅ Architecture decisions documented
@@ -188,11 +199,13 @@ Feature development complete with comprehensive documentation:
 - ✅ Troubleshooting guide available
 
 **Deliverables:**
+
 - Working feature ready for production
 - Complete documentation for developers and users
 - Architecture decisions recorded for future reference
 
 **Next Steps:**
+
 - Deploy to staging environment
 - Share documentation with team
 - Gather user feedback
@@ -203,18 +216,25 @@ Feature development complete with comprehensive documentation:
 
 **API feature with docs:**
 ```
+
 /feature-with-docs user-authentication "OAuth 2.0 authentication"
+
 ```
 
 **Frontend component with docs:**
 ```
+
 /feature-with-docs data-table "Sortable, filterable data table component"
+
 ```
 
 **Full-stack feature with docs:**
 ```
+
 /feature-with-docs notification-system "Real-time notifications"
+
 ```
+
 ```
 
 ### Usage
@@ -234,6 +254,7 @@ Can adjust Phase 7 based on project needs:
 ## Phase 7: API Documentation
 
 **Actions**:
+
 1. Generate OpenAPI 3.0 specification
 2. Create API reference documentation
 3. Provide usage examples with curl
@@ -247,6 +268,7 @@ Can adjust Phase 7 based on project needs:
 ## Phase 7: SDK Documentation
 
 **Actions**:
+
 1. Generate API documentation (JSDoc, TypeDoc, Sphinx)
 2. Create getting started guide
 3. Provide code examples for common use cases
@@ -260,6 +282,7 @@ Can adjust Phase 7 based on project needs:
 ## Phase 7: User Documentation
 
 **Actions**:
+
 1. Create feature overview
 2. Write step-by-step usage guide with screenshots
 3. Document common workflows
@@ -270,12 +293,14 @@ Can adjust Phase 7 based on project needs:
 ## When to Use Extended Workflow
 
 ### Use When:
+
 - ✅ Standard command is 80% of what you need
 - ✅ Additional phase(s) are critical for project
 - ✅ Will use extended workflow repeatedly
 - ✅ Team needs consistent extended process
 
 ### Don't Use When:
+
 - ❌ Only need extension once (use inline instead)
 - ❌ Extension is optional/nice-to-have
 - ❌ Upstream command will soon include this
@@ -293,6 +318,7 @@ Add deployment preparation phase:
 **Goal**: Prepare feature for production deployment
 
 **Actions**:
+
 1. Launch devops-sre-architect
 2. Create deployment plan
 3. Set up feature flags
@@ -310,6 +336,7 @@ Add dedicated security phase:
 **Goal**: Comprehensive security assessment
 
 **Actions**:
+
 1. Launch security-engineer
 2. Threat model the feature
 3. Security testing
@@ -329,6 +356,7 @@ Add user research before design:
 **Agents**: ux-researcher
 
 **Actions**:
+
 1. User interviews
 2. Competitive analysis
 3. Define user personas
@@ -364,15 +392,19 @@ Add phase and change execution order:
 # Feature with Security-First
 
 ## Phase 1: Security Planning (NEW)
+
 [Plan security from start]
 
 ## Phase 2: Design (with security)
+
 [Design with security in mind]
 
 ## Phase 3: Implementation
+
 [Standard implementation]
 
 ## Phase 4: Security Validation (NEW)
+
 [Verify security requirements met]
 ```
 
@@ -388,26 +420,29 @@ Add conditional phase:
 **Condition**: Only if performance targets not met
 
 If Phase 4 testing reveals performance issues:
-  → Run optimization phase
+→ Run optimization phase
 Otherwise:
-  → Skip to documentation
+→ Skip to documentation
 ```
 
 ## Tips
 
 **Planning extensions:**
+
 - Start with standard workflow
 - Identify missing phases
 - Assess if extension is truly needed
 - Consider if can use command chaining instead
 
 **Implementing extensions:**
+
 - Follow same phase structure as standard commands
 - Maintain consistent quality and detail
 - Document why extension needed
 - Keep extension focused (1-2 additional phases typically)
 
 **Maintaining extensions:**
+
 - Review upstream command for improvements
 - Merge beneficial changes
 - Consider if extension still needed
@@ -416,17 +451,18 @@ Otherwise:
 ## Maintenance Considerations
 
 **Version tracking:**
+
 ```yaml
 # Track which upstream version you extended from
 ---
 description: Feature development with documentation
-version: "1.2.0"  # Your version
+version: '1.2.0' # Your version
 ---
-
 <!-- Extended from henry-feature v1.0.0 -->
 ```
 
 **Syncing with upstream:**
+
 ```bash
 # Check for upstream changes
 git diff HEAD~5 plugins/henry-orchestrator/commands/henry-feature.md
@@ -436,6 +472,7 @@ git diff HEAD~5 plugins/henry-orchestrator/commands/henry-feature.md
 
 **Documentation:**
 Document extension rationale:
+
 ```markdown
 <!-- Extended henry-feature with Phase 7: Documentation
    Rationale: Documentation critical for our API features

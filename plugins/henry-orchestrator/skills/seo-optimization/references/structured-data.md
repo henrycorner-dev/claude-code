@@ -17,6 +17,7 @@ JSON-LD (JavaScript Object Notation for Linked Data) is the recommended format b
 - Simple validation
 
 **Alternatives (less recommended):**
+
 - Microdata - Inline with HTML
 - RDFa - Inline with HTML attributes
 
@@ -24,11 +25,11 @@ JSON-LD (JavaScript Object Notation for Linked Data) is the recommended format b
 
 ```html
 <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "TypeName",
-  "property": "value"
-}
+  {
+    "@context": "https://schema.org",
+    "@type": "TypeName",
+    "property": "value"
+  }
 </script>
 ```
 
@@ -70,12 +71,14 @@ For blog posts, news articles, and long-form content.
 ```
 
 **Required properties:**
+
 - headline
 - image (array or single object)
 - datePublished
 - author
 
 **Recommended properties:**
+
 - dateModified
 - publisher
 - description
@@ -176,6 +179,7 @@ For e-commerce product pages.
 ```
 
 **Availability values:**
+
 - `https://schema.org/InStock`
 - `https://schema.org/OutOfStock`
 - `https://schema.org/PreOrder`
@@ -247,10 +251,7 @@ For author profiles, team members, or individual pages.
     "addressRegion": "CA",
     "addressCountry": "US"
   },
-  "sameAs": [
-    "https://twitter.com/johndoe",
-    "https://linkedin.com/in/johndoe"
-  ],
+  "sameAs": ["https://twitter.com/johndoe", "https://linkedin.com/in/johndoe"],
   "alumniOf": {
     "@type": "EducationalOrganization",
     "name": "Stanford University"
@@ -334,6 +335,7 @@ For FAQ pages, enables FAQ rich results in search.
 ```
 
 **Best practices:**
+
 - Include 5-10 questions per page
 - Provide complete, helpful answers
 - Use natural language
@@ -515,6 +517,7 @@ For concerts, conferences, webinars, and other events.
 ```
 
 **eventAttendanceMode values:**
+
 - `OfflineEventAttendanceMode` - In-person only
 - `OnlineEventAttendanceMode` - Virtual only
 - `MixedEventAttendanceMode` - Hybrid event
@@ -595,6 +598,7 @@ For physical business locations.
 ```
 
 **Specific business types:**
+
 - Restaurant
 - Hotel
 - Store
@@ -738,15 +742,12 @@ export default function BlogPost({ post }) {
 ```jsx
 export function StructuredData({ data }) {
   return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
-    />
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />
   );
 }
 
 // Usage
-<StructuredData data={productSchema} />
+<StructuredData data={productSchema} />;
 ```
 
 ### Vue/Nuxt
@@ -797,6 +798,7 @@ https://validator.schema.org/
 ### Google Search Console
 
 Monitor structured data in production:
+
 - Navigate to Enhancements section
 - View detected schema types
 - See errors and valid items
@@ -805,6 +807,7 @@ Monitor structured data in production:
 ## Best Practices
 
 ✅ **DO:**
+
 - Use JSON-LD format (recommended by Google)
 - Include all required properties for schema type
 - Provide accurate, up-to-date information
@@ -815,6 +818,7 @@ Monitor structured data in production:
 - Use ISO 8601 format for dates and durations
 
 ❌ **DON'T:**
+
 - Include content not visible on page
 - Use structured data for deceptive purposes
 - Violate Google's structured data guidelines
@@ -831,6 +835,7 @@ Monitor structured data in production:
 Each schema type has required properties. Missing them prevents rich results.
 
 **Check documentation:**
+
 - https://schema.org/Article
 - https://developers.google.com/search/docs/appearance/structured-data
 
@@ -841,6 +846,7 @@ Structured data must match visible page content. Don't add data not present on p
 ### Invalid Date Format
 
 Use ISO 8601 format:
+
 - `2025-01-15` (date only)
 - `2025-01-15T08:00:00+00:00` (date and time with timezone)
 - `PT30M` (duration: 30 minutes)
@@ -848,6 +854,7 @@ Use ISO 8601 format:
 ### Image Requirements Not Met
 
 Different rich results require specific image formats:
+
 - Article: 1200px wide minimum, 16:9, 4:3, or 1:1 aspect ratio
 - Product: High resolution, multiple views
 - Recipe: Final dish photo

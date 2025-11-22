@@ -68,6 +68,7 @@ const CameraComponent = () => {
 ### Native Camera APIs
 
 **Android:**
+
 ```kotlin
 import android.hardware.camera2.*
 
@@ -93,6 +94,7 @@ class CameraManager {
 ```
 
 **iOS:**
+
 ```swift
 import AVFoundation
 
@@ -179,7 +181,7 @@ export const getCurrentPosition = () => {
   });
 };
 
-export const watchPosition = (callback) => {
+export const watchPosition = callback => {
   return Geolocation.watchPosition(
     position => callback(position.coords),
     error => console.error(error),
@@ -191,6 +193,7 @@ export const watchPosition = (callback) => {
 ### Native Location APIs
 
 **Android:**
+
 ```kotlin
 import com.google.android.gms.location.*
 
@@ -226,6 +229,7 @@ class LocationManager(private val context: Context) {
 ```
 
 **iOS:**
+
 ```swift
 import CoreLocation
 
@@ -308,7 +312,7 @@ export const checkBiometrics = async () => {
 export const authenticate = async () => {
   try {
     const { success } = await biometrics.simplePrompt({
-      promptMessage: 'Confirm fingerprint'
+      promptMessage: 'Confirm fingerprint',
     });
     return success;
   } catch (error) {
@@ -320,6 +324,7 @@ export const authenticate = async () => {
 ### Native Biometric APIs
 
 **Android:**
+
 ```kotlin
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
@@ -355,6 +360,7 @@ class BiometricManager(private val activity: FragmentActivity) {
 ```
 
 **iOS:**
+
 ```swift
 import LocalAuthentication
 
@@ -383,6 +389,7 @@ class BiometricManager {
 ### Accelerometer
 
 **Flutter (sensors_plus):**
+
 ```dart
 import 'package:sensors_plus/sensors_plus.dart';
 
@@ -400,6 +407,7 @@ void stopListening() {
 ```
 
 **React Native (react-native-sensors):**
+
 ```javascript
 import { accelerometer } from 'react-native-sensors';
 
@@ -414,6 +422,7 @@ subscription.unsubscribe();
 ### Gyroscope
 
 **Flutter:**
+
 ```dart
 import 'package:sensors_plus/sensors_plus.dart';
 
@@ -423,6 +432,7 @@ gyroscopeEvents.listen((GyroscopeEvent event) {
 ```
 
 **Native Android:**
+
 ```kotlin
 import android.hardware.Sensor
 import android.hardware.SensorEvent
@@ -500,7 +510,7 @@ import { BleManager } from 'react-native-ble-plx';
 
 const manager = new BleManager();
 
-export const scanDevices = (callback) => {
+export const scanDevices = callback => {
   manager.startDeviceScan(null, null, (error, device) => {
     if (error) {
       console.error(error);
@@ -514,7 +524,7 @@ export const scanDevices = (callback) => {
   }, 5000);
 };
 
-export const connectToDevice = async (deviceId) => {
+export const connectToDevice = async deviceId => {
   const device = await manager.connectToDevice(deviceId);
   await device.discoverAllServicesAndCharacteristics();
   return device;
@@ -559,7 +569,7 @@ export const writeFile = async (filename, content) => {
   await RNFS.writeFile(path, content, 'utf8');
 };
 
-export const readFile = async (filename) => {
+export const readFile = async filename => {
   const path = `${RNFS.DocumentDirectoryPath}/${filename}`;
   return await RNFS.readFile(path, 'utf8');
 };
@@ -600,7 +610,7 @@ import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 
 const options = {
   enableVibrateFallback: true,
-  ignoreAndroidSystemSettings: false
+  ignoreAndroidSystemSettings: false,
 };
 
 export const lightImpact = () => {
@@ -673,15 +683,15 @@ export const checkConnectivity = async () => {
   const state = await NetInfo.fetch();
   return {
     isConnected: state.isConnected,
-    type: state.type
+    type: state.type,
   };
 };
 
-export const subscribeToNetworkChanges = (callback) => {
+export const subscribeToNetworkChanges = callback => {
   return NetInfo.addEventListener(state => {
     callback({
       isConnected: state.isConnected,
-      type: state.type
+      type: state.type,
     });
   });
 };

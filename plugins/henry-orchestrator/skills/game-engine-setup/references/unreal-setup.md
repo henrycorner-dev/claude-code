@@ -7,6 +7,7 @@ Complete guide to setting up, organizing, and working with Unreal Engine project
 ### Creating a New Project
 
 **Using Epic Games Launcher:**
+
 1. Open Epic Games Launcher
 2. Navigate to Unreal Engine → Library
 3. Click "Launch" on desired engine version
@@ -24,6 +25,7 @@ Complete guide to setting up, organizing, and working with Unreal Engine project
 7. Click "Create"
 
 **Template Selection Guide:**
+
 - **Prototype/Learning**: First Person or Third Person (includes player controller)
 - **Custom Game**: Blank (start from scratch)
 - **Mobile Game**: Blank → Mobile/Tablet, Scalable quality
@@ -33,18 +35,21 @@ Complete guide to setting up, organizing, and working with Unreal Engine project
 ### Blueprint vs C++ Project
 
 **Blueprint Project:**
+
 - Pure visual scripting
 - Faster prototyping
 - Designer-friendly
 - Can add C++ later
 
 **C++ Project:**
+
 - Performance-critical code in C++
 - Blueprint for designers
 - Requires Visual Studio (Windows) or Xcode (Mac)
 - Recommended for large/complex projects
 
 **Hybrid Approach (Recommended):**
+
 - Core systems in C++
 - Game logic in Blueprints
 - Best of both worlds
@@ -107,21 +112,22 @@ Content/
 ### Naming Conventions
 
 **Prefixes by asset type:**
-- **BP_** - Blueprint: `BP_PlayerCharacter`, `BP_GameMode`
-- **M_** - Material: `M_CharacterSkin`, `M_Wall`
-- **MI_** - Material Instance: `MI_CharacterSkin_Red`
-- **T_** - Texture: `T_Character_Diffuse`, `T_Wall_Normal`
-- **SM_** - Static Mesh: `SM_Rock`, `SM_Building`
-- **SK_** - Skeletal Mesh: `SK_Character`, `SK_Enemy`
-- **AC_** - Animation Composite: `AC_Character_Idle`
-- **AM_** - Animation Montage: `AM_Character_Attack`
-- **ABP_** - Animation Blueprint: `ABP_Character`
-- **WBP_** - Widget Blueprint (UI): `WBP_MainMenu`, `WBP_HealthBar`
-- **BPI_** - Blueprint Interface: `BPI_Damageable`
-- **E_** - Enum: `E_WeaponType`
-- **S_** - Struct: `S_WeaponData`
-- **SFX_** - Sound Effect: `SFX_Gunshot`, `SFX_Footstep`
-- **MUS_** - Music: `MUS_MainTheme`
+
+- **BP\_** - Blueprint: `BP_PlayerCharacter`, `BP_GameMode`
+- **M\_** - Material: `M_CharacterSkin`, `M_Wall`
+- **MI\_** - Material Instance: `MI_CharacterSkin_Red`
+- **T\_** - Texture: `T_Character_Diffuse`, `T_Wall_Normal`
+- **SM\_** - Static Mesh: `SM_Rock`, `SM_Building`
+- **SK\_** - Skeletal Mesh: `SK_Character`, `SK_Enemy`
+- **AC\_** - Animation Composite: `AC_Character_Idle`
+- **AM\_** - Animation Montage: `AM_Character_Attack`
+- **ABP\_** - Animation Blueprint: `ABP_Character`
+- **WBP\_** - Widget Blueprint (UI): `WBP_MainMenu`, `WBP_HealthBar`
+- **BPI\_** - Blueprint Interface: `BPI_Damageable`
+- **E\_** - Enum: `E_WeaponType`
+- **S\_** - Struct: `S_WeaponData`
+- **SFX\_** - Sound Effect: `SFX_Gunshot`, `SFX_Footstep`
+- **MUS\_** - Music: `MUS_MainTheme`
 
 **PascalCase for everything:** `BP_PlayerCharacter`, `M_MetalShiny`
 
@@ -158,6 +164,7 @@ Level01 (Persistent Level)
 ```
 
 **Use folders in World Outliner:**
+
 - Right-click → Create Folder
 - Drag actors into folders
 - Collapse folders for clean outliner
@@ -167,11 +174,13 @@ Level01 (Persistent Level)
 Use level streaming for large worlds:
 
 **Types:**
+
 - **Always Loaded**: Core level with lighting, game mode
 - **Blueprint Streaming**: Load/unload via Blueprint
 - **Distance Streaming**: Auto-load based on player proximity
 
 **Example setup:**
+
 1. Create persistent level: `Level01_Persistent`
 2. Create sub-levels:
    - `Level01_Lighting` (always loaded)
@@ -181,6 +190,7 @@ Use level streaming for large worlds:
 4. Right-click level → Change Streaming Method
 
 **Loading level via Blueprint:**
+
 ```
 Load Stream Level (Level01_Geometry, Make Visible After Load, Should Block on Load)
 ```
@@ -190,16 +200,19 @@ Load Stream Level (Level01_Geometry, Make Visible After Load, Should Block on Lo
 ### Blueprint Types
 
 **Level Blueprint:**
+
 - One per level
 - Level-specific logic
 - Access via Blueprints → Open Level Blueprint
 
 **Blueprint Class:**
+
 - Reusable actor/object
 - Placed in levels
 - Create: Content Browser → Blueprint Class
 
 **Common Blueprint Classes:**
+
 - **Actor**: Placeable in level (props, pickups)
 - **Pawn**: Controlled by player/AI (characters, vehicles)
 - **Character**: Pawn with movement component (humanoid characters)
@@ -216,12 +229,14 @@ Load Stream Level (Level01_Geometry, Make Visible After Load, Should Block on Lo
 3. Double-click to open Blueprint Editor
 
 **Blueprint Editor sections:**
+
 - **Viewport**: Visual preview
 - **Components**: Hierarchy of components
 - **Event Graph**: Visual scripting
 - **Construction Script**: Runs when placed/moved
 
 **Add components:**
+
 1. Components panel → Add Component → Static Mesh
 2. Rename to "Mesh"
 3. In Details, set Static Mesh to desired mesh
@@ -229,6 +244,7 @@ Load Stream Level (Level01_Geometry, Make Visible After Load, Should Block on Lo
 5. Rename to "CollisionBox"
 
 **Add logic in Event Graph:**
+
 ```
 Event BeginPlay
   → Set Actor Enable Collision (Enabled)
@@ -242,6 +258,7 @@ Event ActorBeginOverlap
 ### Blueprint Variables
 
 **Creating variables:**
+
 1. My Blueprint panel → + Variable
 2. Name: `PickupValue`
 3. Variable Type: Integer
@@ -250,6 +267,7 @@ Event ActorBeginOverlap
 6. Category: "Pickup Settings"
 
 **Variable types:**
+
 - **Boolean**: True/false
 - **Integer**: Whole numbers
 - **Float**: Decimals
@@ -261,12 +279,14 @@ Event ActorBeginOverlap
 ### Blueprint Functions
 
 **Creating custom functions:**
+
 1. My Blueprint → + Function
 2. Name: `GivePoints`
 3. Add input: `Points` (Integer)
 4. Drag from entry node to add logic
 
 **Using functions:**
+
 ```
 Event ActorBeginOverlap
   → Cast to PlayerCharacter
@@ -277,6 +297,7 @@ Event ActorBeginOverlap
 ### Blueprint Events
 
 **Common events:**
+
 - **Event BeginPlay**: Actor spawned/level loaded
 - **Event Tick**: Every frame
 - **Event ActorBeginOverlap**: Collision starts
@@ -284,6 +305,7 @@ Event ActorBeginOverlap
 - **Event AnyDamage**: Actor takes damage
 
 **Custom events:**
+
 1. My Blueprint → + Event Dispatcher or Custom Event
 2. Use to trigger logic from other Blueprints
 
@@ -292,16 +314,19 @@ Event ActorBeginOverlap
 ### Setting Up C++ Development
 
 **Requirements:**
+
 - **Windows**: Visual Studio 2019/2022 with C++ tools
 - **Mac**: Xcode with command-line tools
 
 **Generate Visual Studio files:**
+
 1. Right-click .uproject file → Generate Visual Studio project files
 2. Open .sln file in Visual Studio
 
 ### Creating C++ Class
 
 **From Unreal Editor:**
+
 1. Tools → New C++ Class
 2. Choose parent class (Actor, Pawn, Character, etc.)
 3. Name class (e.g., `PickupBase`)
@@ -309,12 +334,14 @@ Event ActorBeginOverlap
 5. Click Create Class
 
 **Editor generates:**
+
 - `PickupBase.h` (header)
 - `PickupBase.cpp` (implementation)
 
 ### Basic C++ Actor
 
 **PickupBase.h:**
+
 ```cpp
 #pragma once
 
@@ -359,6 +386,7 @@ private:
 ```
 
 **PickupBase.cpp:**
+
 ```cpp
 #include "PickupBase.h"
 #include "Components/StaticMeshComponent.h"
@@ -413,6 +441,7 @@ void APickupBase::OnPickup(AActor* Collector)
 ### UPROPERTY Specifiers
 
 **Common specifiers:**
+
 - `EditAnywhere`: Editable in details panel and Blueprint defaults
 - `EditDefaultsOnly`: Only in Blueprint defaults
 - `EditInstanceOnly`: Only in placed instances
@@ -424,6 +453,7 @@ void APickupBase::OnPickup(AActor* Collector)
 ### UFUNCTION Specifiers
 
 **Common specifiers:**
+
 - `BlueprintCallable`: Can call from Blueprint
 - `BlueprintPure`: Pure function (no execution pin)
 - `BlueprintImplementableEvent`: Implemented in Blueprint
@@ -433,11 +463,13 @@ void APickupBase::OnPickup(AActor* Collector)
 ### Blueprint Extending C++ Classes
 
 **Create Blueprint from C++ class:**
+
 1. Content Browser → Right-click C++ class (`PickupBase`)
 2. Create Blueprint class based on PickupBase
 3. Name: `BP_Pickup_Coin`
 
 **Override functions in Blueprint:**
+
 - If function is `BlueprintImplementableEvent`, implement in Blueprint Event Graph
 - C++ provides default, Blueprint can customize
 
@@ -446,6 +478,7 @@ void APickupBase::OnPickup(AActor* Collector)
 ### Actor Lifecycle
 
 **Order of execution:**
+
 1. **Constructor** (`AMyActor::AMyActor()`) - Create components, set defaults
 2. **PostInitializeComponents()** - After all components initialized
 3. **BeginPlay()** - Actor spawned and ready
@@ -458,6 +491,7 @@ void APickupBase::OnPickup(AActor* Collector)
 **Creating custom component (C++):**
 
 **MyMovementComponent.h:**
+
 ```cpp
 #pragma once
 
@@ -492,6 +526,7 @@ private:
 ```
 
 **Using component:**
+
 ```cpp
 // In Actor constructor
 MyMovementComponent = CreateDefaultSubobject<UMyMovementComponent>(TEXT("MyMovement"));
@@ -503,21 +538,25 @@ MyMovementComponent->MoveForward(1.0f);
 ### Blueprint Interfaces
 
 **Create Blueprint Interface:**
+
 1. Content Browser → Blueprint → Blueprint Interface
 2. Name: `BPI_Damageable`
 3. Add function: `TakeDamage` with input `DamageAmount` (Float)
 
 **Implement in Blueprint:**
+
 1. Open Blueprint → Class Settings → Interfaces → Add `BPI_Damageable`
 2. My Blueprint → Interfaces → TakeDamage → Implement
 
 **Call interface from another Blueprint:**
+
 ```
 Target Actor → Does Implement Interface (BPI_Damageable)
   → [True] Send Message (TakeDamage, DamageAmount = 50.0)
 ```
 
 **Benefits:**
+
 - Communicate between Blueprints without direct references
 - Polymorphism (different actors respond differently)
 
@@ -528,16 +567,20 @@ Target Actor → Does Implement Interface (BPI_Damageable)
 **Purpose:** Defines game rules, win conditions, spawning
 
 **Create custom Game Mode:**
+
 1. Blueprint Class → Game Mode Base
 2. Name: `BP_GameMode`
 
 **Set as default:**
+
 - Project Settings → Maps & Modes → Default GameMode → `BP_GameMode`
 
 **Override in level:**
+
 - World Settings → Game Mode Override → `BP_GameMode`
 
 **Common overrides:**
+
 - `BeginPlay`: Initialize game state
 - `PostLogin`: Player joins
 - `Logout`: Player leaves
@@ -547,13 +590,16 @@ Target Actor → Does Implement Interface (BPI_Damageable)
 **Purpose:** Handles player input, camera control
 
 **Create custom Player Controller:**
+
 1. Blueprint Class → Player Controller
 2. Name: `BP_PlayerController`
 
 **Assign in Game Mode:**
+
 - `BP_GameMode` → Details → Player Controller Class → `BP_PlayerController`
 
 **Input handling:**
+
 ```
 Event InputAction Fire
   → Get Controlled Pawn
@@ -564,10 +610,12 @@ Event InputAction Fire
 ### Game State and Player State
 
 **Game State:**
+
 - Replicated game data (score, time remaining)
 - Create: Blueprint Class → Game State Base
 
 **Player State:**
+
 - Per-player data (kills, deaths, level)
 - Create: Blueprint Class → Player State
 
@@ -576,15 +624,18 @@ Event InputAction Fire
 ### Setting Up Enhanced Input
 
 **Enable plugin:**
+
 1. Edit → Plugins → Search "Enhanced Input"
 2. Enable and restart
 
 **Create Input Action:**
+
 1. Content Browser → Input → Input Action
 2. Name: `IA_Move`
 3. Value Type: Axis2D (for movement)
 
 **Create Input Mapping Context:**
+
 1. Input → Input Mapping Context
 2. Name: `IMC_Default`
 3. Add mapping: `IA_Move` → Keyboard `W/A/S/D`
@@ -592,6 +643,7 @@ Event InputAction Fire
 ### Using Enhanced Input in C++
 
 **PlayerController setup:**
+
 ```cpp
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
@@ -643,18 +695,21 @@ void AMyPlayerController::Move(const FInputActionValue& Value)
 3. Name: `ABP_Character`
 
 **Animation Blueprint sections:**
+
 - **AnimGraph**: Blend animations
 - **EventGraph**: Logic and calculations
 
 ### State Machine
 
 **AnimGraph setup:**
+
 1. Add node: State Machine
 2. Double-click to enter state machine
 3. Add states: Idle, Walk, Jump
 4. Create transitions between states
 
 **Transition rules:**
+
 ```
 Idle → Walk
   Rule: Speed > 0.1
@@ -666,27 +721,32 @@ Walk → Idle
 ### Blend Spaces
 
 **Create Blend Space (1D or 2D):**
+
 1. Animation → Blend Space 1D
 2. Add animations to grid
 3. Preview by moving marker
 
 **Use in AnimGraph:**
+
 - Add Blend Space node
 - Connect Speed variable to input
 
 ## Performance Best Practices
 
 **Blueprints:**
+
 - Minimize Event Tick usage (use timers instead)
 - Cache references (don't use GetAllActorsOfClass every frame)
 - Use Blueprint Nativization for shipping builds
 
 **C++:**
+
 - Prefer C++ for performance-critical code
 - Use object pooling for frequently spawned actors
 - Profile with Unreal Insights (Window → Developer Tools → Insights)
 
 **Rendering:**
+
 - Use LODs (Level of Detail) for meshes
 - Enable Hierarchical LOD (HLOD) for large scenes
 - Bake lighting (Lightmass) for static scenes
@@ -695,21 +755,25 @@ Walk → Idle
 ## Troubleshooting
 
 **Blueprint not compiling:**
+
 - Check for red error nodes
 - Ensure variable types match
 - Click "Compile" button
 
 **C++ compile errors:**
+
 - Ensure #include statements correct
 - Regenerate project files (right-click .uproject)
 - Clean and rebuild solution
 
 **Actor not visible in level:**
+
 - Check Hidden in Game setting (Details → Rendering)
 - Ensure mesh assigned to Static/Skeletal Mesh Component
 - Check collision (may be hidden by geometry)
 
 **Hot reload not working:**
+
 - Close editor
 - Compile in Visual Studio
 - Reopen editor (more reliable than hot reload)

@@ -17,29 +17,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
 - New features that are in progress
 
 ## [1.2.0] - 2025-01-15
 
 ### Added
+
 - New feature X for improved performance
 - Support for Y configuration option
 
 ### Changed
+
 - Updated dependency A to v2.0
 - Refactored module B for better maintainability
 
 ### Deprecated
+
 - Function Z will be removed in v2.0.0
 
 ### Removed
+
 - Old API endpoint /v1/legacy
 
 ### Fixed
+
 - Bug in authentication causing session timeout (#123)
 - Memory leak in cache implementation (#145)
 
 ### Security
+
 - Fixed XSS vulnerability in user input handling (CVE-2025-1234)
 
 ## [1.1.0] - 2025-01-01
@@ -54,11 +61,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Change Categories
 
 ### Added
+
 New features, functionality, or capabilities added to the project.
 
 **Examples:**
+
 ```markdown
 ### Added
+
 - User authentication with OAuth2 support
 - Dark mode theme option
 - Export data to CSV functionality
@@ -67,11 +77,14 @@ New features, functionality, or capabilities added to the project.
 ```
 
 ### Changed
+
 Changes to existing functionality that don't break compatibility.
 
 **Examples:**
+
 ```markdown
 ### Changed
+
 - Improved performance of search algorithm by 40%
 - Updated UI design for better accessibility
 - Changed default timeout from 30s to 60s
@@ -80,22 +93,28 @@ Changes to existing functionality that don't break compatibility.
 ```
 
 ### Deprecated
+
 Features that are still available but will be removed in a future version.
 
 **Examples:**
+
 ```markdown
 ### Deprecated
+
 - `oldFunction()` - use `newFunction()` instead, will be removed in v3.0.0
 - Configuration option `legacy_mode` - no longer needed
 - `/api/v1` endpoint - migrate to `/api/v2`
 ```
 
 ### Removed
+
 Features, functionality, or deprecated items that have been removed.
 
 **Examples:**
+
 ```markdown
 ### Removed
+
 - Support for Internet Explorer 11
 - Deprecated `oldFunction()` method
 - Legacy configuration file format
@@ -103,11 +122,14 @@ Features, functionality, or deprecated items that have been removed.
 ```
 
 ### Fixed
+
 Bug fixes and corrections to existing functionality.
 
 **Examples:**
+
 ```markdown
 ### Fixed
+
 - Fixed crash when opening files with special characters (#234)
 - Corrected calculation error in tax module (#245)
 - Fixed memory leak in image processing
@@ -116,11 +138,14 @@ Bug fixes and corrections to existing functionality.
 ```
 
 ### Security
+
 Security-related changes, vulnerability fixes, and improvements.
 
 **Examples:**
+
 ```markdown
 ### Security
+
 - Fixed SQL injection vulnerability in user query (CVE-2025-1234)
 - Updated dependencies to patch security issues
 - Improved password hashing algorithm
@@ -132,19 +157,19 @@ Security-related changes, vulnerability fixes, and improvements.
 
 Map conventional commit types to changelog categories:
 
-| Commit Type | Changelog Category | Description |
-|-------------|-------------------|-------------|
-| `feat:` | Added | New feature |
-| `fix:` | Fixed | Bug fix |
-| `docs:` | Changed | Documentation changes |
-| `style:` | Changed | Code style changes (formatting, etc.) |
-| `refactor:` | Changed | Code refactoring |
-| `perf:` | Changed | Performance improvements |
-| `test:` | (Often omitted) | Test additions/changes |
-| `chore:` | (Often omitted) | Build process or auxiliary tool changes |
-| `build:` | Changed | Build system changes |
-| `ci:` | (Often omitted) | CI configuration changes |
-| `revert:` | Fixed | Reverts a previous change |
+| Commit Type | Changelog Category | Description                             |
+| ----------- | ------------------ | --------------------------------------- |
+| `feat:`     | Added              | New feature                             |
+| `fix:`      | Fixed              | Bug fix                                 |
+| `docs:`     | Changed            | Documentation changes                   |
+| `style:`    | Changed            | Code style changes (formatting, etc.)   |
+| `refactor:` | Changed            | Code refactoring                        |
+| `perf:`     | Changed            | Performance improvements                |
+| `test:`     | (Often omitted)    | Test additions/changes                  |
+| `chore:`    | (Often omitted)    | Build process or auxiliary tool changes |
+| `build:`    | Changed            | Build system changes                    |
+| `ci:`       | (Often omitted)    | CI configuration changes                |
+| `revert:`   | Fixed              | Reverts a previous change               |
 
 ### Parsing Conventional Commits
 
@@ -168,6 +193,7 @@ Breaking changes (indicated by `!` or `BREAKING CHANGE:` footer) should be highl
 
 ```markdown
 ### Changed
+
 - **BREAKING:** Redesigned API endpoints - see migration guide
 ```
 
@@ -178,6 +204,7 @@ Breaking changes (indicated by `!` or `BREAKING CHANGE:` footer) should be highl
 Write for users of your software, not developers:
 
 **Bad:**
+
 ```markdown
 - Refactored UserController to use dependency injection
 - Updated tests to use Jest instead of Mocha
@@ -185,6 +212,7 @@ Write for users of your software, not developers:
 ```
 
 **Good:**
+
 ```markdown
 - Improved application startup time by 50%
 - Fixed bug causing data loss on network interruption
@@ -196,6 +224,7 @@ Write for users of your software, not developers:
 Provide enough detail to understand the change:
 
 **Bad:**
+
 ```markdown
 - Fixed bug
 - Improved performance
@@ -203,6 +232,7 @@ Provide enough detail to understand the change:
 ```
 
 **Good:**
+
 ```markdown
 - Fixed crash when uploading files larger than 10MB (#234)
 - Improved search performance for large datasets (10,000+ records)
@@ -225,6 +255,7 @@ Group similar changes together:
 
 ```markdown
 ### Added
+
 - User profile management:
   - Profile picture upload
   - Bio and social links
@@ -245,6 +276,7 @@ Follow [Semantic Versioning](https://semver.org/) (SemVer):
 - **PATCH**: Backwards-compatible bug fixes
 
 **Examples:**
+
 - `1.0.0` -> `1.0.1`: Bug fixes only
 - `1.0.0` -> `1.1.0`: New features, no breaking changes
 - `1.0.0` -> `2.0.0`: Breaking changes
@@ -255,11 +287,13 @@ Follow [Semantic Versioning](https://semver.org/) (SemVer):
 ## [2.0.0-beta.1] - 2025-01-15
 
 ### Added
+
 - Preview of new API v2 (subject to change)
 
 ## [2.0.0-alpha.1] - 2025-01-01
 
 ### Added
+
 - Early access to experimental features
 ```
 
@@ -271,9 +305,11 @@ Maintain an `[Unreleased]` section at the top for changes not yet released:
 ## [Unreleased]
 
 ### Added
+
 - Work-in-progress feature X
 
 ### Fixed
+
 - Bug Y fixed in development
 ```
 
@@ -283,9 +319,11 @@ When releasing, move these changes to a new version section:
 ## [1.3.0] - 2025-01-20
 
 ### Added
+
 - Work-in-progress feature X (now complete)
 
 ### Fixed
+
 - Bug Y fixed in development
 ```
 
@@ -295,6 +333,7 @@ Use ISO 8601 date format (YYYY-MM-DD):
 
 ```markdown
 ## [1.2.0] - 2025-01-15
+
            ^^^^^^^^^^
            ISO 8601 format
 ```
@@ -316,8 +355,9 @@ These links help users see exactly what changed between versions.
 
 Highlight breaking changes prominently:
 
-```markdown
+````markdown
 ### Changed
+
 - **BREAKING:** Renamed `oldMethod()` to `newMethod()`
 - **BREAKING:** Changed configuration file format - see [migration guide](MIGRATING.md)
 - **BREAKING:** Minimum Node.js version is now 18.0.0
@@ -327,6 +367,7 @@ Highlight breaking changes prominently:
 To migrate from v1.x to v2.x:
 
 1. Update `oldMethod()` calls:
+
    ```javascript
    // Old
    obj.oldMethod(arg);
@@ -334,8 +375,10 @@ To migrate from v1.x to v2.x:
    // New
    obj.newMethod(arg);
    ```
+````
 
 2. Update configuration file:
+
    ```json
    // Old format
    { "setting": "value" }
@@ -343,7 +386,8 @@ To migrate from v1.x to v2.x:
    // New format
    { "settings": { "name": "value" } }
    ```
-```
+
+````
 
 ## Automated Changelog Generation
 
@@ -354,9 +398,10 @@ Use conventional commits to generate changelog automatically:
 ```bash
 # Using generate_changelog.py
 python scripts/generate_changelog.py v1.1.0..HEAD > CHANGELOG-new.md
-```
+````
 
 The script should:
+
 1. Parse commit messages between versions
 2. Extract conventional commit types
 3. Map to changelog categories
@@ -366,6 +411,7 @@ The script should:
 ### Manual Review Required
 
 Always review auto-generated changelogs:
+
 - Remove internal/developer-only changes
 - Rewrite technical messages for users
 - Add context where needed
@@ -395,11 +441,13 @@ CHANGELOG.md  (root-level, aggregated)
 ### Package A
 
 #### Added
+
 - Feature X
 
 ### Package B
 
 #### Fixed
+
 - Bug Y
 ```
 
@@ -416,11 +464,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
 - Work in progress feature Z
 
 ## [2.0.0] - 2025-01-20
 
 ### Added
+
 - Complete redesign of user interface
 - Support for multiple themes (light, dark, high-contrast)
 - Export data to PDF format
@@ -428,6 +478,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Offline mode with automatic sync
 
 ### Changed
+
 - **BREAKING:** Minimum Node.js version is now 18.0.0
 - **BREAKING:** Changed API response format - see [migration guide](MIGRATING.md)
 - Improved performance of data processing by 3x
@@ -435,20 +486,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Redesigned settings page for better usability
 
 ### Deprecated
+
 - REST API v1 endpoints - migrate to v2 by 2025-06-01
 
 ### Removed
+
 - **BREAKING:** Support for Internet Explorer 11
 - Legacy configuration file format (.legacy.json)
 - Deprecated `processOldFormat()` function
 
 ### Fixed
+
 - Fixed crash when handling large files (>100MB) (#234)
 - Resolved memory leak in image cache (#245)
 - Fixed incorrect calculation in tax module (#256)
 - Corrected timezone handling for international users (#267)
 
 ### Security
+
 - Fixed SQL injection vulnerability in search (CVE-2025-1234)
 - Updated bcrypt to v5.1.0 for improved password hashing
 - Added rate limiting to prevent brute force attacks
@@ -456,29 +511,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.5.2] - 2025-01-10
 
 ### Fixed
+
 - Fixed regression in file upload (#223)
 - Corrected error message typo
 
 ## [1.5.1] - 2025-01-05
 
 ### Fixed
+
 - Fixed authentication bug introduced in v1.5.0 (#220)
 
 ### Security
+
 - Updated dependency with known vulnerability
 
 ## [1.5.0] - 2025-01-01
 
 ### Added
+
 - User profile customization options
 - Email notification preferences
 - Keyboard shortcuts for common actions
 
 ### Changed
+
 - Improved error messages for better clarity
 - Updated documentation with new examples
 
 ### Fixed
+
 - Fixed date picker not working on mobile (#210)
 - Resolved issue with duplicate notifications (#215)
 
@@ -487,6 +548,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Initial release.
 
 ### Added
+
 - User authentication and authorization
 - Data management interface
 - Basic reporting features
@@ -516,6 +578,7 @@ Initial release.
 ## Common Mistakes
 
 ❌ **Don't:**
+
 - Include internal refactorings users don't see
 - Use vague descriptions ("fixed bug", "improved performance")
 - Forget to update on each release
@@ -524,6 +587,7 @@ Initial release.
 - Use inconsistent formatting
 
 ✅ **Do:**
+
 - Focus on user-facing changes
 - Be specific and descriptive
 - Update regularly with releases

@@ -23,12 +23,14 @@ Parallel workflows execute independent tasks simultaneously to maximize efficien
 Execute all three audits in parallel since they're independent:
 
 **Security Audit**
+
 ```bash
 /henry-orchestrator:henry-team security-engineer - Comprehensive security audit
 ```
 
 **Agents**: security-engineer
 **Focus**:
+
 - Threat modeling
 - Vulnerability scanning
 - Authentication/authorization review
@@ -36,6 +38,7 @@ Execute all three audits in parallel since they're independent:
 - OWASP Top 10 compliance
 
 **Deliverables**:
+
 - Security vulnerabilities (Critical/High/Medium/Low)
 - Threat model documentation
 - Security test results
@@ -45,12 +48,14 @@ Execute all three audits in parallel since they're independent:
 ---
 
 **Performance Audit**
+
 ```bash
 /henry-orchestrator:henry-team performance-engineer - Performance baseline and audit
 ```
 
 **Agents**: performance-engineer
 **Focus**:
+
 - Core Web Vitals (LCP, CLS, INP)
 - Load time analysis
 - Bundle size optimization
@@ -58,6 +63,7 @@ Execute all three audits in parallel since they're independent:
 - API response times
 
 **Deliverables**:
+
 - Performance metrics report
 - Bottleneck identification
 - Optimization recommendations
@@ -67,12 +73,14 @@ Execute all three audits in parallel since they're independent:
 ---
 
 **Accessibility Audit**
+
 ```bash
 /henry-orchestrator:henry-team a11y-specialist - WCAG 2.1 AA compliance audit
 ```
 
 **Agents**: a11y-specialist
 **Focus**:
+
 - WCAG 2.1 AA compliance
 - Screen reader testing
 - Keyboard navigation
@@ -80,6 +88,7 @@ Execute all three audits in parallel since they're independent:
 - ARIA implementation
 
 **Deliverables**:
+
 - A11y violation report
 - WCAG compliance status
 - Remediation priorities
@@ -93,16 +102,19 @@ Execute all three audits in parallel since they're independent:
 After all audits complete, synthesize findings:
 
 **Critical Issues** (must fix before launch):
+
 - Security: 3 critical vulnerabilities
 - Performance: LCP 4.2s (failing Core Web Vitals)
 - A11y: 12 WCAG AA violations
 
 **High Priority** (fix ASAP):
+
 - Security: 5 high-risk issues
 - Performance: 8 optimization opportunities
 - A11y: 15 warnings
 
 **Action Plan**:
+
 ```bash
 /henry-orchestrator:henry-optimize fix critical security and performance issues
 # Then address high-priority items
@@ -131,6 +143,7 @@ Hour 3-3.5: Synthesize findings and prioritize
 ## When to Use Parallel Workflow
 
 ✅ **Use when**:
+
 - Tasks are truly independent
 - No sequential dependencies
 - Multiple perspectives on same artifact
@@ -138,6 +151,7 @@ Hour 3-3.5: Synthesize findings and prioritize
 - Sufficient resources available
 
 ❌ **Avoid when**:
+
 - Tasks have dependencies
 - Later tasks need earlier outputs
 - Limited resources (better to sequence)
@@ -158,6 +172,7 @@ Hour 3-3.5: Synthesize findings and prioritize
 **Duration**: 2-3 days each (vs. 4-6 days sequential)
 
 **Prerequisites**:
+
 - API contract agreed upon (OpenAPI spec)
 - Mock data available for frontend
 - Clear interface boundaries
@@ -199,6 +214,7 @@ Hour 3-3.5: Synthesize findings and prioritize
 **Duration**: 1 week each (all parallel)
 
 **Prerequisites**:
+
 - Clear feature boundaries
 - No shared state or dependencies
 - Separate database schemas
@@ -237,6 +253,7 @@ Wrong: [ux-researcher + ux-ui-designer] in parallel
 **Problem**: Designer needs research insights to design effectively
 
 **Fix**: Run sequentially
+
 ```
 Right: ux-researcher → ux-ui-designer
 ```
@@ -252,6 +269,7 @@ Wrong: Launch 10 parallel henry-feature commands for one developer
 **Problem**: Single developer can't implement 10 features simultaneously
 
 **Fix**: Sequence based on capacity
+
 ```
 Right: 2-3 parallel tracks matching team size
 ```
@@ -267,6 +285,7 @@ Wrong: Parallel implementations without agreed interfaces
 **Problem**: Frontend and backend APIs don't align
 
 **Fix**: Agree on contracts first
+
 ```
 Right:
 1. Define API contract (OpenAPI spec)
@@ -284,6 +303,7 @@ Wrong: Run parallel audits with no plan to combine results
 **Problem**: Duplicate issues, inconsistent priorities, no action plan
 
 **Fix**: Pre-define synthesis approach
+
 ```
 Right:
 1. Run parallel audits with standard severity levels
@@ -306,6 +326,7 @@ Track these metrics to evaluate parallel workflow effectiveness:
 ### Clear Boundaries
 
 Define clear boundaries before starting parallel work:
+
 - Separate files/directories
 - Distinct API endpoints
 - Independent database tables
@@ -314,6 +335,7 @@ Define clear boundaries before starting parallel work:
 ### Communication Protocol
 
 Establish communication channels:
+
 - Shared issue tracker
 - Regular sync meetings (daily standup)
 - Documented decisions (ADRs)
@@ -322,6 +344,7 @@ Establish communication channels:
 ### Integration Strategy
 
 Plan integration before starting:
+
 - Merge order and strategy
 - Conflict resolution approach
 - Integration testing plan

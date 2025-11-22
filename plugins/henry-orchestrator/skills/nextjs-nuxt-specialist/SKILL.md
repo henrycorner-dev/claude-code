@@ -27,24 +27,28 @@ Use this skill when working with:
 Modern frameworks support multiple rendering strategies, each with specific use cases:
 
 **Server-Side Rendering (SSR)**
+
 - Renders pages on each request on the server
 - Provides fresh data on every request
 - Best for: Personalized content, authentication-required pages, real-time data
 - Trade-off: Slower TTFB, higher server load
 
 **Static Site Generation (SSG)**
+
 - Pre-renders pages at build time
 - Serves static HTML files
 - Best for: Marketing pages, documentation, blogs, unchanging content
 - Trade-off: Stale data until next build, longer build times
 
 **Incremental Static Regeneration (ISR)**
+
 - Combines SSG benefits with periodic updates
 - Regenerates pages in background after specified interval
 - Best for: Content that changes occasionally, high-traffic sites
 - Trade-off: Complex caching, potential stale data between regenerations
 
 **Client-Side Rendering (CSR)**
+
 - Renders entirely in browser after initial page load
 - Used for dynamic, interactive sections
 - Best for: Dashboards, admin panels, highly interactive UIs
@@ -55,22 +59,26 @@ Modern frameworks support multiple rendering strategies, each with specific use 
 Each framework implements data fetching differently, but follows similar principles:
 
 **Server-Side Data Fetching**
+
 - Fetch data before rendering on server
 - Direct database access possible
 - Credentials and secrets stay on server
 - Examples: `getServerSideProps` (Next.js), `server` load functions (SvelteKit)
 
 **Build-Time Data Fetching**
+
 - Fetch data during build process
 - Results baked into static HTML
 - Examples: `getStaticProps` (Next.js), Astro component frontmatter
 
 **Client-Side Data Fetching**
+
 - Fetch data after page loads in browser
 - Use for personalized/real-time data
 - Examples: `useEffect` with fetch, SWR, React Query
 
 **Hybrid Approaches**
+
 - Combine multiple strategies on single page
 - Server-fetch critical data, client-fetch supplementary data
 - Optimal for performance and user experience
@@ -80,21 +88,25 @@ Each framework implements data fetching differently, but follows similar princip
 SSR/SSG frameworks use file-based routing with conventions:
 
 **File-Based Routing**
+
 - File structure determines routes
 - `pages/about.tsx` → `/about`
 - Reduces boilerplate, improves developer experience
 
 **Dynamic Routes**
+
 - Bracket notation for parameters: `[id].tsx`, `[slug].vue`
 - Catch-all routes: `[...slug].tsx`
 - Optional catch-all: `[[...slug]].tsx`
 
 **Route Middleware**
+
 - Execute code before rendering pages
 - Use for: Authentication, redirects, headers, logging
 - Framework-specific implementations vary
 
 **API Routes**
+
 - Backend endpoints in same codebase
 - File-based like page routes
 - `pages/api/users.ts` → `/api/users`
@@ -104,11 +116,13 @@ SSR/SSG frameworks use file-based routing with conventions:
 Edge functions run on CDN edge nodes closer to users:
 
 **Benefits**
+
 - Lower latency (geographic proximity)
 - Reduced server costs (offload compute)
 - Global distribution automatically
 
 **Use Cases**
+
 - Authentication and authorization
 - A/B testing and feature flags
 - Request/response transformation
@@ -116,6 +130,7 @@ Edge functions run on CDN edge nodes closer to users:
 - Rate limiting and security
 
 **Limitations**
+
 - Limited runtime environment
 - Smaller bundle size limits
 - No access to Node.js-specific APIs
@@ -130,6 +145,7 @@ This skill supports five major SSR/SSG frameworks. Each has unique patterns, con
 Next.js is the most popular React-based framework with robust SSR/SSG capabilities.
 
 **Key Features:**
+
 - App Router (React Server Components) and Pages Router
 - Built-in optimization (Image, Font, Script components)
 - Flexible rendering: SSR, SSG, ISR, CSR
@@ -137,6 +153,7 @@ Next.js is the most popular React-based framework with robust SSR/SSG capabiliti
 - API Routes and Route Handlers
 
 For detailed Next.js patterns, consult **`references/nextjs-patterns.md`** which covers:
+
 - App Router vs Pages Router migration
 - Server Components and Client Components
 - Data fetching with `fetch`, Server Actions
@@ -149,6 +166,7 @@ For detailed Next.js patterns, consult **`references/nextjs-patterns.md`** which
 Nuxt is the leading Vue-based SSR/SSG framework with excellent developer experience.
 
 **Key Features:**
+
 - Auto-imports for components, composables, utilities
 - File-based routing with layouts
 - Universal rendering (SSR + hydration)
@@ -156,6 +174,7 @@ Nuxt is the leading Vue-based SSR/SSG framework with excellent developer experie
 - Built-in state management
 
 For detailed Nuxt patterns, consult **`references/nuxt-patterns.md`** which covers:
+
 - Nuxt 3 Composition API patterns
 - Server routes and API endpoints
 - `useFetch` and `useAsyncData` composables
@@ -168,6 +187,7 @@ For detailed Nuxt patterns, consult **`references/nuxt-patterns.md`** which cove
 SvelteKit is Svelte's official framework for building SSR/SSG applications.
 
 **Key Features:**
+
 - Compiler-based (no virtual DOM)
 - Minimal runtime overhead
 - Form actions and progressive enhancement
@@ -175,6 +195,7 @@ SvelteKit is Svelte's official framework for building SSR/SSG applications.
 - Built-on Vite for fast HMR
 
 For detailed SvelteKit patterns, consult **`references/sveltekit-patterns.md`** which covers:
+
 - `+page.svelte` and `+page.server.ts` patterns
 - Load functions (universal vs server)
 - Form actions for mutations
@@ -187,6 +208,7 @@ For detailed SvelteKit patterns, consult **`references/sveltekit-patterns.md`** 
 Astro is a content-focused framework optimized for static sites with islands architecture.
 
 **Key Features:**
+
 - Islands architecture (partial hydration)
 - Framework-agnostic (React, Vue, Svelte together)
 - Zero JavaScript by default
@@ -194,6 +216,7 @@ Astro is a content-focused framework optimized for static sites with islands arc
 - Built-in image optimization
 
 For detailed Astro patterns, consult **`references/astro-patterns.md`** which covers:
+
 - Component islands and client directives
 - Content Collections API
 - Hybrid rendering (SSR + SSG)
@@ -206,6 +229,7 @@ For detailed Astro patterns, consult **`references/astro-patterns.md`** which co
 Remix is a React framework focused on web standards and progressive enhancement.
 
 **Key Features:**
+
 - Web standards-based (Web Fetch API, FormData)
 - Nested routing with data loading
 - Built-in error boundaries
@@ -213,6 +237,7 @@ Remix is a React framework focused on web standards and progressive enhancement.
 - Optimistic UI patterns
 
 For detailed Remix patterns, consult **`references/remix-patterns.md`** which covers:
+
 - Loader and action functions
 - Nested routes and outlets
 - Form handling and mutations
@@ -225,6 +250,7 @@ For detailed Remix patterns, consult **`references/remix-patterns.md`** which co
 Edge computing enables running code closer to users on CDN edge nodes.
 
 **Common Edge Use Cases:**
+
 - Authentication checks before page render
 - Geolocation-based redirects
 - A/B testing and feature flags
@@ -232,6 +258,7 @@ Edge computing enables running code closer to users on CDN edge nodes.
 - Bot protection and rate limiting
 
 For comprehensive edge function patterns across frameworks, consult **`references/edge-functions.md`** which covers:
+
 - Vercel Edge Functions
 - Cloudflare Workers/Pages Functions
 - Netlify Edge Functions
@@ -244,24 +271,28 @@ For comprehensive edge function patterns across frameworks, consult **`reference
 SSR/SSG frameworks require specific optimization strategies:
 
 **Bundle Optimization**
+
 - Code splitting and dynamic imports
 - Tree shaking unused code
 - Route-based chunking
 - Critical CSS extraction
 
 **Image Optimization**
+
 - Responsive images with srcset
 - Modern formats (WebP, AVIF)
 - Lazy loading below fold
 - Framework-specific image components
 
 **Data Fetching Optimization**
+
 - Parallel data fetching
 - Request deduplication
 - Caching strategies (ISR, SWR)
 - Streaming and Suspense
 
 **Runtime Optimization**
+
 - Server-side caching
 - Edge caching and CDN
 - Database query optimization
@@ -328,30 +359,35 @@ Consult these examples for proven patterns and complete implementations.
 ## Quick Decision Guide
 
 **Choose Next.js when:**
+
 - Building React-based applications
 - Need robust ecosystem and community
 - Require enterprise features and support
 - Want flexibility in rendering strategies
 
 **Choose Nuxt when:**
+
 - Building Vue-based applications
 - Want excellent DX with auto-imports
 - Need powerful module ecosystem
 - Prefer convention over configuration
 
 **Choose SvelteKit when:**
+
 - Want minimal runtime overhead
 - Need compiler optimizations
 - Prefer progressive enhancement
 - Building performance-critical apps
 
 **Choose Astro when:**
+
 - Building content-focused sites
 - Want minimal JavaScript by default
 - Need framework flexibility (multi-framework)
 - Optimizing for static generation
 
 **Choose Remix when:**
+
 - Want web standards-first approach
 - Need nested routing with data loading
 - Building forms-heavy applications

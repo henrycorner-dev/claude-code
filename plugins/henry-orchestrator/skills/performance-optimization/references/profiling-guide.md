@@ -11,17 +11,20 @@ Google's user-centric performance metrics for measuring real-world user experien
 Measures loading performance. Time when largest content element becomes visible.
 
 **Target:**
+
 - Good: ≤ 2.5 seconds
 - Needs Improvement: 2.5 - 4.0 seconds
 - Poor: > 4.0 seconds
 
 **Common Issues:**
+
 - Slow server response time
 - Render-blocking JavaScript/CSS
 - Slow resource load times
 - Client-side rendering
 
 **Optimizations:**
+
 - Use CDN for static assets
 - Optimize images (compression, WebP, lazy loading)
 - Preload critical resources
@@ -33,16 +36,19 @@ Measures loading performance. Time when largest content element becomes visible.
 Measures interactivity. Time from user interaction to browser response.
 
 **Target:**
+
 - Good: ≤ 100 milliseconds
 - Needs Improvement: 100 - 300 milliseconds
 - Poor: > 300 milliseconds
 
 **Common Issues:**
+
 - Long JavaScript tasks blocking main thread
 - Large JavaScript bundles
 - Heavy third-party scripts
 
 **Optimizations:**
+
 - Code splitting
 - Defer non-critical JavaScript
 - Break up long tasks
@@ -54,17 +60,20 @@ Measures interactivity. Time from user interaction to browser response.
 Measures visual stability. Sum of unexpected layout shifts.
 
 **Target:**
+
 - Good: ≤ 0.1
 - Needs Improvement: 0.1 - 0.25
 - Poor: > 0.25
 
 **Common Issues:**
+
 - Images without dimensions
 - Ads/embeds/iframes without reserved space
 - Dynamically injected content
 - Web fonts causing FOIT/FOUT
 
 **Optimizations:**
+
 - Set width/height on images and video
 - Reserve space for ads/embeds
 - Avoid inserting content above existing content
@@ -75,6 +84,7 @@ Measures visual stability. Sum of unexpected layout shifts.
 ### Chrome DevTools Performance Tab
 
 **Record Performance:**
+
 1. Open DevTools (F12)
 2. Navigate to Performance tab
 3. Click Record (circle icon)
@@ -84,17 +94,20 @@ Measures visual stability. Sum of unexpected layout shifts.
 **Analyze Results:**
 
 **Main Thread Analysis:**
+
 - Yellow bars = JavaScript execution
 - Purple bars = Rendering/layout
 - Green bars = Painting
 - Gray bars = Idle time
 
 **Identify Long Tasks:**
+
 - Red triangles in timeline = tasks >50ms
 - Click to see call stack
 - Find bottleneck functions
 
 **Example Interpretation:**
+
 ```
 Main Thread:
 |████████| parseHTML (200ms)
@@ -133,11 +146,13 @@ Identify which code paths are slow.
 ### Network Waterfall
 
 **Open Network Tab:**
+
 1. DevTools → Network tab
 2. Reload page
 3. Analyze request waterfall
 
 **Interpret Waterfall:**
+
 ```
 |■■■■■■| HTML document
   |■■| CSS stylesheet
@@ -148,6 +163,7 @@ Identify which code paths are slow.
 ```
 
 **Colors:**
+
 - Queueing (light gray): Waiting for available connection
 - Stalled (gray): Time before request can be sent
 - DNS Lookup (dark green): DNS resolution time
@@ -158,6 +174,7 @@ Identify which code paths are slow.
 - Downloading (blue): Receiving response
 
 **Optimization Opportunities:**
+
 - Long TTFB → slow server
 - Many sequential requests → poor resource prioritization
 - Large download time → file too large, needs compression
@@ -167,23 +184,27 @@ Identify which code paths are slow.
 ### Memory Profiling
 
 **Take Heap Snapshot:**
+
 1. DevTools → Memory tab
 2. Select "Heap snapshot"
 3. Click "Take snapshot"
 
 **Identify Memory Leaks:**
+
 1. Take snapshot
 2. Perform action (e.g., open/close modal)
 3. Take another snapshot
 4. Compare snapshots
 
 **Look for:**
+
 - Detached DOM nodes (should be garbage collected)
 - Event listeners not removed
 - Closures retaining references
 - Global variables accumulating data
 
 **Example:**
+
 ```javascript
 // Memory leak - event listener not removed
 function createButton() {
@@ -203,7 +224,7 @@ function createButton() {
     remove() {
       button.removeEventListener('click', handleClick);
       button.remove();
-    }
+    },
   };
 }
 ```
@@ -211,12 +232,14 @@ function createButton() {
 ### Coverage Analysis
 
 **Find Unused Code:**
+
 1. DevTools → Coverage tab (Cmd+Shift+P → "Show Coverage")
 2. Click Record
 3. Interact with page
 4. Stop recording
 
 **Results:**
+
 ```
 File                  Size    Unused     Percentage
 --------------------- ------- ---------- ----------
@@ -225,6 +248,7 @@ styles.css            100 KB   20 KB     20%
 ```
 
 **Actions:**
+
 - Code split to defer unused code
 - Remove dead code
 - Use tree shaking
@@ -237,18 +261,21 @@ Automated auditing tool for performance, accessibility, SEO.
 ### Run Lighthouse
 
 **In Chrome DevTools:**
+
 1. Open DevTools
 2. Lighthouse tab
 3. Select categories (Performance, Accessibility, etc.)
 4. Click "Generate report"
 
 **CLI:**
+
 ```bash
 npm install -g lighthouse
 lighthouse https://example.com --view
 ```
 
 **Node.js:**
+
 ```javascript
 const lighthouse = require('lighthouse');
 const chromeLauncher = require('chrome-launcher');
@@ -260,7 +287,7 @@ async function runLighthouse() {
     logLevel: 'info',
     output: 'html',
     onlyCategories: ['performance'],
-    port: chrome.port
+    port: chrome.port,
   };
 
   const runnerResult = await lighthouse('https://example.com', options);
@@ -274,11 +301,13 @@ async function runLighthouse() {
 ### Interpret Lighthouse Results
 
 **Performance Score (0-100):**
+
 - 90-100: Good
 - 50-89: Needs improvement
 - 0-49: Poor
 
 **Key Metrics:**
+
 - First Contentful Paint (FCP)
 - Largest Contentful Paint (LCP)
 - Total Blocking Time (TBT)
@@ -314,6 +343,7 @@ Diagnostics
 ### Node.js Profiling
 
 **Built-in Profiler:**
+
 ```bash
 node --prof app.js
 # Generates isolate-0x...-v8.log
@@ -323,6 +353,7 @@ node --prof-process isolate-0x...-v8.log > profile.txt
 ```
 
 **Interpret Results:**
+
 ```
 Statistical profiling result from isolate-0x...-v8.log
 
@@ -342,6 +373,7 @@ Statistical profiling result from isolate-0x...-v8.log
 Focus on functions with highest tick counts.
 
 **clinic.js:**
+
 ```bash
 npm install -g clinic
 
@@ -359,6 +391,7 @@ clinic bubbleprof -- node app.js
 ```
 
 **0x (Flamegraphs):**
+
 ```bash
 npm install -g 0x
 
@@ -371,6 +404,7 @@ npm install -g 0x
 ### Python Profiling
 
 **cProfile:**
+
 ```python
 import cProfile
 import pstats
@@ -391,6 +425,7 @@ if __name__ == '__main__':
 ```
 
 **Output:**
+
 ```
    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
         1    0.000    0.000    5.234    5.234 app.py:1(main)
@@ -399,6 +434,7 @@ if __name__ == '__main__':
 ```
 
 **py-spy (sampling profiler):**
+
 ```bash
 pip install py-spy
 
@@ -412,6 +448,7 @@ py-spy top -- python app.py
 ### Database Query Profiling
 
 **PostgreSQL:**
+
 ```sql
 -- Enable query timing
 \timing
@@ -423,6 +460,7 @@ WHERE email = 'user@example.com';
 ```
 
 **Output:**
+
 ```
 Index Scan using idx_users_email on users (cost=0.29..8.31 rows=1) (actual time=0.015..0.016 rows=1 loops=1)
   Index Cond: (email = 'user@example.com'::text)
@@ -431,6 +469,7 @@ Execution Time: 0.034 ms
 ```
 
 **MySQL:**
+
 ```sql
 -- Explain query
 EXPLAIN SELECT * FROM users WHERE email = 'user@example.com';
@@ -442,6 +481,7 @@ SHOW PROFILE;
 ```
 
 **Output:**
+
 ```
 +----------------------+----------+
 | Status               | Duration |
@@ -468,6 +508,7 @@ npm install web-vitals
 ```
 
 **Measure Core Web Vitals:**
+
 ```javascript
 import { getCLS, getFID, getFCP, getLCP, getTTFB } from 'web-vitals';
 
@@ -476,7 +517,7 @@ function sendToAnalytics(metric) {
     name: metric.name,
     value: metric.value,
     id: metric.id,
-    rating: metric.rating
+    rating: metric.rating,
   });
 
   // Send to analytics endpoint
@@ -484,7 +525,7 @@ function sendToAnalytics(metric) {
     body,
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    keepalive: true
+    keepalive: true,
   });
 }
 
@@ -498,8 +539,9 @@ getTTFB(sendToAnalytics);
 ### Performance Observer API
 
 **Monitor Long Tasks:**
+
 ```javascript
-const observer = new PerformanceObserver((list) => {
+const observer = new PerformanceObserver(list => {
   for (const entry of list.getEntries()) {
     console.log('Long task detected:', entry.duration, 'ms');
     // Send to analytics
@@ -510,8 +552,9 @@ observer.observe({ entryTypes: ['longtask'] });
 ```
 
 **Monitor Resource Timing:**
+
 ```javascript
-const observer = new PerformanceObserver((list) => {
+const observer = new PerformanceObserver(list => {
   for (const entry of list.getEntries()) {
     if (entry.duration > 1000) {
       console.log('Slow resource:', entry.name, entry.duration, 'ms');
@@ -523,10 +566,11 @@ observer.observe({ entryTypes: ['resource'] });
 ```
 
 **Monitor Layout Shifts:**
+
 ```javascript
 let clsValue = 0;
 
-const observer = new PerformanceObserver((list) => {
+const observer = new PerformanceObserver(list => {
   for (const entry of list.getEntries()) {
     if (!entry.hadRecentInput) {
       clsValue += entry.value;
@@ -551,7 +595,7 @@ window.addEventListener('load', () => {
     download: perfData.responseEnd - perfData.responseStart,
     domInteractive: perfData.domInteractive - perfData.fetchStart,
     domComplete: perfData.domComplete - perfData.fetchStart,
-    loadComplete: perfData.loadEventEnd - perfData.fetchStart
+    loadComplete: perfData.loadEventEnd - perfData.fetchStart,
   };
 
   console.log('Performance metrics:', metrics);
@@ -563,11 +607,13 @@ window.addEventListener('load', () => {
 ### Artillery
 
 **Install:**
+
 ```bash
 npm install -g artillery
 ```
 
 **Create Test (load-test.yml):**
+
 ```yaml
 config:
   target: 'http://localhost:3000'
@@ -590,11 +636,13 @@ scenarios:
 ```
 
 **Run:**
+
 ```bash
 artillery run load-test.yml
 ```
 
 **Output:**
+
 ```
 Summary report
   Scenarios launched:  9000
@@ -612,26 +660,28 @@ Summary report
 ### k6
 
 **Install:**
+
 ```bash
 brew install k6
 ```
 
 **Create Test (load-test.js):**
+
 ```javascript
 import http from 'k6/http';
 import { check, sleep } from 'k6';
 
 export let options = {
   stages: [
-    { duration: '1m', target: 50 },  // Ramp up to 50 users
-    { duration: '3m', target: 50 },  // Stay at 50 users
+    { duration: '1m', target: 50 }, // Ramp up to 50 users
+    { duration: '3m', target: 50 }, // Stay at 50 users
     { duration: '1m', target: 100 }, // Ramp up to 100 users
     { duration: '3m', target: 100 }, // Stay at 100 users
-    { duration: '1m', target: 0 },   // Ramp down
+    { duration: '1m', target: 0 }, // Ramp down
   ],
   thresholds: {
     http_req_duration: ['p(95)<500'], // 95% of requests under 500ms
-    http_req_failed: ['rate<0.01'],   // Error rate under 1%
+    http_req_failed: ['rate<0.01'], // Error rate under 1%
   },
 };
 
@@ -639,8 +689,8 @@ export default function () {
   const res = http.get('http://localhost:3000/api/users');
 
   check(res, {
-    'status is 200': (r) => r.status === 200,
-    'response time < 500ms': (r) => r.timings.duration < 500,
+    'status is 200': r => r.status === 200,
+    'response time < 500ms': r => r.timings.duration < 500,
   });
 
   sleep(1);
@@ -648,6 +698,7 @@ export default function () {
 ```
 
 **Run:**
+
 ```bash
 k6 run load-test.js
 ```
@@ -669,6 +720,7 @@ app.get('/api/users', async (req, res) => {
 ```
 
 **Provides:**
+
 - Transaction traces
 - Database query performance
 - Error tracking
@@ -721,6 +773,7 @@ app.get('/api/users', async (req, res) => {
 ## Custom Performance Marks
 
 **User Timing API:**
+
 ```javascript
 // Mark start of operation
 performance.mark('search-start');
@@ -740,6 +793,7 @@ console.log('Search took:', measure.duration, 'ms');
 ```
 
 **React Performance Markers:**
+
 ```javascript
 import { Profiler } from 'react';
 
@@ -767,6 +821,7 @@ function App() {
 ## Best Practices
 
 **Profiling:**
+
 1. Profile in production-like environment
 2. Use realistic data volumes
 3. Test on representative devices/networks
@@ -775,6 +830,7 @@ function App() {
 6. Measure after each optimization
 
 **Monitoring:**
+
 1. Track Core Web Vitals in production
 2. Set up alerts for performance regressions
 3. Monitor 95th/99th percentile, not just averages
@@ -782,6 +838,7 @@ function App() {
 5. Track business metrics alongside performance
 
 **Load Testing:**
+
 1. Test realistic user scenarios
 2. Gradually increase load (ramp-up)
 3. Test sustained load, not just spikes

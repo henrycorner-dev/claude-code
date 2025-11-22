@@ -40,11 +40,13 @@ pip install -e .
 ### Optional dependencies
 
 For Parquet support:
+
 ```bash
 pip install dataprocessor[parquet]
 ```
 
 For all features:
+
 ```bash
 pip install dataprocessor[all]
 ```
@@ -162,7 +164,7 @@ plugins:
     path: ./plugins/custom.py
 defaults:
   encoding: utf-8
-  delimiter: ","
+  delimiter: ','
 ```
 
 ## API Reference
@@ -177,23 +179,24 @@ See [API Documentation](https://dataprocessor.readthedocs.io/en/latest/api.html)
 
 ### Key Methods
 
-- **`load(path, **options)`** - Load data from file or URL
-- **`clean(data, **options)`** - Clean and validate data
+- **`load(path, **options)`\*\* - Load data from file or URL
+- **`clean(data, **options)`\*\* - Clean and validate data
 - **`transform(data, operations)`** - Apply transformations
-- **`save(data, path, **options)`** - Save processed data
+- **`save(data, path, **options)`\*\* - Save processed data
 
 ## Performance
 
 Benchmarks on 1GB CSV file (10M rows):
 
 | Operation | Time | Memory |
-|-----------|------|--------|
-| Load | 2.3s | 450MB |
-| Clean | 1.1s | 500MB |
-| Transform | 3.5s | 600MB |
-| Save | 1.8s | 400MB |
+| --------- | ---- | ------ |
+| Load      | 2.3s | 450MB  |
+| Clean     | 1.1s | 500MB  |
+| Transform | 3.5s | 600MB  |
+| Save      | 1.8s | 400MB  |
 
 With parallel processing (4 workers):
+
 - 2.5x faster for I/O operations
 - 3x faster for transformations
 

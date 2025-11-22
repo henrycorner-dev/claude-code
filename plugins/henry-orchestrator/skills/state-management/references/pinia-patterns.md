@@ -116,15 +116,15 @@ export const useProductsStore = defineStore('products', {
   }),
 
   getters: {
-    expensiveProducts: (state) => {
-      return state.products.filter((p) => p.price > 100);
+    expensiveProducts: state => {
+      return state.products.filter(p => p.price > 100);
     },
 
-    productById: (state) => {
-      return (id: string) => state.products.find((p) => p.id === id);
+    productById: state => {
+      return (id: string) => state.products.find(p => p.id === id);
     },
 
-    productCount: (state) => state.products.length,
+    productCount: state => state.products.length,
   },
 
   actions: {
@@ -147,14 +147,14 @@ export const useProductsStore = defineStore('products', {
     },
 
     removeProduct(id: string) {
-      const index = this.products.findIndex((p) => p.id === id);
+      const index = this.products.findIndex(p => p.id === id);
       if (index > -1) {
         this.products.splice(index, 1);
       }
     },
 
     updateProduct(id: string, updates: Partial<Product>) {
-      const product = this.products.find((p) => p.id === id);
+      const product = this.products.find(p => p.id === id);
       if (product) {
         Object.assign(product, updates);
       }
@@ -270,7 +270,7 @@ export const useCartStore = defineStore('cart', () => {
 
   // Computed returning function
   const itemById = computed(() => {
-    return (id: string) => items.value.find((item) => item.id === id);
+    return (id: string) => items.value.find(item => item.id === id);
   });
 
   return { items, itemCount, total, itemById };
@@ -387,11 +387,13 @@ export default defineComponent({
 ### Using pinia-plugin-persistedstate
 
 **Installation:**
+
 ```bash
 npm install pinia-plugin-persistedstate
 ```
 
 **Setup:**
+
 ```typescript
 // main.ts
 import { createPinia } from 'pinia';
@@ -404,59 +406,74 @@ app.use(pinia);
 ```
 
 **Basic Persistence:**
+
 ```typescript
-export const useUserStore = defineStore('user', () => {
-  const user = ref<User | null>(null);
-  const token = ref<string | null>(null);
+export const useUserStore = defineStore(
+  'user',
+  () => {
+    const user = ref<User | null>(null);
+    const token = ref<string | null>(null);
 
-  function setUser(newUser: User) {
-    user.value = newUser;
+    function setUser(newUser: User) {
+      user.value = newUser;
+    }
+
+    return { user, token, setUser };
+  },
+  {
+    persist: true, // Persists entire store to localStorage
   }
-
-  return { user, token, setUser };
-}, {
-  persist: true, // Persists entire store to localStorage
-});
+);
 ```
 
 **Selective Persistence:**
-```typescript
-export const useUserStore = defineStore('user', () => {
-  const user = ref<User | null>(null);
-  const token = ref<string | null>(null);
-  const preferences = ref({});
 
-  return { user, token, preferences };
-}, {
-  persist: {
-    key: 'user-store',
-    storage: localStorage,
-    paths: ['token', 'preferences'], // Only persist these
+```typescript
+export const useUserStore = defineStore(
+  'user',
+  () => {
+    const user = ref<User | null>(null);
+    const token = ref<string | null>(null);
+    const preferences = ref({});
+
+    return { user, token, preferences };
   },
-});
+  {
+    persist: {
+      key: 'user-store',
+      storage: localStorage,
+      paths: ['token', 'preferences'], // Only persist these
+    },
+  }
+);
 ```
 
 **Multiple Storages:**
-```typescript
-export const useAppStore = defineStore('app', () => {
-  const sessionData = ref({});
-  const permanentData = ref({});
 
-  return { sessionData, permanentData };
-}, {
-  persist: [
-    {
-      key: 'session-data',
-      storage: sessionStorage,
-      paths: ['sessionData'],
-    },
-    {
-      key: 'permanent-data',
-      storage: localStorage,
-      paths: ['permanentData'],
-    },
-  ],
-});
+```typescript
+export const useAppStore = defineStore(
+  'app',
+  () => {
+    const sessionData = ref({});
+    const permanentData = ref({});
+
+    return { sessionData, permanentData };
+  },
+  {
+    persist: [
+      {
+        key: 'session-data',
+        storage: sessionStorage,
+        paths: ['sessionData'],
+      },
+      {
+        key: 'permanent-data',
+        storage: localStorage,
+        paths: ['permanentData'],
+      },
+    ],
+  }
+);
 ```
 
 ## Store Composition
@@ -626,28 +643,27 @@ watch(
 ### Store Actions Subscriptions
 
 ```typescript
-userStore.$onAction(({
-  name,      // action name
-  store,     // store instance
-  args,      // action arguments
-  after,     // hook after action
-  onError,   // hook on error
-}) => {
-  const startTime = Date.now();
+userStore.$onAction(
+  ({
+    name, // action name
+    store, // store instance
+    args, // action arguments
+    after, // hook after action
+    onError, // hook on error
+  }) => {
+    const startTime = Date.now();
 
-  console.log(`Action ${name} started with args:`, args);
+    console.log(`Action ${name} started with args:`, args);
 
-  after((result) => {
-    console.log(
-      `Action ${name} finished in ${Date.now() - startTime}ms with result:`,
-      result
-    );
-  });
+    after(result => {
+      console.log(`Action ${name} finished in ${Date.now() - startTime}ms with result:`, result);
+    });
 
-  onError((error) => {
-    console.error(`Action ${name} failed:`, error);
-  });
-});
+    onError(error => {
+      console.error(`Action ${name} failed:`, error);
+    });
+  }
+);
 ```
 
 ### Reset Store
@@ -684,7 +700,7 @@ userStore.$patch({
 });
 
 // Patch with function (better for arrays)
-userStore.$patch((state) => {
+userStore.$patch(state => {
   state.items.push({ id: '1', name: 'Item' });
   state.name = 'Updated';
 });
@@ -812,11 +828,13 @@ export function piniaLogger(options: LoggerOptions) {
 }
 
 // Usage:
-pinia.use(piniaLogger({
-  enabled: process.env.NODE_ENV === 'development',
-  logActions: true,
-  logMutations: true,
-}));
+pinia.use(
+  piniaLogger({
+    enabled: process.env.NODE_ENV === 'development',
+    logActions: true,
+    logMutations: true,
+  })
+);
 ```
 
 ## Best Practices

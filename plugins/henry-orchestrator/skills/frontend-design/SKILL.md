@@ -108,10 +108,10 @@ Build production-grade code with these non-negotiable performance requirements:
 
 ```javascript
 // Lazy load three.js only when 3D section enters viewport
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach((entry) => {
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
     if (entry.isIntersecting) {
-      import("three").then(({ Scene, PerspectiveCamera }) => {
+      import('three').then(({ Scene, PerspectiveCamera }) => {
         // Initialize 3D scene
       });
       observer.unobserve(entry.target);
@@ -174,11 +174,11 @@ Creative design must enhance, never hinder, user experience:
 ```javascript
 // anime.js example: Staggered reveal
 anime({
-  targets: ".card",
+  targets: '.card',
   translateY: [40, 0],
   opacity: [0, 1],
   delay: anime.stagger(100),
-  easing: "easeOutExpo",
+  easing: 'easeOutExpo',
   duration: 1200,
 });
 
@@ -221,11 +221,12 @@ border: 3px solid #000;
 box-shadow: 6px 6px 0 #000;
 
 /* Gradient mesh */
-background: radial-gradient(at 20% 30%, #ff00ff 0, transparent 50%),
+background:
+  radial-gradient(at 20% 30%, #ff00ff 0, transparent 50%),
   radial-gradient(at 80% 70%, #00ffff 0, transparent 50%);
 
 /* Noise texture */
-background-image: url("data:image/svg+xml,%3Csvg...");
+background-image: url('data:image/svg+xml,%3Csvg...');
 ```
 
 Apply contextual effects: gradient meshes, noise textures, geometric patterns, layered transparencies, dramatic shadows, decorative borders, custom cursors, grain overlays, scanline effects, glitch animations.
@@ -307,12 +308,12 @@ Provide complete, runnable code with:
 
 ```javascript
 anime({
-  targets: ".feature-card",
+  targets: '.feature-card',
   translateY: [60, 0],
   opacity: [0, 1],
   rotate: [5, 0],
   delay: anime.stagger(150, { start: 300 }),
-  easing: "spring(1, 80, 10, 0)",
+  easing: 'spring(1, 80, 10, 0)',
   duration: 1800,
 });
 ```
@@ -335,19 +336,14 @@ anime({
 ```javascript
 // Load only when needed
 const init3DBackground = async () => {
-  const THREE = await import("three");
+  const THREE = await import('three');
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(
-    75,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    1000
-  );
+  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   // ... particle system implementation
 };
 
 // Trigger on scroll into view
-observer.observe(document.querySelector(".hero-3d"));
+observer.observe(document.querySelector('.hero-3d'));
 ```
 
 ## Design Style Quick Reference

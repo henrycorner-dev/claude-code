@@ -11,6 +11,7 @@ This skill provides guidance for building maintainable cross-platform applicatio
 ## When to Use This Skill
 
 Use this skill when:
+
 - Setting up a new cross-platform project (Flutter or React Native)
 - Refactoring an existing app to share more code between platforms
 - Designing architecture for platform-independent business logic
@@ -31,6 +32,7 @@ Organize code into layers with clear separation:
 ### Code Sharing Strategies
 
 **Maximum Sharing:**
+
 - Business rules and algorithms
 - Data models and schemas
 - API clients and networking
@@ -39,6 +41,7 @@ Organize code into layers with clear separation:
 - Utility functions
 
 **Platform-Specific:**
+
 - Native platform APIs (camera, sensors, etc.)
 - Platform-specific UI/UX patterns
 - Performance optimizations
@@ -190,7 +193,7 @@ export const storage: Storage = {
 // Web implementation (localStorage)
 export const storage: Storage = {
   setItem: async (key, value) => localStorage.setItem(key, value),
-  getItem: async (key) => localStorage.getItem(key),
+  getItem: async key => localStorage.getItem(key),
 };
 ```
 
@@ -324,6 +327,7 @@ describe('AuthService', () => {
 Avoid scattered platform checks throughout the codebase. Instead, use dependency injection and abstraction layers:
 
 **Bad:**
+
 ```typescript
 // Platform checks scattered everywhere
 function saveData(key: string, value: string) {
@@ -336,11 +340,10 @@ function saveData(key: string, value: string) {
 ```
 
 **Good:**
+
 ```typescript
 // Single platform-specific implementation
-const storage: Storage = Platform.OS === 'web'
-  ? webStorage
-  : mobileStorage;
+const storage: Storage = Platform.OS === 'web' ? webStorage : mobileStorage;
 
 // Use abstraction everywhere
 function saveData(key: string, value: string) {
@@ -353,11 +356,13 @@ function saveData(key: string, value: string) {
 Use platform-agnostic state management:
 
 **Flutter:**
+
 - Riverpod (pure Dart, works everywhere)
 - Bloc (platform-independent)
 - Provider (Flutter, but works on all Flutter platforms)
 
 **React Native:**
+
 - Redux (JavaScript, works everywhere)
 - MobX (JavaScript, works everywhere)
 - Zustand (JavaScript, works everywhere)
@@ -370,8 +375,8 @@ Keep platform-specific implementations in sync:
 ```yaml
 # pubspec.yaml (Flutter)
 dependencies:
-  shared_preferences: ^2.2.0        # Mobile + desktop
-  shared_preferences_web: ^2.2.0    # Web
+  shared_preferences: ^2.2.0 # Mobile + desktop
+  shared_preferences_web: ^2.2.0 # Web
 
 # Ensure compatible versions
 ```
@@ -380,7 +385,7 @@ dependencies:
 // package.json (React Native)
 {
   "dependencies": {
-    "@react-native-async-storage/async-storage": "^1.19.0",  // Mobile
+    "@react-native-async-storage/async-storage": "^1.19.0" // Mobile
     // Web uses localStorage (built-in)
   }
 }
@@ -500,12 +505,14 @@ Adopt cross-platform sharing incrementally:
 ### Reference Files
 
 For detailed architecture patterns and advanced techniques:
+
 - **`references/architecture-patterns.md`** - Comprehensive architecture patterns, detailed examples, and advanced sharing techniques
 - **`references/platform-specific-apis.md`** - Guidance on abstracting platform-specific APIs
 
 ### Example Files
 
 Working examples in `examples/`:
+
 - **`flutter-project-structure/`** - Complete Flutter project structure example
 - **`react-native-project-structure/`** - Complete React Native project structure example
 - **`monorepo-example/`** - Monorepo structure for shared codebase
@@ -514,19 +521,19 @@ Working examples in `examples/`:
 
 **Should this code be shared?**
 
-| Code Type | Share? | Reason |
-|-----------|--------|--------|
-| Data models | ✅ Yes | Platform-agnostic |
-| API clients | ✅ Yes | Platform-agnostic |
-| Business logic | ✅ Yes | Platform-agnostic |
-| Validation rules | ✅ Yes | Platform-agnostic |
-| State management | ✅ Yes | Can be platform-agnostic |
-| Utilities | ✅ Yes | Usually platform-agnostic |
-| Navigation logic | ⚠️ Maybe | Abstract if patterns differ |
-| Storage/persistence | ⚠️ Maybe | Abstract the interface |
-| UI components | ⚠️ Maybe | Depends on design requirements |
-| Platform APIs | ❌ No | Platform-specific by nature |
-| Native modules | ❌ No | Platform-specific |
-| Platform UX patterns | ❌ No | Should respect platform conventions |
+| Code Type            | Share?   | Reason                              |
+| -------------------- | -------- | ----------------------------------- |
+| Data models          | ✅ Yes   | Platform-agnostic                   |
+| API clients          | ✅ Yes   | Platform-agnostic                   |
+| Business logic       | ✅ Yes   | Platform-agnostic                   |
+| Validation rules     | ✅ Yes   | Platform-agnostic                   |
+| State management     | ✅ Yes   | Can be platform-agnostic            |
+| Utilities            | ✅ Yes   | Usually platform-agnostic           |
+| Navigation logic     | ⚠️ Maybe | Abstract if patterns differ         |
+| Storage/persistence  | ⚠️ Maybe | Abstract the interface              |
+| UI components        | ⚠️ Maybe | Depends on design requirements      |
+| Platform APIs        | ❌ No    | Platform-specific by nature         |
+| Native modules       | ❌ No    | Platform-specific                   |
+| Platform UX patterns | ❌ No    | Should respect platform conventions |
 
 Focus on extracting and sharing business logic while respecting platform-specific UI/UX conventions for the best user experience.

@@ -1,6 +1,6 @@
 ---
 description: Henry Orchestrator help - commands, agents, examples
-allowed-tools: ["Glob", "Read", "Grep", "Bash", "Task", "TodoWrite", "Edit", "Write", "WebFetch"]
+allowed-tools: ['Glob', 'Read', 'Grep', 'Bash', 'Task', 'TodoWrite', 'Edit', 'Write', 'WebFetch']
 ---
 
 # Henry Orchestrator Help

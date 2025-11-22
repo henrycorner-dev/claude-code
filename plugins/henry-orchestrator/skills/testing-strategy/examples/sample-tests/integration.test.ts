@@ -160,9 +160,9 @@ describe('User API Integration Tests', () => {
     });
 
     it('should validate required fields', async () => {
-      await expect(
-        userService.createUser({ email: '', name: 'Test' } as any)
-      ).rejects.toThrow('Email and name are required');
+      await expect(userService.createUser({ email: '', name: 'Test' } as any)).rejects.toThrow(
+        'Email and name are required'
+      );
 
       await expect(
         userService.createUser({ email: 'test@example.com', name: '' } as any)
@@ -215,9 +215,9 @@ describe('User API Integration Tests', () => {
     });
 
     it('should throw error for non-existent user', async () => {
-      await expect(
-        userService.updateUser('non-existent-id', { name: 'New Name' })
-      ).rejects.toThrow('User not found');
+      await expect(userService.updateUser('non-existent-id', { name: 'New Name' })).rejects.toThrow(
+        'User not found'
+      );
     });
   });
 
@@ -238,9 +238,7 @@ describe('User API Integration Tests', () => {
     });
 
     it('should throw error when deleting non-existent user', async () => {
-      await expect(
-        userService.deleteUser('non-existent-id')
-      ).rejects.toThrow('User not found');
+      await expect(userService.deleteUser('non-existent-id')).rejects.toThrow('User not found');
     });
   });
 
@@ -259,10 +257,7 @@ describe('User API Integration Tests', () => {
       // Verify all users exist
       const users = await db.findAll('users');
       expect(users).toHaveLength(2);
-      expect(users.map(u => u.email)).toEqual([
-        'user1@example.com',
-        'user2@example.com',
-      ]);
+      expect(users.map(u => u.email)).toEqual(['user1@example.com', 'user2@example.com']);
     });
 
     it('should handle create-update-delete workflow', async () => {

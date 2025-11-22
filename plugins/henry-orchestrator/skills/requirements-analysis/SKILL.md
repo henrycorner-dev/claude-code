@@ -13,6 +13,7 @@ This skill provides structured guidance for gathering, analyzing, and prioritizi
 ## When to Use This Skill
 
 Use this skill when:
+
 - Starting a new project or feature that needs requirements definition
 - Stakeholders request requirements gathering or user story creation
 - A project needs prioritization of features and capabilities
@@ -28,6 +29,7 @@ Use this skill when:
 Begin by identifying all stakeholders who have interest in or influence over the requirements:
 
 **Key stakeholder categories:**
+
 - End users and user personas
 - Product owners and business stakeholders
 - Technical leads and architects
@@ -36,6 +38,7 @@ Begin by identifying all stakeholders who have interest in or influence over the
 - External partners or integrators
 
 **For each stakeholder group:**
+
 - Document their primary needs and pain points
 - Identify their success criteria
 - Note any constraints they impose
@@ -46,18 +49,21 @@ Begin by identifying all stakeholders who have interest in or influence over the
 Apply multiple techniques to ensure comprehensive coverage:
 
 **Direct elicitation:**
+
 - Conduct stakeholder interviews with open-ended questions
 - Run workshops or brainstorming sessions
 - Observe users in their current workflow
 - Review existing documentation and systems
 
 **Indirect discovery:**
+
 - Analyze competitor products or similar systems
 - Review support tickets and user feedback
 - Examine usage analytics and metrics
 - Study industry standards and best practices
 
 **Structured approaches:**
+
 - Use user story mapping to visualize user journeys
 - Create personas to represent user archetypes
 - Develop use cases for key scenarios
@@ -68,6 +74,7 @@ Apply multiple techniques to ensure comprehensive coverage:
 Structure functional requirements as user stories following the standard format:
 
 **User story template:**
+
 ```
 As a [type of user]
 I want to [action or feature]
@@ -75,6 +82,7 @@ So that [benefit or value]
 ```
 
 **Essential elements for each user story:**
+
 - Clear persona or user role
 - Specific, actionable functionality
 - Explicit value or business benefit
@@ -83,6 +91,7 @@ So that [benefit or value]
 - Dependencies on other stories or systems
 
 **Feature grouping:**
+
 - Organize related user stories into features or epics
 - Define feature boundaries and scope
 - Identify cross-cutting features that affect multiple areas
@@ -93,6 +102,7 @@ So that [benefit or value]
 Capture quality attributes and system constraints systematically:
 
 **Performance requirements:**
+
 - Response time targets (e.g., API calls < 200ms at p95)
 - Throughput targets (e.g., 10,000 requests/second)
 - Resource utilization limits (CPU, memory, storage)
@@ -100,6 +110,7 @@ Capture quality attributes and system constraints systematically:
 - Real-time processing constraints
 
 **Scalability requirements:**
+
 - Expected user growth over time
 - Peak load scenarios and capacity planning
 - Horizontal vs. vertical scaling approach
@@ -107,6 +118,7 @@ Capture quality attributes and system constraints systematically:
 - Data volume growth projections
 
 **Security requirements:**
+
 - Authentication and authorization mechanisms
 - Data encryption (in transit and at rest)
 - Compliance requirements (GDPR, HIPAA, SOC 2, etc.)
@@ -114,6 +126,7 @@ Capture quality attributes and system constraints systematically:
 - Penetration testing and security scanning
 
 **Reliability and availability:**
+
 - Uptime targets (e.g., 99.9% availability)
 - Recovery time objectives (RTO)
 - Recovery point objectives (RPO)
@@ -121,6 +134,7 @@ Capture quality attributes and system constraints systematically:
 - Disaster recovery requirements
 
 **Maintainability and operability:**
+
 - Code quality standards and testing coverage
 - Documentation requirements
 - Deployment frequency and rollback capabilities
@@ -128,6 +142,7 @@ Capture quality attributes and system constraints systematically:
 - Support and on-call requirements
 
 **Usability and accessibility:**
+
 - User interface standards and guidelines
 - Accessibility compliance (WCAG, Section 508)
 - Internationalization and localization
@@ -141,24 +156,28 @@ For detailed NFR frameworks and templates, see `references/nfr-framework.md`.
 Apply systematic prioritization to focus effort on highest-value work:
 
 **MoSCoW method:**
+
 - **Must have:** Critical requirements for minimum viable product
 - **Should have:** Important but not critical for initial launch
 - **Could have:** Desirable if time and resources permit
 - **Won't have (this time):** Explicitly deferred to future releases
 
 **Value vs. Effort matrix:**
+
 - Plot requirements on 2x2 grid: High/Low Value × High/Low Effort
 - Prioritize high-value, low-effort items ("quick wins")
 - Carefully evaluate high-value, high-effort items ("major projects")
 - Defer or eliminate low-value items
 
 **Weighted scoring:**
+
 - Define criteria: business value, user impact, technical risk, compliance
 - Assign weights to each criterion based on project context
 - Score each requirement against criteria
 - Calculate weighted total for ranking
 
 **Kano model:**
+
 - **Basic needs:** Must be present; absence causes dissatisfaction
 - **Performance needs:** More is better; linear satisfaction
 - **Excitement features:** Unexpected delights that differentiate
@@ -170,6 +189,7 @@ Consult `references/prioritization-methods.md` for detailed prioritization frame
 Define clear, testable criteria for each requirement:
 
 **Acceptance criteria characteristics:**
+
 - Specific and unambiguous
 - Testable through manual or automated means
 - Independent of implementation details
@@ -177,11 +197,13 @@ Define clear, testable criteria for each requirement:
 - Cover both happy paths and edge cases
 
 **Format options:**
+
 - **Given-When-Then (Gherkin):** Given [context], When [action], Then [outcome]
 - **Checklist format:** Bulleted list of conditions that must be met
 - **Scenario-based:** Narrative descriptions of user interactions
 
 **Definition of Done checklist:**
+
 - Code complete and peer-reviewed
 - Unit tests written and passing
 - Integration tests passing
@@ -196,6 +218,7 @@ Define clear, testable criteria for each requirement:
 Organize and document requirements for team accessibility:
 
 **Documentation structure:**
+
 - Executive summary with project goals
 - Stakeholder list with contact information
 - Functional requirements (user stories, features)
@@ -205,6 +228,7 @@ Organize and document requirements for team accessibility:
 - Open questions and assumptions
 
 **Living documentation:**
+
 - Keep requirements in version control
 - Update as requirements evolve
 - Link requirements to implementation (code, issues, PRs)
@@ -218,6 +242,7 @@ For document templates and examples, see `examples/requirements-document.md`.
 ### Conflicting Requirements
 
 When stakeholders have incompatible needs:
+
 - Document all perspectives explicitly
 - Facilitate discussion to understand root needs
 - Identify underlying constraints or assumptions
@@ -227,6 +252,7 @@ When stakeholders have incompatible needs:
 ### Vague or Incomplete Requirements
 
 When requirements lack clarity:
+
 - Ask clarifying questions: Who? What? When? Where? Why? How?
 - Request concrete examples or scenarios
 - Build prototypes or mockups to elicit feedback
@@ -236,6 +262,7 @@ When requirements lack clarity:
 ### Scope Creep
 
 To maintain project boundaries:
+
 - Establish clear scope baseline early
 - Implement formal change request process
 - Evaluate new requirements against project goals
@@ -245,6 +272,7 @@ To maintain project boundaries:
 ### Technical Uncertainty
 
 When requirements involve unknown technical challenges:
+
 - Identify and document technical risks
 - Plan spikes or proofs-of-concept for validation
 - Engage technical experts early
@@ -274,12 +302,14 @@ When requirements involve unknown technical challenges:
 ### Reference Files
 
 For comprehensive frameworks and templates:
+
 - **`references/nfr-framework.md`** - Detailed non-functional requirements framework with examples
 - **`references/prioritization-methods.md`** - In-depth prioritization techniques and decision frameworks
 
 ### Example Files
 
 Working examples and templates:
+
 - **`examples/requirements-document.md`** - Complete requirements document template
 - **`examples/user-story-examples.md`** - User story examples across different domains
 - **`examples/nfr-examples.md`** - Non-functional requirements examples by category
@@ -287,6 +317,7 @@ Working examples and templates:
 ## Summary
 
 Effective requirements analysis involves:
+
 1. Identifying all stakeholders and their needs
 2. Gathering requirements through multiple techniques
 3. Structuring functional requirements as user stories

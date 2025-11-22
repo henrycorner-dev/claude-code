@@ -12,7 +12,7 @@ const { promisify } = require('util');
 const redisClient = redis.createClient({
   host: process.env.REDIS_HOST || 'localhost',
   port: process.env.REDIS_PORT || 6379,
-  retry_strategy: (options) => {
+  retry_strategy: options => {
     if (options.error && options.error.code === 'ECONNREFUSED') {
       return new Error('Redis server refused connection');
     }
@@ -23,7 +23,7 @@ const redisClient = redis.createClient({
       return undefined;
     }
     return Math.min(options.attempt * 100, 3000);
-  }
+  },
 });
 
 // Promisify Redis methods
@@ -42,9 +42,9 @@ const db = {
       id: params[0],
       name: 'John Doe',
       email: 'john@example.com',
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
     };
-  }
+  },
 };
 
 /**
@@ -133,10 +133,7 @@ async function getUsers(userIds) {
 
   // Batch query for cache misses
   if (missingIds.length > 0) {
-    const users = await db.query(
-      `SELECT * FROM users WHERE id IN (${missingIds.join(',')})`,
-      []
-    );
+    const users = await db.query(`SELECT * FROM users WHERE id IN (${missingIds.join(',')})`, []);
 
     // Cache each user
     for (const user of users) {
@@ -188,7 +185,7 @@ async function getCacheStats() {
   return {
     hits,
     misses,
-    hitRate: (hitRate * 100).toFixed(2) + '%'
+    hitRate: (hitRate * 100).toFixed(2) + '%',
   };
 }
 
@@ -217,7 +214,6 @@ async function main() {
     // Get cache stats
     const stats = await getCacheStats();
     console.log('Cache stats:', stats);
-
   } catch (error) {
     console.error('Error:', error);
   } finally {
@@ -234,5 +230,5 @@ module.exports = {
   updateUser,
   getUsers,
   warmCache,
-  getCacheStats
+  getCacheStats,
 };

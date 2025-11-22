@@ -1,6 +1,7 @@
 # Basic WebSocket Multiplayer Example
 
 This example demonstrates a simple multiplayer game using WebSockets with:
+
 - Client-side prediction
 - Server reconciliation
 - Entity interpolation
@@ -22,12 +23,14 @@ node -e "const GameClient = require('./client.js'); new GameClient();"
 ## Architecture
 
 **Server (`server.js`):**
+
 - Runs at 20Hz tick rate
 - Authoritative game state
 - Validates all client inputs
 - Broadcasts state snapshots to all clients
 
 **Client (`client.js`):**
+
 - Client-side prediction for local player (instant response)
 - Server reconciliation to correct predictions
 - Entity interpolation for other players (smooth at 100ms delay)
@@ -38,6 +41,7 @@ node -e "const GameClient = require('./client.js'); new GameClient();"
 ### Client-Side Prediction
 
 When the player presses a key:
+
 1. Client immediately applies movement (no lag)
 2. Client stores input with sequence number
 3. Client sends input to server
@@ -45,6 +49,7 @@ When the player presses a key:
 ### Server Reconciliation
 
 When server state arrives:
+
 1. Check if prediction matches server
 2. If mismatch: snap to server position and replay inputs
 3. Clean up confirmed inputs
@@ -52,6 +57,7 @@ When server state arrives:
 ### Entity Interpolation
 
 Other players are rendered at 100ms delay:
+
 1. Buffer recent server snapshots
 2. Interpolate between snapshots
 3. Result: smooth 60fps animation from 20Hz updates
@@ -71,6 +77,7 @@ python ../../scripts/latency-simulator.py --latency 50 --packet-loss 0.05
 ## Extending This Example
 
 To build a full game:
+
 1. Add actual rendering (Canvas, WebGL, or game engine)
 2. Implement proper input handling (keyboard/gamepad)
 3. Add game mechanics (shooting, collisions, etc.)

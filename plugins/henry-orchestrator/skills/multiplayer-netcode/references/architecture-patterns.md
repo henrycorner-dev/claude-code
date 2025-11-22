@@ -5,6 +5,7 @@ This reference provides complete architecture examples for different types of mu
 ## Pattern 1: Fast-Paced Competitive Shooter
 
 **Requirements:**
+
 - Responsive local player movement (no input lag)
 - Accurate hit detection despite latency
 - Smooth rendering of other players
@@ -32,16 +33,19 @@ Server:
 ### Complete Data Flow
 
 **Player Movement:**
+
 1. Client: Process input → Apply locally (predict) → Send to server
 2. Server: Receive input → Validate → Apply → Include in next snapshot
 3. Client: Receive snapshot → Reconcile if mismatch → Replay inputs
 
 **Shooting:**
+
 1. Client: Fire weapon → Raycast locally (show hit marker) → Send fire command
 2. Server: Receive fire → Rewind state by client latency → Validate hit → Apply damage
 3. All Clients: Receive damage event → Update health bars, show hit effects
 
 **Other Players:**
+
 1. Server: Broadcast state snapshots at 20Hz with all player positions
 2. Client: Buffer snapshots → Interpolate between buffered states at 100ms delay
 3. Client: Render smooth movement at 60fps from 20Hz data
@@ -107,9 +111,7 @@ class ShooterServer {
     const player = this.players.get(playerId);
 
     // Lag compensation
-    const compensatedState = this.stateHistory.getStateAt(
-      Date.now() - player.latency / 2
-    );
+    const compensatedState = this.stateHistory.getStateAt(Date.now() - player.latency / 2);
 
     // Validate hit
     const hit = this.validateShot(fireData, compensatedState);
@@ -131,24 +133,25 @@ class ShooterServer {
 ```javascript
 const ShooterConfig = {
   // Server
-  serverTickRate: 60,        // Hz - simulation rate
-  snapshotRate: 20,          // Hz - network update rate
-  maxCompensation: 200,      // ms - max lag compensation
+  serverTickRate: 60, // Hz - simulation rate
+  snapshotRate: 20, // Hz - network update rate
+  maxCompensation: 200, // ms - max lag compensation
 
   // Client
-  interpolationDelay: 100,   // ms - render delay for other players
+  interpolationDelay: 100, // ms - render delay for other players
   reconciliationThreshold: 0.1, // m - min error before reconciling
-  inputBufferSize: 60,       // frames - inputs stored for reconciliation
+  inputBufferSize: 60, // frames - inputs stored for reconciliation
 
   // Network
-  targetLatency: 50,         // ms - assumed minimum latency
-  maxLatency: 200            // ms - disconnect if exceeded
+  targetLatency: 50, // ms - assumed minimum latency
+  maxLatency: 200, // ms - disconnect if exceeded
 };
 ```
 
 ## Pattern 2: Racing Game
 
 **Requirements:**
+
 - Smooth vehicle physics
 - Close racing with tight gaps between cars
 - Handle connections dropping gracefully
@@ -202,21 +205,21 @@ class RacingCarInterpolator {
     const position = {
       x: car.position.x + car.velocity.x * dt + 0.5 * car.acceleration.x * dt * dt,
       y: car.position.y + car.velocity.y * dt + 0.5 * car.acceleration.y * dt * dt,
-      z: car.position.z + car.velocity.z * dt + 0.5 * car.acceleration.z * dt * dt
+      z: car.position.z + car.velocity.z * dt + 0.5 * car.acceleration.z * dt * dt,
     };
 
     // Extrapolate velocity
     const velocity = {
       x: car.velocity.x + car.acceleration.x * dt,
       y: car.velocity.y + car.acceleration.y * dt,
-      z: car.velocity.z + car.acceleration.z * dt
+      z: car.velocity.z + car.acceleration.z * dt,
     };
 
     return {
       id: car.id,
       position: position,
       velocity: velocity,
-      rotation: car.rotation // Keep last known rotation
+      rotation: car.rotation, // Keep last known rotation
     };
   }
 }
@@ -254,6 +257,7 @@ class SmoothPhysicsReconciliation {
 ## Pattern 3: Top-Down MOBA/RTS
 
 **Requirements:**
+
 - Many units on screen (10-100+)
 - Click-to-move gameplay (less sensitive to input lag)
 - Strategic gameplay (precision less critical than shooters)
@@ -297,7 +301,7 @@ class InterestManager {
     return {
       timestamp: Date.now(),
       playerUnits: relevantEntities.filter(e => e.ownerId === player.id),
-      otherUnits: relevantEntities.filter(e => e.ownerId !== player.id)
+      otherUnits: relevantEntities.filter(e => e.ownerId !== player.id),
     };
   }
 }
@@ -320,7 +324,7 @@ class DeltaCompression {
       timestamp: Date.now(),
       added: [],
       updated: [],
-      removed: []
+      removed: [],
     };
 
     // Find added and updated entities
@@ -352,9 +356,12 @@ class DeltaCompression {
     const dx = Math.abs(entity.position.x - lastEntity.position.x);
     const dy = Math.abs(entity.position.y - lastEntity.position.y);
 
-    return dx > positionThreshold || dy > positionThreshold ||
-           entity.health !== lastEntity.health ||
-           entity.state !== lastEntity.state;
+    return (
+      dx > positionThreshold ||
+      dy > positionThreshold ||
+      entity.health !== lastEntity.health ||
+      entity.state !== lastEntity.state
+    );
   }
 }
 ```
@@ -362,6 +369,7 @@ class DeltaCompression {
 ## Pattern 4: Turn-Based Game
 
 **Requirements:**
+
 - Discrete turns, no real-time movement
 - Reliable delivery (no input loss)
 - Low bandwidth (infrequent updates)
@@ -454,6 +462,7 @@ class TurnBasedServer {
 ## Pattern 5: Peer-to-Peer Co-op
 
 **Requirements:**
+
 - No dedicated server (peer-to-peer)
 - Trusted players (co-op, not competitive)
 - Lower latency between peers
@@ -501,9 +510,9 @@ class PeerToPeerManager {
 
   calculateHostScore(peer) {
     return (
-      (100 - peer.averageLatency) * 0.4 +  // Lower latency better
-      peer.connectionStability * 0.3 +      // Fewer disconnects better
-      peer.bandwidth * 0.3                  // Higher bandwidth better
+      (100 - peer.averageLatency) * 0.4 + // Lower latency better
+      peer.connectionStability * 0.3 + // Fewer disconnects better
+      peer.bandwidth * 0.3 // Higher bandwidth better
     );
   }
 
@@ -595,7 +604,7 @@ class SnapshotCompressor {
     return {
       x: Math.floor(xNorm * 65535), // 16-bit
       y: Math.floor(yNorm * 65535),
-      z: Math.floor(zNorm * 65535)
+      z: Math.floor(zNorm * 65535),
     };
   }
 
@@ -607,7 +616,7 @@ class SnapshotCompressor {
     return {
       x: worldBounds.min.x + xNorm * (worldBounds.max.x - worldBounds.min.x),
       y: worldBounds.min.y + yNorm * (worldBounds.max.y - worldBounds.min.y),
-      z: worldBounds.min.z + zNorm * (worldBounds.max.z - worldBounds.min.z)
+      z: worldBounds.min.z + zNorm * (worldBounds.max.z - worldBounds.min.z),
     };
   }
 }
@@ -617,13 +626,13 @@ Reduces position from 12 bytes (3 floats) to 6 bytes (3 shorts) with minimal pre
 
 ## Choosing the Right Pattern
 
-| Game Type | Pattern | Tickrate | Techniques |
-|-----------|---------|----------|------------|
-| Competitive Shooter | #1 Shooter | 60Hz | All techniques, high precision |
-| Racing | #2 Racing | 20-30Hz | Prediction + Extrapolation |
-| MOBA/RTS | #3 MOBA | 20Hz | Interest management + Delta compression |
-| Turn-Based | #4 Turn-Based | Event-driven | Request-response, no prediction |
-| Co-op PvE | #5 P2P Co-op | 20-30Hz | Peer-to-peer, trusted clients |
+| Game Type           | Pattern       | Tickrate     | Techniques                              |
+| ------------------- | ------------- | ------------ | --------------------------------------- |
+| Competitive Shooter | #1 Shooter    | 60Hz         | All techniques, high precision          |
+| Racing              | #2 Racing     | 20-30Hz      | Prediction + Extrapolation              |
+| MOBA/RTS            | #3 MOBA       | 20Hz         | Interest management + Delta compression |
+| Turn-Based          | #4 Turn-Based | Event-driven | Request-response, no prediction         |
+| Co-op PvE           | #5 P2P Co-op  | 20-30Hz      | Peer-to-peer, trusted clients           |
 
 ## Further Reading
 

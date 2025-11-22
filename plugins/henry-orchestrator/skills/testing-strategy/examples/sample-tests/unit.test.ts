@@ -69,7 +69,7 @@ describe('calculateTotal', () => {
   });
 
   it('should handle decimal prices', () => {
-    const items = [{ price: 10.99 }, { price: 20.50 }];
+    const items = [{ price: 10.99 }, { price: 20.5 }];
     expect(calculateTotal(items)).toBeCloseTo(31.49, 2);
   });
 });
@@ -148,7 +148,7 @@ describe('ShoppingCart', () => {
 
     it('should calculate total correctly', () => {
       cart.addItem({ id: '1', price: 15.99 });
-      cart.addItem({ id: '2', price: 24.50 });
+      cart.addItem({ id: '2', price: 24.5 });
       expect(cart.getTotal()).toBeCloseTo(40.49, 2);
     });
   });

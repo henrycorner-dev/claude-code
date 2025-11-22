@@ -15,11 +15,13 @@ Phase 1 → Phase 2 → Phase 3 → Phase 4
 **Use Case**: Full feature development from strategy to production
 
 **When to Use**:
+
 - Clear dependencies between phases
 - Later work requires earlier outputs
 - Building new features from scratch
 
 **Example Command Sequence**:
+
 ```bash
 /henry-orchestrator:henry-product
 /henry-orchestrator:henry-design
@@ -43,12 +45,14 @@ Phase 1 → Phase 2 → Phase 3 → Phase 4
 **Use Case**: Comprehensive project audit across multiple domains
 
 **When to Use**:
+
 - Tasks are truly independent
 - No sequential dependencies
 - Multiple perspectives on same artifact
 - Time-sensitive deliverables
 
 **Example Command Sequence**:
+
 ```bash
 # Run all in parallel (single message with multiple commands)
 /henry-orchestrator:henry-team security-engineer
@@ -69,12 +73,14 @@ Phase 1 → [Phase 2a + Phase 2b] → Phase 3 → [Phase 4a + Phase 4b + Phase 4
 **Use Case**: MVP product launch with optimized timeline
 
 **When to Use**:
+
 - Complex projects with both dependencies and parallelizable work
 - Medium to large projects (2+ weeks)
 - Multiple team members or domains
 - Need to optimize for speed without sacrificing quality
 
 **Example Command Sequence**:
+
 ```bash
 # Sequential strategy
 /henry-orchestrator:henry-product
@@ -113,12 +119,14 @@ Plan → Build → Review → Refine → (repeat until done)
 **Use Case**: Agile feature development with continuous feedback
 
 **When to Use**:
+
 - Requirements are evolving or uncertain
 - Need continuous user feedback
 - Agile or lean development approach
 - Risk of building wrong thing is high
 
 **Example Command Sequence**:
+
 ```bash
 # Iteration 1
 /henry-orchestrator:henry-team product-strategist  # Plan
@@ -140,46 +148,46 @@ Plan → Build → Review → Refine → (repeat until done)
 
 ### By Project Size
 
-| Project Size | Recommended Pattern | Example |
-|-------------|-------------------|---------|
-| **Small** (< 1 week) | Linear | henry-feature → henry-review |
+| Project Size           | Recommended Pattern | Example                                     |
+| ---------------------- | ------------------- | ------------------------------------------- |
+| **Small** (< 1 week)   | Linear              | henry-feature → henry-review                |
 | **Medium** (1-4 weeks) | Hybrid or Iterative | henry-product → [design + spec] → implement |
-| **Large** (1-3 months) | Hybrid + Iterative | Full workflow with sprint cycles |
+| **Large** (1-3 months) | Hybrid + Iterative  | Full workflow with sprint cycles            |
 
 ---
 
 ### By Project Type
 
-| Project Type | Recommended Pattern | Key Commands |
-|-------------|-------------------|--------------|
-| **New Feature** | Linear | henry-product → henry-design → henry-feature → henry-review |
-| **Redesign** | Iterative | henry-design → test → refine → implement |
-| **Performance Optimization** | Iterative | Baseline → optimize → benchmark → (repeat) |
-| **Product Launch** | Hybrid | Strategy → [parallel prep] → launch |
-| **Multi-Feature Release** | Parallel + Hybrid | [Feature A + Feature B + Feature C] → integration |
+| Project Type                 | Recommended Pattern | Key Commands                                                |
+| ---------------------------- | ------------------- | ----------------------------------------------------------- |
+| **New Feature**              | Linear              | henry-product → henry-design → henry-feature → henry-review |
+| **Redesign**                 | Iterative           | henry-design → test → refine → implement                    |
+| **Performance Optimization** | Iterative           | Baseline → optimize → benchmark → (repeat)                  |
+| **Product Launch**           | Hybrid              | Strategy → [parallel prep] → launch                         |
+| **Multi-Feature Release**    | Parallel + Hybrid   | [Feature A + Feature B + Feature C] → integration           |
 
 ---
 
 ### By Team Size
 
-| Team Size | Recommended Pattern | Parallelization |
-|----------|-------------------|-----------------|
-| **Solo Developer** | Linear or Iterative | Minimal parallelization |
-| **Small Team (2-5)** | Hybrid | 2-3 parallel tracks |
-| **Large Team (6+)** | Parallel + Hybrid | Multiple parallel workflows |
+| Team Size            | Recommended Pattern | Parallelization             |
+| -------------------- | ------------------- | --------------------------- |
+| **Solo Developer**   | Linear or Iterative | Minimal parallelization     |
+| **Small Team (2-5)** | Hybrid              | 2-3 parallel tracks         |
+| **Large Team (6+)**  | Parallel + Hybrid   | Multiple parallel workflows |
 
 ---
 
 ## Pattern Comparison
 
-| Aspect | Linear | Parallel | Hybrid | Iterative |
-|--------|--------|----------|---------|-----------|
-| **Complexity** | Low | Medium | High | Medium |
-| **Speed** | Slowest | Fastest | Fast | Variable |
-| **Flexibility** | Low | Low | Medium | High |
-| **Risk** | Low | Medium | Medium | Low |
-| **Best For** | Simple projects | Time-sensitive | Complex projects | Uncertain requirements |
-| **Team Size** | 1-3 | 3+ | 5+ | 1-5 |
+| Aspect          | Linear          | Parallel       | Hybrid           | Iterative              |
+| --------------- | --------------- | -------------- | ---------------- | ---------------------- |
+| **Complexity**  | Low             | Medium         | High             | Medium                 |
+| **Speed**       | Slowest         | Fastest        | Fast             | Variable               |
+| **Flexibility** | Low             | Low            | Medium           | High                   |
+| **Risk**        | Low             | Medium         | Medium           | Low                    |
+| **Best For**    | Simple projects | Time-sensitive | Complex projects | Uncertain requirements |
+| **Team Size**   | 1-3             | 3+             | 5+               | 1-5                    |
 
 ---
 
@@ -264,21 +272,27 @@ Optimize → Launch
 ## Best Practices Across All Patterns
 
 ### 1. Start with Clear Objectives
+
 Define success criteria before starting any workflow
 
 ### 2. Document Decisions
+
 Record why you chose specific approaches and sequences
 
 ### 3. Build in Quality Gates
+
 Regular checkpoints prevent late-stage surprises
 
 ### 4. Communicate Progress
+
 Keep stakeholders informed at each phase
 
 ### 5. Learn and Adapt
+
 Review workflows after completion and identify improvements
 
 ### 6. Measure Outcomes
+
 Track cycle time, quality, and efficiency metrics
 
 ---
@@ -286,9 +300,11 @@ Track cycle time, quality, and efficiency metrics
 ## Additional Resources
 
 ### Skills
+
 - `workflow-orchestration-patterns` - This skill (comprehensive guide)
 
 ### Commands
+
 - `/henry-orchestrator:help` - Full command reference
 - `/henry-orchestrator:henry-product` - Product strategy
 - `/henry-orchestrator:henry-design` - Design workflow
@@ -300,6 +316,7 @@ Track cycle time, quality, and efficiency metrics
 - `/henry-orchestrator:henry-team` - Custom agent teams
 
 ### Agents
+
 16 specialist agents available for custom workflows - see `/henry-orchestrator:help` for full list
 
 ---
@@ -307,6 +324,7 @@ Track cycle time, quality, and efficiency metrics
 ## Contributing Examples
 
 Have a successful workflow pattern to share? Consider documenting:
+
 - The pattern structure
 - Real-world use case
 - Command sequences

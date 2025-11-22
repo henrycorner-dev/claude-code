@@ -5,18 +5,21 @@
 ### Responsive vs Adaptive
 
 **Responsive Design:**
+
 - Fluid layouts that scale continuously
 - Uses relative units (%, em, rem, vw, vh)
 - Adapts smoothly to any screen size
 - Single layout that flexes
 
 **Adaptive Design:**
+
 - Fixed layouts for specific breakpoints
 - Switches between distinct layouts
 - Optimized for specific device categories
 - Multiple layouts for different screens
 
 **Hybrid Approach (Recommended):**
+
 - Combine both strategies
 - Responsive within breakpoints
 - Adaptive layout changes at major breakpoints
@@ -24,16 +27,19 @@
 ### Design Principles
 
 **Content Priority:**
+
 - Essential content always visible
 - Progressive disclosure for secondary info
 - Hide non-critical elements on small screens
 
 **Touch Targets:**
+
 - Minimum 44x44 pixels (iOS)
 - Minimum 48x48 dp (Android)
 - Larger for critical actions
 
 **Readable Text:**
+
 - Minimum 12-14px for body text
 - Scale proportionally with screen size
 - High contrast ratios
@@ -43,6 +49,7 @@
 ### Common Resolutions
 
 **Mobile (Portrait):**
+
 - 320x568 (iPhone SE)
 - 375x667 (iPhone 8)
 - 390x844 (iPhone 13)
@@ -50,30 +57,35 @@
 - 412x915 (Android)
 
 **Mobile (Landscape):**
+
 - 568x320 (iPhone SE)
 - 667x375 (iPhone 8)
 - 844x390 (iPhone 13)
 - 915x412 (Android)
 
 **Tablet:**
+
 - 768x1024 (iPad)
 - 1024x768 (iPad landscape)
 - 820x1180 (iPad Air)
 - 1280x800 (Android tablet)
 
 **Desktop:**
+
 - 1280x720 (720p)
 - 1920x1080 (1080p, most common)
 - 2560x1440 (1440p)
 - 3840x2160 (4K)
 
 **Console:**
+
 - 1920x1080 (PS5, Xbox Series X)
 - 3840x2160 (4K gaming)
 
 ### Aspect Ratios
 
 **Common Ratios:**
+
 - 16:9 (1920x1080, 1280x720) - Standard widescreen
 - 16:10 (1920x1200, 1280x800) - Monitors
 - 21:9 (2560x1080, 3440x1440) - Ultrawide
@@ -82,6 +94,7 @@
 - 18:9 (2160x1080) - Phones
 
 **Design Implications:**
+
 - Test UI at multiple aspect ratios
 - Avoid fixed positioning that breaks on ultrawide
 - Use anchor points and constraints
@@ -92,6 +105,7 @@
 ### Defining Breakpoints
 
 **Standard Breakpoints:**
+
 ```
 Mobile:    < 768px
 Tablet:    768px - 1024px
@@ -100,6 +114,7 @@ Large:     > 1920px
 ```
 
 **Game-Specific Breakpoints:**
+
 ```
 Phone (Portrait):  < 600px width
 Phone (Landscape): < 900px width, < 600px height
@@ -110,34 +125,48 @@ Desktop/Console:   > 1280px
 ### Breakpoint Strategy
 
 **Mobile-First:**
+
 ```css
 /* Base styles for mobile */
-.ui-panel { width: 100%; }
+.ui-panel {
+  width: 100%;
+}
 
 /* Tablet and up */
 @media (min-width: 768px) {
-    .ui-panel { width: 50%; }
+  .ui-panel {
+    width: 50%;
+  }
 }
 
 /* Desktop and up */
 @media (min-width: 1024px) {
-    .ui-panel { width: 33%; }
+  .ui-panel {
+    width: 33%;
+  }
 }
 ```
 
 **Desktop-First:**
+
 ```css
 /* Base styles for desktop */
-.ui-panel { width: 33%; }
+.ui-panel {
+  width: 33%;
+}
 
 /* Tablet and down */
 @media (max-width: 1024px) {
-    .ui-panel { width: 50%; }
+  .ui-panel {
+    width: 50%;
+  }
 }
 
 /* Mobile */
 @media (max-width: 768px) {
-    .ui-panel { width: 100%; }
+  .ui-panel {
+    width: 100%;
+  }
 }
 ```
 
@@ -148,12 +177,14 @@ Desktop/Console:   > 1280px
 **UI Scale Mode:**
 
 **Constant Pixel Size:**
+
 ```csharp
 // Fixed pixel size, UI doesn't scale
 canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ConstantPixelSize;
 ```
 
 **Scale With Screen Size (Recommended):**
+
 ```csharp
 canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
 canvasScaler.referenceResolution = new Vector2(1920, 1080);
@@ -162,11 +193,13 @@ canvasScaler.matchWidthOrHeight = 0.5f; // 0 = width, 1 = height, 0.5 = balanced
 ```
 
 **Screen Match Mode:**
+
 - Match Width: UI scales based on width (good for portrait)
 - Match Height: UI scales based on height (good for landscape)
 - Match Width or Height: Blend between the two
 
 **Constant Physical Size:**
+
 ```csharp
 // Size in physical units (inches, cm)
 canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ConstantPhysicalSize;
@@ -175,6 +208,7 @@ canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ConstantPhysicalSize;
 ### Anchors and Pivots (Unity)
 
 **Anchor Presets:**
+
 ```
 Top-Left      Top-Center      Top-Right
 ├─────────────┼─────────────┤
@@ -186,6 +220,7 @@ Bottom-Left   Bottom-Center  Bottom-Right
 ```
 
 **Stretch Anchors:**
+
 ```
 Stretch Horizontally: Left + Right anchors at opposite sides
 Stretch Vertically:   Top + Bottom anchors at opposite sides
@@ -193,12 +228,14 @@ Stretch Both:         All four anchors at corners
 ```
 
 **Anchor Usage:**
+
 - Health bar (top-left): Anchor to top-left corner
 - Mini-map (top-right): Anchor to top-right corner
 - Interaction prompt (bottom-center): Anchor to bottom-center
 - Full-screen menu: Stretch to fill entire canvas
 
 **Example:**
+
 ```csharp
 // Anchor health bar to top-left
 RectTransform healthBar = healthBarObject.GetComponent<RectTransform>();
@@ -210,11 +247,13 @@ healthBar.anchoredPosition = new Vector2(20, -20); // Offset from anchor
 ### Layout Groups (Unity)
 
 **Horizontal Layout Group:**
+
 ```
 [Item 1] [Item 2] [Item 3]
 ```
 
 **Vertical Layout Group:**
+
 ```
 [Item 1]
 [Item 2]
@@ -222,12 +261,14 @@ healthBar.anchoredPosition = new Vector2(20, -20); // Offset from anchor
 ```
 
 **Grid Layout Group:**
+
 ```
 [Item 1] [Item 2] [Item 3]
 [Item 4] [Item 5] [Item 6]
 ```
 
 **Properties:**
+
 - Spacing: Gap between elements
 - Padding: Space around edges
 - Child Alignment: How children align within group
@@ -238,80 +279,86 @@ healthBar.anchoredPosition = new Vector2(20, -20); // Offset from anchor
 ### Flexbox (Web/CSS)
 
 **Flex Container:**
+
 ```css
 .menu {
-    display: flex;
-    flex-direction: row; /* or column */
-    justify-content: center; /* horizontal alignment */
-    align-items: center; /* vertical alignment */
-    gap: 16px; /* spacing between items */
+  display: flex;
+  flex-direction: row; /* or column */
+  justify-content: center; /* horizontal alignment */
+  align-items: center; /* vertical alignment */
+  gap: 16px; /* spacing between items */
 }
 ```
 
 **Flex Items:**
+
 ```css
 .menu-item {
-    flex: 1; /* grow to fill space */
-    flex-shrink: 1; /* shrink if needed */
-    flex-basis: auto; /* initial size */
+  flex: 1; /* grow to fill space */
+  flex-shrink: 1; /* shrink if needed */
+  flex-basis: auto; /* initial size */
 }
 ```
 
 **Responsive Flex:**
+
 ```css
 /* Mobile: Stack vertically */
 .menu {
-    flex-direction: column;
+  flex-direction: column;
 }
 
 /* Desktop: Horizontal layout */
 @media (min-width: 768px) {
-    .menu {
-        flex-direction: row;
-    }
+  .menu {
+    flex-direction: row;
+  }
 }
 ```
 
 ### Grid (Web/CSS)
 
 **Grid Container:**
+
 ```css
 .inventory {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-    gap: 8px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 8px;
 }
 ```
 
 **Fixed Grid:**
+
 ```css
 .inventory {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr); /* 5 columns */
-    grid-template-rows: repeat(4, 80px); /* 4 rows, 80px each */
-    gap: 8px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* 5 columns */
+  grid-template-rows: repeat(4, 80px); /* 4 rows, 80px each */
+  gap: 8px;
 }
 ```
 
 **Responsive Grid:**
+
 ```css
 /* Mobile: 2 columns */
 .inventory {
-    grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, 1fr);
 }
 
 /* Tablet: 4 columns */
 @media (min-width: 768px) {
-    .inventory {
-        grid-template-columns: repeat(4, 1fr);
-    }
+  .inventory {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
 /* Desktop: 6 columns */
 @media (min-width: 1024px) {
-    .inventory {
-        grid-template-columns: repeat(6, 1fr);
-    }
+  .inventory {
+    grid-template-columns: repeat(6, 1fr);
+  }
 }
 ```
 
@@ -320,12 +367,14 @@ healthBar.anchoredPosition = new Vector2(20, -20); // Offset from anchor
 ### Mobile Safe Areas
 
 **Device Considerations:**
+
 - Notches (iPhone X and newer)
 - Camera cutouts (Android)
 - Home indicator (iPhone)
 - Rounded corners
 
 **Safe Area Zones:**
+
 ```
 ┌─────────────────────────┐
 │ ⚠️  Notch/Camera      │  ← Avoid placing critical UI
@@ -341,6 +390,7 @@ healthBar.anchoredPosition = new Vector2(20, -20); // Offset from anchor
 ### Unity Safe Area
 
 **Detect Safe Area:**
+
 ```csharp
 public class SafeAreaHandler : MonoBehaviour
 {
@@ -381,6 +431,7 @@ public class SafeAreaHandler : MonoBehaviour
 ```
 
 **Selective Safe Area:**
+
 ```csharp
 // Only apply to top (for notch)
 panel.anchorMin = new Vector2(0, safeArea.position.y / Screen.height);
@@ -394,32 +445,37 @@ panel.anchorMax = new Vector2(1, (safeArea.position.y + safeArea.size.y) / Scree
 ### CSS Safe Area
 
 **Environment Variables:**
+
 ```css
 .ui-container {
-    padding-top: env(safe-area-inset-top);
-    padding-right: env(safe-area-inset-right);
-    padding-bottom: env(safe-area-inset-bottom);
-    padding-left: env(safe-area-inset-left);
+  padding-top: env(safe-area-inset-top);
+  padding-right: env(safe-area-inset-right);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
 }
 ```
 
 **Viewport Meta Tag:**
+
 ```html
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 ```
 
 ### Console Safe Zones
 
 **TV Overscan:**
+
 - Traditional TVs may cut off edges (5-10%)
 - Modern TVs usually don't have this issue
 - Still recommended to have 5% margin
 
 **Action Safe:**
+
 - 90% of screen area
 - Essential information must be here
 
 **Title Safe:**
+
 - 80% of screen area
 - Text must be within this zone
 
@@ -441,18 +497,21 @@ panel.anchorMax = new Vector2(1, (safeArea.position.y + safeArea.size.y) / Scree
 ### Mobile Optimizations
 
 **Touch-Friendly:**
+
 - Larger buttons (minimum 44x44px)
 - Increased spacing between elements
 - Bottom-sheet modals instead of center dialogs
 - Swipe gestures for navigation
 
 **Performance:**
+
 - Reduce transparency/blur effects
 - Simplify animations
 - Use sprite atlases
 - Minimize draw calls
 
 **Layout Adjustments:**
+
 ```
 Mobile Portrait:
 ┌─────────┐
@@ -475,17 +534,20 @@ Mobile Landscape:
 ### Tablet Optimizations
 
 **Utilize Space:**
+
 - Multi-column layouts
 - Side panels
 - Split-screen for menus
 - Picture-in-picture
 
 **Hybrid Input:**
+
 - Touch-friendly but also support mouse/trackpad
 - Larger buttons than desktop but smaller than phone
 - Support keyboard shortcuts
 
 **Layout:**
+
 ```
 Tablet:
 ┌────────────────────────┐
@@ -502,17 +564,20 @@ Tablet:
 ### Desktop/Console Optimizations
 
 **Mouse/Controller:**
+
 - Smaller UI elements (more screen real estate)
 - Hover states and tooltips
 - Context menus
 - Keyboard shortcuts
 
 **High Resolution:**
+
 - Scale UI appropriately (don't leave tiny)
 - Use higher quality assets
 - More information density acceptable
 
 **Layout:**
+
 ```
 Desktop:
 ┌────────────────────────────────┐
@@ -531,6 +596,7 @@ Desktop:
 **Inventory Grid:**
 
 **Mobile (2 columns):**
+
 ```
 ┌───┬───┐
 │ 1 │ 2 │
@@ -542,6 +608,7 @@ Desktop:
 ```
 
 **Tablet (4 columns):**
+
 ```
 ┌───┬───┬───┬───┐
 │ 1 │ 2 │ 3 │ 4 │
@@ -551,6 +618,7 @@ Desktop:
 ```
 
 **Desktop (6 columns):**
+
 ```
 ┌───┬───┬───┬───┬───┬───┐
 │ 1 │ 2 │ 3 │ 4 │ 5 │ 6 │
@@ -564,6 +632,7 @@ Desktop:
 ### Automatic Scaling
 
 **Calculate Scale Factor:**
+
 ```csharp
 public class UIScaler : MonoBehaviour
 {
@@ -582,6 +651,7 @@ public class UIScaler : MonoBehaviour
 ```
 
 **Relative Font Sizing:**
+
 ```csharp
 // Scale font based on screen height
 float baseFontSize = 24f;
@@ -593,12 +663,14 @@ textComponent.fontSize = Mathf.Clamp(scaledFontSize, 12f, 48f);
 ### User-Controlled Scaling
 
 **UI Scale Slider:**
+
 ```
 UI Scale: [━━━━━━━○━━] 100%
           50%        150%
 ```
 
 **Implementation:**
+
 ```csharp
 public class UIScaleController : MonoBehaviour
 {
@@ -631,6 +703,7 @@ public class UIScaleController : MonoBehaviour
 ### Portrait vs Landscape
 
 **Detect Orientation:**
+
 ```csharp
 void Update()
 {
@@ -648,6 +721,7 @@ void Update()
 ```
 
 **Lock Orientation:**
+
 ```csharp
 // Lock to landscape
 Screen.orientation = ScreenOrientation.LandscapeLeft;
@@ -665,6 +739,7 @@ Screen.autorotateToLandscapeRight = false;
 ```
 
 **Adapt Layout:**
+
 ```csharp
 public class OrientationHandler : MonoBehaviour
 {
@@ -702,16 +777,16 @@ public class OrientationHandler : MonoBehaviour
 ```css
 /* Portrait styles */
 @media (orientation: portrait) {
-    .ui-container {
-        flex-direction: column;
-    }
+  .ui-container {
+    flex-direction: column;
+  }
 }
 
 /* Landscape styles */
 @media (orientation: landscape) {
-    .ui-container {
-        flex-direction: row;
-    }
+  .ui-container {
+    flex-direction: row;
+  }
 }
 ```
 
@@ -720,71 +795,77 @@ public class OrientationHandler : MonoBehaviour
 ### Dynamic Font Sizing
 
 **Relative Units:**
+
 ```css
 body {
-    font-size: 16px; /* Base size */
+  font-size: 16px; /* Base size */
 }
 
 h1 {
-    font-size: 2em; /* 32px */
+  font-size: 2em; /* 32px */
 }
 
 p {
-    font-size: 1em; /* 16px */
+  font-size: 1em; /* 16px */
 }
 
 small {
-    font-size: 0.875em; /* 14px */
+  font-size: 0.875em; /* 14px */
 }
 ```
 
 **Viewport Units:**
+
 ```css
 .title {
-    font-size: 5vw; /* 5% of viewport width */
+  font-size: 5vw; /* 5% of viewport width */
 }
 
 .subtitle {
-    font-size: 3vh; /* 3% of viewport height */
+  font-size: 3vh; /* 3% of viewport height */
 }
 
 .responsive-text {
-    font-size: calc(16px + 0.5vw); /* Minimum 16px, scales with viewport */
+  font-size: calc(16px + 0.5vw); /* Minimum 16px, scales with viewport */
 }
 ```
 
 ### Text Wrap and Overflow
 
 **Truncate with Ellipsis:**
+
 ```css
 .text-truncate {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 ```
 
 **Multi-line Clamp:**
+
 ```css
 .text-clamp {
-    display: -webkit-box;
-    -webkit-line-clamp: 3; /* Limit to 3 lines */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Limit to 3 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 ```
 
 **Word Wrap:**
+
 ```css
 .text-wrap {
-    word-wrap: break-word;
-    overflow-wrap: break-word;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 ```
 
 ### Minimum Font Sizes
 
 **Never Go Below:**
+
 - Mobile: 14px minimum
 - Tablet: 13px minimum
 - Desktop: 12px minimum
@@ -795,12 +876,14 @@ small {
 ### Test Devices
 
 **Physical Devices:**
+
 - Various phones (small, medium, large)
 - Tablets (7", 10", 12")
 - Different aspect ratios
 - Different DPI/pixel densities
 
 **Emulators/Simulators:**
+
 - Unity Device Simulator
 - Browser DevTools device emulation
 - Platform-specific emulators (Xcode, Android Studio)
@@ -808,6 +891,7 @@ small {
 ### Test Scenarios
 
 **Checklist:**
+
 - [ ] UI readable at smallest supported screen
 - [ ] No overlapping elements at any size
 - [ ] Touch targets large enough on mobile
@@ -822,23 +906,29 @@ small {
 ### Common Issues
 
 **Problem: Text too small on mobile**
+
 - Solution: Increase base font size, add minimum font size
 
 **Problem: Buttons overlap on small screens**
+
 - Solution: Increase spacing, stack vertically, reduce button count
 
 **Problem: UI cut off by notch**
+
 - Solution: Apply safe area insets
 
 **Problem: Layout breaks on ultrawide**
+
 - Solution: Use max-width constraints, anchor properly
 
 **Problem: Performance issues on mobile**
+
 - Solution: Reduce transparency, simplify shaders, optimize canvas
 
 ## Best Practices Summary
 
 ✅ **DO:**
+
 - Use anchors and constraints properly
 - Test on real devices
 - Respect safe areas
@@ -853,6 +943,7 @@ small {
 - Profile performance
 
 ❌ **DON'T:**
+
 - Hard-code positions and sizes
 - Assume fixed screen dimensions
 - Ignore safe areas
@@ -869,17 +960,20 @@ small {
 ## Tools and Resources
 
 ### Design Tools
+
 - Figma: Responsive design with constraints
 - Adobe XD: Auto-layout and responsive resize
 - Sketch: Responsive resizing
 
 ### Testing Tools
+
 - Unity Device Simulator
 - Browser DevTools (Responsive Design Mode)
 - BrowserStack: Test on real devices remotely
 - TestFlight/Google Play Internal Testing
 
 ### Helpful Resources
+
 - Material Design Guidelines (responsive)
 - Apple Human Interface Guidelines
 - Unity UI Best Practices

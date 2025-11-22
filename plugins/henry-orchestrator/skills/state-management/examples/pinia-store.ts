@@ -151,18 +151,18 @@ export const useProductsStore = defineStore('products', () => {
   const productCount = computed(() => products.value.length);
 
   const expensiveProducts = computed(() => {
-    return products.value.filter((p) => p.price > 100);
+    return products.value.filter(p => p.price > 100);
   });
 
   const productsByCategory = computed(() => {
     return (categoryId: string) => {
-      return products.value.filter((p) => p.categoryId === categoryId);
+      return products.value.filter(p => p.categoryId === categoryId);
     };
   });
 
   const productById = computed(() => {
     return (id: string) => {
-      return products.value.find((p) => p.id === id);
+      return products.value.find(p => p.id === id);
     };
   });
 
@@ -211,14 +211,14 @@ export const useProductsStore = defineStore('products', () => {
   }
 
   function updateProduct(id: string, updates: Partial<Product>) {
-    const product = products.value.find((p) => p.id === id);
+    const product = products.value.find(p => p.id === id);
     if (product) {
       Object.assign(product, updates);
     }
   }
 
   function removeProduct(id: string) {
-    const index = products.value.findIndex((p) => p.id === id);
+    const index = products.value.findIndex(p => p.id === id);
     if (index > -1) {
       products.value.splice(index, 1);
     }
@@ -256,24 +256,24 @@ export const useCartStore = defineStore(
     }),
 
     getters: {
-      itemCount: (state) => {
+      itemCount: state => {
         return state.items.reduce((sum, item) => sum + item.quantity, 0);
       },
 
-      total: (state) => {
+      total: state => {
         return state.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
       },
 
-      itemById: (state) => {
-        return (id: string) => state.items.find((item) => item.id === id);
+      itemById: state => {
+        return (id: string) => state.items.find(item => item.id === id);
       },
 
-      isEmpty: (state) => state.items.length === 0,
+      isEmpty: state => state.items.length === 0,
     },
 
     actions: {
       addItem(productId: string, price: number) {
-        const existingItem = this.items.find((item) => item.productId === productId);
+        const existingItem = this.items.find(item => item.productId === productId);
 
         if (existingItem) {
           existingItem.quantity += 1;
@@ -288,14 +288,14 @@ export const useCartStore = defineStore(
       },
 
       removeItem(id: string) {
-        const index = this.items.findIndex((item) => item.id === id);
+        const index = this.items.findIndex(item => item.id === id);
         if (index > -1) {
           this.items.splice(index, 1);
         }
       },
 
       updateQuantity(id: string, quantity: number) {
-        const item = this.items.find((item) => item.id === id);
+        const item = this.items.find(item => item.id === id);
         if (item) {
           if (quantity <= 0) {
             this.removeItem(id);
@@ -366,7 +366,7 @@ export const useNotificationsStore = defineStore('notifications', () => {
   }
 
   function remove(id: string) {
-    const index = notifications.value.findIndex((n) => n.id === id);
+    const index = notifications.value.findIndex(n => n.id === id);
     if (index > -1) {
       notifications.value.splice(index, 1);
     }
@@ -402,11 +402,11 @@ export function setupUserSubscription() {
   userStore.$onAction(({ name, args, after, onError }) => {
     console.log(`User action: ${name}`, args);
 
-    after((result) => {
+    after(result => {
       console.log(`User action ${name} completed`, result);
     });
 
-    onError((error) => {
+    onError(error => {
       console.error(`User action ${name} failed`, error);
     });
   });

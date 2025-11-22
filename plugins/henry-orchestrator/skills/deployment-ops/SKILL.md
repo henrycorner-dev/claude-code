@@ -11,6 +11,7 @@ Specialized guidance for CI/CD pipelines, containerization, orchestration, and m
 ## Purpose
 
 Assist with designing, implementing, and optimizing deployment infrastructure including:
+
 - **CI/CD Pipelines**: GitHub Actions, Jenkins, GitLab CI
 - **Containerization**: Docker, multi-stage builds, optimization
 - **Orchestration**: Kubernetes deployments, services, and configurations
@@ -19,6 +20,7 @@ Assist with designing, implementing, and optimizing deployment infrastructure in
 ## When to Use This Skill
 
 Use this skill for deployment operations tasks:
+
 - Setting up or modifying CI/CD pipelines
 - Creating Docker containers and optimizing images
 - Deploying applications to Kubernetes
@@ -33,6 +35,7 @@ Use this skill for deployment operations tasks:
 Create workflow files in `.github/workflows/` directory:
 
 **Basic Structure:**
+
 ```yaml
 name: Workflow Name
 on: [push, pull_request]
@@ -46,6 +49,7 @@ jobs:
 ```
 
 **Common Patterns:**
+
 - Use caching for dependencies (`actions/cache`)
 - Run tests in parallel with matrix strategy
 - Use secrets for credentials (`${{ secrets.SECRET_NAME }}`)
@@ -53,6 +57,7 @@ jobs:
 - Use artifacts for sharing data between jobs
 
 **Best Practices:**
+
 - Pin action versions (`@v4` not `@main`)
 - Use minimal permissions with `permissions:`
 - Fail fast in matrix builds
@@ -66,6 +71,7 @@ For detailed patterns and examples, see `references/github-actions.md`.
 Create `Jenkinsfile` in repository root:
 
 **Declarative Pipeline Structure:**
+
 ```groovy
 pipeline {
     agent any
@@ -80,6 +86,7 @@ pipeline {
 ```
 
 **Key Features:**
+
 - Use agents for distributed builds
 - Define environment variables in `environment` block
 - Implement post-build actions in `post` section
@@ -112,6 +119,7 @@ CMD ["node", "dist/index.js"]
 ```
 
 **Key Optimization Techniques:**
+
 - Use alpine or distroless base images
 - Order layers from least to most frequently changed
 - Combine RUN commands to reduce layers
@@ -120,6 +128,7 @@ CMD ["node", "dist/index.js"]
 - Use specific version tags, never `latest`
 
 **Security Considerations:**
+
 - Scan images with `docker scan` or Trivy
 - Keep base images updated
 - Minimize installed packages
@@ -138,7 +147,7 @@ services:
   app:
     build: .
     ports:
-      - "3000:3000"
+      - '3000:3000'
     environment:
       - NODE_ENV=development
     volumes:
@@ -178,17 +187,17 @@ spec:
         app: myapp
     spec:
       containers:
-      - name: app
-        image: myapp:v1.0.0
-        ports:
-        - containerPort: 8080
-        resources:
-          requests:
-            cpu: 100m
-            memory: 128Mi
-          limits:
-            cpu: 500m
-            memory: 512Mi
+        - name: app
+          image: myapp:v1.0.0
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
 ```
 
 **Service:**
@@ -203,9 +212,9 @@ spec:
   selector:
     app: myapp
   ports:
-  - port: 80
-    targetPort: 8080
-  type: ClusterIP  # or LoadBalancer, NodePort
+    - port: 80
+      targetPort: 8080
+  type: ClusterIP # or LoadBalancer, NodePort
 ```
 
 **ConfigMap & Secrets:**
@@ -230,6 +239,7 @@ data:
 ```
 
 **Best Practices:**
+
 - Set resource requests and limits
 - Use liveness and readiness probes
 - Implement horizontal pod autoscaling
@@ -262,6 +272,7 @@ def handle_request():
 ```
 
 **Key Metric Types:**
+
 - **Counter**: Monotonically increasing value (requests, errors)
 - **Gauge**: Value that can go up or down (active connections, queue size)
 - **Histogram**: Observations in buckets (request duration, response size)
@@ -279,19 +290,21 @@ spec:
     matchLabels:
       app: myapp
   endpoints:
-  - port: metrics
-    interval: 30s
+    - port: metrics
+      interval: 30s
 ```
 
 ### Grafana Dashboards
 
 **Dashboard Components:**
+
 - Panels for visualizing metrics
 - Variables for dynamic filtering
 - Alerts for threshold violations
 - Annotations for deployment markers
 
 **Common Query Patterns:**
+
 - Rate of change: `rate(metric[5m])`
 - Aggregation: `sum(metric) by (label)`
 - Percentiles: `histogram_quantile(0.95, metric)`
@@ -324,11 +337,13 @@ For detailed monitoring setup, alerting rules, and dashboard examples, see `refe
 ### Environment Strategy
 
 **Recommended Environments:**
+
 - **Development**: Local Docker Compose
 - **Staging**: Kubernetes cluster mirroring production
 - **Production**: Kubernetes with HA and monitoring
 
 **Configuration Management:**
+
 - Use separate ConfigMaps per environment
 - Externalize all environment-specific values
 - Use tools like Kustomize or Helm for overlays
@@ -339,18 +354,21 @@ For detailed monitoring setup, alerting rules, and dashboard examples, see `refe
 ### Common Issues
 
 **Container Issues:**
+
 - Check logs: `docker logs <container>`
 - Inspect: `docker inspect <container>`
 - Execute shell: `docker exec -it <container> sh`
 - Check resource usage: `docker stats`
 
 **Kubernetes Issues:**
+
 - Check pod status: `kubectl get pods`
 - View logs: `kubectl logs <pod>`
 - Describe resource: `kubectl describe <resource> <name>`
 - Check events: `kubectl get events --sort-by='.lastTimestamp'`
 
 **CI/CD Pipeline Issues:**
+
 - Review workflow/pipeline logs
 - Check secret availability
 - Verify permissions and credentials
@@ -363,6 +381,7 @@ For detailed troubleshooting guides and debugging techniques, see `references/tr
 ### Reference Files
 
 Detailed documentation for specific topics:
+
 - **`references/github-actions.md`** - Advanced GitHub Actions patterns, reusable workflows, marketplace actions
 - **`references/jenkins.md`** - Jenkins pipeline best practices, shared libraries, distributed builds
 - **`references/docker.md`** - Comprehensive Dockerfile optimization, security hardening, multi-arch builds
@@ -373,6 +392,7 @@ Detailed documentation for specific topics:
 ### Example Files
 
 Working configurations in `examples/`:
+
 - **`examples/github-actions-nodejs.yml`** - Complete Node.js CI/CD workflow
 - **`examples/github-actions-python.yml`** - Python testing and Docker deployment
 - **`examples/Dockerfile.nodejs`** - Optimized multi-stage Node.js Dockerfile
@@ -385,6 +405,7 @@ Working configurations in `examples/`:
 ### Utility Scripts
 
 Tools in `scripts/`:
+
 - **`scripts/validate-dockerfile.sh`** - Dockerfile linting and security checks
 - **`scripts/k8s-validate.sh`** - Kubernetes manifest validation
 - **`scripts/docker-optimize.sh`** - Analyze and suggest image optimizations
@@ -392,18 +413,21 @@ Tools in `scripts/`:
 ## Integration with Other Components
 
 ### With CI/CD:
+
 - Build and push Docker images in pipeline
 - Deploy to Kubernetes from GitHub Actions/Jenkins
 - Run integration tests against deployed services
 - Implement automated rollback on test failure
 
 ### With Monitoring:
+
 - Add deployment annotations to Grafana
 - Monitor deployment rollout progress
 - Alert on deployment failures or degraded performance
 - Track deployment frequency and lead time metrics
 
 ### Security Integration:
+
 - Scan containers for vulnerabilities
 - Implement image signing and verification
 - Use pod security policies/standards
@@ -413,12 +437,14 @@ Tools in `scripts/`:
 ## Quick Reference
 
 ### Docker Commands
+
 - Build: `docker build -t image:tag .`
 - Run: `docker run -p 8080:80 image:tag`
 - Push: `docker push registry/image:tag`
 - Compose up: `docker-compose up -d`
 
 ### Kubernetes Commands
+
 - Apply: `kubectl apply -f manifest.yaml`
 - Get status: `kubectl get pods -n namespace`
 - Logs: `kubectl logs -f pod-name`
@@ -426,6 +452,7 @@ Tools in `scripts/`:
 - Scale: `kubectl scale deployment/name --replicas=5`
 
 ### Common Patterns
+
 - Blue-green deployments for zero-downtime
 - Canary releases for gradual rollout
 - Rolling updates as default Kubernetes strategy
@@ -434,6 +461,7 @@ Tools in `scripts/`:
 ## Best Practices Summary
 
 **CI/CD:**
+
 - Run tests before deployment
 - Use caching to speed up builds
 - Implement proper secret management
@@ -441,6 +469,7 @@ Tools in `scripts/`:
 - Enable rollback capability
 
 **Containers:**
+
 - Use multi-stage builds
 - Minimize image size
 - Run as non-root user
@@ -448,6 +477,7 @@ Tools in `scripts/`:
 - Use specific version tags
 
 **Kubernetes:**
+
 - Set resource limits
 - Implement health checks
 - Use horizontal autoscaling
@@ -455,6 +485,7 @@ Tools in `scripts/`:
 - Enable monitoring and logging
 
 **Monitoring:**
+
 - Instrument application code
 - Set up alerts for critical metrics
 - Monitor deployment impact

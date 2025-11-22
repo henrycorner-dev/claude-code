@@ -7,6 +7,7 @@ Advanced Dockerfile optimization, security hardening, and multi-architecture bui
 ### Node.js Application
 
 **Optimized Production Build:**
+
 ```dockerfile
 # Build stage
 FROM node:20-alpine AS builder
@@ -44,6 +45,7 @@ CMD ["node", "dist/index.js"]
 ### Python Application
 
 **With Virtual Environment:**
+
 ```dockerfile
 # Build stage
 FROM python:3.11-slim AS builder
@@ -87,6 +89,7 @@ CMD ["python", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000
 ### Go Application
 
 **Minimal Image with Distroless:**
+
 ```dockerfile
 # Build stage
 FROM golang:1.21-alpine AS builder
@@ -122,6 +125,7 @@ ENTRYPOINT ["/main"]
 ### Ordering Best Practices
 
 **Bad - Frequent Rebuilds:**
+
 ```dockerfile
 FROM node:20-alpine
 WORKDIR /app
@@ -131,6 +135,7 @@ CMD ["npm", "start"]
 ```
 
 **Good - Optimized Caching:**
+
 ```dockerfile
 FROM node:20-alpine
 WORKDIR /app
@@ -148,6 +153,7 @@ CMD ["npm", "start"]
 ### Combining Commands
 
 **Bad - Multiple Layers:**
+
 ```dockerfile
 RUN apt-get update
 RUN apt-get install -y curl
@@ -156,6 +162,7 @@ RUN apt-get clean
 ```
 
 **Good - Single Layer:**
+
 ```dockerfile
 RUN apt-get update && \
     apt-get install -y --no-install-recommends curl vim && \
@@ -168,6 +175,7 @@ RUN apt-get update && \
 ### Non-Root User
 
 **Alpine:**
+
 ```dockerfile
 FROM alpine:3.19
 
@@ -181,6 +189,7 @@ USER appuser
 ```
 
 **Debian/Ubuntu:**
+
 ```dockerfile
 FROM debian:12-slim
 
@@ -196,18 +205,21 @@ USER appuser
 ### Minimal Base Images
 
 **Size Comparison:**
+
 - `ubuntu:22.04` - ~77MB
 - `debian:12-slim` - ~74MB
 - `alpine:3.19` - ~7MB
 - `gcr.io/distroless/static` - ~2MB
 
 **Distroless Benefits:**
+
 - No shell or package manager
 - Minimal attack surface
 - Only runtime dependencies
 - Cannot execute arbitrary commands
 
 **When to Use Each:**
+
 - **Alpine**: Balance of size and compatibility
 - **Distroless**: Maximum security for static binaries
 - **Slim**: Need more tools, compatibility
@@ -216,6 +228,7 @@ USER appuser
 ### Secret Management
 
 **Bad - Secrets in Image:**
+
 ```dockerfile
 # NEVER do this
 COPY .env .
@@ -223,6 +236,7 @@ RUN echo "API_KEY=secret123" >> /app/config
 ```
 
 **Good - Runtime Secrets:**
+
 ```dockerfile
 # Use environment variables at runtime
 ENV API_KEY=""
@@ -232,6 +246,7 @@ VOLUME /run/secrets
 ```
 
 **Docker Build Secrets:**
+
 ```dockerfile
 # syntax=docker/dockerfile:1
 FROM alpine
@@ -242,6 +257,7 @@ RUN --mount=type=secret,id=api_key \
 ```
 
 Build command:
+
 ```bash
 docker build --secret id=api_key,src=./api_key.txt .
 ```
@@ -249,6 +265,7 @@ docker build --secret id=api_key,src=./api_key.txt .
 ## .dockerignore
 
 **Comprehensive Example:**
+
 ```
 # Version control
 .git
@@ -324,6 +341,7 @@ CMD ["node", "server.js"]
 ```
 
 **healthcheck.js:**
+
 ```javascript
 const http = require('http');
 
@@ -331,10 +349,10 @@ const options = {
   host: 'localhost',
   port: 3000,
   path: '/health',
-  timeout: 2000
+  timeout: 2000,
 };
 
-const request = http.request(options, (res) => {
+const request = http.request(options, res => {
   if (res.statusCode === 200) {
     process.exit(0);
   } else {
@@ -413,6 +431,7 @@ RUN echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc && \
 ```
 
 Build command:
+
 ```bash
 docker build \
   --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
@@ -452,6 +471,7 @@ RUN --mount=type=cache,target=/go/pkg/mod \
 ### External Cache
 
 **GitHub Actions:**
+
 ```yaml
 - uses: docker/build-push-action@v5
   with:
@@ -463,6 +483,7 @@ RUN --mount=type=cache,target=/go/pkg/mod \
 ```
 
 **Registry Cache:**
+
 ```bash
 docker buildx build \
   --cache-from type=registry,ref=myregistry/myimage:cache \
@@ -519,11 +540,13 @@ grype myimage:latest -o sarif
 ### Minimize Context
 
 **Bad:**
+
 ```bash
 docker build .  # Sends entire directory
 ```
 
 **Good:**
+
 ```bash
 # Use .dockerignore to exclude files
 # Or specify context
@@ -553,12 +576,14 @@ CMD ["node", "dist/index.js"]
 ### BuildKit Features
 
 Enable BuildKit:
+
 ```bash
 export DOCKER_BUILDKIT=1
 docker build .
 ```
 
 Or in docker-compose:
+
 ```yaml
 version: '3.8'
 services:
@@ -576,6 +601,7 @@ services:
 ### Development vs Production
 
 **Multi-Target Dockerfile:**
+
 ```dockerfile
 FROM node:20-alpine AS base
 WORKDIR /app
@@ -596,6 +622,7 @@ CMD ["node", "dist/index.js"]
 ```
 
 Build specific target:
+
 ```bash
 # Development
 docker build --target development -t app:dev .
@@ -665,6 +692,7 @@ dive myimage:latest
 ## Best Practices Summary
 
 **Image Size:**
+
 - Use multi-stage builds
 - Choose minimal base images
 - Combine RUN commands
@@ -672,6 +700,7 @@ dive myimage:latest
 - Use .dockerignore
 
 **Security:**
+
 - Run as non-root user
 - Scan for vulnerabilities
 - Use specific version tags
@@ -680,6 +709,7 @@ dive myimage:latest
 - Keep base images updated
 
 **Performance:**
+
 - Order layers by change frequency
 - Use BuildKit cache mounts
 - Leverage build cache
@@ -687,6 +717,7 @@ dive myimage:latest
 - Use external cache for CI
 
 **Maintainability:**
+
 - Document ARGs and defaults
 - Add labels for metadata
 - Use meaningful stage names

@@ -28,24 +28,28 @@ This document provides best practices, common challenges, and solutions for synt
 ### Severity Levels
 
 **Critical** (P0 - Fix immediately):
+
 - Security vulnerabilities exploitable in production
 - WCAG A violations (accessibility blockers)
 - Performance issues causing >5s load times
 - Complete feature failures
 
 **High** (P1 - Fix before launch):
+
 - Important security hardening
 - WCAG AA violations
 - Performance issues preventing targets
 - Major UX problems
 
 **Medium** (P2 - Fix in near term):
+
 - Defense-in-depth security improvements
 - Performance optimizations beyond targets
 - UX enhancements
 - Code quality improvements
 
 **Low** (P3 - Backlog):
+
 - Future enhancements
 - Nice-to-have optimizations
 - Polish items
@@ -72,6 +76,7 @@ Low Impact, High Effort: Avoid (Not worth it)
 ### Strategy 1 - Find Both/And Solution
 
 **Example**:
+
 - Performance wants lazy loading + A11y wants keyboard nav
 - **Resolution**: Lazy loading with keyboard-accessible loading indicators and skip links
 - **Rationale**: Both goals achievable with proper implementation
@@ -79,6 +84,7 @@ Low Impact, High Effort: Avoid (Not worth it)
 ### Strategy 2 - Security/A11y Prevails
 
 **Example**:
+
 - Security wants strict CSP + Frontend wants third-party widgets
 - **Resolution**: Find CSP-compliant alternatives or build in-house
 - **Rationale**: Security is non-negotiable, features must work within constraints
@@ -86,6 +92,7 @@ Low Impact, High Effort: Avoid (Not worth it)
 ### Strategy 3 - Data-Driven Decision
 
 **Example**:
+
 - UX wants feature A + Performance concerned about cost
 - **Resolution**: Use product-strategist to assess business value, A/B test if needed
 - **Rationale**: Let impact data guide trade-off
@@ -93,6 +100,7 @@ Low Impact, High Effort: Avoid (Not worth it)
 ### Strategy 4 - Phased Approach
 
 **Example**:
+
 - Frontend wants comprehensive redesign + Performance wants minimal changes
 - **Resolution**: Phase 1 (critical changes), Phase 2 (enhancements), measure impact
 - **Rationale**: Incremental approach reduces risk while delivering value
@@ -104,11 +112,13 @@ Low Impact, High Effort: Avoid (Not worth it)
 **Problem**: Too many findings to process effectively
 
 **Symptoms**:
+
 - 50+ issues across multiple agents
 - Stakeholders overwhelmed by report length
 - Unable to identify clear priorities
 
 **Solution**:
+
 1. Start with critical/high severity only
 2. Group related findings into themes
 3. Focus on blockers first
@@ -116,6 +126,7 @@ Low Impact, High Effort: Avoid (Not worth it)
 5. Use visual aids (charts, severity matrix)
 
 **Example**:
+
 ```
 Instead of listing all 50 issues:
 - Executive Summary: "5 critical blockers, 12 high priority issues"
@@ -128,11 +139,13 @@ Instead of listing all 50 issues:
 **Problem**: Agents recommend opposite approaches
 
 **Symptoms**:
+
 - Performance vs. functionality trade-offs
 - Security vs. user experience conflicts
 - A11y vs. visual design disagreements
 
 **Solution**:
+
 1. Understand each agent's constraints and priorities
 2. Look for both/and solutions first
 3. Apply priority framework (security > a11y > performance > polish)
@@ -140,6 +153,7 @@ Instead of listing all 50 issues:
 5. Escalate if needed (use product-strategist for business trade-offs)
 
 **Example**:
+
 ```
 Conflict: UX wants rich animations vs. Performance concerned about CLS
 
@@ -155,11 +169,13 @@ Resolution:
 **Problem**: Synthesis complete but no one assigned to act
 
 **Symptoms**:
+
 - Report created but no follow-up
 - Issues remain unfixed
 - No accountability for resolution
 
 **Solution**:
+
 1. Explicitly assign owners to each action item
 2. Set realistic deadlines based on priority
 3. Create tracking mechanism (GitHub issues, project board)
@@ -167,6 +183,7 @@ Resolution:
 5. Get sign-off from owners before finalizing
 
 **Example**:
+
 ```
 Action Plan:
 1. Fix SQL injection in auth [Owner: @security-lead, Due: 2024-01-15]
@@ -181,11 +198,13 @@ Follow-up: Weekly sync every Monday 10am until all P0/P1 resolved
 **Problem**: Synthesis loses important context from agent outputs
 
 **Symptoms**:
+
 - Engineers can't understand recommendations
 - Stakeholders question findings
 - Unable to verify or reproduce issues
 
 **Solution**:
+
 1. Link back to detailed agent findings
 2. Include key quotes or data points
 3. Maintain appendix with full details
@@ -193,6 +212,7 @@ Follow-up: Weekly sync every Monday 10am until all P0/P1 resolved
 5. Preserve agent reasoning and evidence
 
 **Example**:
+
 ```
 Instead of: "Fix performance issues"
 
@@ -208,12 +228,14 @@ Better: "Optimize image loading (reduces LCP from 4.2s to 2.1s)
 **Problem**: Different stakeholders need different levels of detail
 
 **Symptoms**:
+
 - Executives want high-level summary
 - Engineers need technical specifics
 - Product managers need business impact
 - Single report doesn't serve any audience well
 
 **Solution**:
+
 1. Create layered documentation:
    - Executive summary (1 page)
    - Management overview (2-3 pages)
@@ -223,6 +245,7 @@ Better: "Optimize image loading (reduces LCP from 4.2s to 2.1s)
 4. Provide multiple formats (slides, report, dashboard)
 
 **Example**:
+
 ```
 For Executives:
 "5 security issues block launch. Fix requires 3 days. Risk: data breach."
@@ -240,17 +263,20 @@ For Engineering:
 **Problem**: Multiple agents identify the same issue
 
 **Symptoms**:
+
 - Same bug reported by security, QA, and performance
 - Confusion about which recommendation to follow
 - Inflated issue counts
 
 **Solution**:
+
 1. Deduplicate during synthesis
 2. Show which agents identified each issue
 3. Combine insights from multiple perspectives
 4. Use cross-agent validation as confidence signal
 
 **Example**:
+
 ```
 Instead of:
 - Security: Auth vulnerability
@@ -274,30 +300,35 @@ Integrated fix:
 Before finalizing synthesis, verify:
 
 ### Completeness
+
 - [ ] All agent outputs reviewed
 - [ ] All critical findings included
 - [ ] Cross-cutting themes identified
 - [ ] Conflicts resolved or escalated
 
 ### Clarity
+
 - [ ] Executive summary clear and concise
 - [ ] Technical details accurate and specific
 - [ ] Action items unambiguous
 - [ ] Success criteria measurable
 
 ### Actionability
+
 - [ ] Each action has owner
 - [ ] Deadlines are realistic
 - [ ] Dependencies identified
 - [ ] Resources available
 
 ### Traceability
+
 - [ ] Links to detailed agent outputs
 - [ ] References to evidence
 - [ ] Decision rationale documented
 - [ ] Version controlled
 
 ### Stakeholder Alignment
+
 - [ ] Appropriate level of detail for audience
 - [ ] Key stakeholders reviewed
 - [ ] Sign-offs obtained
@@ -350,11 +381,11 @@ Before finalizing synthesis, verify:
 
 ### Time Estimates by Complexity
 
-| Complexity | Agents | Issues | Time |
-|------------|--------|--------|------|
-| Simple | 2-3 | <20 | 2-3 hours |
-| Moderate | 3-5 | 20-50 | 4-6 hours |
-| Complex | 5+ | 50+ | 1-2 days |
+| Complexity | Agents | Issues | Time      |
+| ---------- | ------ | ------ | --------- |
+| Simple     | 2-3    | <20    | 2-3 hours |
+| Moderate   | 3-5    | 20-50  | 4-6 hours |
+| Complex    | 5+     | 50+    | 1-2 days  |
 
 ## Continuous Improvement
 
@@ -369,6 +400,7 @@ Before finalizing synthesis, verify:
 ### Retrospective Questions
 
 After each synthesis:
+
 1. What worked well in this synthesis?
 2. What could be improved?
 3. Were there any conflicts we struggled to resolve?

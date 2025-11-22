@@ -21,7 +21,7 @@ class PhysicsGame {
 
     // Create Matter.js engine
     this.engine = Engine.create({
-      gravity: { x: 0, y: 1 }
+      gravity: { x: 0, y: 1 },
     });
 
     this.world = this.engine.world;
@@ -51,8 +51,8 @@ class PhysicsGame {
         wireframes: true,
         showCollisions: true,
         showVelocity: true,
-        showAngleIndicator: true
-      }
+        showAngleIndicator: true,
+      },
     });
 
     Render.run(this.render);
@@ -61,16 +61,16 @@ class PhysicsGame {
   setupInput() {
     this.keys = {};
 
-    window.addEventListener('keydown', (e) => {
+    window.addEventListener('keydown', e => {
       this.keys[e.code] = true;
     });
 
-    window.addEventListener('keyup', (e) => {
+    window.addEventListener('keyup', e => {
       this.keys[e.code] = false;
     });
 
     // Mouse input for spawning objects
-    this.canvas.addEventListener('click', (e) => {
+    this.canvas.addEventListener('click', e => {
       const rect = this.canvas.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
@@ -83,30 +83,30 @@ class PhysicsGame {
     const ground = Bodies.rectangle(400, 580, 810, 60, {
       isStatic: true,
       friction: 0.8,
-      render: { fillStyle: '#444' }
+      render: { fillStyle: '#444' },
     });
     ground.label = 'ground';
     World.add(this.world, ground);
 
     // Create walls
     const leftWall = Bodies.rectangle(0, 300, 60, 600, {
-      isStatic: true
+      isStatic: true,
     });
     const rightWall = Bodies.rectangle(800, 300, 60, 600, {
-      isStatic: true
+      isStatic: true,
     });
     World.add(this.world, [leftWall, rightWall]);
 
     // Create platforms
     const platform1 = Bodies.rectangle(200, 400, 200, 20, {
       isStatic: true,
-      friction: 0.5
+      friction: 0.5,
     });
     platform1.label = 'platform';
 
     const platform2 = Bodies.rectangle(600, 300, 200, 20, {
       isStatic: true,
-      friction: 0.5
+      friction: 0.5,
     });
     platform2.label = 'platform';
 
@@ -130,11 +130,11 @@ class PhysicsGame {
       const rowY = y + row * boxSize;
 
       for (let col = 0; col < cols; col++) {
-        const boxX = x + col * boxSize + (row * boxSize / 2);
+        const boxX = x + col * boxSize + (row * boxSize) / 2;
         const box = Bodies.rectangle(boxX, rowY, boxSize, boxSize, {
           friction: 0.3,
           restitution: 0.2,
-          render: { fillStyle: '#ff6b6b' }
+          render: { fillStyle: '#ff6b6b' },
         });
         box.label = 'box';
         World.add(this.world, box);
@@ -146,21 +146,21 @@ class PhysicsGame {
     const box = Bodies.rectangle(x, y, 40, 40, {
       friction: 0.3,
       restitution: 0.6,
-      render: { fillStyle: '#4ecdc4' }
+      render: { fillStyle: '#4ecdc4' },
     });
     box.label = 'box';
     World.add(this.world, box);
   }
 
   setupCollisionHandling() {
-    Events.on(this.engine, 'collisionStart', (event) => {
+    Events.on(this.engine, 'collisionStart', event => {
       const pairs = event.pairs;
 
       for (const pair of pairs) {
         const { bodyA, bodyB } = pair;
 
         // Player collision with ground/platforms
-        if ((bodyA === this.player.body || bodyB === this.player.body)) {
+        if (bodyA === this.player.body || bodyB === this.player.body) {
           const other = bodyA === this.player.body ? bodyB : bodyA;
           if (other.label === 'ground' || other.label === 'platform') {
             this.player.onGround = true;
@@ -169,13 +169,13 @@ class PhysicsGame {
       }
     });
 
-    Events.on(this.engine, 'collisionEnd', (event) => {
+    Events.on(this.engine, 'collisionEnd', event => {
       const pairs = event.pairs;
 
       for (const pair of pairs) {
         const { bodyA, bodyB } = pair;
 
-        if ((bodyA === this.player.body || bodyB === this.player.body)) {
+        if (bodyA === this.player.body || bodyB === this.player.body) {
           const other = bodyA === this.player.body ? bodyB : bodyA;
           if (other.label === 'ground' || other.label === 'platform') {
             // Check if still grounded with raycast
@@ -262,13 +262,13 @@ class PhysicsGame {
     this.update(dt);
     this.render();
 
-    requestAnimationFrame((time) => this.gameLoop(time));
+    requestAnimationFrame(time => this.gameLoop(time));
   }
 
   start() {
     this.running = true;
     this.lastTime = performance.now();
-    requestAnimationFrame((time) => this.gameLoop(time));
+    requestAnimationFrame(time => this.gameLoop(time));
   }
 
   stop() {
@@ -282,11 +282,11 @@ class CharacterController {
 
     // Create physics body
     this.body = Bodies.rectangle(x, y, 40, 60, {
-      inertia: Infinity,        // Prevent rotation
-      friction: 0,              // No surface friction
+      inertia: Infinity, // Prevent rotation
+      friction: 0, // No surface friction
       frictionAir: 0.02,
       restitution: 0,
-      density: 0.002
+      density: 0.002,
     });
     this.body.label = 'player';
 
@@ -319,14 +319,14 @@ class CharacterController {
 
     Body.setVelocity(this.body, {
       x: newVelX,
-      y: this.body.velocity.y
+      y: this.body.velocity.y,
     });
 
     // Jumping
     if ((keys['Space'] || keys['ArrowUp'] || keys['KeyW']) && this.onGround) {
       Body.applyForce(this.body, this.body.position, {
         x: 0,
-        y: -this.jumpForce
+        y: -this.jumpForce,
       });
       this.onGround = false;
     }
@@ -339,21 +339,16 @@ class CharacterController {
     // Raycast downward to check for ground
     const rayStart = {
       x: this.body.position.x,
-      y: this.body.position.y + 30
+      y: this.body.position.y + 30,
     };
     const rayEnd = {
       x: this.body.position.x,
-      y: this.body.position.y + 35
+      y: this.body.position.y + 35,
     };
 
-    const collisions = Query.ray(
-      this.game.world.bodies,
-      rayStart,
-      rayEnd
-    );
+    const collisions = Query.ray(this.game.world.bodies, rayStart, rayEnd);
 
-    this.onGround = collisions.length > 0 &&
-                    collisions.some(c => c.body !== this.body);
+    this.onGround = collisions.length > 0 && collisions.some(c => c.body !== this.body);
   }
 
   render(ctx) {

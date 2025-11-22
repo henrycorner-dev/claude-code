@@ -5,29 +5,35 @@
 ### Level A (Minimum)
 
 **1.1.1 Non-text Content**
+
 - All images must have alt text
 - Decorative images: `alt=""`
 - Informative images: descriptive alt text
 - Complex images: extended description via aria-describedby
 
 **1.3.1 Info and Relationships**
+
 - Use semantic HTML (headings, lists, tables)
 - Form inputs must have associated labels
 - Group related content with fieldset/legend
 
 **2.1.1 Keyboard**
+
 - All functionality available via keyboard
 - No keyboard traps
 - Tab order follows logical flow
 
 **2.4.1 Bypass Blocks**
+
 - Skip navigation links for repeated content
 - Landmark regions (nav, main, aside)
 
 **3.1.1 Language of Page**
+
 - Declare language: `<html lang="en">`
 
 **4.1.1 Parsing**
+
 - Valid HTML structure
 - Unique IDs
 - Proper nesting
@@ -35,39 +41,48 @@
 ### Level AA (Standard - Recommended)
 
 **1.4.3 Contrast (Minimum)**
+
 - Normal text: 4.5:1 contrast ratio
 - Large text (18pt/14pt bold): 3:1 contrast ratio
 - Tools: WebAIM Contrast Checker, Chrome DevTools
 
 **1.4.5 Images of Text**
+
 - Avoid images of text when possible
 - Use actual text styled with CSS
 
 **2.4.6 Headings and Labels**
+
 - Descriptive headings (h1-h6)
 - Clear form labels
 
 **2.4.7 Focus Visible**
+
 - Visible keyboard focus indicator
 - Don't remove outline without replacement
 
 **3.2.3 Consistent Navigation**
+
 - Navigation in same order across pages
 
 **3.3.3 Error Suggestion**
+
 - Provide correction suggestions for input errors
 
 ### Level AAA (Enhanced)
 
 **1.4.6 Contrast (Enhanced)**
+
 - Normal text: 7:1 contrast ratio
 - Large text: 4.5:1 contrast ratio
 
 **2.4.8 Location**
+
 - Breadcrumb navigation
 - Site maps
 
 **3.3.5 Help**
+
 - Context-sensitive help available
 
 ## ARIA Patterns & Usage
@@ -75,12 +90,14 @@
 ### When to Use ARIA
 
 **Use ARIA when:**
+
 - Native HTML doesn't provide needed semantics
 - Creating custom widgets (tabs, accordions, modals)
 - Adding dynamic content announcements
 - Complex interactive components
 
 **Don't use ARIA when:**
+
 - Native HTML element exists (use `<button>` not `<div role="button">`)
 - It duplicates native semantics
 - It's decorative only
@@ -95,29 +112,21 @@
 
 <!-- aria-labelledby: References visible label -->
 <h2 id="dialog-title">Confirm Action</h2>
-<div role="dialog" aria-labelledby="dialog-title">
-  ...
-</div>
+<div role="dialog" aria-labelledby="dialog-title">...</div>
 
 <!-- aria-describedby: Provides additional description -->
-<input
-  id="password"
-  type="password"
-  aria-describedby="password-requirements"
-/>
-<p id="password-requirements">
-  Must be at least 8 characters with one number
-</p>
+<input id="password" type="password" aria-describedby="password-requirements" />
+<p id="password-requirements">Must be at least 8 characters with one number</p>
 ```
 
 #### States & Properties
 
 ```html
 <!-- aria-expanded: Collapsible state -->
-<button aria-expanded="false" aria-controls="submenu">
-  Menu
-</button>
-<ul id="submenu" hidden>...</ul>
+<button aria-expanded="false" aria-controls="submenu">Menu</button>
+<ul id="submenu" hidden>
+  ...
+</ul>
 
 <!-- aria-pressed: Toggle button state -->
 <button aria-pressed="false">Mute</button>
@@ -139,9 +148,7 @@
 
 ```html
 <!-- aria-live: Announce dynamic changes -->
-<div aria-live="polite" aria-atomic="true">
-  Items in cart: 3
-</div>
+<div aria-live="polite" aria-atomic="true">Items in cart: 3</div>
 
 <!-- polite: Wait for user pause -->
 <!-- assertive: Interrupt immediately -->
@@ -150,7 +157,8 @@
 <!-- aria-atomic: Announce entire region or just changes -->
 <div aria-live="polite" aria-atomic="false">
   <p>Message 1</p>
-  <p>Message 2</p> <!-- Only new messages announced -->
+  <p>Message 2</p>
+  <!-- Only new messages announced -->
 </div>
 
 <!-- role="status": Implicit aria-live="polite" -->
@@ -167,12 +175,7 @@
 ```html
 <div class="tabs">
   <div role="tablist" aria-label="Settings tabs">
-    <button
-      role="tab"
-      aria-selected="true"
-      aria-controls="general-panel"
-      id="general-tab"
-    >
+    <button role="tab" aria-selected="true" aria-controls="general-panel" id="general-tab">
       General
     </button>
     <button
@@ -186,26 +189,18 @@
     </button>
   </div>
 
-  <div
-    role="tabpanel"
-    id="general-panel"
-    aria-labelledby="general-tab"
-  >
+  <div role="tabpanel" id="general-panel" aria-labelledby="general-tab">
     General settings content
   </div>
 
-  <div
-    role="tabpanel"
-    id="privacy-panel"
-    aria-labelledby="privacy-tab"
-    hidden
-  >
+  <div role="tabpanel" id="privacy-panel" aria-labelledby="privacy-tab" hidden>
     Privacy settings content
   </div>
 </div>
 ```
 
 **Keyboard support:**
+
 - Tab: Focus into tablist, focus into active panel
 - Arrow Left/Right: Navigate between tabs
 - Home/End: First/last tab
@@ -216,24 +211,14 @@
 ```html
 <div class="accordion">
   <h3>
-    <button
-      aria-expanded="true"
-      aria-controls="section1-content"
-      id="section1-button"
-    >
+    <button aria-expanded="true" aria-controls="section1-content" id="section1-button">
       Section 1
     </button>
   </h3>
-  <div id="section1-content" role="region" aria-labelledby="section1-button">
-    Section 1 content
-  </div>
+  <div id="section1-content" role="region" aria-labelledby="section1-button">Section 1 content</div>
 
   <h3>
-    <button
-      aria-expanded="false"
-      aria-controls="section2-content"
-      id="section2-button"
-    >
+    <button aria-expanded="false" aria-controls="section2-content" id="section2-button">
       Section 2
     </button>
   </h3>
@@ -244,6 +229,7 @@
 ```
 
 **Keyboard support:**
+
 - Tab: Focus each accordion button
 - Enter/Space: Toggle section
 - Arrow Up/Down: Navigate buttons (optional)
@@ -258,15 +244,14 @@
   aria-describedby="dialog-description"
 >
   <h2 id="dialog-title">Confirm Delete</h2>
-  <p id="dialog-description">
-    Are you sure you want to delete this item?
-  </p>
+  <p id="dialog-description">Are you sure you want to delete this item?</p>
   <button>Cancel</button>
   <button>Delete</button>
 </div>
 ```
 
 **Requirements:**
+
 - Focus trapped within dialog
 - Esc key closes dialog
 - Focus returns to trigger element
@@ -281,13 +266,7 @@
       <a role="menuitem" href="/home">Home</a>
     </li>
     <li role="none">
-      <button
-        role="menuitem"
-        aria-haspopup="true"
-        aria-expanded="false"
-      >
-        Products
-      </button>
+      <button role="menuitem" aria-haspopup="true" aria-expanded="false">Products</button>
       <ul role="menu">
         <li role="none">
           <a role="menuitem" href="/products/software">Software</a>
@@ -303,12 +282,14 @@
 ### Automated Testing
 
 **Tools:**
+
 - axe DevTools (Chrome/Firefox extension)
 - Lighthouse (Chrome DevTools)
 - WAVE (Web Accessibility Evaluation Tool)
 - Pa11y (command line)
 
 **Run automated tests:**
+
 ```bash
 # Using Pa11y
 npm install -g pa11y
@@ -342,12 +323,14 @@ axe https://example.com
 #### Screen Reader Test
 
 **Tools:**
+
 - NVDA (Windows, free)
 - JAWS (Windows, paid)
 - VoiceOver (macOS/iOS, built-in)
 - TalkBack (Android, built-in)
 
 **VoiceOver (macOS):**
+
 - **Cmd+F5**: Toggle VoiceOver
 - **VO+A**: Start reading
 - **VO+Arrow**: Navigate elements
@@ -355,6 +338,7 @@ axe https://example.com
 - **VO+U**: Rotor menu
 
 **Test checklist:**
+
 - [ ] All content announced correctly
 - [ ] Images have meaningful alt text
 - [ ] Form fields have labels
@@ -367,11 +351,13 @@ axe https://example.com
 #### Contrast Testing
 
 **Tools:**
+
 - Chrome DevTools (Inspect > Accessibility pane)
 - WebAIM Contrast Checker
 - Colour Contrast Analyser (desktop app)
 
 **Check:**
+
 - [ ] Body text: 4.5:1 minimum
 - [ ] Large text (18pt+/14pt bold+): 3:1 minimum
 - [ ] UI components: 3:1 minimum
@@ -426,46 +412,49 @@ axe https://example.com
 ### Issue 1: Missing Alt Text
 
 ❌ **Bad:**
+
 ```html
-<img src="product.jpg">
+<img src="product.jpg" />
 ```
 
 ✅ **Good:**
+
 ```html
 <!-- Informative -->
-<img src="product.jpg" alt="Blue wireless headphones">
+<img src="product.jpg" alt="Blue wireless headphones" />
 
 <!-- Decorative -->
-<img src="decoration.jpg" alt="">
+<img src="decoration.jpg" alt="" />
 
 <!-- Complex (chart/diagram) -->
-<img src="chart.jpg" alt="Sales chart" aria-describedby="chart-desc">
-<div id="chart-desc">
-  Detailed description: Sales increased 25% in Q3...
-</div>
+<img src="chart.jpg" alt="Sales chart" aria-describedby="chart-desc" />
+<div id="chart-desc">Detailed description: Sales increased 25% in Q3...</div>
 ```
 
 ### Issue 2: Unlabeled Form Inputs
 
 ❌ **Bad:**
+
 ```html
-<input type="text" placeholder="Email">
+<input type="text" placeholder="Email" />
 ```
 
 ✅ **Good:**
+
 ```html
-<label for="email">Email address</label>
-<input id="email" type="email" required>
+<label for="email">Email address</label> <input id="email" type="email" required />
 ```
 
 ### Issue 3: Non-Semantic Buttons
 
 ❌ **Bad:**
+
 ```html
 <div onclick="submit()">Submit</div>
 ```
 
 ✅ **Good:**
+
 ```html
 <button type="submit">Submit</button>
 ```
@@ -473,6 +462,7 @@ axe https://example.com
 ### Issue 4: Poor Color Contrast
 
 ❌ **Bad:**
+
 ```css
 .text {
   color: #777; /* 2.7:1 contrast on white */
@@ -481,6 +471,7 @@ axe https://example.com
 ```
 
 ✅ **Good:**
+
 ```css
 .text {
   color: #595959; /* 4.5:1 contrast on white */
@@ -491,6 +482,7 @@ axe https://example.com
 ### Issue 5: No Focus Indicator
 
 ❌ **Bad:**
+
 ```css
 button:focus {
   outline: none; /* NEVER do this without replacement */
@@ -498,6 +490,7 @@ button:focus {
 ```
 
 ✅ **Good:**
+
 ```css
 button:focus-visible {
   outline: 2px solid #005fcc;
@@ -508,6 +501,7 @@ button:focus-visible {
 ### Issue 6: Inaccessible Modal
 
 ❌ **Bad:**
+
 ```html
 <div class="modal">
   <p>Content</p>
@@ -515,12 +509,9 @@ button:focus-visible {
 ```
 
 ✅ **Good:**
+
 ```html
-<div
-  role="dialog"
-  aria-modal="true"
-  aria-labelledby="modal-title"
->
+<div role="dialog" aria-modal="true" aria-labelledby="modal-title">
   <h2 id="modal-title">Modal Title</h2>
   <p>Content</p>
   <button aria-label="Close">×</button>
@@ -532,25 +523,27 @@ button:focus-visible {
 ### Issue 7: Link Text Not Descriptive
 
 ❌ **Bad:**
+
 ```html
-<a href="/products">Click here</a>
-<a href="/docs">Read more</a>
+<a href="/products">Click here</a> <a href="/docs">Read more</a>
 ```
 
 ✅ **Good:**
+
 ```html
-<a href="/products">View our products</a>
-<a href="/docs">Read documentation about accessibility</a>
+<a href="/products">View our products</a> <a href="/docs">Read documentation about accessibility</a>
 ```
 
 ### Issue 8: Icon-Only Buttons
 
 ❌ **Bad:**
+
 ```html
 <button>🗑️</button>
 ```
 
 ✅ **Good:**
+
 ```html
 <button aria-label="Delete item">
   <span aria-hidden="true">🗑️</span>
@@ -571,8 +564,8 @@ Minimum 44x44px for touch targets (WCAG 2.1 AA):
 ```css
 button,
 a,
-input[type="checkbox"],
-input[type="radio"] {
+input[type='checkbox'],
+input[type='radio'] {
   min-width: 44px;
   min-height: 44px;
 }
@@ -628,22 +621,26 @@ Ensure focus visible at all viewport sizes:
 ## Resources
 
 ### Official Documentation
+
 - WCAG 2.1: https://www.w3.org/WAI/WCAG21/quickref/
 - ARIA Authoring Practices: https://www.w3.org/WAI/ARIA/apg/
 
 ### Testing Tools
+
 - axe DevTools: https://www.deque.com/axe/devtools/
 - WAVE: https://wave.webaim.org/
 - Lighthouse: Built into Chrome DevTools
 - Color Contrast Checker: https://webaim.org/resources/contrastchecker/
 
 ### Screen Readers
+
 - NVDA (Windows): https://www.nvaccess.org/
 - JAWS (Windows): https://www.freedomscientific.com/products/software/jaws/
 - VoiceOver (macOS/iOS): Built-in
 - TalkBack (Android): Built-in
 
 ### Learning Resources
+
 - WebAIM: https://webaim.org/
 - A11y Project: https://www.a11yproject.com/
 - Inclusive Components: https://inclusive-components.design/

@@ -72,7 +72,7 @@ Review code in $1 for issues listed in @standards.md.
 
 - **Arguments:** `$1`, `$2`, `$ARGUMENTS`
 - **Files:** `@file/path`
-- **Bash:** `` !`command`  `` (dynamic context)
+- **Bash:** ``!`command` `` (dynamic context)
 - **Plugin refs:** `${CLAUDE_PLUGIN_ROOT}/script.sh`
 
 ### Best Practices

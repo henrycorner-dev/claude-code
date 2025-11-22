@@ -17,7 +17,7 @@ class GameClient {
     // Local player state (predicted)
     this.localPlayer = {
       position: { x: 0, y: 0 },
-      velocity: { x: 0, y: 0 }
+      velocity: { x: 0, y: 0 },
     };
 
     // Input tracking
@@ -46,7 +46,7 @@ class GameClient {
       this.startPingLoop();
     };
 
-    this.ws.onmessage = (event) => {
+    this.ws.onmessage = event => {
       try {
         const message = JSON.parse(event.data);
         this.handleMessage(message);
@@ -55,7 +55,7 @@ class GameClient {
       }
     };
 
-    this.ws.onerror = (error) => {
+    this.ws.onerror = error => {
       console.error('WebSocket error:', error);
     };
 
@@ -87,7 +87,7 @@ class GameClient {
     this.clientId = message.clientId;
     this.localPlayer = {
       position: { ...message.player.position },
-      velocity: { ...message.player.velocity }
+      velocity: { ...message.player.velocity },
     };
     console.log('Assigned client ID:', this.clientId);
   }
@@ -97,7 +97,7 @@ class GameClient {
     this.stateBuffer.push({
       timestamp: Date.now(),
       serverTime: message.timestamp,
-      players: message.players
+      players: message.players,
     });
 
     // Keep buffer size reasonable (1 second of history)
@@ -155,7 +155,7 @@ class GameClient {
       sequenceNumber: this.inputSequenceNumber++,
       movement: movement,
       timestamp: Date.now(),
-      deltaTime: 1 / 60 // Assume 60fps for this example
+      deltaTime: 1 / 60, // Assume 60fps for this example
     };
 
     // Store for reconciliation
@@ -189,8 +189,8 @@ class GameClient {
       input: {
         sequenceNumber: input.sequenceNumber,
         movement: input.movement,
-        timestamp: input.timestamp
-      }
+        timestamp: input.timestamp,
+      },
     });
   }
 
@@ -202,8 +202,10 @@ class GameClient {
     let after = null;
 
     for (let i = 0; i < this.stateBuffer.length - 1; i++) {
-      if (this.stateBuffer[i].timestamp <= renderTime &&
-          this.stateBuffer[i + 1].timestamp >= renderTime) {
+      if (
+        this.stateBuffer[i].timestamp <= renderTime &&
+        this.stateBuffer[i + 1].timestamp >= renderTime
+      ) {
         before = this.stateBuffer[i];
         after = this.stateBuffer[i + 1];
         break;
@@ -233,8 +235,8 @@ class GameClient {
         id: afterPlayer.id,
         position: {
           x: beforePlayer.position.x + (afterPlayer.position.x - beforePlayer.position.x) * t,
-          y: beforePlayer.position.y + (afterPlayer.position.y - beforePlayer.position.y) * t
-        }
+          y: beforePlayer.position.y + (afterPlayer.position.y - beforePlayer.position.y) * t,
+        },
       });
     }
 
@@ -246,7 +248,7 @@ class GameClient {
       this.lastPingTime = Date.now();
       this.send({
         type: 'ping',
-        sentAt: this.lastPingTime
+        sentAt: this.lastPingTime,
       });
     }, 1000);
   }
@@ -279,8 +281,10 @@ class GameClient {
   renderPlayer(player, isLocal) {
     // This would be your actual rendering code
     // For example, updating a DOM element or canvas
-    console.log(`${isLocal ? 'Local' : 'Other'} Player ${player.id}:`,
-                `(${player.position.x.toFixed(2)}, ${player.position.y.toFixed(2)})`);
+    console.log(
+      `${isLocal ? 'Local' : 'Other'} Player ${player.id}:`,
+      `(${player.position.x.toFixed(2)}, ${player.position.y.toFixed(2)})`
+    );
   }
 
   renderStats() {

@@ -7,6 +7,7 @@ This example demonstrates running only specific agents from a command, rather th
 ## Scenario
 
 **Standard henry-audit runs 5 agents:**
+
 - security-engineer
 - performance-engineer
 - a11y-specialist
@@ -24,15 +25,18 @@ Simply specify which agents to run when invoking the command:
 ```
 
 Claude will interpret this instruction and run only:
+
 - security-engineer
 - performance-engineer
 
 **Pros:**
+
 - No file modifications needed
 - Quick and flexible
 - Different every time if needed
 
 **Cons:**
+
 - Not reusable
 - Must remember which agents to include/exclude
 - No permanent record
@@ -46,7 +50,7 @@ Create a custom command that always runs only security and performance audits.
 ```markdown
 ---
 description: Security and performance audit only
-version: "1.0.0"
+version: '1.0.0'
 ---
 
 # Security Performance Audit
@@ -58,6 +62,7 @@ Focused audit for security vulnerabilities and performance bottlenecks, skipping
 **Goal**: Identify security vulnerabilities
 
 **Actions**:
+
 1. Launch security-engineer to scan for vulnerabilities
 2. Check for OWASP Top 10 issues
 3. Review authentication and authorization logic
@@ -74,6 +79,7 @@ Focused audit for security vulnerabilities and performance bottlenecks, skipping
 **Goal**: Baseline performance and identify bottlenecks
 
 **Actions**:
+
 1. Launch performance-engineer to measure Core Web Vitals
 2. Measure key metrics: LCP, FID, CLS, TTFB
 3. Identify performance bottlenecks
@@ -90,17 +96,20 @@ Focused audit for security vulnerabilities and performance bottlenecks, skipping
 Focused audit complete. Present findings:
 
 **Security Summary:**
-- [X] Critical vulnerabilities found
-- [X] High-priority vulnerabilities found
-- [X] Medium/Low vulnerabilities found
+
+- [x] Critical vulnerabilities found
+- [x] High-priority vulnerabilities found
+- [x] Medium/Low vulnerabilities found
 - Remediation recommendations prioritized by risk
 
 **Performance Summary:**
+
 - Current Core Web Vitals: LCP [X]s, FID [X]ms, CLS [X]
 - Key bottlenecks: [list top 3-5]
 - Optimization recommendations prioritized by impact
 
 **Next Steps:**
+
 - Address critical security vulnerabilities immediately
 - Implement high-impact performance optimizations
 - Re-run audit to verify improvements
@@ -111,18 +120,25 @@ Focused audit complete. Present findings:
 
 **Quick security and performance check before release:**
 ```
+
 /sec-perf-audit
+
 ```
 
 **Focused review for API service:**
 ```
+
 /sec-perf-audit "Focus on API endpoints and response times"
+
 ```
 
 **After security or performance changes:**
 ```
+
 /sec-perf-audit "Verify security fixes and performance improvements"
+
 ```
+
 ```
 
 ### Usage
@@ -136,12 +152,14 @@ Focused audit complete. Present findings:
 ```
 
 **Pros:**
+
 - Reusable across project
 - Clear, documented workflow
 - Team can use consistently
 - Can be committed to git
 
 **Cons:**
+
 - Requires creating and maintaining file
 - Another command to manage
 - May diverge from upstream henry-audit
@@ -149,12 +167,14 @@ Focused audit complete. Present findings:
 ## When to Use Each Approach
 
 ### Use Inline Customization When:
+
 - ✅ One-off audit
 - ✅ Experimenting with different agent combinations
 - ✅ Quick turnaround needed
 - ✅ Don't want to create another file
 
 ### Use Fork Approach When:
+
 - ✅ Will use this combination repeatedly
 - ✅ Team needs consistent workflow
 - ✅ Want to document the specific audit focus
@@ -199,12 +219,15 @@ Can combine subset agent selection with other customization patterns:
 # Security Then Performance Audit
 
 ## Phase 1: Security Audit
+
 [security-engineer only]
 
 ## Phase 2: Fix Critical Issues
+
 [address findings before proceeding]
 
 ## Phase 3: Performance Audit
+
 [performance-engineer only, on secure baseline]
 ```
 
@@ -214,12 +237,15 @@ Can combine subset agent selection with other customization patterns:
 # Security Performance Audit with Compliance
 
 ## Phase 1: Security Audit
+
 [security-engineer]
 
 ## Phase 2: Performance Audit
+
 [performance-engineer]
 
 ## Phase 3: Compliance Check (NEW)
+
 [verify GDPR, SOC2 compliance]
 ```
 
@@ -229,29 +255,35 @@ Can combine subset agent selection with other customization patterns:
 # Smart Audit
 
 ## Phase 1: Quick Security Scan
+
 [security-engineer only]
 
 ## Phase 2: Deep Security Analysis (Conditional)
+
 Only if Phase 1 found critical issues
 
 ## Phase 3: Performance Audit
+
 [performance-engineer only]
 ```
 
 ## Tips
 
 **Choosing agents:**
+
 - Review available agents: `/agents`
 - Understand agent expertise and focus areas
 - Select minimum agents needed for goal
 - Consider agent dependencies (e.g., security before performance)
 
 **Communicating intent:**
+
 - Be explicit about which agents to run
 - Explain why skipping others (time, cost, focus)
 - Document decision for team
 
 **Iterating:**
+
 - Start with single agent if very focused
 - Add agents as needed
 - Can always run full audit later if issues found

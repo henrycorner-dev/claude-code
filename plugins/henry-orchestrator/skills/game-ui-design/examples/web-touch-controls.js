@@ -4,69 +4,69 @@
  */
 
 class TouchControls {
-    constructor(options = {}) {
-        this.options = {
-            joystickContainer: options.joystickContainer || '#joystick-container',
-            buttonsContainer: options.buttonsContainer || '#buttons-container',
-            joystickRadius: options.joystickRadius || 50,
-            joystickDeadzone: options.joystickDeadzone || 0.1,
-            enableHaptics: options.enableHaptics !== false,
-            showDebug: options.showDebug || false,
-            ...options
-        };
+  constructor(options = {}) {
+    this.options = {
+      joystickContainer: options.joystickContainer || '#joystick-container',
+      buttonsContainer: options.buttonsContainer || '#buttons-container',
+      joystickRadius: options.joystickRadius || 50,
+      joystickDeadzone: options.joystickDeadzone || 0.1,
+      enableHaptics: options.enableHaptics !== false,
+      showDebug: options.showDebug || false,
+      ...options,
+    };
 
-        this.joystick = {
-            active: false,
-            startX: 0,
-            startY: 0,
-            currentX: 0,
-            currentY: 0,
-            normalizedX: 0,
-            normalizedY: 0
-        };
+    this.joystick = {
+      active: false,
+      startX: 0,
+      startY: 0,
+      currentX: 0,
+      currentY: 0,
+      normalizedX: 0,
+      normalizedY: 0,
+    };
 
-        this.buttons = new Map();
-        this.swipeGestures = {
-            startX: 0,
-            startY: 0,
-            startTime: 0,
-            minDistance: 50,
-            maxTime: 300
-        };
+    this.buttons = new Map();
+    this.swipeGestures = {
+      startX: 0,
+      startY: 0,
+      startTime: 0,
+      minDistance: 50,
+      maxTime: 300,
+    };
 
-        this.callbacks = {
-            onJoystickMove: null,
-            onButtonPress: null,
-            onButtonRelease: null,
-            onSwipe: null
-        };
+    this.callbacks = {
+      onJoystickMove: null,
+      onButtonPress: null,
+      onButtonRelease: null,
+      onSwipe: null,
+    };
 
-        this.init();
+    this.init();
+  }
+
+  init() {
+    this.setupJoystick();
+    this.setupButtons();
+    this.setupSwipeDetection();
+    this.setupOrientationChange();
+
+    if (this.options.showDebug) {
+      this.setupDebugDisplay();
     }
 
-    init() {
-        this.setupJoystick();
-        this.setupButtons();
-        this.setupSwipeDetection();
-        this.setupOrientationChange();
+    console.log('Touch Controls initialized');
+  }
 
-        if (this.options.showDebug) {
-            this.setupDebugDisplay();
-        }
+  // ===== VIRTUAL JOYSTICK =====
 
-        console.log('Touch Controls initialized');
-    }
+  setupJoystick() {
+    const container = document.querySelector(this.options.joystickContainer);
+    if (!container) return;
 
-    // ===== VIRTUAL JOYSTICK =====
-
-    setupJoystick() {
-        const container = document.querySelector(this.options.joystickContainer);
-        if (!container) return;
-
-        // Create joystick elements
-        const base = document.createElement('div');
-        base.className = 'joystick-base';
-        base.style.cssText = `
+    // Create joystick elements
+    const base = document.createElement('div');
+    base.className = 'joystick-base';
+    base.style.cssText = `
             width: ${this.options.joystickRadius * 2}px;
             height: ${this.options.joystickRadius * 2}px;
             border-radius: 50%;
@@ -75,9 +75,9 @@ class TouchControls {
             position: relative;
         `;
 
-        const stick = document.createElement('div');
-        stick.className = 'joystick-stick';
-        stick.style.cssText = `
+    const stick = document.createElement('div');
+    stick.className = 'joystick-stick';
+    stick.style.cssText = `
             width: ${this.options.joystickRadius}px;
             height: ${this.options.joystickRadius}px;
             border-radius: 50%;
@@ -90,112 +90,111 @@ class TouchControls {
             transition: transform 0.1s;
         `;
 
-        base.appendChild(stick);
-        container.appendChild(base);
+    base.appendChild(stick);
+    container.appendChild(base);
 
-        this.joystickElements = { container, base, stick };
+    this.joystickElements = { container, base, stick };
 
-        // Touch events
-        base.addEventListener('touchstart', this.onJoystickStart.bind(this), { passive: false });
-        base.addEventListener('touchmove', this.onJoystickMove.bind(this), { passive: false });
-        base.addEventListener('touchend', this.onJoystickEnd.bind(this), { passive: false });
+    // Touch events
+    base.addEventListener('touchstart', this.onJoystickStart.bind(this), { passive: false });
+    base.addEventListener('touchmove', this.onJoystickMove.bind(this), { passive: false });
+    base.addEventListener('touchend', this.onJoystickEnd.bind(this), { passive: false });
 
-        // Mouse events (for testing on desktop)
-        base.addEventListener('mousedown', this.onJoystickStart.bind(this));
-        base.addEventListener('mousemove', this.onJoystickMove.bind(this));
-        base.addEventListener('mouseup', this.onJoystickEnd.bind(this));
-        base.addEventListener('mouseleave', this.onJoystickEnd.bind(this));
+    // Mouse events (for testing on desktop)
+    base.addEventListener('mousedown', this.onJoystickStart.bind(this));
+    base.addEventListener('mousemove', this.onJoystickMove.bind(this));
+    base.addEventListener('mouseup', this.onJoystickEnd.bind(this));
+    base.addEventListener('mouseleave', this.onJoystickEnd.bind(this));
+  }
+
+  onJoystickStart(event) {
+    event.preventDefault();
+    this.joystick.active = true;
+
+    const touch = event.touches ? event.touches[0] : event;
+    const rect = this.joystickElements.base.getBoundingClientRect();
+
+    this.joystick.startX = rect.left + rect.width / 2;
+    this.joystick.startY = rect.top + rect.height / 2;
+
+    this.hapticFeedback('light');
+  }
+
+  onJoystickMove(event) {
+    if (!this.joystick.active) return;
+    event.preventDefault();
+
+    const touch = event.touches ? event.touches[0] : event;
+
+    let deltaX = touch.clientX - this.joystick.startX;
+    let deltaY = touch.clientY - this.joystick.startY;
+
+    // Calculate distance and clamp to radius
+    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+    const maxDistance = this.options.joystickRadius / 2;
+
+    if (distance > maxDistance) {
+      deltaX = (deltaX / distance) * maxDistance;
+      deltaY = (deltaY / distance) * maxDistance;
     }
 
-    onJoystickStart(event) {
-        event.preventDefault();
-        this.joystick.active = true;
+    // Update stick position
+    this.joystickElements.stick.style.transform = `translate(calc(-50% + ${deltaX}px), calc(-50% + ${deltaY}px))`;
 
-        const touch = event.touches ? event.touches[0] : event;
-        const rect = this.joystickElements.base.getBoundingClientRect();
+    // Normalize to -1 to 1
+    this.joystick.normalizedX = deltaX / maxDistance;
+    this.joystick.normalizedY = -deltaY / maxDistance; // Invert Y
 
-        this.joystick.startX = rect.left + rect.width / 2;
-        this.joystick.startY = rect.top + rect.height / 2;
-
-        this.hapticFeedback('light');
+    // Apply deadzone
+    if (Math.abs(this.joystick.normalizedX) < this.options.joystickDeadzone) {
+      this.joystick.normalizedX = 0;
+    }
+    if (Math.abs(this.joystick.normalizedY) < this.options.joystickDeadzone) {
+      this.joystick.normalizedY = 0;
     }
 
-    onJoystickMove(event) {
-        if (!this.joystick.active) return;
-        event.preventDefault();
-
-        const touch = event.touches ? event.touches[0] : event;
-
-        let deltaX = touch.clientX - this.joystick.startX;
-        let deltaY = touch.clientY - this.joystick.startY;
-
-        // Calculate distance and clamp to radius
-        const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-        const maxDistance = this.options.joystickRadius / 2;
-
-        if (distance > maxDistance) {
-            deltaX = (deltaX / distance) * maxDistance;
-            deltaY = (deltaY / distance) * maxDistance;
-        }
-
-        // Update stick position
-        this.joystickElements.stick.style.transform =
-            `translate(calc(-50% + ${deltaX}px), calc(-50% + ${deltaY}px))`;
-
-        // Normalize to -1 to 1
-        this.joystick.normalizedX = deltaX / maxDistance;
-        this.joystick.normalizedY = -deltaY / maxDistance; // Invert Y
-
-        // Apply deadzone
-        if (Math.abs(this.joystick.normalizedX) < this.options.joystickDeadzone) {
-            this.joystick.normalizedX = 0;
-        }
-        if (Math.abs(this.joystick.normalizedY) < this.options.joystickDeadzone) {
-            this.joystick.normalizedY = 0;
-        }
-
-        // Callback
-        if (this.callbacks.onJoystickMove) {
-            this.callbacks.onJoystickMove(this.joystick.normalizedX, this.joystick.normalizedY);
-        }
+    // Callback
+    if (this.callbacks.onJoystickMove) {
+      this.callbacks.onJoystickMove(this.joystick.normalizedX, this.joystick.normalizedY);
     }
+  }
 
-    onJoystickEnd(event) {
-        if (!this.joystick.active) return;
-        event.preventDefault();
+  onJoystickEnd(event) {
+    if (!this.joystick.active) return;
+    event.preventDefault();
 
-        this.joystick.active = false;
-        this.joystick.normalizedX = 0;
-        this.joystick.normalizedY = 0;
+    this.joystick.active = false;
+    this.joystick.normalizedX = 0;
+    this.joystick.normalizedY = 0;
 
-        // Reset stick position
-        this.joystickElements.stick.style.transform = 'translate(-50%, -50%)';
+    // Reset stick position
+    this.joystickElements.stick.style.transform = 'translate(-50%, -50%)';
 
-        // Callback
-        if (this.callbacks.onJoystickMove) {
-            this.callbacks.onJoystickMove(0, 0);
-        }
+    // Callback
+    if (this.callbacks.onJoystickMove) {
+      this.callbacks.onJoystickMove(0, 0);
     }
+  }
 
-    // ===== ACTION BUTTONS =====
+  // ===== ACTION BUTTONS =====
 
-    setupButtons() {
-        const container = document.querySelector(this.options.buttonsContainer);
-        if (!container) return;
+  setupButtons() {
+    const container = document.querySelector(this.options.buttonsContainer);
+    if (!container) return;
 
-        // Create buttons (Jump, Attack, etc.)
-        const buttonConfigs = [
-            { id: 'jump', label: 'A', color: '#4CAF50' },
-            { id: 'attack', label: 'B', color: '#F44336' },
-            { id: 'special', label: 'X', color: '#2196F3' }
-        ];
+    // Create buttons (Jump, Attack, etc.)
+    const buttonConfigs = [
+      { id: 'jump', label: 'A', color: '#4CAF50' },
+      { id: 'attack', label: 'B', color: '#F44336' },
+      { id: 'special', label: 'X', color: '#2196F3' },
+    ];
 
-        buttonConfigs.forEach((config, index) => {
-            const button = document.createElement('button');
-            button.className = 'action-button';
-            button.id = `btn-${config.id}`;
-            button.innerHTML = config.label;
-            button.style.cssText = `
+    buttonConfigs.forEach((config, index) => {
+      const button = document.createElement('button');
+      button.className = 'action-button';
+      button.id = `btn-${config.id}`;
+      button.innerHTML = config.label;
+      button.style.cssText = `
                 width: 60px;
                 height: 60px;
                 border-radius: 50%;
@@ -210,177 +209,191 @@ class TouchControls {
                 margin: 8px;
             `;
 
-            // Touch events
-            button.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                this.onButtonPress(config.id);
-            }, { passive: false });
+      // Touch events
+      button.addEventListener(
+        'touchstart',
+        e => {
+          e.preventDefault();
+          this.onButtonPress(config.id);
+        },
+        { passive: false }
+      );
 
-            button.addEventListener('touchend', (e) => {
-                e.preventDefault();
-                this.onButtonRelease(config.id);
-            }, { passive: false });
+      button.addEventListener(
+        'touchend',
+        e => {
+          e.preventDefault();
+          this.onButtonRelease(config.id);
+        },
+        { passive: false }
+      );
 
-            // Mouse events (for testing)
-            button.addEventListener('mousedown', () => this.onButtonPress(config.id));
-            button.addEventListener('mouseup', () => this.onButtonRelease(config.id));
+      // Mouse events (for testing)
+      button.addEventListener('mousedown', () => this.onButtonPress(config.id));
+      button.addEventListener('mouseup', () => this.onButtonRelease(config.id));
 
-            container.appendChild(button);
-            this.buttons.set(config.id, { element: button, pressed: false });
-        });
+      container.appendChild(button);
+      this.buttons.set(config.id, { element: button, pressed: false });
+    });
+  }
+
+  onButtonPress(buttonId) {
+    const button = this.buttons.get(buttonId);
+    if (!button || button.pressed) return;
+
+    button.pressed = true;
+    button.element.style.transform = 'scale(0.9)';
+    button.element.style.opacity = '0.8';
+
+    this.hapticFeedback('medium');
+
+    if (this.callbacks.onButtonPress) {
+      this.callbacks.onButtonPress(buttonId);
     }
+  }
 
-    onButtonPress(buttonId) {
-        const button = this.buttons.get(buttonId);
-        if (!button || button.pressed) return;
+  onButtonRelease(buttonId) {
+    const button = this.buttons.get(buttonId);
+    if (!button || !button.pressed) return;
 
-        button.pressed = true;
-        button.element.style.transform = 'scale(0.9)';
-        button.element.style.opacity = '0.8';
+    button.pressed = false;
+    button.element.style.transform = 'scale(1)';
+    button.element.style.opacity = '1';
 
-        this.hapticFeedback('medium');
+    if (this.callbacks.onButtonRelease) {
+      this.callbacks.onButtonRelease(buttonId);
+    }
+  }
 
-        if (this.callbacks.onButtonPress) {
-            this.callbacks.onButtonPress(buttonId);
+  // ===== SWIPE GESTURES =====
+
+  setupSwipeDetection() {
+    const gameArea = document.querySelector('#game-area') || document.body;
+
+    gameArea.addEventListener(
+      'touchstart',
+      e => {
+        if (e.target.closest('.joystick-base') || e.target.closest('.action-button')) {
+          return; // Don't detect swipes on controls
         }
-    }
 
-    onButtonRelease(buttonId) {
-        const button = this.buttons.get(buttonId);
-        if (!button || !button.pressed) return;
+        this.swipeGestures.startX = e.touches[0].clientX;
+        this.swipeGestures.startY = e.touches[0].clientY;
+        this.swipeGestures.startTime = Date.now();
+      },
+      { passive: true }
+    );
 
-        button.pressed = false;
-        button.element.style.transform = 'scale(1)';
-        button.element.style.opacity = '1';
-
-        if (this.callbacks.onButtonRelease) {
-            this.callbacks.onButtonRelease(buttonId);
+    gameArea.addEventListener(
+      'touchend',
+      e => {
+        if (e.target.closest('.joystick-base') || e.target.closest('.action-button')) {
+          return;
         }
-    }
 
-    // ===== SWIPE GESTURES =====
+        const endX = e.changedTouches[0].clientX;
+        const endY = e.changedTouches[0].clientY;
+        const endTime = Date.now();
 
-    setupSwipeDetection() {
-        const gameArea = document.querySelector('#game-area') || document.body;
+        const deltaX = endX - this.swipeGestures.startX;
+        const deltaY = endY - this.swipeGestures.startY;
+        const deltaTime = endTime - this.swipeGestures.startTime;
 
-        gameArea.addEventListener('touchstart', (e) => {
-            if (e.target.closest('.joystick-base') || e.target.closest('.action-button')) {
-                return; // Don't detect swipes on controls
-            }
+        const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
-            this.swipeGestures.startX = e.touches[0].clientX;
-            this.swipeGestures.startY = e.touches[0].clientY;
-            this.swipeGestures.startTime = Date.now();
-        }, { passive: true });
+        // Check if it's a swipe
+        if (distance > this.swipeGestures.minDistance && deltaTime < this.swipeGestures.maxTime) {
+          const direction = this.getSwipeDirection(deltaX, deltaY);
 
-        gameArea.addEventListener('touchend', (e) => {
-            if (e.target.closest('.joystick-base') || e.target.closest('.action-button')) {
-                return;
-            }
+          this.hapticFeedback('light');
 
-            const endX = e.changedTouches[0].clientX;
-            const endY = e.changedTouches[0].clientY;
-            const endTime = Date.now();
-
-            const deltaX = endX - this.swipeGestures.startX;
-            const deltaY = endY - this.swipeGestures.startY;
-            const deltaTime = endTime - this.swipeGestures.startTime;
-
-            const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-
-            // Check if it's a swipe
-            if (distance > this.swipeGestures.minDistance &&
-                deltaTime < this.swipeGestures.maxTime) {
-
-                const direction = this.getSwipeDirection(deltaX, deltaY);
-
-                this.hapticFeedback('light');
-
-                if (this.callbacks.onSwipe) {
-                    this.callbacks.onSwipe(direction);
-                }
-            }
-        }, { passive: true });
-    }
-
-    getSwipeDirection(deltaX, deltaY) {
-        if (Math.abs(deltaX) > Math.abs(deltaY)) {
-            return deltaX > 0 ? 'right' : 'left';
-        } else {
-            return deltaY > 0 ? 'down' : 'up';
+          if (this.callbacks.onSwipe) {
+            this.callbacks.onSwipe(direction);
+          }
         }
+      },
+      { passive: true }
+    );
+  }
+
+  getSwipeDirection(deltaX, deltaY) {
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+      return deltaX > 0 ? 'right' : 'left';
+    } else {
+      return deltaY > 0 ? 'down' : 'up';
     }
+  }
 
-    // ===== ORIENTATION HANDLING =====
+  // ===== ORIENTATION HANDLING =====
 
-    setupOrientationChange() {
-        window.addEventListener('orientationchange', () => {
-            setTimeout(() => {
-                this.updateLayout();
-            }, 100);
-        });
+  setupOrientationChange() {
+    window.addEventListener('orientationchange', () => {
+      setTimeout(() => {
+        this.updateLayout();
+      }, 100);
+    });
 
-        window.addEventListener('resize', () => {
-            this.updateLayout();
-        });
+    window.addEventListener('resize', () => {
+      this.updateLayout();
+    });
+  }
+
+  updateLayout() {
+    const isLandscape = window.innerWidth > window.innerHeight;
+
+    if (isLandscape) {
+      // Landscape: Controls on sides
+      if (this.joystickElements.container) {
+        this.joystickElements.container.style.bottom = '20px';
+        this.joystickElements.container.style.left = '20px';
+      }
+      const buttonsContainer = document.querySelector(this.options.buttonsContainer);
+      if (buttonsContainer) {
+        buttonsContainer.style.bottom = '20px';
+        buttonsContainer.style.right = '20px';
+        buttonsContainer.style.flexDirection = 'row';
+      }
+    } else {
+      // Portrait: Stack vertically
+      if (this.joystickElements.container) {
+        this.joystickElements.container.style.bottom = '120px';
+        this.joystickElements.container.style.left = '20px';
+      }
+      const buttonsContainer = document.querySelector(this.options.buttonsContainer);
+      if (buttonsContainer) {
+        buttonsContainer.style.bottom = '20px';
+        buttonsContainer.style.right = '20px';
+        buttonsContainer.style.flexDirection = 'column';
+      }
     }
+  }
 
-    updateLayout() {
-        const isLandscape = window.innerWidth > window.innerHeight;
+  // ===== HAPTIC FEEDBACK =====
 
-        if (isLandscape) {
-            // Landscape: Controls on sides
-            if (this.joystickElements.container) {
-                this.joystickElements.container.style.bottom = '20px';
-                this.joystickElements.container.style.left = '20px';
-            }
-            const buttonsContainer = document.querySelector(this.options.buttonsContainer);
-            if (buttonsContainer) {
-                buttonsContainer.style.bottom = '20px';
-                buttonsContainer.style.right = '20px';
-                buttonsContainer.style.flexDirection = 'row';
-            }
-        } else {
-            // Portrait: Stack vertically
-            if (this.joystickElements.container) {
-                this.joystickElements.container.style.bottom = '120px';
-                this.joystickElements.container.style.left = '20px';
-            }
-            const buttonsContainer = document.querySelector(this.options.buttonsContainer);
-            if (buttonsContainer) {
-                buttonsContainer.style.bottom = '20px';
-                buttonsContainer.style.right = '20px';
-                buttonsContainer.style.flexDirection = 'column';
-            }
-        }
+  hapticFeedback(intensity = 'light') {
+    if (!this.options.enableHaptics) return;
+
+    if ('vibrate' in navigator) {
+      switch (intensity) {
+        case 'light':
+          navigator.vibrate(10);
+          break;
+        case 'medium':
+          navigator.vibrate(20);
+          break;
+        case 'heavy':
+          navigator.vibrate(50);
+          break;
+      }
     }
+  }
 
-    // ===== HAPTIC FEEDBACK =====
+  // ===== DEBUG DISPLAY =====
 
-    hapticFeedback(intensity = 'light') {
-        if (!this.options.enableHaptics) return;
-
-        if ('vibrate' in navigator) {
-            switch (intensity) {
-                case 'light':
-                    navigator.vibrate(10);
-                    break;
-                case 'medium':
-                    navigator.vibrate(20);
-                    break;
-                case 'heavy':
-                    navigator.vibrate(50);
-                    break;
-            }
-        }
-    }
-
-    // ===== DEBUG DISPLAY =====
-
-    setupDebugDisplay() {
-        const debug = document.createElement('div');
-        debug.id = 'debug-display';
-        debug.style.cssText = `
+  setupDebugDisplay() {
+    const debug = document.createElement('div');
+    debug.id = 'debug-display';
+    debug.style.cssText = `
             position: fixed;
             top: 10px;
             left: 50%;
@@ -393,58 +406,60 @@ class TouchControls {
             font-size: 12px;
             z-index: 10000;
         `;
-        document.body.appendChild(debug);
+    document.body.appendChild(debug);
 
-        setInterval(() => {
-            debug.innerHTML = `
+    setInterval(() => {
+      debug.innerHTML = `
                 Joystick: X: ${this.joystick.normalizedX.toFixed(2)}, Y: ${this.joystick.normalizedY.toFixed(2)}<br>
-                Buttons: ${Array.from(this.buttons.entries())
+                Buttons: ${
+                  Array.from(this.buttons.entries())
                     .filter(([_, btn]) => btn.pressed)
                     .map(([id]) => id)
-                    .join(', ') || 'None'}
+                    .join(', ') || 'None'
+                }
             `;
-        }, 100);
-    }
+    }, 100);
+  }
 
-    // ===== PUBLIC API =====
+  // ===== PUBLIC API =====
 
-    onJoystickMove(callback) {
-        this.callbacks.onJoystickMove = callback;
-    }
+  onJoystickMove(callback) {
+    this.callbacks.onJoystickMove = callback;
+  }
 
-    onButtonPress(callback) {
-        this.callbacks.onButtonPress = callback;
-    }
+  onButtonPress(callback) {
+    this.callbacks.onButtonPress = callback;
+  }
 
-    onButtonRelease(callback) {
-        this.callbacks.onButtonRelease = callback;
-    }
+  onButtonRelease(callback) {
+    this.callbacks.onButtonRelease = callback;
+  }
 
-    onSwipe(callback) {
-        this.callbacks.onSwipe = callback;
-    }
+  onSwipe(callback) {
+    this.callbacks.onSwipe = callback;
+  }
 
-    getJoystickInput() {
-        return {
-            x: this.joystick.normalizedX,
-            y: this.joystick.normalizedY
-        };
-    }
+  getJoystickInput() {
+    return {
+      x: this.joystick.normalizedX,
+      y: this.joystick.normalizedY,
+    };
+  }
 
-    isButtonPressed(buttonId) {
-        const button = this.buttons.get(buttonId);
-        return button ? button.pressed : false;
-    }
+  isButtonPressed(buttonId) {
+    const button = this.buttons.get(buttonId);
+    return button ? button.pressed : false;
+  }
 
-    destroy() {
-        // Clean up event listeners and DOM elements
-        if (this.joystickElements.base) {
-            this.joystickElements.base.remove();
-        }
-        this.buttons.forEach((button) => {
-            button.element.remove();
-        });
+  destroy() {
+    // Clean up event listeners and DOM elements
+    if (this.joystickElements.base) {
+      this.joystickElements.base.remove();
     }
+    this.buttons.forEach(button => {
+      button.element.remove();
+    });
+  }
 }
 
 /*

@@ -29,8 +29,7 @@ class StateMachine {
     }
 
     // Check if transition is allowed
-    if (this.currentState.transitions &&
-        !this.currentState.transitions.includes(newStateName)) {
+    if (this.currentState.transitions && !this.currentState.transitions.includes(newStateName)) {
       console.warn(`Transition from "${this.currentState.name}" to "${newStateName}" not allowed`);
       return false;
     }
@@ -96,7 +95,7 @@ class Character {
       right: false,
       jump: false,
       attack: false,
-      sprint: false
+      sprint: false,
     };
 
     // Create FSM
@@ -116,7 +115,7 @@ class Character {
         this.velocity.x = 0;
       },
 
-      update: (deltaTime) => {
+      update: deltaTime => {
         // Check for transitions
         if (this.input.left || this.input.right) {
           if (this.input.sprint) {
@@ -135,7 +134,7 @@ class Character {
         }
       },
 
-      exit: () => {}
+      exit: () => {},
     };
 
     const walkState = {
@@ -146,7 +145,7 @@ class Character {
         this.animation = 'walk';
       },
 
-      update: (deltaTime) => {
+      update: deltaTime => {
         // Horizontal movement
         if (this.input.left) {
           this.velocity.x = -this.walkSpeed;
@@ -178,7 +177,7 @@ class Character {
 
       exit: () => {
         this.velocity.x = 0;
-      }
+      },
     };
 
     const runState = {
@@ -189,7 +188,7 @@ class Character {
         this.animation = 'run';
       },
 
-      update: (deltaTime) => {
+      update: deltaTime => {
         // Horizontal movement
         if (this.input.left) {
           this.velocity.x = -this.runSpeed;
@@ -221,7 +220,7 @@ class Character {
 
       exit: () => {
         this.velocity.x = 0;
-      }
+      },
     };
 
     const jumpState = {
@@ -236,7 +235,7 @@ class Character {
         this.airTime = 0;
       },
 
-      update: (deltaTime) => {
+      update: deltaTime => {
         this.airTime += deltaTime;
 
         // Air control
@@ -269,7 +268,7 @@ class Character {
 
       exit: () => {
         this.velocity.x = 0;
-      }
+      },
     };
 
     const attackState = {
@@ -286,7 +285,7 @@ class Character {
         this.velocity.x = 0;
       },
 
-      update: (deltaTime) => {
+      update: deltaTime => {
         this.timer += deltaTime;
 
         // Execute attack at midpoint of animation
@@ -312,7 +311,7 @@ class Character {
       exit: () => {
         this.timer = 0;
         this.attackExecuted = false;
-      }
+      },
     };
 
     const hurtState = {
@@ -327,7 +326,7 @@ class Character {
         this.velocity.x = -this.direction * 100; // Knockback
       },
 
-      update: (deltaTime) => {
+      update: deltaTime => {
         this.timer += deltaTime;
 
         if (this.timer >= this.duration) {
@@ -341,7 +340,7 @@ class Character {
 
       exit: () => {
         this.velocity.x = 0;
-      }
+      },
     };
 
     const deadState = {
@@ -354,11 +353,11 @@ class Character {
         this.velocity.y = 0;
       },
 
-      update: (deltaTime) => {
+      update: deltaTime => {
         // Dead - no transitions
       },
 
-      exit: () => {}
+      exit: () => {},
     };
 
     // Add states to FSM
@@ -475,7 +474,7 @@ class Character {
       jump: '#ff00ff',
       attack: '#ff0000',
       hurt: '#ff6600',
-      dead: '#666666'
+      dead: '#666666',
     };
     return colors[state] || '#00ff00';
   }
@@ -495,11 +494,11 @@ class FSMDemo {
   }
 
   setupInput() {
-    window.addEventListener('keydown', (e) => {
+    window.addEventListener('keydown', e => {
       this.handleKeyDown(e.code);
     });
 
-    window.addEventListener('keyup', (e) => {
+    window.addEventListener('keyup', e => {
       this.handleKeyUp(e.code);
     });
   }
@@ -610,13 +609,13 @@ class FSMDemo {
     this.update(dt);
     this.render();
 
-    requestAnimationFrame((time) => this.gameLoop(time));
+    requestAnimationFrame(time => this.gameLoop(time));
   }
 
   start() {
     this.running = true;
     this.lastTime = performance.now();
-    requestAnimationFrame((time) => this.gameLoop(time));
+    requestAnimationFrame(time => this.gameLoop(time));
   }
 
   stop() {

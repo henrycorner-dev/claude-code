@@ -9,18 +9,21 @@ This reference provides comprehensive guidance on scaling applications, performa
 Add more resources to existing machines.
 
 **Approach:**
+
 - Increase CPU cores
 - Add more RAM
 - Upgrade to faster disks (SSD, NVMe)
 - Use more powerful instances
 
 **Advantages:**
+
 - Simple to implement
 - No code changes needed
 - Lower operational complexity
 - Better for single-threaded workloads
 
 **Limitations:**
+
 - Hardware limits (physical constraints)
 - Single point of failure
 - Diminishing returns
@@ -28,6 +31,7 @@ Add more resources to existing machines.
 - Downtime for upgrades
 
 **When to use:**
+
 - Database primary instances
 - Monolithic applications
 - Memory-intensive workloads
@@ -38,12 +42,14 @@ Add more resources to existing machines.
 Add more machines to distribute load.
 
 **Approach:**
+
 - Add more application instances
 - Use load balancers
 - Distribute data across nodes
 - Replicate services
 
 **Advantages:**
+
 - Near-infinite scalability
 - No single point of failure
 - Cost-effective (commodity hardware)
@@ -51,12 +57,14 @@ Add more machines to distribute load.
 - No downtime for scaling
 
 **Limitations:**
+
 - Application must be stateless
 - Data consistency challenges
 - Operational complexity
 - Network overhead
 
 **When to use:**
+
 - Web applications
 - API services
 - Microservices
@@ -69,6 +77,7 @@ Add more machines to distribute load.
 Route read queries to replica databases.
 
 **Implementation:**
+
 ```
 Primary DB (writes)
     ├─→ Read Replica 1 (reads)
@@ -77,23 +86,27 @@ Primary DB (writes)
 ```
 
 **Advantages:**
+
 - Offload reads from primary
 - Geographic distribution
 - Failover capability
 - Simple to implement
 
 **Considerations:**
+
 - Replication lag (eventual consistency)
 - Read-after-write consistency issues
 - Connection management
 
 **Replication lag mitigation:**
+
 - Route user's own writes to primary
 - Use async refresh patterns
 - Set acceptable lag thresholds
 - Monitor replication lag metrics
 
 **Best for:**
+
 - Read-heavy workloads (10:1 read/write ratio or higher)
 - Reporting and analytics
 - Geographic distribution
@@ -105,6 +118,7 @@ Partition data across multiple databases.
 **Sharding Strategies:**
 
 **Hash-based:**
+
 ```
 Shard = hash(user_id) % num_shards
 
@@ -114,14 +128,17 @@ User 3 (hash: 89) → Shard 3
 ```
 
 **Advantages:**
+
 - Even distribution
 - Simple algorithm
 
 **Disadvantages:**
+
 - Resharding requires rebalancing
 - Range queries difficult
 
 **Range-based:**
+
 ```
 Shard 1: user_id 1-10000
 Shard 2: user_id 10001-20000
@@ -129,14 +146,17 @@ Shard 3: user_id 20001-30000
 ```
 
 **Advantages:**
+
 - Range queries efficient
 - Easy to add shards
 
 **Disadvantages:**
+
 - Potential hotspots
 - Uneven distribution
 
 **Geographic:**
+
 ```
 Shard US-East: users in North America
 Shard EU-West: users in Europe
@@ -144,34 +164,40 @@ Shard AP-Southeast: users in Asia
 ```
 
 **Advantages:**
+
 - Low latency for users
 - Data residency compliance
 
 **Disadvantages:**
+
 - Uneven distribution
 - Cross-region queries complex
 
 **Implementation Considerations:**
 
 **Shard Key Selection:**
+
 - High cardinality
 - Even distribution
 - Query pattern alignment
 - Rarely changes
 
 **Cross-shard Queries:**
+
 - Scatter-gather pattern
 - Application-level joins
 - Denormalization
 - Separate analytics database
 
 **Resharding:**
+
 - Plan for growth
 - Consistent hashing
 - Online migration tools
 - Double-write pattern
 
 **Best for:**
+
 - Very large datasets (TB+)
 - High write throughput
 - Multi-tenant applications
@@ -182,6 +208,7 @@ Shard AP-Southeast: users in Asia
 Reuse database connections to reduce overhead.
 
 **Implementation:**
+
 ```
 Application Instances (100)
     ↓
@@ -191,17 +218,20 @@ Database
 ```
 
 **Tools:**
+
 - **PgBouncer:** PostgreSQL connection pooler
 - **ProxySQL:** MySQL connection pooling and query routing
 - **Application-level:** HikariCP (Java), pgpool (Node.js)
 
 **Benefits:**
+
 - Reduced connection overhead
 - Limits concurrent connections
 - Faster query execution
 - Better resource utilization
 
 **Configuration:**
+
 ```
 Max connections = (Core count * 2) + effective_spindle_count
 
@@ -213,113 +243,129 @@ Example: 4 cores, 1 disk = (4 * 2) + 1 = 9 connections
 #### Cache-Aside (Lazy Loading)
 
 **Flow:**
+
 1. Check cache
 2. If miss, query database
 3. Store in cache
 4. Return result
 
 **Code example:**
+
 ```typescript
 async function getUser(userId: string) {
   // Check cache
-  let user = await cache.get(`user:${userId}`)
+  let user = await cache.get(`user:${userId}`);
 
   if (!user) {
     // Cache miss - query database
-    user = await db.users.findById(userId)
+    user = await db.users.findById(userId);
 
     // Store in cache
-    await cache.set(`user:${userId}`, user, { ttl: 3600 })
+    await cache.set(`user:${userId}`, user, { ttl: 3600 });
   }
 
-  return user
+  return user;
 }
 ```
 
 **Advantages:**
+
 - Only cache what's requested
 - Cache failures don't break app
 
 **Disadvantages:**
+
 - Cache miss penalty (extra latency)
 - Stale data possible
 
 #### Write-Through
 
 **Flow:**
+
 1. Write to cache
 2. Synchronously write to database
 3. Return success
 
 **Code example:**
+
 ```typescript
 async function updateUser(userId: string, data: UserUpdate) {
   // Update database
-  const user = await db.users.update(userId, data)
+  const user = await db.users.update(userId, data);
 
   // Update cache
-  await cache.set(`user:${userId}`, user, { ttl: 3600 })
+  await cache.set(`user:${userId}`, user, { ttl: 3600 });
 
-  return user
+  return user;
 }
 ```
 
 **Advantages:**
+
 - Cache always consistent
 - No cache miss penalty for reads
 
 **Disadvantages:**
+
 - Write latency increased
 - Cache pollution (unused data)
 
 #### Write-Behind (Write-Back)
 
 **Flow:**
+
 1. Write to cache
 2. Asynchronously write to database
 3. Return success immediately
 
 **Advantages:**
+
 - Fast writes
 - Batch database updates
 
 **Disadvantages:**
+
 - Data loss risk if cache fails
 - Complexity in error handling
 
 **Best for:**
+
 - Write-heavy workloads
 - Can tolerate eventual consistency
 
 #### Cache Invalidation Patterns
 
 **TTL (Time-To-Live):**
+
 ```typescript
-await cache.set(key, value, { ttl: 3600 }) // 1 hour
+await cache.set(key, value, { ttl: 3600 }); // 1 hour
 ```
 
 **Event-based:**
+
 ```typescript
 async function updateUser(userId: string, data: UserUpdate) {
-  const user = await db.users.update(userId, data)
+  const user = await db.users.update(userId, data);
 
   // Invalidate cache
-  await cache.delete(`user:${userId}`)
+  await cache.delete(`user:${userId}`);
 
-  return user
+  return user;
 }
 ```
 
 **Tag-based:**
+
 ```typescript
 // Set with tags
-await cache.set('user:123', user, { tags: ['user', 'profile'] })
+await cache.set('user:123', user, { tags: ['user', 'profile'] });
 
 // Invalidate all with tag
-await cache.invalidateTag('user')
+await cache.invalidateTag('user');
 ```
 
 **Considerations:**
+
 - Shorter TTL = fresher data, more database load
 - Longer TTL = less database load, staler data
 - Event-based = consistent but complex
@@ -330,65 +376,68 @@ await cache.invalidateTag('user')
 **Problem:** Many requests for expired key hit database simultaneously.
 
 **Solution 1: Lock-based**
+
 ```typescript
 async function getUser(userId: string) {
-  const cacheKey = `user:${userId}`
-  const lockKey = `lock:${userId}`
+  const cacheKey = `user:${userId}`;
+  const lockKey = `lock:${userId}`;
 
-  let user = await cache.get(cacheKey)
+  let user = await cache.get(cacheKey);
 
   if (!user) {
     // Try to acquire lock
-    const acquired = await cache.setNX(lockKey, '1', { ttl: 5 })
+    const acquired = await cache.setNX(lockKey, '1', { ttl: 5 });
 
     if (acquired) {
       // We got the lock - fetch from DB
-      user = await db.users.findById(userId)
-      await cache.set(cacheKey, user, { ttl: 3600 })
-      await cache.delete(lockKey)
+      user = await db.users.findById(userId);
+      await cache.set(cacheKey, user, { ttl: 3600 });
+      await cache.delete(lockKey);
     } else {
       // Someone else is fetching - wait and retry
-      await sleep(100)
-      return getUser(userId) // Retry
+      await sleep(100);
+      return getUser(userId); // Retry
     }
   }
 
-  return user
+  return user;
 }
 ```
 
 **Solution 2: Probabilistic early expiration**
+
 ```typescript
 async function getUser(userId: string) {
-  const cacheKey = `user:${userId}`
+  const cacheKey = `user:${userId}`;
 
-  const cached = await cache.getWithTTL(cacheKey)
+  const cached = await cache.getWithTTL(cacheKey);
 
   if (cached) {
-    const { value, ttl } = cached
+    const { value, ttl } = cached;
 
     // Probabilistically refresh before expiry
-    const delta = Date.now() - (ttl * 1000)
-    const shouldRefresh = delta * Math.random() < 1000 // 1 second window
+    const delta = Date.now() - ttl * 1000;
+    const shouldRefresh = delta * Math.random() < 1000; // 1 second window
 
     if (shouldRefresh) {
       // Async refresh
-      refreshUserCache(userId).catch(console.error)
+      refreshUserCache(userId).catch(console.error);
     }
 
-    return value
+    return value;
   }
 
   // Cache miss - fetch and cache
-  const user = await db.users.findById(userId)
-  await cache.set(cacheKey, user, { ttl: 3600 })
-  return user
+  const user = await db.users.findById(userId);
+  await cache.set(cacheKey, user, { ttl: 3600 });
+  return user;
 }
 ```
 
 ### Query Optimization
 
 **Indexing:**
+
 ```sql
 -- Single column index
 CREATE INDEX idx_users_email ON users(email);
@@ -404,6 +453,7 @@ CREATE INDEX idx_users_lookup ON users(email) INCLUDE (name, created_at);
 ```
 
 **Index selection guidelines:**
+
 - Index columns used in WHERE clauses
 - Index columns used in JOINs
 - Index columns used in ORDER BY
@@ -413,29 +463,31 @@ CREATE INDEX idx_users_lookup ON users(email) INCLUDE (name, created_at);
 **Query optimization:**
 
 **N+1 Query Problem:**
+
 ```typescript
 // Bad: N+1 queries
-const users = await db.users.findAll()
+const users = await db.users.findAll();
 for (const user of users) {
-  user.posts = await db.posts.findByUserId(user.id) // N queries!
+  user.posts = await db.posts.findByUserId(user.id); // N queries!
 }
 
 // Good: Single query with join
 const users = await db.users.findAll({
-  include: { posts: true }
-})
+  include: { posts: true },
+});
 
 // Alternative: Dataloader pattern (batching)
-const users = await db.users.findAll()
-const userIds = users.map(u => u.id)
-const posts = await db.posts.findByUserIds(userIds) // Single query
-const postsByUserId = groupBy(posts, 'userId')
+const users = await db.users.findAll();
+const userIds = users.map(u => u.id);
+const posts = await db.posts.findByUserIds(userIds); // Single query
+const postsByUserId = groupBy(posts, 'userId');
 users.forEach(user => {
-  user.posts = postsByUserId[user.id] || []
-})
+  user.posts = postsByUserId[user.id] || [];
+});
 ```
 
 **Pagination:**
+
 ```sql
 -- Offset pagination (slow for large offsets)
 SELECT * FROM users ORDER BY id LIMIT 20 OFFSET 10000;
@@ -448,6 +500,7 @@ LIMIT 20;
 ```
 
 **Explain Plans:**
+
 ```sql
 EXPLAIN ANALYZE
 SELECT * FROM users
@@ -455,6 +508,7 @@ WHERE email = 'user@example.com';
 ```
 
 Look for:
+
 - Seq Scan (bad for large tables)
 - Index Scan (good)
 - Execution time
@@ -465,32 +519,35 @@ Look for:
 ### Stateless Architecture
 
 **Requirements:**
+
 - No local state (sessions, files)
 - Horizontal scaling compatible
 - Any instance can handle any request
 
 **State storage options:**
+
 - **Sessions:** Redis, Memcached
 - **Files:** S3, Cloud Storage
 - **Queues:** Redis, SQS, RabbitMQ
 
 **Example:**
+
 ```typescript
 // Bad: Local session storage
-const sessions = new Map()
+const sessions = new Map();
 
 app.post('/login', (req, res) => {
-  const sessionId = uuid()
-  sessions.set(sessionId, { userId: req.body.userId }) // Lost on restart!
-  res.cookie('sessionId', sessionId)
-})
+  const sessionId = uuid();
+  sessions.set(sessionId, { userId: req.body.userId }); // Lost on restart!
+  res.cookie('sessionId', sessionId);
+});
 
 // Good: Distributed session storage
 app.post('/login', async (req, res) => {
-  const sessionId = uuid()
-  await redis.set(`session:${sessionId}`, { userId: req.body.userId }, { ttl: 3600 })
-  res.cookie('sessionId', sessionId)
-})
+  const sessionId = uuid();
+  await redis.set(`session:${sessionId}`, { userId: req.body.userId }, { ttl: 3600 });
+  res.cookie('sessionId', sessionId);
+});
 ```
 
 ### Load Balancing
@@ -498,48 +555,55 @@ app.post('/login', async (req, res) => {
 **Algorithms:**
 
 **Round Robin:**
+
 - Distribute requests evenly
 - Simple, no state needed
 - Doesn't account for server load
 
 **Least Connections:**
+
 - Route to server with fewest active connections
 - Better for long-lived connections
 - Requires connection tracking
 
 **IP Hash:**
+
 - Route based on client IP
 - Session affinity without sticky sessions
 - Uneven distribution possible
 
 **Weighted:**
+
 - Assign weights based on capacity
 - Use during migrations (gradual traffic shift)
 - Example: 80% to new version, 20% to old
 
 **Tools:**
+
 - **Cloud:** AWS ALB/NLB, GCP Load Balancer, Azure Load Balancer
 - **Self-hosted:** Nginx, HAProxy, Traefik
 - **Application:** Envoy, Linkerd (service mesh)
 
 **Health Checks:**
+
 ```typescript
 app.get('/health', (req, res) => {
   // Check dependencies
-  const dbHealthy = await checkDatabase()
-  const cacheHealthy = await checkRedis()
+  const dbHealthy = await checkDatabase();
+  const cacheHealthy = await checkRedis();
 
   if (dbHealthy && cacheHealthy) {
-    res.status(200).json({ status: 'healthy' })
+    res.status(200).json({ status: 'healthy' });
   } else {
-    res.status(503).json({ status: 'unhealthy' })
+    res.status(503).json({ status: 'unhealthy' });
   }
-})
+});
 ```
 
 ### Asynchronous Processing
 
 **Pattern:**
+
 ```
 User Request
     ↓
@@ -551,6 +615,7 @@ Background Worker (process job)
 ```
 
 **Use cases:**
+
 - Email sending
 - Image processing
 - Report generation
@@ -558,29 +623,31 @@ Background Worker (process job)
 - Batch operations
 
 **Implementation:**
+
 ```typescript
 // API handler
 app.post('/upload-video', async (req, res) => {
-  const videoId = await saveVideo(req.file)
+  const videoId = await saveVideo(req.file);
 
   // Enqueue processing job
-  await queue.add('process-video', { videoId })
+  await queue.add('process-video', { videoId });
 
   // Return immediately
-  res.json({ videoId, status: 'processing' })
-})
+  res.json({ videoId, status: 'processing' });
+});
 
 // Background worker
-worker.process('process-video', async (job) => {
-  const { videoId } = job.data
+worker.process('process-video', async job => {
+  const { videoId } = job.data;
 
-  await transcodeVideo(videoId)
-  await generateThumbnail(videoId)
-  await updateVideoStatus(videoId, 'completed')
-})
+  await transcodeVideo(videoId);
+  await generateThumbnail(videoId);
+  await updateVideoStatus(videoId, 'completed');
+});
 ```
 
 **Tools:**
+
 - **BullMQ:** Redis-based, Node.js
 - **Celery:** Python
 - **Sidekiq:** Ruby
@@ -594,48 +661,52 @@ Prevent abuse and ensure fair usage.
 **Algorithms:**
 
 **Token Bucket:**
+
 - Bucket refills at constant rate
 - Requests consume tokens
 - Allows bursts up to bucket size
 
 **Sliding Window:**
+
 - Count requests in rolling time window
 - More accurate than fixed window
 - More complex to implement
 
 **Implementation (Redis):**
+
 ```typescript
 async function rateLimit(userId: string, limit: number, windowSeconds: number) {
-  const key = `ratelimit:${userId}`
-  const now = Date.now()
-  const windowStart = now - (windowSeconds * 1000)
+  const key = `ratelimit:${userId}`;
+  const now = Date.now();
+  const windowStart = now - windowSeconds * 1000;
 
   // Remove old entries
-  await redis.zremrangebyscore(key, 0, windowStart)
+  await redis.zremrangebyscore(key, 0, windowStart);
 
   // Count requests in window
-  const count = await redis.zcard(key)
+  const count = await redis.zcard(key);
 
   if (count >= limit) {
-    throw new Error('Rate limit exceeded')
+    throw new Error('Rate limit exceeded');
   }
 
   // Add current request
-  await redis.zadd(key, now, `${now}-${Math.random()}`)
-  await redis.expire(key, windowSeconds)
+  await redis.zadd(key, now, `${now}-${Math.random()}`);
+  await redis.expire(key, windowSeconds);
 }
 
 app.use(async (req, res, next) => {
   try {
-    await rateLimit(req.userId, 100, 60) // 100 requests per minute
-    next()
+    await rateLimit(req.userId, 100, 60); // 100 requests per minute
+    next();
   } catch (err) {
-    res.status(429).json({ error: 'Too many requests' })
+    res.status(429).json({ error: 'Too many requests' });
   }
-})
+});
 ```
 
 **Strategies:**
+
 - Per user
 - Per IP
 - Per API endpoint
@@ -647,12 +718,14 @@ app.use(async (req, res, next) => {
 ### Content Delivery Networks
 
 **Purpose:**
+
 - Serve static assets from edge locations
 - Reduce latency
 - Offload origin servers
 - DDoS protection
 
 **Cacheable Content:**
+
 - Images, videos
 - CSS, JavaScript
 - Fonts
@@ -660,21 +733,23 @@ app.use(async (req, res, next) => {
 - API responses (with appropriate headers)
 
 **Cache Control Headers:**
+
 ```typescript
 // Immutable assets (versioned)
-res.set('Cache-Control', 'public, max-age=31536000, immutable')
+res.set('Cache-Control', 'public, max-age=31536000, immutable');
 
 // Frequently changing content
-res.set('Cache-Control', 'public, max-age=3600, must-revalidate')
+res.set('Cache-Control', 'public, max-age=3600, must-revalidate');
 
 // Private content (user-specific)
-res.set('Cache-Control', 'private, max-age=600')
+res.set('Cache-Control', 'private, max-age=600');
 
 // No cache
-res.set('Cache-Control', 'no-store')
+res.set('Cache-Control', 'no-store');
 ```
 
 **Providers:**
+
 - **Cloudflare:** Free tier, DDoS protection, edge computing
 - **AWS CloudFront:** Deep AWS integration
 - **Fastly:** Real-time purging, VCL customization
@@ -685,6 +760,7 @@ res.set('Cache-Control', 'no-store')
 Run code close to users.
 
 **Use cases:**
+
 - A/B testing
 - Personalization
 - Authentication
@@ -692,25 +768,27 @@ Run code close to users.
 - API aggregation
 
 **Platforms:**
+
 - **Cloudflare Workers:** V8 isolates, global
 - **AWS Lambda@Edge:** CloudFront integration
 - **Vercel Edge Functions:** Next.js integration
 - **Deno Deploy:** TypeScript-first
 
 **Example (Cloudflare Workers):**
+
 ```typescript
 addEventListener('fetch', event => {
-  event.respondWith(handleRequest(event.request))
-})
+  event.respondWith(handleRequest(event.request));
+});
 
 async function handleRequest(request) {
   // A/B test at the edge
-  const variant = Math.random() < 0.5 ? 'A' : 'B'
+  const variant = Math.random() < 0.5 ? 'A' : 'B';
 
-  const url = new URL(request.url)
-  url.hostname = `variant-${variant}.example.com`
+  const url = new URL(request.url);
+  url.hostname = `variant-${variant}.example.com`;
 
-  return fetch(url)
+  return fetch(url);
 }
 ```
 
@@ -719,16 +797,19 @@ async function handleRequest(request) {
 ### Key Metrics
 
 **Response Time Percentiles:**
+
 - p50 (median): Typical user experience
 - p95: Most users' experience
 - p99: Tail latency, worst-case scenarios
 
 **Why percentiles matter:**
+
 - Average hides outliers
 - p99 affects real users
 - High p99 indicates problems
 
 **Apdex Score:**
+
 ```
 Apdex = (Satisfied + (Tolerating / 2)) / Total
 
@@ -738,6 +819,7 @@ Frustrated: Response time > 4T
 ```
 
 **Resource Utilization:**
+
 - CPU usage (aim for 60-70% during peak)
 - Memory usage (watch for leaks)
 - Disk I/O (IOPS, throughput)
@@ -746,6 +828,7 @@ Frustrated: Response time > 4T
 ### Application Profiling
 
 **Node.js:**
+
 ```bash
 # CPU profiling
 node --prof app.js
@@ -757,6 +840,7 @@ node --inspect app.js
 ```
 
 **Python:**
+
 ```python
 import cProfile
 import pstats
@@ -775,6 +859,7 @@ stats.print_stats(20)
 ```
 
 **Identify bottlenecks:**
+
 - Hot code paths
 - Blocking I/O
 - Inefficient algorithms
@@ -783,6 +868,7 @@ stats.print_stats(20)
 ### Database Query Analysis
 
 **Slow query logs:**
+
 ```sql
 -- PostgreSQL
 ALTER DATABASE mydb SET log_min_duration_statement = 1000; -- Log queries > 1s
@@ -793,11 +879,13 @@ SET GLOBAL long_query_time = 1;
 ```
 
 **Query performance insights:**
+
 - AWS RDS Performance Insights
 - Google Cloud SQL Insights
 - Azure Database Insights
 
 **Missing index detection:**
+
 ```sql
 -- PostgreSQL: Find seq scans on large tables
 SELECT schemaname, tablename, seq_scan, seq_tup_read,
@@ -811,6 +899,7 @@ LIMIT 20;
 ## Scaling Checklist
 
 **Before you need it:**
+
 - [ ] Implement stateless architecture
 - [ ] Use managed databases with easy scaling
 - [ ] Set up caching layer
@@ -820,6 +909,7 @@ LIMIT 20;
 - [ ] Document scaling procedures
 
 **When traffic grows:**
+
 - [ ] Analyze bottlenecks (database, API, frontend)
 - [ ] Scale horizontally (add app instances)
 - [ ] Add read replicas for databases
@@ -829,6 +919,7 @@ LIMIT 20;
 - [ ] Consider async processing for heavy operations
 
 **For high scale:**
+
 - [ ] Database sharding
 - [ ] Microservices architecture
 - [ ] Message queues for decoupling
@@ -841,29 +932,34 @@ LIMIT 20;
 ## Cost Optimization
 
 **Right-sizing:**
+
 - Monitor actual usage
 - Use smaller instances where possible
 - Reserved instances for predictable load
 - Spot instances for flexible workloads
 
 **Database:**
+
 - Use read replicas instead of larger primary
 - Archive old data
 - Use cheaper storage tiers for backups
 - Consider serverless options (Aurora Serverless, Firestore)
 
 **Compute:**
+
 - Serverless for variable workloads
 - Kubernetes for high utilization
 - Auto-scaling policies (scale down during low traffic)
 
 **Storage:**
+
 - Use S3 Intelligent-Tiering
 - Lifecycle policies for old data
 - Compress data
 - Use cheaper storage for archives
 
 **Network:**
+
 - CDN to reduce origin traffic
 - Compress responses (gzip, Brotli)
 - Optimize images (WebP, lazy loading)

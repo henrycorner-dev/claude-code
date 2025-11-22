@@ -13,6 +13,7 @@ Found 8 security vulnerabilities: 2 critical, 3 high, 3 medium. Critical issues 
 ### Critical (P0)
 
 #### 1. SQL Injection in Payment Endpoint
+
 - **Location**: `api/checkout/process-payment:234`
 - **Severity**: Critical
 - **CVSS Score**: 9.8
@@ -20,6 +21,7 @@ Found 8 security vulnerabilities: 2 critical, 3 high, 3 medium. Critical issues 
 - **Impact**: Attacker can extract all customer payment data
 - **Remediation**: Use parameterized queries with prepared statements
 - **Code**:
+
   ```javascript
   // VULNERABLE
   const query = `SELECT * FROM payments WHERE card='${cardNumber}'`;
@@ -28,9 +30,11 @@ Found 8 security vulnerabilities: 2 critical, 3 high, 3 medium. Critical issues 
   const query = 'SELECT * FROM payments WHERE card = ?';
   db.execute(query, [cardNumber]);
   ```
+
 - **Timeline**: Fix immediately (blocker)
 
 #### 2. Stored XSS in Order Confirmation
+
 - **Location**: `components/OrderConfirmation.tsx:89`
 - **Severity**: Critical
 - **CVSS Score**: 8.2
@@ -38,6 +42,7 @@ Found 8 security vulnerabilities: 2 critical, 3 high, 3 medium. Critical issues 
 - **Impact**: Attacker can inject malicious scripts visible to all users
 - **Remediation**: Sanitize HTML or use textContent instead of innerHTML
 - **Code**:
+
   ```typescript
   // VULNERABLE
   <div dangerouslySetInnerHTML={{ __html: orderNotes }} />
@@ -45,11 +50,13 @@ Found 8 security vulnerabilities: 2 critical, 3 high, 3 medium. Critical issues 
   // SECURE
   <div>{DOMPurify.sanitize(orderNotes)}</div>
   ```
+
 - **Timeline**: Fix immediately (blocker)
 
 ### High (P1)
 
 #### 3. Missing Rate Limiting on Checkout API
+
 - **Location**: `api/checkout/*`
 - **Severity**: High
 - **CVSS Score**: 7.5
@@ -59,6 +66,7 @@ Found 8 security vulnerabilities: 2 critical, 3 high, 3 medium. Critical issues 
 - **Timeline**: Fix before launch
 
 #### 4. Weak Session Management
+
 - **Location**: `auth/session.ts:45`
 - **Severity**: High
 - **CVSS Score**: 7.1
@@ -68,6 +76,7 @@ Found 8 security vulnerabilities: 2 critical, 3 high, 3 medium. Critical issues 
 - **Timeline**: Fix before launch
 
 #### 5. Insecure Direct Object Reference (IDOR)
+
 - **Location**: `api/orders/:orderId:67`
 - **Severity**: High
 - **CVSS Score**: 6.8
@@ -79,16 +88,19 @@ Found 8 security vulnerabilities: 2 critical, 3 high, 3 medium. Critical issues 
 ### Medium (P2)
 
 #### 6. Missing CSP Headers
+
 - **Severity**: Medium
 - **Description**: No Content Security Policy headers configured
 - **Remediation**: Add CSP headers to prevent XSS
 
 #### 7. Sensitive Data in Logs
+
 - **Severity**: Medium
 - **Description**: Credit card last 4 digits logged
 - **Remediation**: Remove PII from application logs
 
 #### 8. Missing CSRF Tokens
+
 - **Severity**: Medium
 - **Description**: State-changing operations lack CSRF protection
 - **Remediation**: Implement CSRF token validation
@@ -96,17 +108,20 @@ Found 8 security vulnerabilities: 2 critical, 3 high, 3 medium. Critical issues 
 ## Recommendations
 
 ### Immediate Actions (P0)
+
 1. Patch SQL injection vulnerability
 2. Fix XSS in order confirmation
 3. Deploy emergency security review before launch
 
 ### Pre-Launch (P1)
+
 1. Implement rate limiting on all APIs
 2. Fix session management
 3. Add authorization checks for IDOR
 4. Conduct penetration testing
 
 ### Post-Launch (P2)
+
 1. Add CSP headers
 2. Audit and clean up logging
 3. Implement CSRF protection
@@ -114,6 +129,7 @@ Found 8 security vulnerabilities: 2 critical, 3 high, 3 medium. Critical issues 
 ## Testing Requirements
 
 To verify fixes:
+
 1. SQL injection test suite (see test-plan.md)
 2. XSS attack vectors (OWASP ZAP scan)
 3. Rate limiting validation (load testing)

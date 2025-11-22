@@ -61,7 +61,7 @@ Nuxt 3 provides composables for data fetching with SSR support and automatic hyd
 
 ```vue
 <script setup lang="ts">
-const { data: posts, pending, error, refresh } = await useFetch('/api/posts')
+const { data: posts, pending, error, refresh } = await useFetch('/api/posts');
 </script>
 
 <template>
@@ -89,7 +89,7 @@ const { data, pending, error, refresh } = await useFetch('/api/posts', {
 
   // Request headers
   headers: {
-    'Authorization': 'Bearer token'
+    Authorization: 'Bearer token',
   },
 
   // Request body
@@ -99,11 +99,11 @@ const { data, pending, error, refresh } = await useFetch('/api/posts', {
   pick: ['id', 'title'],
 
   // Transform response data
-  transform: (data) => {
+  transform: data => {
     return data.map(post => ({
       ...post,
-      titleUpper: post.title.toUpperCase()
-    }))
+      titleUpper: post.title.toUpperCase(),
+    }));
   },
 
   // Cache key (for deduplication)
@@ -116,8 +116,8 @@ const { data, pending, error, refresh } = await useFetch('/api/posts', {
   lazy: true,
 
   // Watch sources for refetch
-  watch: [searchQuery]
-})
+  watch: [searchQuery],
+});
 ```
 
 ### useAsyncData
@@ -126,13 +126,10 @@ const { data, pending, error, refresh } = await useFetch('/api/posts', {
 
 ```vue
 <script setup lang="ts">
-const { data: user, pending } = await useAsyncData(
-  'user',
-  async () => {
-    const response = await $fetch('/api/user')
-    return response
-  }
-)
+const { data: user, pending } = await useAsyncData('user', async () => {
+  const response = await $fetch('/api/user');
+  return response;
+});
 </script>
 
 <template>
@@ -147,18 +144,18 @@ const { data: user, pending } = await useAsyncData(
 
 ```vue
 <script setup lang="ts">
-const route = useRoute()
+const route = useRoute();
 
 const { data: post } = await useAsyncData(
   `post-${route.params.id}`,
   async () => {
-    const response = await $fetch(`/api/posts/${route.params.id}`)
-    return response
+    const response = await $fetch(`/api/posts/${route.params.id}`);
+    return response;
   },
   {
-    watch: [() => route.params.id]
+    watch: [() => route.params.id],
   }
-)
+);
 </script>
 ```
 
@@ -169,7 +166,7 @@ Non-blocking versions for client-side navigation:
 ```vue
 <script setup lang="ts">
 // Don't block navigation - load in background
-const { pending, data: posts } = useLazyFetch('/api/posts')
+const { pending, data: posts } = useLazyFetch('/api/posts');
 </script>
 
 <template>
@@ -187,16 +184,16 @@ Direct fetch utility for manual requests:
 
 ```typescript
 // In components or composables
-const posts = await $fetch('/api/posts')
+const posts = await $fetch('/api/posts');
 
 // With options
 const post = await $fetch('/api/posts', {
   method: 'POST',
   body: {
     title: 'New Post',
-    content: 'Content here'
-  }
-})
+    content: 'Content here',
+  },
+});
 ```
 
 ### Data Fetching Best Practices
@@ -206,13 +203,10 @@ const post = await $fetch('/api/posts', {
 ```vue
 <script setup lang="ts">
 // Both requests happen in parallel
-const [
-  { data: user },
-  { data: posts }
-] = await Promise.all([
+const [{ data: user }, { data: posts }] = await Promise.all([
   useFetch('/api/user'),
-  useFetch('/api/posts')
-])
+  useFetch('/api/posts'),
+]);
 </script>
 ```
 
@@ -220,10 +214,10 @@ const [
 
 ```vue
 <script setup lang="ts">
-const { data: user } = await useFetch('/api/user')
+const { data: user } = await useFetch('/api/user');
 
 // Wait for user before fetching posts
-const { data: posts } = await useFetch(`/api/posts?userId=${user.value.id}`)
+const { data: posts } = await useFetch(`/api/posts?userId=${user.value.id}`);
 </script>
 ```
 
@@ -231,21 +225,17 @@ const { data: posts } = await useFetch(`/api/posts?userId=${user.value.id}`)
 
 ```vue
 <script setup lang="ts">
-const userId = ref<string | null>(null)
+const userId = ref<string | null>(null);
 
-const { data: user } = await useAsyncData(
-  'user',
-  () => $fetch(`/api/users/${userId.value}`),
-  {
-    // Only fetch when userId is set
-    watch: [userId],
-    immediate: false
-  }
-)
+const { data: user } = await useAsyncData('user', () => $fetch(`/api/users/${userId.value}`), {
+  // Only fetch when userId is set
+  watch: [userId],
+  immediate: false,
+});
 
 // Later in component
 function loadUser(id: string) {
-  userId.value = id
+  userId.value = id;
 }
 </script>
 ```
@@ -271,9 +261,9 @@ pages/
 ```vue
 <!-- pages/posts/[id].vue -->
 <script setup lang="ts">
-const route = useRoute()
+const route = useRoute();
 
-const { data: post } = await useFetch(`/api/posts/${route.params.id}`)
+const { data: post } = await useFetch(`/api/posts/${route.params.id}`);
 </script>
 
 <template>
@@ -302,7 +292,8 @@ pages/
 <template>
   <div>
     <h1>Parent</h1>
-    <NuxtPage />  <!-- Nested routes render here -->
+    <NuxtPage />
+    <!-- Nested routes render here -->
   </div>
 </template>
 ```
@@ -311,17 +302,17 @@ pages/
 
 ```vue
 <script setup lang="ts">
-const router = useRouter()
+const router = useRouter();
 
 function goToPost(id: string) {
   // Programmatic navigation
-  router.push(`/posts/${id}`)
+  router.push(`/posts/${id}`);
 
   // Or with object
   router.push({
     path: '/posts',
-    query: { page: 1 }
-  })
+    query: { page: 1 },
+  });
 }
 </script>
 
@@ -344,12 +335,12 @@ Define middleware in `middleware/` directory:
 ```typescript
 // middleware/auth.ts
 export default defineNuxtRouteMiddleware((to, from) => {
-  const user = useState('user')
+  const user = useState('user');
 
   if (!user.value) {
-    return navigateTo('/login')
+    return navigateTo('/login');
   }
-})
+});
 ```
 
 **Use in pages:**
@@ -358,8 +349,8 @@ export default defineNuxtRouteMiddleware((to, from) => {
 <!-- pages/dashboard.vue -->
 <script setup lang="ts">
 definePageMeta({
-  middleware: 'auth'
-})
+  middleware: 'auth',
+});
 </script>
 
 <template>
@@ -376,11 +367,11 @@ definePageMeta({
     function (to, from) {
       // Inline middleware logic
       if (!userIsAdmin()) {
-        return navigateTo('/unauthorized')
+        return navigateTo('/unauthorized');
       }
-    }
-  ]
-})
+    },
+  ],
+});
 </script>
 ```
 
@@ -390,8 +381,8 @@ definePageMeta({
 // middleware/analytics.global.ts
 export default defineNuxtRouteMiddleware((to, from) => {
   // Runs on every route change
-  console.log('Navigating to:', to.path)
-})
+  console.log('Navigating to:', to.path);
+});
 ```
 
 ### Layouts
@@ -410,7 +401,8 @@ Define layouts in `layouts/` directory:
     </header>
 
     <main>
-      <slot />  <!-- Page content renders here -->
+      <slot />
+      <!-- Page content renders here -->
     </main>
 
     <footer>Footer content</footer>
@@ -424,8 +416,8 @@ Define layouts in `layouts/` directory:
 <!-- pages/index.vue -->
 <script setup lang="ts">
 definePageMeta({
-  layout: 'default'
-})
+  layout: 'default',
+});
 </script>
 
 <template>
@@ -451,8 +443,8 @@ definePageMeta({
 <!-- pages/admin/dashboard.vue -->
 <script setup lang="ts">
 definePageMeta({
-  layout: 'admin'
-})
+  layout: 'admin',
+});
 </script>
 ```
 
@@ -466,13 +458,13 @@ Create API endpoints in `server/api/`:
 
 ```typescript
 // server/api/posts/index.get.ts
-export default defineEventHandler(async (event) => {
-  const posts = await getPosts()
+export default defineEventHandler(async event => {
+  const posts = await getPosts();
 
   return {
-    posts
-  }
-})
+    posts,
+  };
+});
 ```
 
 **HTTP method conventions:**
@@ -491,53 +483,53 @@ server/api/
 
 ```typescript
 // server/api/posts/index.post.ts
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async event => {
   // Read request body
-  const body = await readBody(event)
+  const body = await readBody(event);
 
   // Get query parameters
-  const query = getQuery(event)
+  const query = getQuery(event);
 
   // Get route parameters
-  const { id } = getRouterParams(event)
+  const { id } = getRouterParams(event);
 
   // Get headers
-  const token = getHeader(event, 'authorization')
+  const token = getHeader(event, 'authorization');
 
   // Set response status
-  setResponseStatus(event, 201)
+  setResponseStatus(event, 201);
 
   // Set response headers
-  setResponseHeader(event, 'x-custom-header', 'value')
+  setResponseHeader(event, 'x-custom-header', 'value');
 
   // Throw errors
   if (!body.title) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Title is required'
-    })
+      statusMessage: 'Title is required',
+    });
   }
 
   return {
-    success: true
-  }
-})
+    success: true,
+  };
+});
 ```
 
 ### Server Middleware
 
 ```typescript
 // server/middleware/auth.ts
-export default defineEventHandler((event) => {
-  const token = getHeader(event, 'authorization')
+export default defineEventHandler(event => {
+  const token = getHeader(event, 'authorization');
 
   if (!token && event.path.startsWith('/api/protected')) {
     throw createError({
       statusCode: 401,
-      statusMessage: 'Unauthorized'
-    })
+      statusMessage: 'Unauthorized',
+    });
   }
-})
+});
 ```
 
 ### Server Routes
@@ -546,39 +538,39 @@ Non-API routes in `server/routes/`:
 
 ```typescript
 // server/routes/rss.xml.ts
-export default defineEventHandler((event) => {
-  const posts = await getPosts()
+export default defineEventHandler(event => {
+  const posts = await getPosts();
 
-  const rss = generateRSS(posts)
+  const rss = generateRSS(posts);
 
-  setResponseHeader(event, 'content-type', 'application/xml')
+  setResponseHeader(event, 'content-type', 'application/xml');
 
-  return rss
-})
+  return rss;
+});
 ```
 
 ### Database Access
 
 ```typescript
 // server/api/posts/[id].get.ts
-import { db } from '~/server/database'
+import { db } from '~/server/database';
 
-export default defineEventHandler(async (event) => {
-  const { id } = getRouterParams(event)
+export default defineEventHandler(async event => {
+  const { id } = getRouterParams(event);
 
   const post = await db.posts.findUnique({
-    where: { id }
-  })
+    where: { id },
+  });
 
   if (!post) {
     throw createError({
       statusCode: 404,
-      statusMessage: 'Post not found'
-    })
+      statusMessage: 'Post not found',
+    });
   }
 
-  return post
-})
+  return post;
+});
 ```
 
 ## State Management
@@ -590,42 +582,40 @@ Nuxt 3 provides `useState` for reactive shared state.
 ```typescript
 // composables/useAuth.ts
 export const useAuth = () => {
-  const user = useState<User | null>('user', () => null)
+  const user = useState<User | null>('user', () => null);
 
   const login = async (email: string, password: string) => {
     const response = await $fetch('/api/auth/login', {
       method: 'POST',
-      body: { email, password }
-    })
+      body: { email, password },
+    });
 
-    user.value = response.user
-  }
+    user.value = response.user;
+  };
 
   const logout = () => {
-    user.value = null
-  }
+    user.value = null;
+  };
 
   return {
     user: readonly(user),
     login,
-    logout
-  }
-}
+    logout,
+  };
+};
 ```
 
 **Use in components:**
 
 ```vue
 <script setup lang="ts">
-const { user, login, logout } = useAuth()
+const { user, login, logout } = useAuth();
 </script>
 
 <template>
   <div>
     <p v-if="user">Welcome, {{ user.name }}</p>
-    <button v-else @click="login('user@example.com', 'password')">
-      Login
-    </button>
+    <button v-else @click="login('user@example.com', 'password')">Login</button>
   </div>
 </template>
 ```
@@ -639,57 +629,55 @@ npm install pinia @pinia/nuxt
 ```typescript
 // nuxt.config.ts
 export default defineNuxtConfig({
-  modules: ['@pinia/nuxt']
-})
+  modules: ['@pinia/nuxt'],
+});
 ```
 
 ```typescript
 // stores/auth.ts
-import { defineStore } from 'pinia'
+import { defineStore } from 'pinia';
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     user: null as User | null,
-    token: null as string | null
+    token: null as string | null,
   }),
 
   getters: {
-    isAuthenticated: (state) => !!state.user
+    isAuthenticated: state => !!state.user,
   },
 
   actions: {
     async login(email: string, password: string) {
       const response = await $fetch('/api/auth/login', {
         method: 'POST',
-        body: { email, password }
-      })
+        body: { email, password },
+      });
 
-      this.user = response.user
-      this.token = response.token
+      this.user = response.user;
+      this.token = response.token;
     },
 
     logout() {
-      this.user = null
-      this.token = null
-    }
-  }
-})
+      this.user = null;
+      this.token = null;
+    },
+  },
+});
 ```
 
 **Use in components:**
 
 ```vue
 <script setup lang="ts">
-import { useAuthStore } from '~/stores/auth'
+import { useAuthStore } from '~/stores/auth';
 
-const authStore = useAuthStore()
+const authStore = useAuthStore();
 </script>
 
 <template>
   <div>
-    <p v-if="authStore.isAuthenticated">
-      Welcome, {{ authStore.user.name }}
-    </p>
+    <p v-if="authStore.isAuthenticated">Welcome, {{ authStore.user.name }}</p>
   </div>
 </template>
 ```
@@ -703,61 +691,59 @@ Nuxt auto-imports composables from `composables/` directory.
 ```typescript
 // composables/usePosts.ts
 export const usePosts = () => {
-  const posts = useState<Post[]>('posts', () => [])
+  const posts = useState<Post[]>('posts', () => []);
 
   const fetchPosts = async () => {
-    const { data } = await useFetch('/api/posts')
-    posts.value = data.value
-  }
+    const { data } = await useFetch('/api/posts');
+    posts.value = data.value;
+  };
 
   const addPost = async (post: CreatePostDto) => {
     const newPost = await $fetch('/api/posts', {
       method: 'POST',
-      body: post
-    })
+      body: post,
+    });
 
-    posts.value.push(newPost)
-  }
+    posts.value.push(newPost);
+  };
 
   return {
     posts: readonly(posts),
     fetchPosts,
-    addPost
-  }
-}
+    addPost,
+  };
+};
 ```
 
 ### Built-in Composables
 
 ```typescript
 // Navigation
-const router = useRouter()
-const route = useRoute()
+const router = useRouter();
+const route = useRoute();
 
 // Fetching
-const { data } = await useFetch('/api/data')
-const { data } = await useAsyncData('key', fetchFn)
+const { data } = await useFetch('/api/data');
+const { data } = await useAsyncData('key', fetchFn);
 
 // State
-const counter = useState('counter', () => 0)
+const counter = useState('counter', () => 0);
 
 // Head/SEO
 useHead({
   title: 'Page Title',
-  meta: [
-    { name: 'description', content: 'Page description' }
-  ]
-})
+  meta: [{ name: 'description', content: 'Page description' }],
+});
 
 // Runtime config
-const config = useRuntimeConfig()
+const config = useRuntimeConfig();
 
 // Cookies
-const token = useCookie('token')
+const token = useCookie('token');
 
 // Error handling
-const error = useError()
-const { showError, clearError } = useError()
+const error = useError();
+const { showError, clearError } = useError();
 ```
 
 ## Nitro Server Engine
@@ -768,11 +754,11 @@ Nitro is Nuxt's server engine with universal deployment support.
 
 ```typescript
 // server/api/hello.ts
-export default defineEventHandler((event) => {
+export default defineEventHandler(event => {
   return {
-    api: 'works!'
-  }
-})
+    api: 'works!',
+  };
+});
 ```
 
 ### Cached Handlers
@@ -780,15 +766,15 @@ export default defineEventHandler((event) => {
 ```typescript
 // server/api/posts.get.ts
 export default defineCachedEventHandler(
-  async (event) => {
-    const posts = await db.posts.findMany()
-    return posts
+  async event => {
+    const posts = await db.posts.findMany();
+    return posts;
   },
   {
     maxAge: 60 * 10, // Cache for 10 minutes
-    getKey: (event) => `posts-list`
+    getKey: event => `posts-list`,
   }
-)
+);
 ```
 
 ### Server Utils
@@ -798,9 +784,9 @@ export default defineCachedEventHandler(
 export const db = {
   async getPosts() {
     // Database query
-    return []
-  }
-}
+    return [];
+  },
+};
 ```
 
 **Use in API routes:**
@@ -808,23 +794,23 @@ export const db = {
 ```typescript
 // server/api/posts/index.get.ts
 export default defineEventHandler(async () => {
-  const posts = await db.getPosts()
-  return posts
-})
+  const posts = await db.getPosts();
+  return posts;
+});
 ```
 
 ### Server Plugins
 
 ```typescript
 // server/plugins/database.ts
-export default defineNitroPlugin((nitroApp) => {
-  console.log('Nitro plugin initialization')
+export default defineNitroPlugin(nitroApp => {
+  console.log('Nitro plugin initialization');
 
   // Initialize database connection
-  nitroApp.hooks.hook('request', (event) => {
-    console.log('Request received:', event.path)
-  })
-})
+  nitroApp.hooks.hook('request', event => {
+    console.log('Request received:', event.path);
+  });
+});
 ```
 
 ## Modules and Plugins
@@ -840,13 +826,12 @@ npm install @nuxtjs/tailwindcss
 ```typescript
 // nuxt.config.ts
 export default defineNuxtConfig({
-  modules: [
-    '@nuxtjs/tailwindcss'
-  ]
-})
+  modules: ['@nuxtjs/tailwindcss'],
+});
 ```
 
 **Popular modules:**
+
 - `@nuxtjs/tailwindcss` - Tailwind CSS
 - `@pinia/nuxt` - State management
 - `@nuxt/image` - Image optimization
@@ -857,27 +842,27 @@ export default defineNuxtConfig({
 
 ```typescript
 // plugins/api.ts
-export default defineNuxtPlugin((nuxtApp) => {
+export default defineNuxtPlugin(nuxtApp => {
   const api = {
     getPosts: () => $fetch('/api/posts'),
-    getPost: (id: string) => $fetch(`/api/posts/${id}`)
-  }
+    getPost: (id: string) => $fetch(`/api/posts/${id}`),
+  };
 
   return {
     provide: {
-      api
-    }
-  }
-})
+      api,
+    },
+  };
+});
 ```
 
 **Use in components:**
 
 ```vue
 <script setup lang="ts">
-const { $api } = useNuxtApp()
+const { $api } = useNuxtApp();
 
-const posts = await $api.getPosts()
+const posts = await $api.getPosts();
 </script>
 ```
 
@@ -891,8 +876,8 @@ Configure per-route rendering:
 <script setup lang="ts">
 definePageMeta({
   // Static generation
-  prerender: true
-})
+  prerender: true,
+});
 </script>
 ```
 
@@ -911,9 +896,9 @@ export default defineNuxtConfig({
     '/admin/**': { ssr: false },
 
     // Cached for 1 hour
-    '/api/**': { cache: { maxAge: 3600 } }
-  }
-})
+    '/api/**': { cache: { maxAge: 3600 } },
+  },
+});
 ```
 
 ### Lazy Loading Components
@@ -921,9 +906,7 @@ export default defineNuxtConfig({
 ```vue
 <script setup lang="ts">
 // Lazy load component
-const LazyComponent = defineAsyncComponent(
-  () => import('~/components/HeavyComponent.vue')
-)
+const LazyComponent = defineAsyncComponent(() => import('~/components/HeavyComponent.vue'));
 </script>
 
 <template>
@@ -950,9 +933,9 @@ const LazyComponent = defineAsyncComponent(
 // nuxt.config.ts
 export default defineNuxtConfig({
   experimental: {
-    payloadExtraction: true
-  }
-})
+    payloadExtraction: true,
+  },
+});
 ```
 
 ### Image Optimization
@@ -964,19 +947,13 @@ npm install @nuxt/image
 ```typescript
 // nuxt.config.ts
 export default defineNuxtConfig({
-  modules: ['@nuxt/image']
-})
+  modules: ['@nuxt/image'],
+});
 ```
 
 ```vue
 <template>
-  <NuxtImg
-    src="/hero.jpg"
-    width="1200"
-    height="600"
-    format="webp"
-    quality="80"
-  />
+  <NuxtImg src="/hero.jpg" width="1200" height="600" format="webp" quality="80" />
 </template>
 ```
 

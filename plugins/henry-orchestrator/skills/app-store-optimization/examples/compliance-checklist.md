@@ -7,6 +7,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 ### Safety (Guideline 1)
 
 #### Objectionable Content
+
 - [ ] No offensive, discriminatory, or mean-spirited content
 - [ ] No graphic violence toward real people or animals
 - [ ] No bullying, harassment, or hate speech
@@ -14,6 +15,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 - [ ] No defamatory or malicious content
 
 #### User-Generated Content (If Applicable)
+
 - [ ] Content filtering mechanism implemented
 - [ ] In-app reporting system available
 - [ ] Moderation system in place (AI + human review recommended)
@@ -22,6 +24,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 - [ ] Contact information published for reporting concerns
 
 #### Kids Category (If Applicable)
+
 - [ ] No external links (or behind parental gate)
 - [ ] No behavioral advertising
 - [ ] No third-party analytics collecting personal data
@@ -30,12 +33,14 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 - [ ] Parental gates for purchases
 
 #### Physical Harm
+
 - [ ] Medical disclaimers included if providing health information
 - [ ] No encouragement of dangerous behavior
 - [ ] Drug/medical information from approved sources only
 - [ ] Privacy policy for health data collection
 
 #### Developer Information
+
 - [ ] Published under correct developer name
 - [ ] Organization apps use registered business name
 - [ ] No impersonation of other developers or entities
@@ -43,6 +48,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 ### Performance (Guideline 2)
 
 #### App Completeness
+
 - [ ] All features functional and complete
 - [ ] No placeholder content or "coming soon" features
 - [ ] All URLs and backend services active
@@ -51,6 +57,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 - [ ] App tested on actual devices
 
 #### Accurate Metadata
+
 - [ ] App description matches actual functionality
 - [ ] Screenshots show actual app usage
 - [ ] App name accurately represents the app
@@ -58,6 +65,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 - [ ] Preview video shows real app features
 
 #### Hardware & Software Requirements
+
 - [ ] App runs on currently shipping iOS devices
 - [ ] Uses only public APIs (no private API usage)
 - [ ] Optimized for target devices
@@ -68,6 +76,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 ### Business (Guideline 3)
 
 #### Payments
+
 - [ ] In-app purchases used for digital content
 - [ ] No alternative payment mechanisms for digital goods
 - [ ] Physical goods/services use external payment if needed
@@ -75,6 +84,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 - [ ] No directing users to external payment for digital content
 
 #### Subscriptions (If Applicable)
+
 - [ ] Clear terms and pricing
 - [ ] Subscription features only available to subscribers
 - [ ] Restore purchases functionality
@@ -83,6 +93,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 - [ ] Privacy policy link included
 
 #### Other Business Models
+
 - [ ] No unfair pricing practices
 - [ ] No spam apps
 - [ ] Cryptocurrency functionality complies with policies
@@ -91,23 +102,27 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 ### Design (Guideline 4)
 
 #### Originality
+
 - [ ] Original app design (not copycat)
 - [ ] Unique functionality and value
 - [ ] Not misleadingly similar to other apps
 - [ ] Original content and assets
 
 #### Functionality
+
 - [ ] Provides substantial functionality
 - [ ] Not just a website wrapper
 - [ ] Not single-function marketing material
 - [ ] Template apps are sufficiently unique
 
 #### Extensions (If Applicable)
+
 - [ ] Extensions provide value in host app context
 - [ ] No marketing or advertising in extensions
 - [ ] Today widget follows guidelines
 
 #### Apple Services
+
 - [ ] No misuse of Apple services
 - [ ] Push notifications provide value (not spam/ads)
 - [ ] Sign in with Apple implemented if other social login available
@@ -116,6 +131,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 ### Legal (Guideline 5)
 
 #### Privacy (CRITICAL)
+
 - [ ] Privacy policy URL provided and accessible
 - [ ] Privacy policy describes data collection and usage
 - [ ] User consent obtained before collecting data
@@ -125,6 +141,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 - [ ] Kids apps: strict privacy compliance
 
 #### Privacy Policy Content
+
 - [ ] Types of data collected
 - [ ] How data is used
 - [ ] Third-party data sharing disclosed
@@ -134,12 +151,14 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 - [ ] Policy covers all app functionality
 
 #### Permissions
+
 - [ ] Purpose strings for all requested permissions
 - [ ] Clear explanation why each permission needed
 - [ ] No requesting unnecessary permissions
 - [ ] Sensitive permissions justified
 
 #### Intellectual Property
+
 - [ ] All content owned or properly licensed
 - [ ] No copyright infringement
 - [ ] No unauthorized trademark usage
@@ -147,6 +166,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 - [ ] No celebrity names/images without permission
 
 #### Gambling & Lotteries (If Applicable)
+
 - [ ] Proper licensing for gambling apps
 - [ ] Free entry method for sweepstakes
 - [ ] Complies with local gambling laws
@@ -159,12 +179,14 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 ### Restricted Content
 
 #### Illegal Activities
+
 - [ ] No facilitation of illegal activities
 - [ ] No dangerous instructions
 - [ ] No promotion of terrorist organizations
 - [ ] Complies with local laws
 
 #### Child Safety
+
 - [ ] Families Policy followed if targeting children
 - [ ] Age-appropriate content
 - [ ] Parental consent for data collection
@@ -172,6 +194,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 - [ ] Proper content rating
 
 #### Inappropriate Content
+
 - [ ] No sexually explicit material
 - [ ] No graphic violence
 - [ ] No hate speech or discrimination
@@ -179,6 +202,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 - [ ] Content rating accurate
 
 #### Intellectual Property
+
 - [ ] No copyright infringement
 - [ ] No trademark violations
 - [ ] No counterfeit goods
@@ -187,6 +211,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 ### Privacy & Security (CRITICAL)
 
 #### User Data Requirements
+
 - [ ] Privacy policy provided in-app AND on store listing
 - [ ] Privacy policy URL accessible without login
 - [ ] Data Safety form completed accurately
@@ -195,6 +220,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 - [ ] Third-party data sharing disclosed
 
 #### Data Safety Form (Play Console)
+
 - [ ] All collected data types declared
 - [ ] Data usage purposes accurate
 - [ ] Security practices described
@@ -203,6 +229,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 - [ ] Updated within 7 days of changes
 
 #### Permissions
+
 - [ ] Only necessary permissions requested
 - [ ] Prominent disclosure for sensitive permissions
 - [ ] Explanation for each permission
@@ -210,6 +237,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 - [ ] Secure data transmission (HTTPS)
 
 #### Personal & Sensitive Information
+
 - [ ] Secure authentication methods
 - [ ] No selling user data without consent
 - [ ] Contact list access with user permission only
@@ -219,6 +247,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 ### Monetization & Ads
 
 #### Payments
+
 - [ ] Google Play Billing for digital goods/services
 - [ ] Clear pricing information
 - [ ] Physical goods can use alternative payment
@@ -226,6 +255,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 - [ ] No misleading pricing
 
 #### Advertising
+
 - [ ] Ads clearly distinguishable from content
 - [ ] No ads interfering with device functionality
 - [ ] No full-screen ads at app launch
@@ -234,6 +264,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 - [ ] Ad content appropriate
 
 #### Subscriptions (If Applicable)
+
 - [ ] Clear terms and pricing
 - [ ] Easy cancellation process
 - [ ] Grace period for billing issues
@@ -244,6 +275,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 ### Malware & Security
 
 #### Security
+
 - [ ] No malware or spyware
 - [ ] No stealing user data
 - [ ] No interfering with other apps
@@ -253,6 +285,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 - [ ] No security vulnerabilities
 
 #### Device & Network
+
 - [ ] No interfering with device functionality
 - [ ] No unauthorized system settings changes
 - [ ] Respects device resources (battery, data)
@@ -262,6 +295,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 ### App Functionality
 
 #### Minimum Functionality
+
 - [ ] Stable, responsive functionality
 - [ ] No placeholder or incomplete content
 - [ ] All advertised features work
@@ -269,6 +303,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 - [ ] No broken features
 
 #### Deceptive Behavior
+
 - [ ] Accurate app description
 - [ ] No impersonating others
 - [ ] No misleading claims
@@ -276,6 +311,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 - [ ] No fake reviews or ratings manipulation
 
 #### User-Generated Content (If Applicable)
+
 - [ ] Content moderation implemented
 - [ ] In-app reporting mechanism
 - [ ] System to remove objectionable content
@@ -285,6 +321,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 ### Families Policy (If Targeting Children)
 
 #### Requirements
+
 - [ ] Designed for Families Program compliant
 - [ ] Age-appropriate content only
 - [ ] Teacher Approved (if applicable)
@@ -294,6 +331,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 - [ ] Privacy policy required
 
 #### Content
+
 - [ ] Age-appropriate themes
 - [ ] No realistic violence
 - [ ] No frightening content for young children
@@ -301,6 +339,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 - [ ] Educational value (preferred)
 
 #### Advertising
+
 - [ ] No behavioral advertising
 - [ ] No remarketing to children
 - [ ] Age-appropriate ad content only
@@ -310,6 +349,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 ### Store Listing & Metadata
 
 #### Accuracy
+
 - [ ] App title accurate
 - [ ] Description matches functionality
 - [ ] No keyword stuffing
@@ -319,6 +359,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 - [ ] No misleading visuals
 
 #### Content Rating
+
 - [ ] IARC questionnaire completed
 - [ ] Accurate content description
 - [ ] Rating appropriate for all content
@@ -327,6 +368,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 ### Quality & Spam
 
 #### App Quality
+
 - [ ] No crashes or freezes
 - [ ] Responsive UI
 - [ ] Works on various devices
@@ -335,6 +377,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 - [ ] Smooth performance
 
 #### Spam Prevention
+
 - [ ] No repetitive content across apps
 - [ ] Unique value provided
 - [ ] Quality content
@@ -348,6 +391,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 ### Data Privacy (Both Platforms)
 
 #### Privacy Policy Requirements
+
 - [ ] Hosted on accessible URL (not PDF download)
 - [ ] Available in all supported languages
 - [ ] Updated to reflect current practices
@@ -358,6 +402,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 - [ ] Provides contact information
 
 #### Data Collection Disclosure
+
 - [ ] Location data (if collected)
 - [ ] Personal information
 - [ ] Financial information
@@ -368,6 +413,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 - [ ] Health data (if applicable)
 
 #### User Consent
+
 - [ ] Consent obtained before data collection
 - [ ] Tracking permission requested (iOS)
 - [ ] Clear opt-out options
@@ -377,6 +423,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 ### Permissions Best Practices
 
 #### Required Explanations
+
 - [ ] Location: Why app needs location
 - [ ] Camera: Purpose of camera access
 - [ ] Microphone: Reason for audio recording
@@ -386,6 +433,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 - [ ] Health data: Why health data needed
 
 #### Permission Timing
+
 - [ ] Request at point of use (not at launch)
 - [ ] Provide context before requesting
 - [ ] Gracefully handle denial
@@ -394,6 +442,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 ### Metadata Quality
 
 #### Description
+
 - [ ] Clear and accurate
 - [ ] Highlights key features
 - [ ] No false claims
@@ -402,6 +451,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 - [ ] Includes necessary disclosures
 
 #### Visual Assets
+
 - [ ] High quality
 - [ ] Represent actual app
 - [ ] No misleading content
@@ -411,6 +461,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 ### Legal Compliance
 
 #### Required Documents
+
 - [ ] Privacy Policy (accessible URL)
 - [ ] Terms of Service
 - [ ] COPPA compliance (if applicable)
@@ -419,6 +470,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 - [ ] Local regulations compliance
 
 #### Content Rights
+
 - [ ] Own or license all content
 - [ ] Music rights secured
 - [ ] Image rights secured
@@ -431,6 +483,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 ## Pre-Submission Final Checks
 
 ### Binary Testing
+
 - [ ] Tested on minimum supported OS version
 - [ ] Tested on multiple device sizes
 - [ ] No crashes during normal use
@@ -440,6 +493,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 - [ ] Offline functionality (if claimed)
 
 ### Metadata Review
+
 - [ ] All text proofread
 - [ ] Links work correctly
 - [ ] Screenshots up to date
@@ -449,6 +503,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 - [ ] Contact information correct
 
 ### Policy Compliance
+
 - [ ] Reviewed relevant guidelines
 - [ ] Privacy policy complete
 - [ ] Permissions justified
@@ -457,6 +512,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 - [ ] Legal requirements met
 
 ### Account & Setup
+
 - [ ] Developer account in good standing
 - [ ] Payment information current (Android)
 - [ ] Agreements accepted
@@ -469,6 +525,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 ## Common Rejection Reasons Quick Reference
 
 ### iOS Common Rejections
+
 1. **Guideline 2.1** - Incomplete app, broken features, demo account doesn't work
 2. **Guideline 2.3** - Misleading metadata, screenshots don't match app
 3. **Guideline 4.3** - Spam, duplicate apps, copycat
@@ -477,6 +534,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 6. **Guideline 3.1.1** - Not using In-App Purchase for digital content
 
 ### Google Play Common Rejections
+
 1. **Privacy Policy** - Missing, inaccessible, or incomplete
 2. **Data Safety** - Incomplete or inaccurate Data Safety form
 3. **Permissions** - Unnecessary permissions or no explanation
@@ -489,6 +547,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 ## Post-Submission Monitoring
 
 ### After Approval
+
 - [ ] Monitor crash reports
 - [ ] Respond to user reviews
 - [ ] Track ratings
@@ -497,6 +556,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 - [ ] Check for unauthorized warnings
 
 ### If Rejected
+
 1. Read rejection reason carefully
 2. Review specific guideline mentioned
 3. Fix all issues identified
@@ -511,16 +571,19 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 ## Resources
 
 ### iOS
+
 - Guidelines: https://developer.apple.com/app-store/review/guidelines/
 - Resolution Center: In App Store Connect
 - App Review: https://developer.apple.com/contact/app-store/
 
 ### Android
+
 - Policy Center: https://play.google.com/about/developer-content-policy/
 - Developer Support: Play Console
 - Appeals: Through Play Console
 
 ### Privacy Resources
+
 - GDPR: https://gdpr.eu/
 - COPPA: https://www.ftc.gov/legal-library/browse/rules/childrens-online-privacy-protection-rule-coppa
 - CCPA: https://oag.ca.gov/privacy/ccpa
@@ -530,6 +593,7 @@ Use this checklist before submitting your app to ensure compliance with iOS App 
 ## Checklist Summary
 
 **Critical Pre-Launch Items:**
+
 1. Privacy policy complete and accessible
 2. Data Safety form accurate (Android)
 3. All permissions justified with explanations

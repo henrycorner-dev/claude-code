@@ -11,6 +11,7 @@ This example demonstrates an end-to-end performance optimization workflow for a 
 ## Initial State
 
 ### Performance Metrics (Baseline)
+
 ```
 Core Web Vitals:
 - LCP: 4.2s (Poor - target: <2.5s)
@@ -28,6 +29,7 @@ Performance Score: 42/100
 ```
 
 ### Business Impact
+
 ```
 Current State:
 - Bounce rate: 35% (industry avg: 25%)
@@ -46,27 +48,32 @@ Projected with optimization:
 ### Step 1: Baseline Analysis with performance-engineer
 
 **Command**:
+
 ```bash
 /henry-orchestrator:henry-team performance-engineer - Baseline landing page performance and identify bottlenecks
 ```
 
 **performance-engineer findings**:
+
 ```markdown
 ## Performance Baseline Report
 
 ### Core Web Vitals Analysis
 
 **LCP: 4.2s (Poor)**
+
 - Root cause: Large hero image (2.8MB JPEG, 4000x3000)
 - Element: Main hero image above fold
 - Impact: 60% of LCP time waiting for image
 
 **INP: 350ms (Poor)**
+
 - Root cause: Heavy JavaScript execution blocking main thread
 - Longest task: 280ms (Bundle parsing and execution)
 - Impact: Delayed interactivity after click
 
 **CLS: 0.18 (Needs Improvement)**
+
 - Root causes:
   1. Images without width/height causing layout shift (0.12)
   2. Web font loading causing FOIT (Flash of Invisible Text) (0.04)
@@ -76,11 +83,13 @@ Projected with optimization:
 
 **Bundle Breakdown**:
 ```
+
 Total: 1.2MB (380KB gzipped)
 ├─ vendor.js: 650KB (React, lodash, moment, etc.)
 ├─ main.js: 420KB (Application code)
 ├─ styles.css: 80KB (CSS)
 └─ fonts: 50KB (Web fonts)
+
 ```
 
 **Unused JavaScript**: 320KB (27% of bundle)
@@ -88,11 +97,13 @@ Total: 1.2MB (380KB gzipped)
 
 **Images**:
 ```
+
 Total: 3.5MB
 ├─ hero.jpg: 2.8MB (4000x3000, unoptimized)
 ├─ product-1.jpg: 450KB (1200x1200)
 ├─ product-2.jpg: 380KB (1200x1200)
 └─ logo.png: 120KB (500x500, should be SVG)
+
 ```
 
 ### Prioritized Recommendations
@@ -119,11 +130,13 @@ Total: 3.5MB
 **Resources Needed**: frontend-engineer, performance-engineer, qa-tester
 
 **Sprint 1 (Week 1-2): High Impact Items**
+
 - Optimize hero image (WebP, responsive sizes, lazy loading)
 - Implement code splitting
 - Add image dimensions
 
 **Sprint 2 (Week 3-4): Medium Impact Items + Validation**
+
 - Font optimization
 - Lazy load below-fold content
 - Remove unused code
@@ -134,6 +147,7 @@ Total: 3.5MB
 ### Sprint 1, Week 1: Image Optimization
 
 **Task Assignment**:
+
 ```bash
 /henry-orchestrator:henry-team frontend-engineer performance-engineer - Optimize landing page images for Core Web Vitals
 ```
@@ -141,6 +155,7 @@ Total: 3.5MB
 #### Implementation
 
 **Before**:
+
 ```html
 <!-- Unoptimized hero image -->
 <div class="hero">
@@ -150,6 +165,7 @@ Total: 3.5MB
 ```
 
 **After**:
+
 ```html
 <!-- Optimized hero image with responsive sizes and WebP -->
 <div class="hero">
@@ -157,8 +173,8 @@ Total: 3.5MB
     <source
       type="image/webp"
       srcset="
-        /images/hero-400.webp 400w,
-        /images/hero-800.webp 800w,
+        /images/hero-400.webp   400w,
+        /images/hero-800.webp   800w,
         /images/hero-1200.webp 1200w,
         /images/hero-1600.webp 1600w
       "
@@ -167,8 +183,8 @@ Total: 3.5MB
     <source
       type="image/jpeg"
       srcset="
-        /images/hero-400.jpg 400w,
-        /images/hero-800.jpg 800w,
+        /images/hero-400.jpg   400w,
+        /images/hero-800.jpg   800w,
         /images/hero-1200.jpg 1200w,
         /images/hero-1600.jpg 1600w
       "
@@ -189,10 +205,7 @@ Total: 3.5MB
 <div class="products">
   <img
     src="/images/product-1-400.webp"
-    srcset="
-      /images/product-1-400.webp 400w,
-      /images/product-1-800.webp 800w
-    "
+    srcset="/images/product-1-400.webp 400w, /images/product-1-800.webp 800w"
     sizes="(max-width: 768px) 100vw, 400px"
     alt="Product 1"
     width="400"
@@ -205,6 +218,7 @@ Total: 3.5MB
 ```
 
 **Image Generation Script**:
+
 ```bash
 # Convert to WebP and generate responsive sizes
 for img in hero product-1 product-2; do
@@ -223,6 +237,7 @@ done
 ```
 
 **Results After Image Optimization**:
+
 ```
 Image Sizes:
 - hero.jpg: 2.8MB → 280KB (90% reduction)
@@ -241,6 +256,7 @@ Still needs work:
 ### Sprint 1, Week 2: Code Splitting
 
 **Task Assignment**:
+
 ```bash
 /henry-orchestrator:henry-team frontend-engineer - Implement code splitting and lazy loading for JavaScript bundles
 ```
@@ -248,11 +264,12 @@ Still needs work:
 #### Implementation
 
 **Before**:
+
 ```javascript
 // main.js - Everything bundled together
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {BrowserRouter, Routes, Route} from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import moment from 'moment';
 import _ from 'lodash';
 
@@ -280,11 +297,12 @@ ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
 **After**:
+
 ```javascript
 // main.js - Code splitting with lazy loading
-import React, {lazy, Suspense} from 'react';
+import React, { lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom';
-import {BrowserRouter, Routes, Route} from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 // Only import what's needed for initial load
 import LoadingSpinner from './components/LoadingSpinner';
@@ -316,6 +334,7 @@ ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
 **Webpack Configuration**:
+
 ```javascript
 // webpack.config.js
 module.exports = {
@@ -348,13 +367,14 @@ module.exports = {
 ```
 
 **Replace Heavy Dependencies**:
+
 ```javascript
 // Before: moment.js (entire library)
 import moment from 'moment';
 const date = moment().format('YYYY-MM-DD');
 
 // After: date-fns (tree-shakeable)
-import {format} from 'date-fns';
+import { format } from 'date-fns';
 const date = format(new Date(), 'yyyy-MM-dd');
 
 // Before: lodash (entire library)
@@ -367,6 +387,7 @@ const unique = uniq(array);
 ```
 
 **Results After Code Splitting**:
+
 ```
 Bundle Sizes:
 Before:
@@ -404,17 +425,20 @@ All targets met! 🎉
 ### Step 1: Performance Validation
 
 **Command**:
+
 ```bash
 /henry-orchestrator:henry-team performance-engineer qa-tester - Validate optimizations meet targets and verify no regressions
 ```
 
 **performance-engineer validation**:
+
 ```markdown
 ## Validation Report
 
 ### Core Web Vitals (After Optimization)
 
 **Lighthouse Audit** (5 runs, median):
+
 - Performance Score: 42 → 94 (+124%)
 - LCP: 4.2s → 2.1s (50% improvement) ✓
 - INP: 350ms → 195ms (44% improvement) ✓
@@ -423,6 +447,7 @@ All targets met! 🎉
 - FCP: 2.1s → 1.2s (43% improvement) ✓
 
 **WebPageTest** (Dulles, VA - Cable, 3 runs):
+
 - First View LCP: 2.3s ✓
 - Repeat View LCP: 1.1s ✓ (cached)
 - Speed Index: 5.3s → 2.1s ✓
@@ -432,10 +457,12 @@ All Core Web Vitals targets met ✓
 ```
 
 **qa-tester validation**:
+
 ```markdown
 ## Regression Testing Report
 
 ### Functional Testing
+
 ✓ All pages load correctly
 ✓ Navigation between pages works
 ✓ Images display correctly (WebP with JPEG fallback)
@@ -443,17 +470,20 @@ All Core Web Vitals targets met ✓
 ✓ Code splitting doesn't break functionality
 
 ### Cross-browser Testing
+
 ✓ Chrome 120: All features work, WebP supported
 ✓ Safari 17: Fallback to JPEG, all features work
 ✓ Firefox 121: WebP supported, all features work
 ✓ Edge 120: WebP supported, all features work
 
 ### Mobile Testing
+
 ✓ iPhone 13 (iOS 17): LCP 2.4s, all features work
 ✓ Samsung Galaxy S21 (Android 13): LCP 2.2s, all features work
 ✓ Responsive images load correct sizes
 
 ### Performance Regression Tests
+
 ✓ Bundle size within budget (< 150KB initial)
 ✓ LCP < 2.5s on all tested devices
 ✓ No new console errors or warnings
@@ -465,6 +495,7 @@ No regressions detected ✓
 ### Step 2: Performance Budget Enforcement
 
 **Lighthouse CI Configuration**:
+
 ```json
 {
   "ci": {
@@ -474,13 +505,13 @@ No regressions detected ✓
     },
     "assert": {
       "assertions": {
-        "largest-contentful-paint": ["error", {"maxNumericValue": 2500}],
-        "cumulative-layout-shift": ["error", {"maxNumericValue": 0.1}],
-        "total-blocking-time": ["error", {"maxNumericValue": 300}],
-        "interactive": ["error", {"maxNumericValue": 3800}],
-        "categories:performance": ["error", {"minScore": 0.9}],
-        "resource-summary:script:size": ["error", {"maxNumericValue": 200000}],
-        "resource-summary:image:size": ["error", {"maxNumericValue": 500000}]
+        "largest-contentful-paint": ["error", { "maxNumericValue": 2500 }],
+        "cumulative-layout-shift": ["error", { "maxNumericValue": 0.1 }],
+        "total-blocking-time": ["error", { "maxNumericValue": 300 }],
+        "interactive": ["error", { "maxNumericValue": 3800 }],
+        "categories:performance": ["error", { "minScore": 0.9 }],
+        "resource-summary:script:size": ["error", { "maxNumericValue": 200000 }],
+        "resource-summary:image:size": ["error", { "maxNumericValue": 500000 }]
       }
     }
   }
@@ -488,6 +519,7 @@ No regressions detected ✓
 ```
 
 **GitHub Actions Workflow**:
+
 ```yaml
 name: Performance Budget
 on: [push, pull_request]
@@ -513,11 +545,12 @@ jobs:
 ### Real User Monitoring (RUM)
 
 **Implementation**:
+
 ```javascript
 // Track Core Web Vitals in production
-import {onLCP, onINP, onCLS} from 'web-vitals';
+import { onLCP, onINP, onCLS } from 'web-vitals';
 
-function sendToAnalytics({name, value, id}) {
+function sendToAnalytics({ name, value, id }) {
   // Send to Google Analytics
   gtag('event', name, {
     event_category: 'Web Vitals',
@@ -529,8 +562,8 @@ function sendToAnalytics({name, value, id}) {
   // Send to custom analytics endpoint
   fetch('/api/analytics/web-vitals', {
     method: 'POST',
-    body: JSON.stringify({name, value, id}),
-    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ name, value, id }),
+    headers: { 'Content-Type': 'application/json' },
   });
 }
 
@@ -540,22 +573,28 @@ onCLS(sendToAnalytics);
 ```
 
 **Dashboard Configuration**:
+
 ```javascript
 // Analytics dashboard queries
 const webVitalsQueries = {
   // 75th percentile (good user experience threshold)
-  lcp_p75: "SELECT PERCENTILE(value, 75) FROM web_vitals WHERE name='LCP' AND timestamp > NOW() - 7d",
-  inp_p75: "SELECT PERCENTILE(value, 75) FROM web_vitals WHERE name='INP' AND timestamp > NOW() - 7d",
-  cls_p75: "SELECT PERCENTILE(value, 75) FROM web_vitals WHERE name='CLS' AND timestamp > NOW() - 7d",
+  lcp_p75:
+    "SELECT PERCENTILE(value, 75) FROM web_vitals WHERE name='LCP' AND timestamp > NOW() - 7d",
+  inp_p75:
+    "SELECT PERCENTILE(value, 75) FROM web_vitals WHERE name='INP' AND timestamp > NOW() - 7d",
+  cls_p75:
+    "SELECT PERCENTILE(value, 75) FROM web_vitals WHERE name='CLS' AND timestamp > NOW() - 7d",
 
   // Trends over time
-  lcp_trend: "SELECT DATE(timestamp), PERCENTILE(value, 75) FROM web_vitals WHERE name='LCP' GROUP BY DATE(timestamp) ORDER BY DATE(timestamp) DESC LIMIT 30",
+  lcp_trend:
+    "SELECT DATE(timestamp), PERCENTILE(value, 75) FROM web_vitals WHERE name='LCP' GROUP BY DATE(timestamp) ORDER BY DATE(timestamp) DESC LIMIT 30",
 };
 ```
 
 ### Alerts
 
 **Performance Degradation Alert**:
+
 ```yaml
 alert: LCP Degradation
 condition: lcp_p75 > 3000ms for 15 minutes
@@ -568,18 +607,19 @@ notification: #performance-alerts Slack channel
 
 ### Performance Improvements
 
-| Metric | Before | After | Improvement | Target | Status |
-|--------|--------|-------|-------------|--------|--------|
-| **LCP** | 4.2s | 2.1s | 50% | <2.5s | ✓ Pass |
-| **INP** | 350ms | 195ms | 44% | <200ms | ✓ Pass |
-| **CLS** | 0.18 | 0.06 | 67% | <0.1 | ✓ Pass |
-| **Performance Score** | 42 | 94 | 124% | >90 | ✓ Pass |
-| **Bundle Size** | 380KB | 131KB | 66% | <150KB | ✓ Pass |
-| **Image Size** | 3.5MB | 460KB | 87% | <500KB | ✓ Pass |
+| Metric                | Before | After | Improvement | Target | Status |
+| --------------------- | ------ | ----- | ----------- | ------ | ------ |
+| **LCP**               | 4.2s   | 2.1s  | 50%         | <2.5s  | ✓ Pass |
+| **INP**               | 350ms  | 195ms | 44%         | <200ms | ✓ Pass |
+| **CLS**               | 0.18   | 0.06  | 67%         | <0.1   | ✓ Pass |
+| **Performance Score** | 42     | 94    | 124%        | >90    | ✓ Pass |
+| **Bundle Size**       | 380KB  | 131KB | 66%         | <150KB | ✓ Pass |
+| **Image Size**        | 3.5MB  | 460KB | 87%         | <500KB | ✓ Pass |
 
 ### Business Impact
 
 **Measured after 4 weeks**:
+
 ```
 Bounce Rate:
 - Before: 35%
@@ -611,17 +651,20 @@ ROI:
 ### Lessons Learned
 
 **What Worked Well**:
+
 1. **Image optimization had biggest single impact** - 38% LCP improvement
 2. **Code splitting improved both load time and interactivity** - 66% bundle reduction
 3. **Measurements guided prioritization** - Focused on high-impact items first
 4. **No regressions** - Comprehensive testing prevented issues
 
 **Challenges**:
+
 1. **Safari WebP support** - Needed JPEG fallbacks (added 15% to implementation time)
 2. **Image generation pipeline** - Manual process initially, automated in sprint 2
 3. **Cache invalidation** - Had to update cache-busting strategy for split bundles
 
 **Next Steps**:
+
 1. **Further optimizations** (Sprint 3+):
    - Implement Service Worker for offline support
    - Optimize third-party scripts (analytics, chat widget)

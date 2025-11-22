@@ -30,22 +30,26 @@ Consider these before creating new command:
 Answer these questions:
 
 **What problem does this solve?**
+
 - What workflow are you automating?
 - What pain point does it address?
 - Why can't existing commands handle this?
 
 **Who will use it?**
+
 - Specific team members?
 - Entire team?
 - Specific project only?
 - Reusable across projects?
 
 **What are the outcomes?**
+
 - What deliverables should it produce?
 - How will success be measured?
 - What should user have at the end?
 
 **Example:**
+
 ```
 Purpose: API development workflow
 Problem: No command for OpenAPI-first API development
@@ -68,21 +72,23 @@ Outcomes: OpenAPI spec, implemented API, security review, tests, docs
 
 **Examples:**
 
-| Good | Bad | Why |
-|------|-----|-----|
-| `api-workflow` | `api` | Too vague |
-| `mobile-feature` | `mobile-feature-development-workflow` | Too long |
-| `security-review` | `sec` | Unclear abbreviation |
-| `db-migration` | `migrate` | Missing context |
+| Good              | Bad                                   | Why                  |
+| ----------------- | ------------------------------------- | -------------------- |
+| `api-workflow`    | `api`                                 | Too vague            |
+| `mobile-feature`  | `mobile-feature-development-workflow` | Too long             |
+| `security-review` | `sec`                                 | Unclear abbreviation |
+| `db-migration`    | `migrate`                             | Missing context      |
 
 ### Step 3: Identify Agents
 
 **Review available agents:**
+
 ```bash
 /agents
 ```
 
 **Common Henry agents:**
+
 - `backend-engineer`: Backend development, APIs, databases
 - `frontend-engineer`: Frontend development, UI implementation
 - `mobile-app-engineer`: iOS, Android, React Native
@@ -100,12 +106,14 @@ Outcomes: OpenAPI spec, implemented API, security review, tests, docs
 - `product-manager`: Product strategy, requirements
 
 **Select agents for your workflow:**
+
 - Which experts are needed?
 - What order should they work?
 - Which can work in parallel?
 - Which need sequential handoffs?
 
 **Example for API workflow:**
+
 ```
 Phase 1: API Design → backend-engineer
 Phase 2: Security Review → security-engineer
@@ -119,18 +127,21 @@ Phase 5: Documentation → backend-engineer
 Break workflow into logical phases.
 
 **Good phase characteristics:**
+
 - **Clear goal:** Single, well-defined objective
 - **Appropriate scope:** 3-7 actions per phase
 - **Concrete deliverables:** Specific outputs
 - **Logical boundaries:** Natural handoff points
 
 **Phase template:**
+
 ```markdown
 ## Phase N: [Phase Name]
 
 **Goal**: [Single sentence describing what this phase accomplishes]
 
 **Actions**:
+
 1. [Specific action with clear outcome]
 2. [Another action]
 3. [Another action]
@@ -143,12 +154,14 @@ Break workflow into logical phases.
 ```
 
 **Example:**
+
 ```markdown
 ## Phase 1: API Design
 
 **Goal**: Create OpenAPI specification for the API
 
 **Actions**:
+
 1. Launch backend-engineer to design REST API
 2. Define endpoints, request/response schemas
 3. Document authentication and authorization
@@ -163,11 +176,13 @@ Break workflow into logical phases.
 ```
 
 **How many phases?**
+
 - **3-5 phases:** Typical for focused workflows
 - **6-8 phases:** Typical for comprehensive workflows
 - **9+ phases:** Consider splitting into multiple commands
 
 **Phase sequencing:**
+
 - **Sequential:** Each phase depends on previous (most common)
 - **Parallel:** Independent phases can run simultaneously
 - **Conditional:** Some phases only run under certain conditions
@@ -178,11 +193,13 @@ Break workflow into logical phases.
 Create file in appropriate location:
 
 **Project-specific:**
+
 ```bash
 touch .claude/commands/your-command.md
 ```
 
 **Personal:**
+
 ```bash
 touch ~/.claude/commands/your-command.md
 ```
@@ -193,12 +210,13 @@ touch ~/.claude/commands/your-command.md
 ---
 description: [Clear, concise description for /help - 60-120 characters]
 argument-hint: [Optional: expected arguments format]
-version: "1.0.0"
+version: '1.0.0'
 ---
 
 # [Command Title]
 
 [1-2 paragraph overview explaining:
+
 - What this command does
 - When to use it
 - What outcomes to expect]
@@ -208,6 +226,7 @@ version: "1.0.0"
 **Goal**: [What this phase accomplishes]
 
 **Actions**:
+
 1. [Specific action]
 2. [Another action]
 3. [Another action]
@@ -234,13 +253,18 @@ version: "1.0.0"
 
 **Example 1: [Scenario]**
 ```
+
 /your-command [args]
+
 ```
 
 **Example 2: [Scenario]**
 ```
+
 /your-command [args]
+
 ```
+
 ```
 
 ### Step 6: Add Detailed Content
@@ -248,27 +272,32 @@ version: "1.0.0"
 Expand each section with specifics:
 
 **Frontmatter:**
+
 - Write clear description (60-120 chars)
 - Add argument hint if command takes arguments
 - Include version for tracking
 
 **Overview:**
+
 - Explain command purpose
 - Describe use cases
 - Set expectations
 
 **Each phase:**
+
 - Write clear, actionable steps
 - Specify exact agent names
 - Define concrete deliverables
 - Add user interaction points
 
 **Summary:**
+
 - Explain how to synthesize deliverables
 - Describe final output
 - Suggest next steps
 
 **Examples:**
+
 - Show 2-3 realistic scenarios
 - Use actual arguments
 - Demonstrate different use cases
@@ -278,17 +307,21 @@ Expand each section with specifics:
 Verify command works correctly:
 
 **1. Check command appears:**
+
 ```bash
 /help
 ```
+
 Look for your command in the list.
 
 **2. Test invocation:**
+
 ```bash
 /your-command [test-args]
 ```
 
 **3. Verify execution:**
+
 - Phases execute in correct order
 - Agents are invoked properly
 - Deliverables are produced
@@ -299,6 +332,7 @@ Look for your command in the list.
 If command takes arguments, test multiple variations
 
 **5. Edge cases:**
+
 - Missing arguments
 - Invalid arguments
 - Empty results
@@ -317,12 +351,16 @@ API development workflow with OpenAPI spec generation.
 
 **Usage:**
 ```
+
 /api-workflow [api-name] "[description]"
+
 ```
 
 **Example:**
 ```
+
 /api-workflow user-management "CRUD API for user accounts"
+
 ```
 
 **Phases:**
@@ -340,6 +378,7 @@ API development workflow with OpenAPI spec generation.
 ```
 
 **Commit to version control:**
+
 ```bash
 git add .claude/commands/api-workflow.md
 git commit -m "Add API development workflow command
@@ -354,6 +393,7 @@ Usage: /api-workflow [api-name] [description]"
 ```
 
 **Share with team:**
+
 - Announce in team chat
 - Demo command usage
 - Share documentation
@@ -408,6 +448,7 @@ End-to-end mobile feature development with platform-specific considerations for 
 **Goal**: Create platform-appropriate UX design
 
 **Actions**:
+
 1. Launch ux-ui-designer for mobile-first design
 2. Apply iOS Human Interface Guidelines or Material Design principles
 3. Design for platform-specific patterns (navigation, gestures, components)
@@ -425,6 +466,7 @@ End-to-end mobile feature development with platform-specific considerations for 
 **Goal**: Implement feature for target platform(s)
 
 **Actions**:
+
 1. Launch mobile-app-engineer for implementation
 2. Implement using native (Swift/Kotlin) or React Native
 3. Implement offline-first architecture if needed
@@ -441,6 +483,7 @@ End-to-end mobile feature development with platform-specific considerations for 
 **Goal**: Test across devices and scenarios
 
 **Actions**:
+
 1. Launch qa-tester for mobile test strategy
 2. Test on multiple device sizes (phones, tablets)
 3. Test on multiple OS versions
@@ -458,6 +501,7 @@ End-to-end mobile feature development with platform-specific considerations for 
 **Goal**: Meet mobile performance targets
 
 **Actions**:
+
 1. Launch performance-engineer for mobile metrics
 2. Optimize cold start time (target: < 2 seconds)
 3. Reduce memory footprint
@@ -473,6 +517,7 @@ End-to-end mobile feature development with platform-specific considerations for 
 ## Summary
 
 Complete mobile feature ready for release:
+
 - Platform-appropriate UX following iOS/Android guidelines
 - Optimized native or React Native implementation
 - Comprehensive testing across devices and OS versions
@@ -480,6 +525,7 @@ Complete mobile feature ready for release:
 - App store compliance verified (if applicable)
 
 Next steps:
+
 - Prepare app store listing (if new app)
 - Submit for internal testing (TestFlight, Google Play Internal Testing)
 - Gather user feedback and iterate
@@ -490,23 +536,32 @@ Next steps:
 
 **iOS feature:**
 ```
+
 /mobile-feature offline-notes iOS
+
 ```
 
 **Android feature:**
 ```
+
 /mobile-feature payment-flow Android
+
 ```
 
 **Cross-platform React Native:**
 ```
+
 /mobile-feature user-profile "iOS and Android"
+
 ```
 
 **Tablet-specific:**
 ```
+
 /mobile-feature dashboard-view "iPad and Android tablets"
+
 ```
+
 ```
 
 ### 6. Test
@@ -535,6 +590,7 @@ Add to project README:
 Mobile feature development workflow for iOS/Android.
 
 **Phases:**
+
 1. Mobile UX design (platform-appropriate)
 2. Implementation (native or React Native)
 3. Multi-device testing
@@ -542,8 +598,11 @@ Mobile feature development workflow for iOS/Android.
 
 **Example:**
 ```
+
 /mobile-feature offline-sync "iOS and Android"
+
 ```
+
 ```
 
 ### 8. Share
@@ -589,6 +648,7 @@ git push
 **Problem:** 12+ phases making command overwhelming
 
 **Solution:**
+
 - Combine related phases
 - Split into multiple commands
 - Use command composition
@@ -598,6 +658,7 @@ git push
 **Problem:** Actions like "Review code" without specifics
 
 **Solution:**
+
 - Be specific: "Review for OWASP Top 10 vulnerabilities"
 - Define criteria: "Ensure test coverage > 80%"
 - Specify tools: "Run ESLint with airbnb config"
@@ -607,6 +668,7 @@ git push
 **Problem:** Using agent for wrong task
 
 **Solution:**
+
 - Review agent descriptions in `/agents`
 - Match agent expertise to phase needs
 - Combine agents when multiple perspectives needed
@@ -616,6 +678,7 @@ git push
 **Problem:** Long workflow with no checkpoints
 
 **Solution:**
+
 - Add approval points at phase boundaries
 - Request input for critical decisions
 - Allow user to skip optional phases
@@ -625,6 +688,7 @@ git push
 **Problem:** Phase completes but no concrete output
 
 **Solution:**
+
 - Define specific artifacts: "OpenAPI spec file"
 - Specify formats: "Test report in JUnit XML"
 - Provide examples: "Similar to example-api.yaml"
@@ -636,6 +700,7 @@ git push
 **Issue:** Command doesn't show in `/help`
 
 **Solutions:**
+
 - Check file location: `.claude/commands/` or `~/.claude/commands/`
 - Verify `.md` extension
 - Validate YAML frontmatter (no syntax errors)
@@ -646,6 +711,7 @@ git push
 **Issue:** Agents aren't invoked or wrong agents run
 
 **Solutions:**
+
 - Check exact agent names in `/agents`
 - Review phase instructions for clarity
 - Make agent invocation explicit
@@ -656,6 +722,7 @@ git push
 **Issue:** Phases execute in wrong sequence
 
 **Solutions:**
+
 - Explicitly state dependencies: "After Phase 1 completes..."
 - Add user confirmation checkpoints
 - Use numbered lists for sequential actions
@@ -666,6 +733,7 @@ git push
 **Issue:** `$1`, `$2` not substituting
 
 **Solutions:**
+
 - Verify syntax: `$1` not `$arg1`
 - Check `argument-hint` matches invocation
 - Test: `/your-command arg1 arg2`
@@ -689,6 +757,7 @@ Deploy $1 feature to $2 environment with options: $3
 ## Phase 1: Pre-Deploy Checks
 
 Verify $1 is ready for $2:
+
 - Run tests for $1
 - Check $2 environment health
 - Verify $3 configuration
@@ -706,9 +775,9 @@ Implement conditional phases:
 **Goal:** Address critical issues before proceeding
 
 If critical issues found in Phase 1:
-  → Execute optimization
+→ Execute optimization
 Otherwise:
-  → Skip to Phase 3
+→ Skip to Phase 3
 ```
 
 ### Iteration
@@ -721,6 +790,7 @@ Create iterative workflows:
 **Goal:** Iterate until performance target met
 
 **Actions**:
+
 1. Measure current performance
 2. If target met → Proceed to Phase 4
 3. If target not met:
@@ -733,16 +803,20 @@ Create iterative workflows:
 
 Integrate external tools:
 
-```markdown
+````markdown
 ## Phase 2: Security Scan
 
 **Actions**:
+
 1. Run SAST scan
    ```bash
    snyk test --severity-threshold=high
    ```
+````
+
 2. Launch security-engineer to review results
 3. Create remediation plan
+
 ```
 
 ## Related Documentation
@@ -751,3 +825,4 @@ Integrate external tools:
 - **Forking Guide:** `references/forking-guide.md`
 - **Customization Patterns:** `references/customization-patterns.md`
 - **Examples:** `examples/` directory
+```

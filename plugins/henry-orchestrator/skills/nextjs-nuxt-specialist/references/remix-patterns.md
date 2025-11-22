@@ -144,9 +144,9 @@ export default function AuthLayout() {
 ```typescript
 // app/routes/files.$.tsx
 export async function loader({ params }: LoaderFunctionArgs) {
-  const filePath = params['*']  // Captures everything after /files/
+  const filePath = params['*']; // Captures everything after /files/
 
-  return { filePath }
+  return { filePath };
 }
 ```
 
@@ -610,20 +610,20 @@ Resource routes return data (JSON, XML, PDF) instead of HTML.
 
 ```typescript
 // app/routes/api.posts.ts
-import { LoaderFunctionArgs, json } from '@remix-run/node'
+import { LoaderFunctionArgs, json } from '@remix-run/node';
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const posts = await getPosts()
+  const posts = await getPosts();
 
-  return json({ posts })
+  return json({ posts });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  const data = await request.json()
+  const data = await request.json();
 
-  const post = await createPost(data)
+  const post = await createPost(data);
 
-  return json({ post }, { status: 201 })
+  return json({ post }, { status: 201 });
 }
 ```
 
@@ -631,17 +631,17 @@ export async function action({ request }: ActionFunctionArgs) {
 
 ```typescript
 // app/routes/reports.$id.pdf.ts
-import { LoaderFunctionArgs } from '@remix-run/node'
+import { LoaderFunctionArgs } from '@remix-run/node';
 
 export async function loader({ params }: LoaderFunctionArgs) {
-  const report = await generateReport(params.id!)
+  const report = await generateReport(params.id!);
 
   return new Response(report.pdf, {
     headers: {
       'Content-Type': 'application/pdf',
-      'Content-Disposition': `attachment; filename="report-${params.id}.pdf"`
-    }
-  })
+      'Content-Disposition': `attachment; filename="report-${params.id}.pdf"`,
+    },
+  });
 }
 ```
 
@@ -650,28 +650,32 @@ export async function loader({ params }: LoaderFunctionArgs) {
 ```typescript
 // app/routes/blog.rss.ts
 export async function loader() {
-  const posts = await getPosts()
+  const posts = await getPosts();
 
   const rss = `<?xml version="1.0"?>
     <rss version="2.0">
       <channel>
         <title>My Blog</title>
-        ${posts.map(post => `
+        ${posts
+          .map(
+            post => `
           <item>
             <title>${post.title}</title>
             <link>https://example.com/blog/${post.slug}</link>
           </item>
-        `).join('')}
+        `
+          )
+          .join('')}
       </channel>
     </rss>
-  `
+  `;
 
   return new Response(rss, {
     headers: {
       'Content-Type': 'application/xml',
-      'Cache-Control': 'public, max-age=3600'
-    }
-  })
+      'Cache-Control': 'public, max-age=3600',
+    },
+  });
 }
 ```
 
@@ -742,13 +746,16 @@ export default function Dashboard() {
 
 ```typescript
 export async function loader() {
-  const posts = await getPosts()
+  const posts = await getPosts();
 
-  return json({ posts }, {
-    headers: {
-      'Cache-Control': 'public, max-age=3600, s-maxage=86400'
+  return json(
+    { posts },
+    {
+      headers: {
+        'Cache-Control': 'public, max-age=3600, s-maxage=86400',
+      },
     }
-  })
+  );
 }
 ```
 

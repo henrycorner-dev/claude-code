@@ -12,6 +12,7 @@ This skill provides comprehensive troubleshooting and debugging guidance for Hen
 ## Overview
 
 Common issues when using Henry Orchestrator:
+
 - Agents not triggering when expected
 - Wrong agents selected for task
 - Commands producing unexpected results
@@ -27,6 +28,7 @@ This skill helps you identify root causes and implement solutions.
 ### Step 1: Identify the Problem
 
 **Questions to answer**:
+
 - What did you expect to happen?
 - What actually happened?
 - When did it start failing?
@@ -34,6 +36,7 @@ This skill helps you identify root causes and implement solutions.
 - What changed recently?
 
 **Gather evidence**:
+
 - Command invocation (exact syntax used)
 - Agent responses or errors
 - Expected vs. actual behavior
@@ -42,6 +45,7 @@ This skill helps you identify root causes and implement solutions.
 ### Step 2: Categorize the Issue
 
 **Issue types**:
+
 1. **Agent Selection**: Wrong agent(s) invoked or no agent invoked
 2. **Command Execution**: Command fails or produces wrong results
 3. **Agent Conflicts**: Agents provide contradictory recommendations
@@ -62,20 +66,24 @@ This skill helps you identify root causes and implement solutions.
 **Diagnostic steps**:
 
 1. **Verify agent exists**:
+
    ```
    /agents
    ```
+
    Check if agent appears in list. Look for exact name match.
 
 2. **Check invocation method**:
    - Automatic: Claude decides based on context
    - Explicit: User requests specific agent
-   - Command-based: henry-* commands invoke agents
+   - Command-based: henry-\* commands invoke agents
 
 3. **Review agent description**:
+
    ```
    Read agent file: plugins/henry-orchestrator/agents/[agent-name].md
    ```
+
    Check triggering examples in frontmatter `description` field.
 
 4. **Test explicit invocation**:
@@ -87,24 +95,28 @@ This skill helps you identify root causes and implement solutions.
 **Common causes**:
 
 **Cause: Vague request**
+
 ```
 Problem: "Review my code" (too generic, any agent could apply)
 Solution: "Use security-engineer to review authentication code for vulnerabilities"
 ```
 
 **Cause: Missing keywords**
+
 ```
 Problem: "Make it faster" (doesn't mention performance)
 Solution: "Use performance-engineer to optimize Core Web Vitals"
 ```
 
 **Cause: Wrong context**
+
 ```
 Problem: Asking for performance optimization in strategy discussion
 Solution: Complete strategy phase first, then request performance work
 ```
 
 **Resolution**:
+
 - Be specific about which agent you need
 - Use explicit invocation: "Use [agent-name] to..."
 - Include domain keywords that match agent description
@@ -117,13 +129,15 @@ Solution: Complete strategy phase first, then request performance work
 **Diagnostic steps**:
 
 1. **Analyze request ambiguity**:
+
    ```
    Request: "Review the API"
-   Could match: backend-engineer (implementation), security-engineer (vulnerabilities), 
+   Could match: backend-engineer (implementation), security-engineer (vulnerabilities),
                 performance-engineer (speed), qa-tester (testing)
    ```
 
 2. **Check agent descriptions for overlap**:
+
    ```
    Read descriptions of expected vs. actual agent
    Identify why actual agent matched
@@ -136,6 +150,7 @@ Solution: Complete strategy phase first, then request performance work
    ```
 
 **Resolution**:
+
 - Specify agent explicitly when ambiguous
 - Include domain-specific keywords (security, performance, UX, etc.)
 - Reference specific deliverables you need
@@ -148,9 +163,10 @@ Solution: Complete strategy phase first, then request performance work
 **Diagnostic steps**:
 
 1. **Check if request implies multiple domains**:
+
    ```
    Request: "Build accessible dashboard with good performance"
-   Triggers: frontend-engineer (build), a11y-specialist (accessible), 
+   Triggers: frontend-engineer (build), a11y-specialist (accessible),
              performance-engineer (performance)
    ```
 
@@ -159,6 +175,7 @@ Solution: Complete strategy phase first, then request performance work
    - If not desired, be more specific
 
 **Resolution**:
+
 - If multiple agents beneficial: Let them collaborate, synthesize outputs
 - If single agent desired: Be very specific about which aspect you need
 - Use agent names explicitly to limit scope
@@ -172,12 +189,15 @@ Solution: Complete strategy phase first, then request performance work
 **Diagnostic steps**:
 
 1. **Verify command name**:
+
    ```
    /henry-orchestrator:help
    ```
+
    Check exact command names available.
 
 2. **Check for typos**:
+
    ```
    Common mistakes:
    - /henry-feature (missing :henry-orchestrator prefix)
@@ -191,6 +211,7 @@ Solution: Complete strategy phase first, then request performance work
    ```
 
 **Resolution**:
+
 - Use exact command name from `/henry-orchestrator:help`
 - Include full prefix: `/henry-orchestrator:henry-feature`
 - Use tab completion to avoid typos
@@ -202,12 +223,14 @@ Solution: Complete strategy phase first, then request performance work
 **Diagnostic steps**:
 
 1. **Review command definition**:
+
    ```
    Read file: plugins/henry-orchestrator/commands/[command-name].md
    Check which agents command is supposed to invoke
    ```
 
 2. **Check command arguments**:
+
    ```
    Some commands accept arguments that modify behavior
    Example: /henry-orchestrator:henry-review [specific focus]
@@ -227,16 +250,17 @@ Problem: /henry-orchestrator:henry-audit only ran security audit, not full audit
 Investigation:
 1. Read plugins/henry-orchestrator/commands/henry-audit.md
    → Should invoke: security, performance, a11y, SEO, ops agents
-   
+
 2. Check invocation: /henry-orchestrator:henry-audit Security only
    → Argument "Security only" modified default behavior
-   
+
 3. Root cause: User inadvertently restricted scope with arguments
 
 Solution: Use /henry-orchestrator:henry-audit without arguments for full audit
 ```
 
 **Resolution**:
+
 - Check command documentation for expected behavior
 - Review arguments passed to command
 - Use `/henry-orchestrator:help` to see argument hints
@@ -254,6 +278,7 @@ Solution: Use /henry-orchestrator:henry-audit without arguments for full audit
    - Check error messages
 
 2. **Check phase dependencies**:
+
    ```
    Example: henry-feature implementation phase requires design phase output
    If design skipped, implementation may fail
@@ -279,6 +304,7 @@ Solution: Provide approval when command asks "Proceed with security review?"
 ```
 
 **Resolution**:
+
 - Monitor todo list for phase progress
 - Respond to approval requests promptly
 - Ensure all prerequisites available before starting command
@@ -298,6 +324,7 @@ Solution: Provide approval when command asks "Proceed with security review?"
    - Is conflict fundamental or resolvable?
 
 2. **Apply priority framework**:
+
    ```
    Priority order:
    1. Security (non-negotiable)
@@ -430,6 +457,7 @@ Rationale: Calculated risk with mitigation plan
    - Are there dependencies blocking progress?
 
 **Resolution**:
+
 - Respond to any pending questions or approval requests
 - If truly stuck, restart workflow from last successful phase
 - Provide more context if workflow needs clarification
@@ -442,6 +470,7 @@ Rationale: Calculated risk with mitigation plan
 **Diagnostic steps**:
 
 1. **Review workflow definition**:
+
    ```
    Check command file for intended phase sequence
    Example: henry-feature should be Strategy → Design → Implementation
@@ -456,6 +485,7 @@ Rationale: Calculated risk with mitigation plan
    - Does current phase have required inputs?
 
 **Resolution**:
+
 - If parallel execution causing confusion, request sequential: "Run phases one at a time, waiting for my approval between each"
 - If dependencies missing, go back and complete prerequisite phases
 - For complex workflows, use henry-team to control agent sequence manually
@@ -481,6 +511,7 @@ Rationale: Calculated risk with mitigation plan
 **Optimization strategies**:
 
 **Strategy 1: Reduce agent count**
+
 ```
 Slow: /henry-orchestrator:henry-audit (5 agents in parallel)
 Faster: /henry-orchestrator:henry-team security-engineer performance-engineer
@@ -488,6 +519,7 @@ Faster: /henry-orchestrator:henry-team security-engineer performance-engineer
 ```
 
 **Strategy 2: Use focused commands**
+
 ```
 Slow: /henry-orchestrator:henry-feature (full workflow, 7 phases)
 Faster: /henry-orchestrator:henry-team frontend-engineer - Just implement UI
@@ -495,6 +527,7 @@ Faster: /henry-orchestrator:henry-team frontend-engineer - Just implement UI
 ```
 
 **Strategy 3: Provide context upfront**
+
 ```
 Slow: Let agents search codebase repeatedly
 Faster: "Review @src/auth/login.ts for security issues"
@@ -502,6 +535,7 @@ Faster: "Review @src/auth/login.ts for security issues"
 ```
 
 **Strategy 4: Sequential instead of parallel**
+
 ```
 Parallel: All agents work simultaneously (can be overwhelming)
 Sequential: One agent at a time (slower but clearer)
@@ -510,6 +544,7 @@ Use: "Run one agent at a time, show me output before proceeding"
 ```
 
 **Resolution**:
+
 - Use smallest effective team of agents
 - Provide direct file references instead of making agents search
 - Use focused commands instead of comprehensive workflows when appropriate
@@ -524,12 +559,14 @@ Use: "Run one agent at a time, show me output before proceeding"
 **Diagnostic steps**:
 
 1. **Verify MCP server running**:
+
    ```
    Check that Playwright MCP server is connected
    Test basic command: use_mcp_tool(playwright, browser_navigate, {url: "https://example.com"})
    ```
 
 2. **Check tool permissions**:
+
    ```
    Review agent frontmatter: Does agent have access to use_mcp_tool?
    Some agents restricted to specific tools
@@ -542,6 +579,7 @@ Use: "Run one agent at a time, show me output before proceeding"
    ```
 
 **Resolution**:
+
 - Ensure MCP server connected before starting workflow
 - Grant tool access if needed (modify agent frontmatter or use different agent)
 - Test MCP tools independently before using in orchestration
@@ -596,13 +634,13 @@ Instead of: /henry-orchestrator:henry-feature Build complete dashboard
 Test incrementally:
 1. /henry-orchestrator:henry-product Dashboard requirements
    → Verify PRD output looks good
-   
+
 2. /henry-orchestrator:henry-design Dashboard UX
    → Verify designs match requirements
-   
+
 3. /henry-orchestrator:henry-team frontend-engineer - Implement dashboard UI
    → Verify implementation works
-   
+
 4. /henry-orchestrator:henry-review Dashboard code
    → Verify quality
 
@@ -621,10 +659,10 @@ Original (complex): Full audit of entire codebase failing
 Reduce to:
 1. /henry-orchestrator:henry-team security-engineer - Review src/auth.ts
    → Works? Security agent fine
-   
+
 2. /henry-orchestrator:henry-team performance-engineer - Review src/auth.ts
    → Works? Performance agent fine
-   
+
 3. /henry-orchestrator:henry-team security-engineer performance-engineer - Review src/auth.ts
    → Fails? Issue with multi-agent synthesis
 
@@ -656,12 +694,14 @@ Find what changed between working and broken states
 ### Strategy 1: Clear Communication
 
 **Do**:
+
 - Be specific about which agents you need
 - Provide clear context and goals
 - Reference specific files and code sections
 - Define success criteria upfront
 
 **Don't**:
+
 - Use vague requests like "make it better"
 - Assume agents know context they weren't given
 - Mix multiple unrelated tasks in one request
@@ -670,12 +710,14 @@ Find what changed between working and broken states
 ### Strategy 2: Iterative Workflows
 
 **Do**:
+
 - Start small, expand gradually
 - Verify each phase before proceeding
 - Use checkpoints and approvals
 - Build in feedback loops
 
 **Don't**:
+
 - Run entire workflow blindly
 - Skip validation steps
 - Ignore intermediate outputs
@@ -684,12 +726,14 @@ Find what changed between working and broken states
 ### Strategy 3: Documentation
 
 **Do**:
+
 - Document workflow decisions
 - Track what worked and what didn't
 - Note workarounds for recurring issues
 - Share debugging findings with team
 
 **Don't**:
+
 - Repeat same mistakes
 - Forget what worked before
 - Skip documenting complex workflows
@@ -697,16 +741,16 @@ Find what changed between working and broken states
 
 ## Quick Reference: Common Issues
 
-| Symptom | Likely Cause | Quick Fix |
-|---------|--------------|-----------|
-| Agent doesn't trigger | Vague request | Use explicit: "Use [agent-name] to..." |
-| Wrong agent responds | Request ambiguous | Be more specific about domain |
-| Command not found | Typo in name | Check `/henry-orchestrator:help` |
-| Workflow stuck | Waiting for approval | Respond to prompts |
-| Agents conflict | Different priorities | Apply priority framework, find both/and solution |
-| Too slow | Too many agents | Use henry-team with only needed agents |
-| Phases skip | Missing prerequisites | Complete earlier phases first |
-| Tool fails | MCP not connected | Verify MCP server status |
+| Symptom               | Likely Cause          | Quick Fix                                        |
+| --------------------- | --------------------- | ------------------------------------------------ |
+| Agent doesn't trigger | Vague request         | Use explicit: "Use [agent-name] to..."           |
+| Wrong agent responds  | Request ambiguous     | Be more specific about domain                    |
+| Command not found     | Typo in name          | Check `/henry-orchestrator:help`                 |
+| Workflow stuck        | Waiting for approval  | Respond to prompts                               |
+| Agents conflict       | Different priorities  | Apply priority framework, find both/and solution |
+| Too slow              | Too many agents       | Use henry-team with only needed agents           |
+| Phases skip           | Missing prerequisites | Complete earlier phases first                    |
+| Tool fails            | MCP not connected     | Verify MCP server status                         |
 
 ## Getting Help
 
@@ -720,6 +764,7 @@ When debugging fails, gather this information for help request:
 6. **Error messages**: Any errors or warnings
 
 **Example help request**:
+
 ```
 Problem: henry-review only invoked qa-tester, expected security and performance too
 
@@ -758,6 +803,7 @@ This debugging skill complements all Henry commands:
 - Consult for performance optimization of orchestration
 
 For command-specific troubleshooting, also reference:
+
 - `/henry-orchestrator:help` - Command documentation
 - Individual agent files in `plugins/henry-orchestrator/agents/`
 - Command files in `plugins/henry-orchestrator/commands/`

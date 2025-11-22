@@ -557,17 +557,20 @@ flutter:
 ## Running the App
 
 ### Mobile
+
 ```bash
 flutter run -d ios
 flutter run -d android
 ```
 
 ### Web
+
 ```bash
 flutter run -d chrome
 ```
 
 ### Desktop
+
 ```bash
 flutter run -d macos
 flutter run -d windows

@@ -5,6 +5,7 @@ Client-side prediction is the technique of immediately applying local player inp
 ## The Problem
 
 Without prediction:
+
 1. Player presses "move forward"
 2. Client sends input to server
 3. Wait for round-trip time (RTT: 50-200ms)
@@ -16,6 +17,7 @@ Result: Player experiences 50-200ms delay between pressing a key and seeing move
 ## The Solution
 
 With client-side prediction:
+
 1. Player presses "move forward"
 2. Client **immediately** applies input to local state (predicts)
 3. Client also sends input to server
@@ -42,7 +44,7 @@ class ClientInputSystem {
     const sequencedInput = {
       ...input,
       sequenceNumber: this.inputSequenceNumber++,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
 
     // Store for later reconciliation
@@ -66,7 +68,7 @@ class ClientInputSystem {
       sequenceNumber: input.sequenceNumber,
       timestamp: input.timestamp,
       movement: input.movement,
-      actions: input.actions
+      actions: input.actions,
     });
   }
 }
@@ -115,7 +117,7 @@ class ClientGameState {
       sequenceNumber: sequenceNumber,
       position: this.player.position.clone(),
       velocity: this.player.velocity.clone(),
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
 
     this.stateHistory.push(state);
@@ -168,11 +170,13 @@ handleServerUpdate(serverState) {
 ## Prediction Accuracy
 
 Prediction is accurate when:
+
 - Client and server use identical game logic
 - No server-side events affect the player (e.g., being hit by another player)
 - Constant tick rate and deterministic simulation
 
 Prediction is inaccurate when:
+
 - Server applies an action client didn't predict (e.g., damage from another player)
 - Client and server logic diverges (bug or intentional)
 - Non-deterministic behavior (floating point differences, race conditions)
@@ -182,11 +186,13 @@ Handle inaccuracies with server reconciliation (see `server-reconciliation.md`).
 ## What to Predict
 
 **Do predict:**
+
 - Local player movement
 - Local player actions with local effects (jumping, crouching)
 - Projectile firing (spawn projectile immediately)
 
 **Don't predict:**
+
 - Other players' positions (use entity interpolation)
 - Server-authoritative events (damage, pickups, game state changes)
 - Physics involving multiple entities (collisions with other players)
@@ -237,7 +243,7 @@ class InputBuffer {
   addInput(input) {
     this.buffer.push({
       ...input,
-      timestamp: performance.now()
+      timestamp: performance.now(),
     });
   }
 
@@ -255,18 +261,22 @@ This ensures no inputs are lost between frames and enables input replaying durin
 ## Common Pitfalls
 
 **Pitfall 1: Client-Server Logic Mismatch**
+
 - Symptom: Constant prediction corrections, "rubber-banding"
 - Solution: Ensure identical logic on client and server. Share code or use deterministic rules.
 
 **Pitfall 2: Not Predicting Enough**
+
 - Symptom: Input lag for local player actions
 - Solution: Predict all local player actions that don't depend on server state.
 
 **Pitfall 3: Predicting Too Much**
+
 - Symptom: Frequent, jarring corrections
 - Solution: Only predict local player. Use interpolation for other entities.
 
 **Pitfall 4: Missing Reconciliation**
+
 - Symptom: Client state diverges from server over time
 - Solution: Implement server reconciliation (see `server-reconciliation.md`).
 
@@ -283,7 +293,7 @@ Use `scripts/latency-simulator.py` to test these conditions locally.
 
 ## Performance Considerations
 
-**Memory**: Storing input and state buffers is cheap. 60 states * 100 bytes = 6KB.
+**Memory**: Storing input and state buffers is cheap. 60 states \* 100 bytes = 6KB.
 
 **CPU**: Prediction adds minimal CPU cost (one extra game logic pass). Reconciliation (replay) is more expensive but infrequent.
 

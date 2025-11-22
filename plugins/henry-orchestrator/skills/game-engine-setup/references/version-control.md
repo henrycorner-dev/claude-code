@@ -5,6 +5,7 @@ Complete guide to setting up Git (and Perforce) for Unity, Unreal Engine, and Go
 ## Why Version Control for Games?
 
 **Benefits:**
+
 - Track changes to code, assets, scenes
 - Collaborate with team members
 - Revert to previous versions
@@ -12,6 +13,7 @@ Complete guide to setting up Git (and Perforce) for Unity, Unreal Engine, and Go
 - Backup and disaster recovery
 
 **Challenges:**
+
 - Large binary files (textures, models, audio)
 - Merge conflicts in scenes/levels
 - Engine-generated files bloating repository
@@ -22,6 +24,7 @@ Complete guide to setting up Git (and Perforce) for Unity, Unreal Engine, and Go
 ### Installing Git
 
 **Windows:**
+
 ```bash
 # Download from git-scm.com
 # Or via Chocolatey
@@ -32,6 +35,7 @@ git --version
 ```
 
 **Mac:**
+
 ```bash
 # Via Homebrew
 brew install git
@@ -41,6 +45,7 @@ xcode-select --install
 ```
 
 **Linux:**
+
 ```bash
 # Ubuntu/Debian
 sudo apt-get install git
@@ -52,6 +57,7 @@ sudo dnf install git
 ### Git Configuration
 
 **Global settings:**
+
 ```bash
 git config --global user.name "Your Name"
 git config --global user.email "your.email@example.com"
@@ -72,11 +78,13 @@ git config --global merge.tool vscode
 ### Why Git LFS?
 
 **Regular Git:**
+
 - Stores entire history of every file
 - Binary files bloat repository size
 - Cloning/pulling slow
 
 **Git LFS:**
+
 - Stores large files on remote server
 - Downloads only needed versions
 - Repository stays small
@@ -100,6 +108,7 @@ git lfs install
 ### Configuring Git LFS
 
 **Track large file types:**
+
 ```bash
 # Images
 git lfs track "*.png"
@@ -133,6 +142,7 @@ git commit -m "Configure Git LFS"
 ```
 
 **Check LFS tracking:**
+
 ```bash
 git lfs track
 git lfs ls-files
@@ -145,6 +155,7 @@ git lfs ls-files
 **Before initializing Git:**
 
 1. **Enable text serialization:**
+
 ```
 Edit → Project Settings → Editor
   Version Control Mode: Visible Meta Files
@@ -154,6 +165,7 @@ Edit → Project Settings → Editor
 **Why:** Text files merge better than binary, enables meaningful diffs.
 
 2. **Disable auto-refresh (optional):**
+
 ```
 Edit → Preferences → General
   Auto Refresh: False
@@ -319,6 +331,7 @@ git config merge.unityyamlmerge.recursive binary
 ```
 
 **Benefits:**
+
 - Automatically resolves merge conflicts in Unity YAML files
 - Handles scene and prefab merges intelligently
 
@@ -327,6 +340,7 @@ git config merge.unityyamlmerge.recursive binary
 ### Unreal Project Configuration
 
 **Unreal generates large files:**
+
 - Compiled shaders (Saved/)
 - Intermediate build files (Intermediate/)
 - Binary assets (Content/)
@@ -431,12 +445,14 @@ Content/StarterContent/
 ### Unreal + Perforce (Alternative)
 
 **Why Perforce for Unreal:**
+
 - Unreal Engine has built-in Perforce support
 - File locking prevents binary merge conflicts
 - Faster for very large projects
 - Industry standard for AAA studios
 
 **Setup Perforce:**
+
 1. Install Perforce Helix Core server
 2. Install P4V client
 3. In Unreal Editor:
@@ -446,6 +462,7 @@ Content/StarterContent/
    - Username: your_username
 
 **File locking workflow:**
+
 - Check out file before editing (locks for you)
 - Other users can't edit until you submit/revert
 - Prevents binary merge conflicts
@@ -455,6 +472,7 @@ Content/StarterContent/
 ### Godot Project Configuration
 
 **Godot advantages for Git:**
+
 - Text-based formats by default (.tscn scenes)
 - Small repository size
 - No special configuration needed
@@ -520,12 +538,14 @@ builds/
 ### Basic Workflow
 
 **Clone repository:**
+
 ```bash
 git clone https://github.com/username/game-project.git
 cd game-project
 ```
 
 **Make changes:**
+
 ```bash
 # Check status
 git status
@@ -541,6 +561,7 @@ git push origin main
 ```
 
 **Pull latest changes:**
+
 ```bash
 git pull origin main
 ```
@@ -548,6 +569,7 @@ git pull origin main
 ### Branching Strategy
 
 **Feature branches:**
+
 ```bash
 # Create and switch to feature branch
 git checkout -b feature/player-movement
@@ -566,6 +588,7 @@ git push origin main
 ```
 
 **Recommended branch structure:**
+
 - `main` - Stable, production-ready
 - `develop` - Active development
 - `feature/*` - New features
@@ -575,6 +598,7 @@ git push origin main
 ### Resolving Merge Conflicts
 
 **Text conflicts (scripts):**
+
 ```bash
 # Pull latest
 git pull origin main
@@ -591,6 +615,7 @@ git commit
 ```
 
 **Binary conflicts (scenes, prefabs):**
+
 ```bash
 # Scene conflict - can't auto-merge
 
@@ -607,6 +632,7 @@ git add Assets/Scenes/Level01.unity
 ```
 
 **Avoiding conflicts:**
+
 - Communicate with team about who's editing what
 - Use file locking (Perforce or Unity Collaborate)
 - Break scenes into smaller sub-scenes
@@ -617,6 +643,7 @@ git add Assets/Scenes/Level01.unity
 ### Commit Guidelines
 
 **Good commit messages:**
+
 ```bash
 # Good
 git commit -m "Add double jump to player controller"
@@ -630,6 +657,7 @@ git commit -m "Changes"
 ```
 
 **Commit frequently:**
+
 - Commit after each logical change
 - Don't commit broken/non-compiling code to main
 - Use feature branches for experiments
@@ -637,10 +665,12 @@ git commit -m "Changes"
 ### File Organization
 
 **Avoid moving files:**
+
 - Git tracks content, but LFS complicates moves
 - If must rename/move, coordinate with team
 
 **Large files:**
+
 - Keep assets optimized (compress textures, audio)
 - Don't commit build artifacts
 - Use .gitignore liberally
@@ -648,11 +678,13 @@ git commit -m "Changes"
 ### Communication
 
 **Before pushing:**
+
 - Pull latest changes first
 - Test that everything works
 - Check that build succeeds
 
 **Coordinate on:**
+
 - Scene/level edits (high conflict risk)
 - Project settings changes (affects everyone)
 - Large asset additions (LFS bandwidth)
@@ -662,12 +694,14 @@ git commit -m "Changes"
 ### GitHub
 
 **Pros:**
+
 - Free for public repos, generous free tier for private
 - 2GB Git LFS storage free, $5/month for 50GB
 - GitHub Actions for CI/CD
 - Large community
 
 **Setup:**
+
 ```bash
 git remote add origin https://github.com/username/game-project.git
 git push -u origin main
@@ -676,12 +710,14 @@ git push -u origin main
 ### GitLab
 
 **Pros:**
+
 - Free for private repos
 - 10GB Git LFS storage free
 - GitLab CI/CD built-in
 - Self-hosted option
 
 **Setup:**
+
 ```bash
 git remote add origin https://gitlab.com/username/game-project.git
 git push -u origin main
@@ -690,11 +726,13 @@ git push -u origin main
 ### Bitbucket
 
 **Pros:**
+
 - Free for small teams (up to 5 users)
 - 1GB Git LFS storage free
 - Jira integration
 
 **Setup:**
+
 ```bash
 git remote add origin https://bitbucket.org/username/game-project.git
 git push -u origin main
@@ -703,17 +741,20 @@ git push -u origin main
 ### Self-Hosted (Gitea, GitLab)
 
 **Pros:**
+
 - Complete control
 - No LFS storage limits
 - No bandwidth limits
 
 **Cons:**
+
 - Must maintain server
 - Initial setup complexity
 
 ## Troubleshooting
 
 **Large repository size:**
+
 ```bash
 # Check LFS status
 git lfs ls-files
@@ -727,16 +768,19 @@ git lfs migrate import --include="*.png,*.jpg"
 ```
 
 **Slow clone/pull:**
+
 - Use Git LFS (stores pointers, not full files)
 - Shallow clone: `git clone --depth 1 https://...`
 - Partial clone: `git clone --filter=blob:none https://...`
 
 **LFS bandwidth exceeded:**
+
 - Upgrade GitHub LFS plan
 - Use self-hosted Git LFS server
 - Optimize assets (compress textures, audio)
 
 **Merge conflicts in scenes:**
+
 - Use Unity YAML merge tool
 - Communicate with team before editing shared scenes
 - Break scenes into smaller, modular parts

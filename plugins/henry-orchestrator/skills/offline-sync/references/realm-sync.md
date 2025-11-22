@@ -60,12 +60,12 @@ const user = await app.logIn(credentials);
 
 // Open synced realm
 const config = {
-    schema: [TaskSchema, ProjectSchema],
-    sync: {
-        user: user,
-        partitionValue: user.id, // Or team ID, project ID, etc.
-        flexible: true, // Use flexible sync
-    }
+  schema: [TaskSchema, ProjectSchema],
+  sync: {
+    user: user,
+    partitionValue: user.id, // Or team ID, project ID, etc.
+    flexible: true, // Use flexible sync
+  },
 };
 
 const realm = await Realm.open(config);
@@ -103,29 +103,29 @@ app.login(credentials: Credentials.emailPassword(email: "user@example.com", pass
 
 ```javascript
 const TaskSchema = {
-    name: 'Task',
-    primaryKey: '_id',
-    properties: {
-        _id: 'objectId',
-        title: 'string',
-        description: 'string?',
-        completed: { type: 'bool', default: false },
-        owner_id: 'string',
-        created_at: 'date',
-        updated_at: 'date'
-    }
+  name: 'Task',
+  primaryKey: '_id',
+  properties: {
+    _id: 'objectId',
+    title: 'string',
+    description: 'string?',
+    completed: { type: 'bool', default: false },
+    owner_id: 'string',
+    created_at: 'date',
+    updated_at: 'date',
+  },
 };
 
 const ProjectSchema = {
-    name: 'Project',
-    primaryKey: '_id',
-    properties: {
-        _id: 'objectId',
-        name: 'string',
-        tasks: 'Task[]',
-        owner_id: 'string',
-        members: 'string[]'
-    }
+  name: 'Project',
+  primaryKey: '_id',
+  properties: {
+    _id: 'objectId',
+    name: 'string',
+    tasks: 'Task[]',
+    owner_id: 'string',
+    members: 'string[]',
+  },
 };
 ```
 
@@ -160,11 +160,11 @@ Data partitioned by a field value (user ID, team ID, etc.):
 ```javascript
 // Each user syncs only their own data
 const config = {
-    schema: [TaskSchema],
-    sync: {
-        user: user,
-        partitionValue: user.id, // Only sync documents where owner_id = user.id
-    }
+  schema: [TaskSchema],
+  sync: {
+    user: user,
+    partitionValue: user.id, // Only sync documents where owner_id = user.id
+  },
 };
 ```
 
@@ -176,11 +176,11 @@ Query-based sync with custom subscription rules:
 
 ```javascript
 const config = {
-    schema: [TaskSchema, ProjectSchema],
-    sync: {
-        user: user,
-        flexible: true,
-    }
+  schema: [TaskSchema, ProjectSchema],
+  sync: {
+    user: user,
+    flexible: true,
+  },
 };
 
 const realm = await Realm.open(config);
@@ -188,14 +188,11 @@ const realm = await Realm.open(config);
 // Subscribe to specific queries
 const tasks = realm.objects('Task');
 await realm.subscriptions.update(mutableSubs => {
-    // Subscribe to user's own tasks
-    mutableSubs.add(tasks.filtered('owner_id == $0', user.id), { name: 'myTasks' });
+  // Subscribe to user's own tasks
+  mutableSubs.add(tasks.filtered('owner_id == $0', user.id), { name: 'myTasks' });
 
-    // Subscribe to shared project tasks
-    mutableSubs.add(
-        tasks.filtered('project.members IN $0', [user.id]),
-        { name: 'sharedTasks' }
-    );
+  // Subscribe to shared project tasks
+  mutableSubs.add(tasks.filtered('project.members IN $0', [user.id]), { name: 'sharedTasks' });
 });
 ```
 
@@ -207,15 +204,15 @@ await realm.subscriptions.update(mutableSubs => {
 
 ```javascript
 realm.write(() => {
-    realm.create('Task', {
-        _id: new Realm.BSON.ObjectId(),
-        title: 'New Task',
-        description: 'Task description',
-        completed: false,
-        owner_id: user.id,
-        created_at: new Date(),
-        updated_at: new Date()
-    });
+  realm.create('Task', {
+    _id: new Realm.BSON.ObjectId(),
+    title: 'New Task',
+    description: 'Task description',
+    completed: false,
+    owner_id: user.id,
+    created_at: new Date(),
+    updated_at: new Date(),
+  });
 });
 // Automatically synced when online
 ```
@@ -232,9 +229,9 @@ const incompleteTasks = realm.objects('Task').filtered('completed == false');
 // Listen for changes (live queries)
 const tasks = realm.objects('Task');
 tasks.addListener((tasks, changes) => {
-    console.log(`${changes.insertions.length} tasks inserted`);
-    console.log(`${changes.modifications.length} tasks modified`);
-    console.log(`${changes.deletions.length} tasks deleted`);
+  console.log(`${changes.insertions.length} tasks inserted`);
+  console.log(`${changes.modifications.length} tasks modified`);
+  console.log(`${changes.deletions.length} tasks deleted`);
 });
 ```
 
@@ -244,8 +241,8 @@ tasks.addListener((tasks, changes) => {
 const task = realm.objects('Task').filtered('_id == $0', taskId)[0];
 
 realm.write(() => {
-    task.title = 'Updated Title';
-    task.updated_at = new Date();
+  task.title = 'Updated Title';
+  task.updated_at = new Date();
 });
 // Change synced automatically
 ```
@@ -256,7 +253,7 @@ realm.write(() => {
 const task = realm.objects('Task').filtered('_id == $0', taskId)[0];
 
 realm.write(() => {
-    realm.delete(task);
+  realm.delete(task);
 });
 // Deletion synced across devices
 ```
@@ -270,14 +267,14 @@ Realm uses **last-write-wins** (LWW) at the property level:
 ```javascript
 // Device A (offline)
 realm.write(() => {
-    task.title = 'Title from Device A';
-    task.updated_at = new Date('2024-01-01T10:00:00'); // Older
+  task.title = 'Title from Device A';
+  task.updated_at = new Date('2024-01-01T10:00:00'); // Older
 });
 
 // Device B (offline)
 realm.write(() => {
-    task.title = 'Title from Device B';
-    task.updated_at = new Date('2024-01-01T10:05:00'); // Newer
+  task.title = 'Title from Device B';
+  task.updated_at = new Date('2024-01-01T10:05:00'); // Newer
 });
 
 // When both sync:
@@ -289,14 +286,14 @@ realm.write(() => {
 ```javascript
 // Device A
 realm.write(() => {
-    task.title = 'Title A';
-    task.description = 'Description A';
+  task.title = 'Title A';
+  task.description = 'Description A';
 });
 
 // Device B
 realm.write(() => {
-    task.title = 'Title B'; // This might win
-    task.completed = true;  // This will merge
+  task.title = 'Title B'; // This might win
+  task.completed = true; // This will merge
 });
 
 // Result: Merged object with properties from both devices
@@ -308,23 +305,21 @@ For advanced scenarios, implement custom merge logic:
 
 ```javascript
 // Monitor sync errors
-realm.syncSession.addConnectionNotification(
-    (newState, oldState) => {
-        if (newState === Realm.ConnectionState.Disconnected) {
-            console.log('Sync disconnected');
-        }
-    }
-);
+realm.syncSession.addConnectionNotification((newState, oldState) => {
+  if (newState === Realm.ConnectionState.Disconnected) {
+    console.log('Sync disconnected');
+  }
+});
 
 // Handle specific conflict scenarios in application logic
 realm.objects('Task').addListener((tasks, changes) => {
-    changes.modifications.forEach(index => {
-        const task = tasks[index];
-        // Check if modification requires special handling
-        if (requiresManualReview(task)) {
-            flagForUserReview(task);
-        }
-    });
+  changes.modifications.forEach(index => {
+    const task = tasks[index];
+    // Check if modification requires special handling
+    if (requiresManualReview(task)) {
+      flagForUserReview(task);
+    }
+  });
 });
 ```
 
@@ -334,16 +329,11 @@ realm.objects('Task').addListener((tasks, changes) => {
 
 ```javascript
 await realm.subscriptions.update(mutableSubs => {
-    // Add named subscription
-    mutableSubs.add(
-        realm.objects('Task').filtered('owner_id == $0', user.id),
-        { name: 'myTasks' }
-    );
+  // Add named subscription
+  mutableSubs.add(realm.objects('Task').filtered('owner_id == $0', user.id), { name: 'myTasks' });
 
-    // Add anonymous subscription
-    mutableSubs.add(
-        realm.objects('Project').filtered('members IN $0', [user.id])
-    );
+  // Add anonymous subscription
+  mutableSubs.add(realm.objects('Project').filtered('members IN $0', [user.id]));
 });
 
 // Wait for sync to complete
@@ -354,15 +344,15 @@ await realm.subscriptions.waitForSynchronization();
 
 ```javascript
 await realm.subscriptions.update(mutableSubs => {
-    // Remove by name
-    mutableSubs.removeByName('myTasks');
+  // Remove by name
+  mutableSubs.removeByName('myTasks');
 
-    // Remove all subscriptions
-    mutableSubs.removeAll();
+  // Remove all subscriptions
+  mutableSubs.removeAll();
 
-    // Remove specific query
-    const query = realm.objects('Task').filtered('completed == true');
-    mutableSubs.remove(query);
+  // Remove specific query
+  const query = realm.objects('Task').filtered('completed == true');
+  mutableSubs.remove(query);
 });
 ```
 
@@ -370,14 +360,13 @@ await realm.subscriptions.update(mutableSubs => {
 
 ```javascript
 await realm.subscriptions.update(mutableSubs => {
-    // Remove old subscription
-    mutableSubs.removeByName('oldTasks');
+  // Remove old subscription
+  mutableSubs.removeByName('oldTasks');
 
-    // Add updated subscription
-    mutableSubs.add(
-        realm.objects('Task').filtered('updated_at > $0', lastWeek),
-        { name: 'recentTasks' }
-    );
+  // Add updated subscription
+  mutableSubs.add(realm.objects('Task').filtered('updated_at > $0', lastWeek), {
+    name: 'recentTasks',
+  });
 });
 ```
 
@@ -390,26 +379,26 @@ const syncSession = realm.syncSession;
 
 // Check connection state
 if (syncSession.state === 'active') {
-    console.log('Syncing...');
+  console.log('Syncing...');
 } else if (syncSession.state === 'inactive') {
-    console.log('Offline');
+  console.log('Offline');
 }
 
 // Monitor upload/download progress
 syncSession.addProgressNotification(
-    'upload',
-    'forCurrentlyOutstandingWork',
-    (transferred, transferable) => {
-        console.log(`Upload: ${transferred} / ${transferable} bytes`);
-    }
+  'upload',
+  'forCurrentlyOutstandingWork',
+  (transferred, transferable) => {
+    console.log(`Upload: ${transferred} / ${transferable} bytes`);
+  }
 );
 
 syncSession.addProgressNotification(
-    'download',
-    'reportIndefinitely',
-    (transferred, transferable) => {
-        console.log(`Download: ${transferred} / ${transferable} bytes`);
-    }
+  'download',
+  'reportIndefinitely',
+  (transferred, transferable) => {
+    console.log(`Download: ${transferred} / ${transferable} bytes`);
+  }
 );
 ```
 
@@ -435,15 +424,15 @@ await realm.syncSession.downloadAllServerChanges();
 
 ```javascript
 realm.syncSession.addErrorNotification((session, error) => {
-    console.error('Sync error:', error);
+  console.error('Sync error:', error);
 
-    if (error.name === 'ClientReset') {
-        handleClientReset(error);
-    } else if (error.name === 'PermissionDenied') {
-        handlePermissionError(error);
-    } else if (error.name === 'BadChangeset') {
-        handleBadChangeset(error);
-    }
+  if (error.name === 'ClientReset') {
+    handleClientReset(error);
+  } else if (error.name === 'PermissionDenied') {
+    handlePermissionError(error);
+  } else if (error.name === 'BadChangeset') {
+    handleBadChangeset(error);
+  }
 });
 ```
 
@@ -453,22 +442,22 @@ Handle cases where local Realm must be discarded:
 
 ```javascript
 const config = {
-    schema: [TaskSchema],
-    sync: {
-        user: user,
-        flexible: true,
-        clientReset: {
-            mode: 'recoverOrDiscard', // Options: 'manual', 'discardLocal', 'recoverUnsyncedChanges', 'recoverOrDiscard'
-            onBefore: (realm) => {
-                console.log('Client reset about to happen');
-                // Backup unsynced changes if needed
-            },
-            onAfter: (beforeRealm, afterRealm) => {
-                console.log('Client reset completed');
-                // Restore or merge data if needed
-            }
-        }
-    }
+  schema: [TaskSchema],
+  sync: {
+    user: user,
+    flexible: true,
+    clientReset: {
+      mode: 'recoverOrDiscard', // Options: 'manual', 'discardLocal', 'recoverUnsyncedChanges', 'recoverOrDiscard'
+      onBefore: realm => {
+        console.log('Client reset about to happen');
+        // Backup unsynced changes if needed
+      },
+      onAfter: (beforeRealm, afterRealm) => {
+        console.log('Client reset completed');
+        // Restore or merge data if needed
+      },
+    },
+  },
 };
 ```
 
@@ -478,15 +467,15 @@ const config = {
 
 ```javascript
 realm.write(() => {
-    for (let i = 0; i < 1000; i++) {
-        realm.create('Task', {
-            _id: new Realm.BSON.ObjectId(),
-            title: `Task ${i}`,
-            owner_id: user.id,
-            created_at: new Date(),
-            updated_at: new Date()
-        });
-    }
+  for (let i = 0; i < 1000; i++) {
+    realm.create('Task', {
+      _id: new Realm.BSON.ObjectId(),
+      title: `Task ${i}`,
+      owner_id: user.id,
+      created_at: new Date(),
+      updated_at: new Date(),
+    });
+  }
 });
 // Single write transaction, synced as one batch
 ```
@@ -495,15 +484,15 @@ realm.write(() => {
 
 ```javascript
 const TaskSchema = {
-    name: 'Task',
-    primaryKey: '_id',
-    properties: {
-        _id: 'objectId',
-        title: { type: 'string', indexed: true }, // Index for faster queries
-        owner_id: { type: 'string', indexed: true },
-        completed: 'bool',
-        created_at: 'date'
-    }
+  name: 'Task',
+  primaryKey: '_id',
+  properties: {
+    _id: 'objectId',
+    title: { type: 'string', indexed: true }, // Index for faster queries
+    owner_id: { type: 'string', indexed: true },
+    completed: 'bool',
+    created_at: 'date',
+  },
 };
 ```
 
@@ -514,10 +503,11 @@ const TaskSchema = {
 const pageSize = 20;
 const offset = 0;
 
-const tasks = realm.objects('Task')
-    .filtered('owner_id == $0', user.id)
-    .sorted('created_at', true)
-    .slice(offset, offset + pageSize);
+const tasks = realm
+  .objects('Task')
+  .filtered('owner_id == $0', user.id)
+  .sorted('created_at', true)
+  .slice(offset, offset + pageSize);
 ```
 
 ## Security and Authentication
@@ -577,11 +567,11 @@ Safe changes that don't require migration:
 ```javascript
 // Add optional property
 const TaskSchemaV2 = {
-    name: 'Task',
-    properties: {
-        // ... existing properties
-        priority: 'int?', // New optional property
-    }
+  name: 'Task',
+  properties: {
+    // ... existing properties
+    priority: 'int?', // New optional property
+  },
 };
 ```
 
@@ -591,19 +581,19 @@ Requires migration:
 
 ```javascript
 const TaskSchemaV2 = {
-    name: 'Task',
-    schemaVersion: 2, // Increment version
-    properties: {
-        // ... properties
-    },
-    migration: (oldRealm, newRealm) => {
-        const oldObjects = oldRealm.objects('Task');
-        const newObjects = newRealm.objects('Task');
+  name: 'Task',
+  schemaVersion: 2, // Increment version
+  properties: {
+    // ... properties
+  },
+  migration: (oldRealm, newRealm) => {
+    const oldObjects = oldRealm.objects('Task');
+    const newObjects = newRealm.objects('Task');
 
-        for (let i = 0; i < oldObjects.length; i++) {
-            newObjects[i].priority = 0; // Set default for new property
-        }
+    for (let i = 0; i < oldObjects.length; i++) {
+      newObjects[i].priority = 0; // Set default for new property
     }
+  },
 };
 ```
 
@@ -616,32 +606,32 @@ const TaskSchemaV2 = {
 import Realm from 'realm';
 
 describe('Task operations', () => {
-    let realm;
+  let realm;
 
-    beforeEach(async () => {
-        // Use in-memory Realm for tests
-        realm = await Realm.open({
-            schema: [TaskSchema],
-            inMemory: true
-        });
+  beforeEach(async () => {
+    // Use in-memory Realm for tests
+    realm = await Realm.open({
+      schema: [TaskSchema],
+      inMemory: true,
     });
+  });
 
-    afterEach(() => {
-        realm.close();
-    });
+  afterEach(() => {
+    realm.close();
+  });
 
-    it('should create task', () => {
-        realm.write(() => {
-            const task = realm.create('Task', {
-                _id: new Realm.BSON.ObjectId(),
-                title: 'Test Task',
-                owner_id: 'test-user',
-                created_at: new Date(),
-                updated_at: new Date()
-            });
-            expect(task.title).toBe('Test Task');
-        });
+  it('should create task', () => {
+    realm.write(() => {
+      const task = realm.create('Task', {
+        _id: new Realm.BSON.ObjectId(),
+        title: 'Test Task',
+        owner_id: 'test-user',
+        created_at: new Date(),
+        updated_at: new Date(),
+      });
+      expect(task.title).toBe('Test Task');
     });
+  });
 });
 ```
 

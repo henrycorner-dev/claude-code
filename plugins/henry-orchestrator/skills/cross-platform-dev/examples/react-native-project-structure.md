@@ -572,10 +572,11 @@ export function setupAuthDI(container: DIContainer) {
   // Repository
   container.register(
     'authRepository',
-    () => new AuthRepositoryImpl(
-      container.get('authRemoteDataSource'),
-      container.get('authLocalDataSource')
-    )
+    () =>
+      new AuthRepositoryImpl(
+        container.get('authRemoteDataSource'),
+        container.get('authLocalDataSource')
+      )
   );
 
   // Use cases
@@ -799,16 +800,19 @@ const styles = StyleSheet.create({
 ## Running the App
 
 ### iOS
+
 ```bash
 npm run ios
 ```
 
 ### Android
+
 ```bash
 npm run android
 ```
 
 ### Web
+
 ```bash
 npm run web
 ```

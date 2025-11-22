@@ -7,6 +7,7 @@ This document provides detailed specifications, best practices, and design strat
 ### Technical Specifications
 
 **iOS App Store:**
+
 - Size: 1024x1024 px (submitted in App Store Connect)
 - Format: PNG or JPEG (no transparency)
 - Color space: RGB
@@ -14,6 +15,7 @@ This document provides detailed specifications, best practices, and design strat
 - Actual displayed sizes: 60x60, 76x76, 120x120, 152x152, 180x180
 
 **Google Play Store:**
+
 - Size: 512x512 px
 - Format: PNG (32-bit, transparency allowed)
 - Maximum file size: 1024 KB
@@ -22,6 +24,7 @@ This document provides detailed specifications, best practices, and design strat
 ### Design Best Practices
 
 **Core Principles:**
+
 1. **Simplicity** - Recognizable at small sizes
 2. **Uniqueness** - Stand out from competitors
 3. **Relevance** - Represent app purpose
@@ -29,6 +32,7 @@ This document provides detailed specifications, best practices, and design strat
 5. **Memorability** - Easy to remember
 
 **Design Guidelines:**
+
 - Use bold, simple shapes
 - High contrast for visibility
 - Limit to 2-3 colors
@@ -39,6 +43,7 @@ This document provides detailed specifications, best practices, and design strat
 - Test in grayscale for contrast
 
 **Common Mistakes:**
+
 - Too much detail
 - Low contrast
 - Too many elements
@@ -47,6 +52,7 @@ This document provides detailed specifications, best practices, and design strat
 - Platform inconsistency (use same icon for both)
 
 **Category-Specific Trends:**
+
 - **Social:** People-focused, vibrant colors
 - **Productivity:** Clean, professional, tool-like
 - **Games:** Character or game element, energetic
@@ -57,6 +63,7 @@ This document provides detailed specifications, best practices, and design strat
 ### Testing Your Icon
 
 **Test Methods:**
+
 1. View at actual sizes (60x60, 48x48)
 2. Place among competitors
 3. Convert to grayscale (check contrast)
@@ -64,6 +71,7 @@ This document provides detailed specifications, best practices, and design strat
 5. A/B test variations in stores
 
 **Questions to Ask:**
+
 - Is it instantly recognizable?
 - Does it stand out in the category?
 - Is the purpose clear?
@@ -75,6 +83,7 @@ This document provides detailed specifications, best practices, and design strat
 ### Technical Specifications
 
 **iOS Requirements:**
+
 - Minimum: 2 screenshots required
 - Maximum: 10 screenshots
 - Supported sizes (must provide for at least one device):
@@ -88,6 +97,7 @@ This document provides detailed specifications, best practices, and design strat
 - Note: iOS scales screenshots for other device sizes
 
 **Android Requirements:**
+
 - Minimum: 2 screenshots required
 - Maximum: 8 screenshots
 - Dimensions:
@@ -99,6 +109,7 @@ This document provides detailed specifications, best practices, and design strat
 - Maximum file size: 8 MB per screenshot
 
 **Best Practices (Both Platforms):**
+
 - Use portrait orientation for phone screenshots
 - Landscape acceptable for iPad/tablet apps
 - Consistent style across all screenshots
@@ -108,6 +119,7 @@ This document provides detailed specifications, best practices, and design strat
 ### Screenshot Content Strategy
 
 **First 3 Screenshots (Critical):**
+
 - These appear "above the fold" on most devices
 - Highest impact on conversion
 - Show your strongest value proposition
@@ -116,6 +128,7 @@ This document provides detailed specifications, best practices, and design strat
 **Screenshot Order Strategy:**
 
 **Option 1: Feature Flow**
+
 1. Hero/main feature
 2. Second key feature
 3. Third key feature
@@ -123,6 +136,7 @@ This document provides detailed specifications, best practices, and design strat
 5. Social proof/call to action (last)
 
 **Option 2: Story Flow**
+
 1. Problem statement
 2. Solution (your app)
 3. How it works
@@ -130,6 +144,7 @@ This document provides detailed specifications, best practices, and design strat
 5. Social proof
 
 **Option 3: Benefit-First**
+
 1. Primary benefit/outcome
 2. How it's achieved
 3. Additional benefits
@@ -139,24 +154,28 @@ This document provides detailed specifications, best practices, and design strat
 ### Screenshot Design Approaches
 
 **Approach 1: Device Frames with UI**
+
 - Show actual app in device mockup
 - Add text overlays for context
 - Clean, professional look
 - Good for: Complex apps, productivity apps
 
 **Approach 2: UI with Text Overlays**
+
 - No device frame, full screen UI
 - Large text captions
 - Highlights specific features
 - Good for: Most app categories
 
 **Approach 3: Lifestyle/Contextual**
+
 - Show app in use context
 - People using the app
 - Emphasize experience over UI
 - Good for: Social, fitness, lifestyle apps
 
 **Approach 4: Illustrated/Graphic**
+
 - Custom illustrations
 - Minimal or no UI
 - Focus on concept/benefits
@@ -165,6 +184,7 @@ This document provides detailed specifications, best practices, and design strat
 ### Screenshot Text Overlays
 
 **Text Best Practices:**
+
 - Font size: Large enough to read at preview size (minimum 40pt)
 - Contrast: High contrast with background
 - Brevity: 5-10 words maximum
@@ -175,16 +195,19 @@ This document provides detailed specifications, best practices, and design strat
 **Caption Examples:**
 
 **Feature-focused:**
+
 - "Track Your Progress Daily"
 - "Connect with Friends Instantly"
 - "Schedule Posts in Seconds"
 
 **Benefit-focused:**
+
 - "Save 10 Hours Every Week"
 - "Never Miss a Deadline"
 - "Get Fit in Just 7 Minutes"
 
 **Action-oriented:**
+
 - "Start Your Free Trial"
 - "Join 1M+ Happy Users"
 - "Download Now and Save"
@@ -192,12 +215,14 @@ This document provides detailed specifications, best practices, and design strat
 ### Localization Considerations
 
 **What to Localize:**
+
 - All text overlays
 - UI text in screenshots (if applicable)
 - Cultural imagery adjustments
 - Different value propositions per market
 
 **Common Mistakes:**
+
 - Direct translation without cultural adaptation
 - Text overflow in longer languages
 - Unchanged Western-centric imagery
@@ -208,6 +233,7 @@ This document provides detailed specifications, best practices, and design strat
 ### Technical Specifications
 
 **iOS App Store:**
+
 - Duration: 15-30 seconds
 - Orientation: Portrait or landscape (match screenshots)
 - Formats: .mov, .mp4, .m4v
@@ -220,6 +246,7 @@ This document provides detailed specifications, best practices, and design strat
 - Audio: Optional (many users watch muted)
 
 **Google Play Store:**
+
 - Duration: 30 seconds to 2 minutes (recommended 30 sec)
 - Aspect ratio: 16:9 or 9:16
 - Minimum resolution: 1920x1080 px (landscape) or 1080x1920 px (portrait)
@@ -230,18 +257,21 @@ This document provides detailed specifications, best practices, and design strat
 ### Video Content Strategy
 
 **First 3 Seconds (Critical):**
+
 - Grab attention immediately
 - Show most compelling feature or benefit
 - Use visual interest, motion
 - Don't waste time on logos or intro
 
 **Video Structure (30 seconds):**
+
 - 0-3 sec: Hook (problem or compelling visual)
 - 3-10 sec: Solution (your app)
 - 10-25 sec: Key features (2-3 max)
 - 25-30 sec: Call to action
 
 **What to Show:**
+
 - Real app interface
 - Actual interactions (taps, swipes)
 - Key user flows
@@ -250,6 +280,7 @@ This document provides detailed specifications, best practices, and design strat
 - Ease of use
 
 **What to Avoid:**
+
 - Long intros or outros
 - Talking heads
 - Boring tutorials
@@ -260,6 +291,7 @@ This document provides detailed specifications, best practices, and design strat
 ### Video Design Elements
 
 **Text Overlays:**
+
 - Large, readable font (minimum 60pt)
 - High contrast
 - Brief messages (3-5 words)
@@ -267,6 +299,7 @@ This document provides detailed specifications, best practices, and design strat
 - Animate in/out smoothly
 
 **Audio Considerations:**
+
 - Optional (many watch muted)
 - If included: upbeat, not distracting
 - No voiceover necessary
@@ -274,6 +307,7 @@ This document provides detailed specifications, best practices, and design strat
 - Subtitles/captions if using dialogue
 
 **Visual Polish:**
+
 - Smooth transitions
 - Professional app recording
 - No lag or glitches
@@ -284,24 +318,28 @@ This document provides detailed specifications, best practices, and design strat
 ### Video Production Methods
 
 **Option 1: Screen Recording + Editing**
+
 - Record app interactions
 - Edit in iMovie, Final Cut, Adobe Premiere
 - Add text overlays and effects
 - Export at required specs
 
 **Option 2: After Effects / Motion Graphics**
+
 - Create animated presentation
 - Show app UI with motion design
 - More control over pacing and visuals
 - Higher production value
 
 **Option 3: Hybrid Approach**
+
 - Screen recordings for UI
 - Motion graphics for transitions and text
 - Best of both worlds
 - Most professional result
 
 **Tools:**
+
 - Screen recording: QuickTime (Mac), OBS (cross-platform)
 - Editing: iMovie, Final Cut Pro, Adobe Premiere
 - Motion graphics: After Effects, Apple Motion
@@ -310,6 +348,7 @@ This document provides detailed specifications, best practices, and design strat
 ### Testing Videos
 
 **Questions to Evaluate:**
+
 - Is the first 3 seconds compelling?
 - Is it clear what the app does?
 - Is it watchable without sound?
@@ -318,6 +357,7 @@ This document provides detailed specifications, best practices, and design strat
 - Does it end with clear CTA?
 
 **A/B Testing:**
+
 - Test video vs. no video
 - Test different hooks
 - Test different feature highlights
@@ -336,17 +376,20 @@ This document provides detailed specifications, best practices, and design strat
 ### Design Guidelines
 
 **Purpose:**
+
 - First visual element users see
 - Should represent app and grab attention
 - Combination of branding and value proposition
 
 **Content Options:**
+
 - App name + tagline + key visual
 - Hero screenshot with branding
 - Illustrated concept
 - Key benefit visualization
 
 **Design Tips:**
+
 - Horizontal format (2:1 ratio)
 - Include app name (unless very recognizable)
 - Clear, bold visuals
@@ -356,6 +399,7 @@ This document provides detailed specifications, best practices, and design strat
 - Test on various devices
 
 **Common Mistakes:**
+
 - Too much text
 - Low contrast
 - Cluttered design
@@ -367,6 +411,7 @@ This document provides detailed specifications, best practices, and design strat
 ### Priority Markets
 
 **Tier 1 (Essential):**
+
 - English (US, UK, Australia, Canada)
 - Spanish (Spain, Latin America)
 - German
@@ -376,6 +421,7 @@ This document provides detailed specifications, best practices, and design strat
 - Chinese (Simplified, Traditional)
 
 **Tier 2 (High Value):**
+
 - Portuguese (Brazil)
 - Italian
 - Russian
@@ -384,22 +430,26 @@ This document provides detailed specifications, best practices, and design strat
 - Indonesian
 
 **Tier 3 (Additional):**
+
 - Regional languages based on your target audience
 
 ### What to Localize
 
 **Must Localize:**
+
 - All text in screenshots
 - Video text overlays and captions
 - Feature graphic text (Android)
 
 **Consider Localizing:**
+
 - UI language in screenshots
 - Cultural imagery/context
 - Color schemes (cultural meanings)
 - Feature priorities (different markets value different features)
 
 **Usually Don't Localize:**
+
 - App icon (unless culturally sensitive)
 - Core visual design
 - Brand identity elements
@@ -407,24 +457,28 @@ This document provides detailed specifications, best practices, and design strat
 ### Localization Process
 
 **Step 1: Prepare Source Files**
+
 - Organized file structure
 - Editable text layers (PSD, Sketch, Figma)
 - Clear naming conventions
 - Documentation of fonts and styles
 
 **Step 2: Translation**
+
 - Professional translation (not just Google Translate)
 - Native speakers
 - App store and marketing context
 - Character limits for text overlays
 
 **Step 3: Design Adaptation**
+
 - Adjust text sizes (some languages longer)
 - Ensure readability
 - Cultural imagery adjustments
 - Test with native speakers
 
 **Step 4: Quality Assurance**
+
 - Native speaker review
 - Visual consistency check
 - Technical spec compliance
@@ -435,6 +489,7 @@ This document provides detailed specifications, best practices, and design strat
 ### Tools and Resources
 
 **Design Tools:**
+
 - Figma (collaborative, web-based)
 - Sketch (Mac only, popular for app design)
 - Adobe Photoshop (pixel-perfect editing)
@@ -442,18 +497,21 @@ This document provides detailed specifications, best practices, and design strat
 - Canva (templates and quick designs)
 
 **Device Mockups:**
+
 - Figma/Sketch plugins
 - Mockuuups.com
 - Placeit.net
 - Shotbot.io
 
 **Video Tools:**
+
 - Screen recording: QuickTime, OBS
 - Editing: Final Cut Pro, Adobe Premiere, iMovie
 - Motion graphics: After Effects
 - Quick edits: ScreenFlow, Camtasia
 
 **Screenshot Tools:**
+
 - Screenshot Builder (AppLaunchpad)
 - App Store Screenshot Generator
 - DIY with templates (Figma, Sketch)
@@ -461,12 +519,14 @@ This document provides detailed specifications, best practices, and design strat
 ### Template Approach
 
 **Benefits:**
+
 - Consistent visual style
 - Quick updates
 - Easy localization
 - Brand consistency
 
 **Template Elements:**
+
 - Background styles
 - Text overlay styles
 - Device frame templates
@@ -474,6 +534,7 @@ This document provides detailed specifications, best practices, and design strat
 - Typography system
 
 **Creating Templates:**
+
 1. Design one screenshot fully
 2. Extract reusable elements
 3. Create component library
@@ -483,6 +544,7 @@ This document provides detailed specifications, best practices, and design strat
 ### Asset Update Strategy
 
 **When to Update:**
+
 - Major app redesigns (immediately)
 - UI refresh (within 1-2 releases)
 - New key features (highlight in new screenshots)
@@ -491,6 +553,7 @@ This document provides detailed specifications, best practices, and design strat
 - Competitor changes (stay competitive)
 
 **Update Process:**
+
 1. Identify what to change
 2. Create variations
 3. A/B test if possible
@@ -500,6 +563,7 @@ This document provides detailed specifications, best practices, and design strat
 ### Quality Checklist
 
 **Before Submission:**
+
 - [ ] All assets meet technical specs
 - [ ] Text is readable at preview sizes
 - [ ] Consistent visual style
@@ -512,6 +576,7 @@ This document provides detailed specifications, best practices, and design strat
 - [ ] Files properly named
 
 **Localization Checklist:**
+
 - [ ] All text translated by native speakers
 - [ ] Text fits within design
 - [ ] Cultural appropriateness reviewed
@@ -525,11 +590,13 @@ This document provides detailed specifications, best practices, and design strat
 ### File Size Optimization
 
 **Why It Matters:**
+
 - Faster loading in stores
 - Better user experience
 - Some platforms have size limits
 
 **Optimization Techniques:**
+
 - Export screenshots as JPEG with 80-90% quality
 - Use PNG only when transparency needed
 - Compress videos without quality loss (HandBrake)
@@ -537,6 +604,7 @@ This document provides detailed specifications, best practices, and design strat
 - Use appropriate resolution (not higher than required)
 
 **Tools:**
+
 - ImageOptim (Mac)
 - TinyPNG (web)
 - HandBrake (video compression)
@@ -545,6 +613,7 @@ This document provides detailed specifications, best practices, and design strat
 ### Conversion Rate Optimization
 
 **Metrics to Track:**
+
 - Product page views
 - Install/download rate
 - Conversion rate by traffic source
@@ -552,6 +621,7 @@ This document provides detailed specifications, best practices, and design strat
 - Video completion rate
 
 **Testing Methodology:**
+
 1. Baseline: Measure current performance
 2. Hypothesis: What to change and why
 3. Create: Design variation
@@ -561,6 +631,7 @@ This document provides detailed specifications, best practices, and design strat
 7. Iterate: Continue testing
 
 **Common Test Ideas:**
+
 - Screenshot order variations
 - Different messaging approaches
 - With/without device frames
@@ -574,32 +645,38 @@ This document provides detailed specifications, best practices, and design strat
 ### iOS App Store Unique Features
 
 **App Preview Posters:**
+
 - Static image shown before video plays
 - First frame of video used
 - Make it compelling to encourage play
 
 **Portrait vs. Landscape:**
+
 - Most apps use portrait for iPhone
 - Landscape for iPad apps or games
 - Separate assets for iPhone and iPad
 
 **Device-Specific Assets:**
+
 - Can provide different screenshots for iPhone vs. iPad
 - Consider different messaging for iPad (productivity focus)
 
 ### Google Play Store Unique Features
 
 **Feature Graphic Prominence:**
+
 - Large banner at top of listing
 - Critical for first impression
 - Use for branding and key message
 
 **Video Thumbnail:**
+
 - Custom thumbnail for promo video
 - Make it compelling and clear
 - Different from first frame option
 
 **Landscape Tablets:**
+
 - Consider tablet screenshots if app supports
 - Show expanded UI or tablet-specific features
 
@@ -608,12 +685,14 @@ This document provides detailed specifications, best practices, and design strat
 ### Seasonal Visual Updates
 
 **Approach:**
+
 - Update screenshots for major holidays
 - Seasonal color schemes
 - Limited-time feature highlights
 - Promotional messaging
 
 **Best Practices:**
+
 - Plan 2-3 weeks ahead
 - Update back after season
 - Don't overdo (maintain brand consistency)
@@ -622,6 +701,7 @@ This document provides detailed specifications, best practices, and design strat
 ### Competitive Visual Analysis
 
 **Research Process:**
+
 1. Identify top 10 competitors
 2. Analyze their visual approaches
 3. Note what stands out
@@ -629,6 +709,7 @@ This document provides detailed specifications, best practices, and design strat
 5. Differentiate your visuals
 
 **Questions to Answer:**
+
 - What visual styles are common?
 - What makes top apps stand out?
 - What are they doing well?
@@ -638,18 +719,21 @@ This document provides detailed specifications, best practices, and design strat
 ### User-Generated Content in Visuals
 
 **Options:**
+
 - Real user testimonials in screenshots
 - Actual user photos (with permission)
 - Community highlights
 - User statistics and social proof
 
 **Benefits:**
+
 - Authenticity
 - Social proof
 - Trust building
 - Community showcase
 
 **Legal Considerations:**
+
 - Get explicit permission
 - Model releases for people
 - Rights to use content
@@ -658,6 +742,7 @@ This document provides detailed specifications, best practices, and design strat
 ### Accessibility in Visual Assets
 
 **Considerations:**
+
 - High contrast for visibility
 - Large text sizes
 - Clear visual hierarchy
@@ -666,6 +751,7 @@ This document provides detailed specifications, best practices, and design strat
 - Simple, clear imagery
 
 **Benefits:**
+
 - Better user experience
 - Wider audience
 - Improved conversion

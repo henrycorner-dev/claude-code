@@ -1,7 +1,7 @@
 ---
 description: Optimization sprint focusing on performance and efficiency
 argument-hint: Optimization goals (perf/SEO/etc)
-allowed-tools: ["Glob", "Read", "Grep", "Bash", "Task", "TodoWrite"]
+allowed-tools: ['Glob', 'Read', 'Grep', 'Bash', 'Task', 'TodoWrite']
 ---
 
 # Henry Optimization Sprint

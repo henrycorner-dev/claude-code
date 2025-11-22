@@ -29,6 +29,7 @@ Phase 1 → [Phase 2a + Phase 2b] → Phase 3 → [Phase 4a + Phase 4b + Phase 4
 **Agent**: product-strategist
 
 **Deliverables**:
+
 - Product Requirements Document (PRD)
 - MVP feature prioritization (RICE/ICE scores)
 - Success metrics and KPIs
@@ -46,6 +47,7 @@ Phase 1 → [Phase 2a + Phase 2b] → Phase 3 → [Phase 4a + Phase 4b + Phase 4
 Run these in parallel since design and backend architecture are independent:
 
 **Design Track**
+
 ```bash
 /henry-orchestrator:henry-design MVP user interface and flows
 ```
@@ -53,15 +55,17 @@ Run these in parallel since design and backend architecture are independent:
 **Agents**: ux-researcher, ux-ui-designer, a11y-specialist
 **Focus**: User experience and visual design
 **Deliverables**:
+
 - User research insights
 - Wireframes and user flows
 - High-fidelity mockups
 - Design system components
-**Duration**: 4-8 hours
+  **Duration**: 4-8 hours
 
 ---
 
 **Technical Specification Track**
+
 ```bash
 /henry-orchestrator:henry-team backend-engineer devops-sre-architect - Define MVP architecture and API design
 ```
@@ -69,11 +73,12 @@ Run these in parallel since design and backend architecture are independent:
 **Agents**: backend-engineer, devops-sre-architect
 **Focus**: Backend architecture and infrastructure
 **Deliverables**:
+
 - System architecture diagram
 - API specification (OpenAPI)
 - Database schema
 - Infrastructure requirements
-**Duration**: 4-6 hours
+  **Duration**: 4-6 hours
 
 ---
 
@@ -91,6 +96,7 @@ Run these in parallel since design and backend architecture are independent:
 **Objective**: Align design with technical capabilities
 
 **Activities**:
+
 - Review API endpoints support UI requirements
 - Verify data models match UI needs
 - Resolve any conflicts
@@ -107,6 +113,7 @@ Run these in parallel since design and backend architecture are independent:
 With aligned specifications, implement in parallel:
 
 **Frontend Track**
+
 ```bash
 /henry-orchestrator:henry-team frontend-engineer a11y-specialist - Implement MVP UI
 ```
@@ -119,6 +126,7 @@ With aligned specifications, implement in parallel:
 ---
 
 **Backend Track**
+
 ```bash
 /henry-orchestrator:henry-team backend-engineer - Implement MVP API and database
 ```
@@ -131,6 +139,7 @@ With aligned specifications, implement in parallel:
 ---
 
 **DevOps Track**
+
 ```bash
 /henry-orchestrator:henry-team devops-sre-architect - Set up CI/CD and infrastructure
 ```
@@ -157,6 +166,7 @@ With aligned specifications, implement in parallel:
 **Agents**: qa-tester, frontend-engineer, backend-engineer
 
 **Activities**:
+
 - End-to-end testing
 - API integration validation
 - Bug fixing
@@ -173,6 +183,7 @@ With aligned specifications, implement in parallel:
 Final preparations can happen simultaneously:
 
 **Audit Track**
+
 ```bash
 /henry-orchestrator:henry-audit comprehensive pre-launch audit
 ```
@@ -183,6 +194,7 @@ Final preparations can happen simultaneously:
 ---
 
 **SEO Track**
+
 ```bash
 /henry-orchestrator:henry-team seo-specialist - SEO optimization and sitemap
 ```
@@ -193,6 +205,7 @@ Final preparations can happen simultaneously:
 ---
 
 **Analytics Track**
+
 ```bash
 /henry-orchestrator:henry-team data-analytics-engineer - Set up analytics and monitoring
 ```
@@ -231,6 +244,7 @@ Final preparations can happen simultaneously:
 **Agents**: devops-sre-architect, qa-tester, security-engineer
 
 **Deliverables**:
+
 - Deployment runbook
 - Monitoring dashboards
 - Rollback procedure
@@ -294,12 +308,14 @@ Launch (4h)
 ## When to Use Hybrid Workflow
 
 ✅ **Use when**:
+
 - Complex projects with both dependencies and parallelizable work
 - Medium to large projects (2+ weeks)
 - Multiple team members or domains
 - Need to optimize for speed without sacrificing quality
 
 ❌ **Avoid when**:
+
 - Simple projects (use linear instead)
 - Solo developer with no time savings from parallelization
 - Unclear dependencies (too risky to parallelize)
@@ -342,6 +358,7 @@ Wrong: [Strategy + Design + Implementation] all in parallel
 **Problem**: Design needs strategy, implementation needs design
 
 **Fix**: Identify true dependencies
+
 ```
 Right: Strategy → [Design + Backend Spec] → [Frontend + Backend]
 ```
@@ -357,6 +374,7 @@ Wrong: [Frontend + Backend] parallel with no check-ins → Merge at end
 **Problem**: Major integration issues discovered too late
 
 **Fix**: Add integration checkpoints
+
 ```
 Right: [Frontend + Backend] with daily integration tests
 ```
@@ -372,6 +390,7 @@ Wrong: [2-day task + 10-day task] in parallel
 **Problem**: Workflow blocked by longest task; shorter task resources idle
 
 **Fix**: Balance parallel workloads
+
 ```
 Right: Split 10-day task or add more work to 2-day track
 ```
@@ -387,6 +406,7 @@ Wrong: [5 parallel tracks with 2 developers]
 **Problem**: Context switching overhead, resource contention
 
 **Fix**: Match parallelization to capacity
+
 ```
 Right: 2 parallel tracks for 2 developers
 ```
@@ -396,6 +416,7 @@ Right: 2 parallel tracks for 2 developers
 ### Daily Standups
 
 During parallel phases, hold daily syncs:
+
 - What did you complete?
 - What are you working on?
 - Any blockers or conflicts?
@@ -403,6 +424,7 @@ During parallel phases, hold daily syncs:
 ### Integration Checkpoints
 
 Schedule regular integration points:
+
 - Daily: Smoke tests of integration
 - Mid-phase: Comprehensive integration test
 - End-phase: Full integration validation
@@ -410,6 +432,7 @@ Schedule regular integration points:
 ### Shared Artifacts
 
 Maintain shared documentation:
+
 - API contracts (OpenAPI spec)
 - Data models (database schema)
 - Design tokens (for consistency)
@@ -418,6 +441,7 @@ Maintain shared documentation:
 ### Clear Ownership
 
 Define clear ownership boundaries:
+
 - Frontend: UI components, state management
 - Backend: API endpoints, business logic
 - DevOps: Infrastructure, CI/CD
@@ -437,6 +461,7 @@ Track these metrics to evaluate hybrid workflow effectiveness:
 ### 1. Front-Load Dependencies
 
 Get dependencies done early:
+
 ```
 Better: Quick strategy (2h) → Parallel work (5d)
 Worse: Detailed strategy (2d) → Parallel work (3d)
@@ -445,6 +470,7 @@ Worse: Detailed strategy (2d) → Parallel work (3d)
 ### 2. Maximize Parallel Duration
 
 Design phases to maximize parallel time:
+
 ```
 Better: [5d + 5d + 5d] parallel → 2d sequential
 Worse: 2d sequential → [2d + 2d + 2d] parallel → 2d sequential
@@ -453,6 +479,7 @@ Worse: 2d sequential → [2d + 2d + 2d] parallel → 2d sequential
 ### 3. Pipeline Stages
 
 Overlap phases with pipeline approach:
+
 ```
 Phase 1 complete → Phase 2 starts
 Phase 2 50% done → Phase 3 starts (if possible)
@@ -461,6 +488,7 @@ Phase 2 50% done → Phase 3 starts (if possible)
 ### 4. Buffer for Integration
 
 Always budget time for integration:
+
 ```
 [Parallel implementation: 5d] + [Integration buffer: 1d] = 6d total
 ```

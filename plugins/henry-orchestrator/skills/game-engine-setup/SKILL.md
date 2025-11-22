@@ -11,6 +11,7 @@ This skill provides specialized knowledge for setting up, configuring, and build
 ## Purpose
 
 Game engine setup is complex because it involves:
+
 - Engine-specific project structures and conventions
 - Organizing scenes, prefabs, assets, and scripts
 - Platform-specific build configurations (iOS, Android, Windows, Mac, consoles)
@@ -25,6 +26,7 @@ This skill guides the setup and configuration of game projects using industry be
 ### Engine Comparison
 
 **Unity:**
+
 - C# scripting with MonoBehaviour component system
 - Scene-based architecture with GameObjects and Prefabs
 - Mature asset store and extensive third-party support
@@ -32,6 +34,7 @@ This skill guides the setup and configuration of game projects using industry be
 - Inspector-based workflow
 
 **Unreal Engine:**
+
 - Blueprint visual scripting or C++ programming
 - Level-based architecture with Actors and Components
 - High-fidelity graphics and AAA game focus
@@ -39,6 +42,7 @@ This skill guides the setup and configuration of game projects using industry be
 - Editor-based workflow with powerful tools
 
 **Godot:**
+
 - GDScript (Python-like) or C# scripting
 - Scene-based architecture with Nodes
 - Lightweight, open-source, no licensing fees
@@ -70,6 +74,7 @@ ProjectRoot/
 All three engines use entity-component systems:
 
 **Unity GameObject:**
+
 ```
 GameObject
 ├── Transform (position, rotation, scale)
@@ -79,6 +84,7 @@ GameObject
 ```
 
 **Unreal Actor:**
+
 ```
 Actor
 ├── SceneComponent (transform hierarchy)
@@ -88,6 +94,7 @@ Actor
 ```
 
 **Godot Node:**
+
 ```
 Node
 ├── Spatial/Node2D (transform)
@@ -99,6 +106,7 @@ Node
 ## When to Use This Skill
 
 Use this skill when:
+
 - Initializing a new game project in Unity, Unreal, or Godot
 - Setting up scenes, levels, or organizing project assets
 - Creating player controllers, character scripts, or game mechanics
@@ -112,16 +120,19 @@ Use this skill when:
 ### Question 1: What Type of Game?
 
 **2D Game:**
+
 - **Unity**: Excellent 2D tooling, Tilemap system
 - **Godot**: Lightweight, great 2D performance
 - **Unreal**: Overkill for 2D (use Unity or Godot)
 
 **3D Game:**
+
 - **Unity**: Good for stylized 3D, mobile 3D
 - **Unreal**: Best for photorealistic, AAA-quality 3D
 - **Godot**: Suitable for stylized 3D, indie games
 
 **Mobile Game:**
+
 - **Unity**: Industry standard for mobile
 - **Godot**: Lightweight, good performance
 - **Unreal**: Heavy, but possible for high-end mobile
@@ -129,29 +140,35 @@ Use this skill when:
 ### Question 2: Team Experience?
 
 **C# Developers:**
+
 - Unity (native C#)
 - Godot (C# support available)
 
 **C++ Developers:**
+
 - Unreal (native C++)
 - Godot (GDNative C++ bindings)
 
 **Python/Scripting Background:**
+
 - Godot (GDScript is Python-like)
 - Unity (C# is approachable)
 
 **Visual/Non-Programmers:**
+
 - Unreal (Blueprints visual scripting)
 - Unity (visual scripting with Bolt/Visual Scripting)
 
 ### Question 3: Budget and Licensing?
 
 **Free/Open Source:**
+
 - Godot (MIT license, completely free)
 - Unity (free Personal license <$100k revenue)
 - Unreal (5% royalty after $1M gross revenue)
 
 **Commercial:**
+
 - Unity (Plus/Pro subscriptions)
 - Unreal (5% royalty or custom license)
 - Godot (always free)
@@ -161,18 +178,21 @@ Use this skill when:
 ### Initialize New Project
 
 **Unity:**
+
 1. Use Unity Hub to create project with template
 2. Set up folder structure in Assets/
 3. Configure Project Settings (Player, Quality)
 4. See `references/unity-setup.md` for details
 
 **Unreal:**
+
 1. Launch Unreal Engine, select project template
 2. Configure project settings (Platform, Rendering)
 3. Organize Content/ folders
 4. See `references/unreal-setup.md` for details
 
 **Godot:**
+
 1. Create new project, select renderer (Vulkan/OpenGL)
 2. Set up folder structure in res://
 3. Configure Project Settings
@@ -181,6 +201,7 @@ Use this skill when:
 ### Create Player Controller
 
 **Unity (C#):**
+
 ```csharp
 // MonoBehaviour pattern
 public class PlayerController : MonoBehaviour {
@@ -195,11 +216,13 @@ public class PlayerController : MonoBehaviour {
 ```
 
 **Unreal (Blueprint/C++):**
+
 - Blueprint: Create Character Blueprint, add InputAction events
 - C++: Inherit from ACharacter, override SetupPlayerInputComponent
 - See `references/unreal-setup.md` for complete examples
 
 **Godot (GDScript):**
+
 ```gdscript
 extends KinematicBody2D
 
@@ -217,27 +240,32 @@ See `examples/player-controllers/` for complete implementations.
 ### Configure Build for Platforms
 
 **iOS:**
+
 - Unity: Player Settings → iOS, configure Bundle ID, signing
 - Unreal: Project Settings → iOS, provision profiles
 - See `references/build-pipelines.md` for complete guide
 
 **Android:**
+
 - Unity: Player Settings → Android, configure keystore
 - Unreal: Project Settings → Android, SDK/NDK paths
 - See `references/build-pipelines.md` for complete guide
 
 **Windows/Mac/Linux:**
+
 - Unity: Build Settings → Select platform, switch
 - Unreal: File → Package Project → Platform
 - Godot: Export → Add export template → Configure
 
 **Consoles (PS5, Xbox, Switch):**
+
 - Requires platform-specific SDKs and NDAs
 - See `references/build-pipelines.md` for workflow
 
 ### Set Up Version Control
 
 **Git for Unity:**
+
 1. Force text serialization: Edit → Project Settings → Asset Serialization → Force Text
 2. Enable Visible Meta Files: Edit → Project Settings → Version Control → Mode: Visible Meta Files
 3. Use .gitignore from `scripts/generate-gitignore.py unity`
@@ -245,12 +273,14 @@ See `examples/player-controllers/` for complete implementations.
 5. See `references/version-control.md` for complete setup
 
 **Git for Unreal:**
+
 1. Use Unreal's built-in Perforce support for teams
 2. For Git: Use .gitignore from `scripts/generate-gitignore.py unreal`
 3. Git LFS critical for Unreal (large binary assets)
 4. See `references/version-control.md` for complete setup
 
 **Git for Godot:**
+
 1. Use .gitignore from `scripts/generate-gitignore.py godot`
 2. Godot stores assets as text by default (Git-friendly)
 3. See `references/version-control.md` for complete setup
@@ -260,6 +290,7 @@ See `examples/player-controllers/` for complete implementations.
 ### Unity Patterns
 
 **Singleton Manager:**
+
 ```csharp
 public class GameManager : MonoBehaviour {
     public static GameManager Instance { get; private set; }
@@ -276,6 +307,7 @@ public class GameManager : MonoBehaviour {
 ```
 
 **State Machine:**
+
 - Use Animator Controller for animation-driven states
 - Custom enum-based state machine for game logic
 - See `references/scripting-patterns.md` for details
@@ -283,11 +315,13 @@ public class GameManager : MonoBehaviour {
 ### Unreal Patterns
 
 **Blueprint Interface:**
+
 - Create Blueprint Interface for common behaviors (IDamageable)
 - Implement interface on actors
 - Call interface functions without casting
 
 **C++ Component Pattern:**
+
 - Create UActorComponent subclasses for reusable logic
 - Attach to actors in editor or code
 - See `references/unreal-setup.md` for examples
@@ -295,6 +329,7 @@ public class GameManager : MonoBehaviour {
 ### Godot Patterns
 
 **Signal System:**
+
 ```gdscript
 # Define signal
 signal health_changed(new_health)
@@ -307,6 +342,7 @@ player.connect("health_changed", self, "_on_player_health_changed")
 ```
 
 **Autoload Singletons:**
+
 - Project Settings → AutoLoad → Add global script
 - Access from anywhere: GlobalScript.method()
 
@@ -315,12 +351,14 @@ player.connect("health_changed", self, "_on_player_health_changed")
 ### Local Development Builds
 
 **Unity:**
+
 ```bash
 # Command-line build
 Unity -quit -batchmode -projectPath /path/to/project -buildTarget Android -executeMethod BuildScript.Build
 ```
 
 **Unreal:**
+
 ```bash
 # Command-line build
 RunUAT BuildCookRun -project="MyProject.uproject" -platform=Win64 -build -cook -stage -pak
@@ -331,6 +369,7 @@ See `references/build-pipelines.md` for complete build scripts.
 ### CI/CD Integration
 
 **Unity with GitHub Actions:**
+
 ```yaml
 - uses: game-ci/unity-builder@v2
   with:
@@ -338,6 +377,7 @@ See `references/build-pipelines.md` for complete build scripts.
 ```
 
 **Unreal with Jenkins:**
+
 - Set up dedicated build machines
 - Use BuildGraph scripts
 - See `references/build-pipelines.md` for complete CI setup
@@ -345,12 +385,14 @@ See `references/build-pipelines.md` for complete build scripts.
 ### Build Optimization
 
 **Reduce Build Size:**
+
 - Strip unused code (IL2CPP stripping in Unity)
 - Compress textures (DXT, ASTC formats)
 - Use asset bundles/addressables for on-demand loading
 - See `references/performance.md` for optimization techniques
 
 **Build Performance:**
+
 - Incremental builds when possible
 - Cache dependencies
 - Parallelize build steps
@@ -361,10 +403,12 @@ See `references/build-pipelines.md` for complete build scripts.
 ### Unity Performance
 
 **Profiling:**
+
 - Window → Analysis → Profiler
 - Check CPU, GPU, Memory, Rendering
 
 **Common Optimizations:**
+
 - Object pooling for frequently instantiated objects
 - Occlusion culling for large scenes
 - LOD (Level of Detail) for 3D models
@@ -374,10 +418,12 @@ See `references/build-pipelines.md` for complete build scripts.
 ### Unreal Performance
 
 **Profiling:**
+
 - stat fps, stat unit, stat gpu
 - Session Frontend for detailed profiling
 
 **Common Optimizations:**
+
 - Hierarchical LOD (HLOD)
 - Lightmap baking
 - Nanite and Lumen for UE5
@@ -386,10 +432,12 @@ See `references/build-pipelines.md` for complete build scripts.
 ### Godot Performance
 
 **Profiling:**
+
 - Debug → Profiler
 - Monitor frame time and memory
 
 **Common Optimizations:**
+
 - VisibilityNotifier for off-screen culling
 - Simplified collision shapes
 - Texture compression
@@ -446,30 +494,35 @@ When setting up a new game project:
 ## Best Practices
 
 **Project Organization:**
+
 - Use clear, consistent naming conventions (PascalCase for C#, snake_case for GDScript)
 - Organize assets by type (Scripts, Textures, Models) not by feature
 - Keep scenes small and modular
 - Use prefabs/blueprints for reusable objects
 
 **Version Control:**
+
 - Commit early and often
 - Use Git LFS for files >100MB
 - Never commit build artifacts or engine binaries
 - Use meaningful commit messages
 
 **Build Management:**
+
 - Test builds on target hardware early
 - Automate builds with CI/CD
 - Version your builds (semantic versioning)
 - Keep build logs for debugging
 
 **Performance:**
+
 - Profile regularly during development
 - Optimize early for target platform constraints (mobile, VR)
 - Use asset compression appropriate for platform
 - Implement LOD and culling systems
 
 **Collaboration:**
+
 - Document project setup in README
 - Use consistent coding standards (linters, formatters)
 - Communicate engine and SDK version requirements
@@ -478,16 +531,19 @@ When setting up a new game project:
 ## Troubleshooting Common Issues
 
 **Unity:**
+
 - "Assembly not found": Check .asmdef files or reimport project
 - "Scene is not in build": Add scene to Build Settings
 - "Platform not installed": Install module via Unity Hub
 
 **Unreal:**
+
 - "Missing DLL": Regenerate Visual Studio project files
 - "Cooking failed": Clear intermediate and saved folders
 - "Can't package": Check project settings for platform
 
 **Godot:**
+
 - "Invalid resource path": Use res:// prefix
 - "Export template missing": Download export templates for engine version
 - "Script error": Check for typos, Godot is case-sensitive

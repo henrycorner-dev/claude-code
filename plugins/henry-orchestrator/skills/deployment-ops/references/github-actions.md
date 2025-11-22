@@ -7,6 +7,7 @@ Comprehensive guide to GitHub Actions workflows, reusable components, and market
 ### Event Types
 
 **Push and Pull Request:**
+
 ```yaml
 on:
   push:
@@ -19,13 +20,15 @@ on:
 ```
 
 **Scheduled Workflows:**
+
 ```yaml
 on:
   schedule:
-    - cron: '0 2 * * *'  # Daily at 2 AM UTC
+    - cron: '0 2 * * *' # Daily at 2 AM UTC
 ```
 
 **Manual Trigger with Inputs:**
+
 ```yaml
 on:
   workflow_dispatch:
@@ -43,6 +46,7 @@ on:
 ```
 
 **Repository Events:**
+
 ```yaml
 on:
   release:
@@ -58,6 +62,7 @@ on:
 ### Parallel Testing
 
 **Multiple Versions:**
+
 ```yaml
 jobs:
   test:
@@ -77,6 +82,7 @@ jobs:
 ```
 
 **Including/Excluding Combinations:**
+
 ```yaml
 strategy:
   matrix:
@@ -95,6 +101,7 @@ strategy:
 ### Dependency Caching
 
 **Node.js:**
+
 ```yaml
 - uses: actions/setup-node@v4
   with:
@@ -104,6 +111,7 @@ strategy:
 ```
 
 **Custom Cache:**
+
 ```yaml
 - uses: actions/cache@v4
   with:
@@ -116,6 +124,7 @@ strategy:
 ```
 
 **Python:**
+
 ```yaml
 - uses: actions/setup-python@v5
   with:
@@ -125,6 +134,7 @@ strategy:
 ```
 
 **Docker Layers:**
+
 ```yaml
 - uses: docker/setup-buildx-action@v3
 - uses: docker/build-push-action@v5
@@ -138,6 +148,7 @@ strategy:
 ### Defining Reusable Workflow
 
 Create `.github/workflows/reusable-test.yml`:
+
 ```yaml
 name: Reusable Test Workflow
 
@@ -156,7 +167,7 @@ on:
         required: true
     outputs:
       coverage:
-        description: "Test coverage percentage"
+        description: 'Test coverage percentage'
         value: ${{ jobs.test.outputs.coverage }}
 
 jobs:
@@ -207,6 +218,7 @@ jobs:
 ### Creating Custom Action
 
 Create `.github/actions/setup-project/action.yml`:
+
 ```yaml
 name: 'Setup Project'
 description: 'Install dependencies and cache'
@@ -256,6 +268,7 @@ jobs:
 ```
 
 **GitHub Settings:**
+
 - Set environment in repository settings
 - Add protection rules (required reviewers, wait timer)
 - Configure environment-specific secrets and variables
@@ -263,6 +276,7 @@ jobs:
 ### Secret Management
 
 **Using Secrets:**
+
 ```yaml
 steps:
   - name: Login to Registry
@@ -274,6 +288,7 @@ steps:
 ```
 
 **Multi-line Secrets:**
+
 ```yaml
 - name: Setup SSH Key
   run: |
@@ -432,6 +447,7 @@ steps:
 ### Code Quality
 
 **ESLint:**
+
 ```yaml
 - uses: actions/checkout@v4
 - uses: actions/setup-node@v4
@@ -442,6 +458,7 @@ steps:
 ```
 
 **SonarCloud:**
+
 ```yaml
 - uses: SonarSource/sonarcloud-github-action@master
   env:
@@ -452,6 +469,7 @@ steps:
 ### Security Scanning
 
 **Trivy:**
+
 ```yaml
 - uses: aquasecurity/trivy-action@master
   with:
@@ -465,6 +483,7 @@ steps:
 ```
 
 **Dependency Review:**
+
 ```yaml
 - uses: actions/dependency-review-action@v4
   if: github.event_name == 'pull_request'
@@ -473,6 +492,7 @@ steps:
 ### Notifications
 
 **Slack:**
+
 ```yaml
 - uses: slackapi/slack-github-action@v1
   with:
@@ -491,7 +511,7 @@ steps:
 ```yaml
 - uses: actions/checkout@v4
   with:
-    fetch-depth: 1  # Shallow clone
+    fetch-depth: 1 # Shallow clone
 ```
 
 ### Parallel Jobs
@@ -568,6 +588,7 @@ jobs:
 ## Best Practices
 
 **Security:**
+
 - Use pinned versions of actions (commit SHA)
 - Minimize GITHUB_TOKEN permissions
 - Use environments for production deployments
@@ -575,6 +596,7 @@ jobs:
 - Use OIDC for cloud provider authentication
 
 **Performance:**
+
 - Cache dependencies aggressively
 - Use shallow clones when possible
 - Run independent jobs in parallel
@@ -582,6 +604,7 @@ jobs:
 - Cancel outdated workflow runs
 
 **Maintainability:**
+
 - Create reusable workflows for common patterns
 - Use composite actions for repeated steps
 - Document workflow inputs and outputs
@@ -589,6 +612,7 @@ jobs:
 - Keep workflows under 1000 lines
 
 **Reliability:**
+
 - Set appropriate timeouts
 - Use fail-fast: false for non-critical matrices
 - Implement retry logic for flaky operations

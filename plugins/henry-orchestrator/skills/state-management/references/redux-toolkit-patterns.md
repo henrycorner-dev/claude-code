@@ -17,7 +17,7 @@ export const store = configureStore({
     user: userReducer,
     products: productsReducer,
   },
-  middleware: (getDefaultMiddleware) =>
+  middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: {
         // Ignore these action types
@@ -97,7 +97,7 @@ const userSlice = createSlice({
     updateName: (state, action: PayloadAction<string>) => {
       state.name = action.payload;
     },
-    logout: (state) => {
+    logout: state => {
       state.id = null;
       state.name = '';
       state.email = '';
@@ -142,7 +142,7 @@ const todosSlice = createSlice({
       },
     },
     toggleTodo: (state, action: PayloadAction<string>) => {
-      const todo = state.find((t) => t.id === action.payload);
+      const todo = state.find(t => t.id === action.payload);
       if (todo) {
         todo.completed = !todo.completed;
       }
@@ -191,9 +191,9 @@ const productsSlice = createSlice({
   name: 'products',
   initialState,
   reducers: {},
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
-      .addCase(fetchProducts.pending, (state) => {
+      .addCase(fetchProducts.pending, state => {
         state.loading = 'pending';
         state.error = null;
       })
@@ -228,7 +228,7 @@ export const createProduct = createAsyncThunk(
 );
 
 // In slice:
-extraReducers: (builder) => {
+extraReducers: builder => {
   builder
     .addCase(createProduct.fulfilled, (state, action) => {
       state.items.push(action.payload);
@@ -236,7 +236,7 @@ extraReducers: (builder) => {
     .addCase(createProduct.rejected, (state, action) => {
       state.error = action.payload as string;
     });
-}
+};
 ```
 
 ### Async Thunk with ThunkAPI
@@ -313,41 +313,35 @@ import { RootState } from '../../store';
 export const selectProducts = (state: RootState) => state.products.items;
 
 // Memoized - only recalculates when products change
-export const selectExpensiveProducts = createSelector(
-  [selectProducts],
-  (products) => products.filter((p) => p.price > 100)
+export const selectExpensiveProducts = createSelector([selectProducts], products =>
+  products.filter(p => p.price > 100)
 );
 
 // Selector with parameters
 export const selectProductsByCategory = createSelector(
   [selectProducts, (state: RootState, categoryId: string) => categoryId],
-  (products, categoryId) => products.filter((p) => p.categoryId === categoryId)
+  (products, categoryId) => products.filter(p => p.categoryId === categoryId)
 );
 
 // Usage in component:
-const expensiveProducts = useAppSelector((state) =>
-  selectProductsByCategory(state, 'electronics')
-);
+const expensiveProducts = useAppSelector(state => selectProductsByCategory(state, 'electronics'));
 ```
 
 ### Complex Selectors
 
 ```typescript
-export const selectProductStats = createSelector(
-  [selectProducts],
-  (products) => {
-    const total = products.length;
-    const totalValue = products.reduce((sum, p) => sum + p.price, 0);
-    const averagePrice = total > 0 ? totalValue / total : 0;
+export const selectProductStats = createSelector([selectProducts], products => {
+  const total = products.length;
+  const totalValue = products.reduce((sum, p) => sum + p.price, 0);
+  const averagePrice = total > 0 ? totalValue / total : 0;
 
-    return {
-      total,
-      totalValue,
-      averagePrice,
-      mostExpensive: products.reduce((max, p) => (p.price > max.price ? p : max), products[0]),
-    };
-  }
-);
+  return {
+    total,
+    totalValue,
+    averagePrice,
+    mostExpensive: products.reduce((max, p) => (p.price > max.price ? p : max), products[0]),
+  };
+});
 ```
 
 ## Component Integration
@@ -418,7 +412,7 @@ interface Product {
 }
 
 const productsAdapter = createEntityAdapter<Product>({
-  selectId: (product) => product.id,
+  selectId: product => product.id,
   sortComparer: (a, b) => a.name.localeCompare(b.name),
 });
 
@@ -440,9 +434,9 @@ const productsSlice = createSlice({
     productUpdated: productsAdapter.updateOne,
     productRemoved: productsAdapter.removeOne,
   },
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
-      .addCase(fetchProducts.pending, (state) => {
+      .addCase(fetchProducts.pending, state => {
         state.loading = 'pending';
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
@@ -471,7 +465,7 @@ export default productsSlice.reducer;
 ```typescript
 import { Middleware } from '@reduxjs/toolkit';
 
-const loggerMiddleware: Middleware = (storeAPI) => (next) => (action) => {
+const loggerMiddleware: Middleware = storeAPI => next => action => {
   console.log('Dispatching:', action);
   const result = next(action);
   console.log('Next state:', storeAPI.getState());
@@ -481,15 +475,14 @@ const loggerMiddleware: Middleware = (storeAPI) => (next) => (action) => {
 // Add to store:
 export const store = configureStore({
   reducer: rootReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(loggerMiddleware),
+  middleware: getDefaultMiddleware => getDefaultMiddleware().concat(loggerMiddleware),
 });
 ```
 
 ### API Middleware Example
 
 ```typescript
-const apiMiddleware: Middleware = (storeAPI) => (next) => async (action) => {
+const apiMiddleware: Middleware = storeAPI => next => async action => {
   if (action.type.endsWith('/rejected')) {
     // Handle all rejected async thunks
     if (action.error.message === 'Unauthorized') {
@@ -511,17 +504,17 @@ export const productsApi = createApi({
   reducerPath: 'productsApi',
   baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
   tagTypes: ['Product'],
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     getProducts: builder.query<Product[], void>({
       query: () => 'products',
       providesTags: ['Product'],
     }),
     getProduct: builder.query<Product, string>({
-      query: (id) => `products/${id}`,
+      query: id => `products/${id}`,
       providesTags: (result, error, id) => [{ type: 'Product', id }],
     }),
     createProduct: builder.mutation<Product, Omit<Product, 'id'>>({
-      query: (product) => ({
+      query: product => ({
         url: 'products',
         method: 'POST',
         body: product,
@@ -551,8 +544,7 @@ export const store = configureStore({
   reducer: {
     [productsApi.reducerPath]: productsApi.reducer,
   },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(productsApi.middleware),
+  middleware: getDefaultMiddleware => getDefaultMiddleware().concat(productsApi.middleware),
 });
 ```
 

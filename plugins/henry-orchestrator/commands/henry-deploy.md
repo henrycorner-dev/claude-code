@@ -1,6 +1,7 @@
 ---
 description: One-click deploy (Vercel/Netlify/Heroku/App Stores); CI/CD setup
-allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "AskUserQuestion", "TodoWrite", "WebFetch"]
+allowed-tools:
+  ['Read', 'Write', 'Edit', 'Bash', 'Glob', 'Grep', 'AskUserQuestion', 'TodoWrite', 'WebFetch']
 ---
 
 You are an expert deployment and DevOps engineer. Your task is to deploy the application to the user's chosen platform and set up CI/CD pipelines.
@@ -10,13 +11,16 @@ You are an expert deployment and DevOps engineer. Your task is to deploy the app
 Follow these steps to deploy the application:
 
 ### 1. Project Analysis
+
 - Analyze the project structure and detect the application type (web, mobile, full-stack)
 - Check for existing deployment configurations
 - Identify the tech stack (React, Next.js, Node.js, React Native, Flutter, etc.)
 - Review package.json, build scripts, and environment requirements
 
 ### 2. Platform Selection
+
 Use the AskUserQuestion tool to determine:
+
 - Which deployment platform(s) to use:
   - **Vercel**: Best for Next.js, React, static sites
   - **Netlify**: Great for static sites, JAMstack, serverless functions
@@ -32,6 +36,7 @@ Use the AskUserQuestion tool to determine:
 ### 3. Pre-deployment Setup
 
 #### For Web Applications:
+
 - Create/verify build configuration
 - Set up environment variables template (.env.example)
 - Configure build output directory
@@ -39,6 +44,7 @@ Use the AskUserQuestion tool to determine:
 - Set up analytics and monitoring (optional)
 
 #### For Mobile Applications:
+
 - Configure app signing (Android keystore, iOS certificates)
 - Set up app icons and splash screens
 - Configure app metadata (version, build number)
@@ -47,6 +53,7 @@ Use the AskUserQuestion tool to determine:
 ### 4. Platform-Specific Deployment
 
 #### Vercel Deployment:
+
 ```bash
 # Install Vercel CLI if needed
 npm i -g vercel
@@ -61,6 +68,7 @@ vercel env add VARIABLE_NAME
 Create `vercel.json` configuration if needed for advanced routing, headers, redirects.
 
 #### Netlify Deployment:
+
 ```bash
 # Install Netlify CLI
 npm i -g netlify-cli
@@ -75,6 +83,7 @@ netlify env:set VARIABLE_NAME value
 Create `netlify.toml` for build configuration, redirects, headers.
 
 #### Heroku Deployment:
+
 ```bash
 # Login and create app
 heroku login
@@ -96,6 +105,7 @@ heroku addons:create heroku-postgresql
 Create `Procfile` for process configuration.
 
 #### Railway Deployment:
+
 ```bash
 # Install Railway CLI
 npm i -g @railway/cli
@@ -112,6 +122,7 @@ railway variables set VARIABLE_NAME=value
 ```
 
 #### Fly.io Deployment:
+
 ```bash
 # Install flyctl
 # Deploy
@@ -127,6 +138,7 @@ Create `fly.toml` and `Dockerfile` if needed.
 #### Mobile App Store Deployment:
 
 **Android (Google Play):**
+
 ```bash
 # Build release APK/AAB
 cd android
@@ -142,6 +154,7 @@ eas build --platform android
 Set up Google Play Console, upload AAB, configure store listing.
 
 **iOS (App Store):**
+
 ```bash
 # Build for App Store
 cd ios
@@ -158,6 +171,7 @@ eas submit --platform ios
 Set up App Store Connect, configure metadata, screenshots, submit for review.
 
 **Expo EAS (Both Platforms):**
+
 ```bash
 # Install EAS CLI
 npm install -g eas-cli
@@ -175,6 +189,7 @@ eas submit --platform all
 ### 5. CI/CD Pipeline Setup
 
 #### GitHub Actions:
+
 Create `.github/workflows/deploy.yml`:
 
 ```yaml
@@ -217,6 +232,7 @@ jobs:
 ```
 
 #### GitLab CI:
+
 Create `.gitlab-ci.yml`:
 
 ```yaml
@@ -243,6 +259,7 @@ deploy:
 ```
 
 #### For Mobile CI/CD:
+
 Configure EAS Build, Fastlane, or platform-specific CI/CD:
 
 ```bash
@@ -269,6 +286,7 @@ fastlane init
 ### 7. Environment Variables Management
 
 Create comprehensive environment variable documentation:
+
 - Development variables (.env.local)
 - Production variables (platform secrets)
 - Required vs optional variables
@@ -277,6 +295,7 @@ Create comprehensive environment variable documentation:
 ### 8. Rollback Strategy
 
 Document rollback procedures:
+
 - How to revert to previous deployment
 - Database migration rollback (if applicable)
 - Environment variable restoration
@@ -285,6 +304,7 @@ Document rollback procedures:
 ### 9. Final Checklist
 
 Provide the user with:
+
 - [ ] Deployment successful and verified
 - [ ] Environment variables configured
 - [ ] Custom domain configured (if applicable)
@@ -308,6 +328,7 @@ Provide the user with:
 ## Output
 
 Provide the user with:
+
 - Deployment URL(s)
 - CI/CD pipeline status
 - Configuration files created

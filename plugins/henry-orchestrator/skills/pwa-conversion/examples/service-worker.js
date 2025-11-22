@@ -11,47 +11,53 @@ const PRECACHE_ASSETS = [
   '/offline.html',
   '/manifest.json',
   '/icon-192x192.png',
-  '/icon-512x512.png'
+  '/icon-512x512.png',
 ];
 
 // Install event - cache essential assets
-self.addEventListener('install', (event) => {
+self.addEventListener('install', event => {
   console.log('[SW] Installing service worker...');
 
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      console.log('[SW] Precaching assets');
-      return cache.addAll(PRECACHE_ASSETS);
-    }).then(() => {
-      // Force the waiting service worker to become the active service worker
-      return self.skipWaiting();
-    })
+    caches
+      .open(CACHE_NAME)
+      .then(cache => {
+        console.log('[SW] Precaching assets');
+        return cache.addAll(PRECACHE_ASSETS);
+      })
+      .then(() => {
+        // Force the waiting service worker to become the active service worker
+        return self.skipWaiting();
+      })
   );
 });
 
 // Activate event - clean up old caches
-self.addEventListener('activate', (event) => {
+self.addEventListener('activate', event => {
   console.log('[SW] Activating service worker...');
 
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames
-          .filter((name) => name !== CACHE_NAME)
-          .map((name) => {
-            console.log('[SW] Deleting old cache:', name);
-            return caches.delete(name);
-          })
-      );
-    }).then(() => {
-      // Take control of all pages immediately
-      return self.clients.claim();
-    })
+    caches
+      .keys()
+      .then(cacheNames => {
+        return Promise.all(
+          cacheNames
+            .filter(name => name !== CACHE_NAME)
+            .map(name => {
+              console.log('[SW] Deleting old cache:', name);
+              return caches.delete(name);
+            })
+        );
+      })
+      .then(() => {
+        // Take control of all pages immediately
+        return self.clients.claim();
+      })
   );
 });
 
 // Fetch event - serve from cache with network fallback
-self.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', event => {
   const { request } = event;
   const url = new URL(request.url);
 
@@ -78,10 +84,12 @@ async function handleFetch(request) {
   }
 
   // Static assets (images, fonts, CSS, JS): Cache First
-  if (request.destination === 'image' ||
-      request.destination === 'font' ||
-      request.destination === 'style' ||
-      request.destination === 'script') {
+  if (
+    request.destination === 'image' ||
+    request.destination === 'font' ||
+    request.destination === 'style' ||
+    request.destination === 'script'
+  ) {
     return cacheFirst(request);
   }
 
@@ -155,21 +163,23 @@ async function staleWhileRevalidate(request) {
   const cached = await cache.match(request);
 
   // Fetch fresh version in background
-  const fetchPromise = fetch(request).then((response) => {
-    if (response.ok) {
-      cache.put(request, response.clone());
-    }
-    return response;
-  }).catch((error) => {
-    console.error('[SW] Background fetch failed:', error);
-  });
+  const fetchPromise = fetch(request)
+    .then(response => {
+      if (response.ok) {
+        cache.put(request, response.clone());
+      }
+      return response;
+    })
+    .catch(error => {
+      console.error('[SW] Background fetch failed:', error);
+    });
 
   // Return cached version immediately, or wait for network
   return cached || fetchPromise || cache.match(OFFLINE_URL);
 }
 
 // Push notification event
-self.addEventListener('push', (event) => {
+self.addEventListener('push', event => {
   console.log('[SW] Push notification received');
 
   if (!event.data) {
@@ -187,44 +197,41 @@ self.addEventListener('push', (event) => {
     vibrate: data.vibrate || [200, 100, 200],
     data: {
       url: data.url || '/',
-      timestamp: Date.now()
+      timestamp: Date.now(),
     },
     actions: data.actions || [],
     tag: data.tag || 'default-notification',
-    requireInteraction: data.requireInteraction || false
+    requireInteraction: data.requireInteraction || false,
   };
 
-  event.waitUntil(
-    self.registration.showNotification(data.title || 'Notification', options)
-  );
+  event.waitUntil(self.registration.showNotification(data.title || 'Notification', options));
 });
 
 // Notification click event
-self.addEventListener('notificationclick', (event) => {
+self.addEventListener('notificationclick', event => {
   console.log('[SW] Notification clicked:', event.notification.tag);
   event.notification.close();
 
   const urlToOpen = event.notification.data.url || '/';
 
   event.waitUntil(
-    clients.matchAll({ type: 'window', includeUncontrolled: true })
-      .then((clientList) => {
-        // Check if there's already a window open
-        for (let client of clientList) {
-          if (client.url === urlToOpen && 'focus' in client) {
-            return client.focus();
-          }
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(clientList => {
+      // Check if there's already a window open
+      for (let client of clientList) {
+        if (client.url === urlToOpen && 'focus' in client) {
+          return client.focus();
         }
-        // Open new window
-        if (clients.openWindow) {
-          return clients.openWindow(urlToOpen);
-        }
-      })
+      }
+      // Open new window
+      if (clients.openWindow) {
+        return clients.openWindow(urlToOpen);
+      }
+    })
   );
 });
 
 // Background sync event
-self.addEventListener('sync', (event) => {
+self.addEventListener('sync', event => {
   console.log('[SW] Sync event fired:', event.tag);
 
   if (event.tag === 'sync-data') {
@@ -240,8 +247,8 @@ async function syncData() {
     const response = await fetch('/api/sync', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     });
 
     if (response.ok) {
@@ -251,7 +258,7 @@ async function syncData() {
       self.registration.showNotification('Sync Complete', {
         body: 'Your data has been synchronized',
         icon: '/icon-192x192.png',
-        tag: 'sync-complete'
+        tag: 'sync-complete',
       });
     }
   } catch (error) {
@@ -261,7 +268,7 @@ async function syncData() {
 }
 
 // Message event - handle messages from clients
-self.addEventListener('message', (event) => {
+self.addEventListener('message', event => {
   console.log('[SW] Message received:', event.data);
 
   if (event.data.type === 'SKIP_WAITING') {
@@ -270,7 +277,7 @@ self.addEventListener('message', (event) => {
 
   if (event.data.type === 'CACHE_URLS') {
     event.waitUntil(
-      caches.open(CACHE_NAME).then((cache) => {
+      caches.open(CACHE_NAME).then(cache => {
         return cache.addAll(event.data.urls);
       })
     );
@@ -278,10 +285,8 @@ self.addEventListener('message', (event) => {
 
   if (event.data.type === 'CLEAR_CACHE') {
     event.waitUntil(
-      caches.keys().then((cacheNames) => {
-        return Promise.all(
-          cacheNames.map((name) => caches.delete(name))
-        );
+      caches.keys().then(cacheNames => {
+        return Promise.all(cacheNames.map(name => caches.delete(name)));
       })
     );
   }

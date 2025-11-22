@@ -13,6 +13,7 @@ This skill provides guidance for implementing server-side logic, creating robust
 ## When to Use This Skill
 
 Use this skill when implementing:
+
 - RESTful or GraphQL APIs
 - Authentication and authorization systems
 - Business logic and data validation
@@ -76,6 +77,7 @@ Implement security best practices:
 ### Node.js/Express
 
 **Project Structure:**
+
 ```
 src/
 ├── controllers/    # Request handlers
@@ -89,6 +91,7 @@ src/
 ```
 
 **Key Practices:**
+
 - Use async/await for asynchronous operations
 - Implement error-handling middleware
 - Use environment variables with dotenv
@@ -101,6 +104,7 @@ src/
 ### Python/Django
 
 **Project Structure:**
+
 ```
 project/
 ├── app/
@@ -115,6 +119,7 @@ project/
 ```
 
 **Key Practices:**
+
 - Use Django REST Framework for APIs
 - Leverage Django ORM for database operations
 - Use class-based views for complex logic
@@ -129,6 +134,7 @@ project/
 ### Go/Gin
 
 **Project Structure:**
+
 ```
 project/
 ├── handlers/      # HTTP handlers
@@ -141,6 +147,7 @@ project/
 ```
 
 **Key Practices:**
+
 - Use structured logging
 - Handle errors explicitly
 - Use context for request-scoped values
@@ -159,17 +166,20 @@ project/
 Follow REST conventions:
 
 **Resource naming:**
+
 - Use plural nouns for collections: `/api/users`, `/api/products`
 - Use path parameters for specific resources: `/api/users/:id`
 - Use query parameters for filtering: `/api/users?role=admin`
 
 **HTTP methods:**
+
 - GET - Retrieve resources
 - POST - Create new resources
 - PUT/PATCH - Update existing resources
 - DELETE - Remove resources
 
 **Status codes:**
+
 - 200 OK - Successful GET, PUT, PATCH
 - 201 Created - Successful POST
 - 204 No Content - Successful DELETE
@@ -182,6 +192,7 @@ Follow REST conventions:
 ### Authentication Patterns
 
 **JWT (JSON Web Tokens):**
+
 - Issue tokens on successful login
 - Include claims (user ID, roles, expiry)
 - Verify token on protected routes
@@ -189,12 +200,14 @@ Follow REST conventions:
 - Store tokens securely on client
 
 **Session-based:**
+
 - Use secure session cookies
 - Store session data server-side
 - Implement session expiration
 - Clear sessions on logout
 
 **OAuth 2.0:**
+
 - Use for third-party authentication
 - Implement authorization code flow
 - Securely store access and refresh tokens
@@ -202,6 +215,7 @@ Follow REST conventions:
 ### Database Operations
 
 **ORM Best Practices:**
+
 - Use transactions for related operations
 - Implement proper indexing
 - Avoid N+1 queries with eager loading
@@ -209,6 +223,7 @@ Follow REST conventions:
 - Handle connection errors gracefully
 
 **Query Optimization:**
+
 - Select only needed fields
 - Use pagination for large datasets
 - Implement caching for frequent queries
@@ -218,6 +233,7 @@ Follow REST conventions:
 ### API Integration
 
 **Making External API Calls:**
+
 - Use HTTP client libraries (axios, requests, http package)
 - Implement retry logic with exponential backoff
 - Set appropriate timeouts
@@ -229,6 +245,7 @@ Follow REST conventions:
 ### Middleware Implementation
 
 **Common middleware types:**
+
 - Authentication/Authorization
 - Request logging
 - Error handling
@@ -238,6 +255,7 @@ Follow REST conventions:
 - Request ID generation
 
 **Middleware ordering matters** - Apply in this sequence:
+
 1. CORS and security headers
 2. Request logging
 3. Authentication
@@ -251,6 +269,7 @@ Follow REST conventions:
 ### Unit Tests
 
 Test individual functions and methods:
+
 - Mock external dependencies (database, APIs)
 - Test business logic in isolation
 - Cover edge cases and error conditions
@@ -259,6 +278,7 @@ Test individual functions and methods:
 ### Integration Tests
 
 Test component interactions:
+
 - Test API endpoints end-to-end
 - Use test database or in-memory database
 - Test authentication flows
@@ -276,18 +296,21 @@ Test component interactions:
 ### Optimization Strategies
 
 **Caching:**
+
 - Cache expensive computations
 - Use Redis for distributed caching
 - Implement cache invalidation strategies
 - Cache API responses appropriately
 
 **Async Operations:**
+
 - Use background jobs for long-running tasks
 - Implement message queues (RabbitMQ, Redis Queue)
 - Process tasks asynchronously
 - Return immediate responses for queued work
 
 **Database Performance:**
+
 - Add appropriate indexes
 - Use connection pooling
 - Optimize queries
@@ -295,6 +318,7 @@ Test component interactions:
 - Use database-specific features
 
 **Load Balancing:**
+
 - Design stateless services
 - Use horizontal scaling
 - Implement health checks
@@ -305,6 +329,7 @@ Test component interactions:
 ### Structured Logging
 
 Implement consistent logging:
+
 - Use structured log formats (JSON)
 - Include context (request ID, user ID, timestamp)
 - Log at appropriate levels (debug, info, warn, error)
@@ -314,6 +339,7 @@ Implement consistent logging:
 ### Monitoring
 
 Track key metrics:
+
 - Response times
 - Error rates
 - Request volume
@@ -326,6 +352,7 @@ Track key metrics:
 ### Reference Files
 
 For framework-specific implementation details:
+
 - **`references/nodejs-express.md`** - Node.js/Express patterns, middleware, and examples
 - **`references/python-django.md`** - Django/DRF patterns, views, and examples
 - **`references/go-gin.md`** - Go/Gin patterns, handlers, and examples
@@ -333,6 +360,7 @@ For framework-specific implementation details:
 ### Example Files
 
 Complete working examples:
+
 - **`examples/express-api/`** - Full Express REST API with authentication
 - **`examples/django-api/`** - Django REST Framework API example
 - **`examples/gin-api/`** - Go/Gin API with middleware
@@ -359,6 +387,7 @@ When building backend features:
 ### CRUD Operations
 
 Implement standard Create, Read, Update, Delete endpoints:
+
 - Use appropriate HTTP methods
 - Validate input data
 - Handle not found errors
@@ -368,6 +397,7 @@ Implement standard Create, Read, Update, Delete endpoints:
 ### File Uploads
 
 Handle file uploads securely:
+
 - Validate file types and sizes
 - Use multipart form data
 - Store files appropriately (local, S3, etc.)
@@ -377,6 +407,7 @@ Handle file uploads securely:
 ### Pagination
 
 Implement pagination for list endpoints:
+
 - Use cursor or offset-based pagination
 - Return metadata (total count, page info)
 - Set reasonable default and maximum page sizes
@@ -385,6 +416,7 @@ Implement pagination for list endpoints:
 ### Search and Filtering
 
 Implement search functionality:
+
 - Support query parameters for filtering
 - Use database full-text search or search engines (Elasticsearch)
 - Implement sorting options
@@ -393,6 +425,7 @@ Implement search functionality:
 ### Background Jobs
 
 Process long-running tasks asynchronously:
+
 - Use job queues (Bull, Celery, custom solutions)
 - Return job ID immediately
 - Provide job status endpoints
@@ -434,11 +467,13 @@ Before deploying backend code:
 ### Common HTTP Headers
 
 **Request:**
+
 - `Content-Type: application/json`
 - `Authorization: Bearer <token>`
 - `Accept: application/json`
 
 **Response:**
+
 - `Content-Type: application/json`
 - `Cache-Control: no-cache`
 - `X-Request-ID: <uuid>`
@@ -446,6 +481,7 @@ Before deploying backend code:
 ### Environment Variables
 
 Common variables to configure:
+
 - `PORT` - Server port
 - `DATABASE_URL` - Database connection string
 - `JWT_SECRET` - Secret for signing tokens
@@ -457,6 +493,7 @@ Common variables to configure:
 ## Best Practices Summary
 
 **DO:**
+
 - Validate all input data
 - Use appropriate HTTP status codes
 - Implement proper error handling
@@ -471,6 +508,7 @@ Common variables to configure:
 - Optimize database queries
 
 **DON'T:**
+
 - Expose sensitive information in errors
 - Store secrets in code
 - Trust user input without validation

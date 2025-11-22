@@ -125,9 +125,7 @@ test.describe('E-commerce Checkout Flow', () => {
 
     // Wait for order confirmation
     await expect(page).toHaveURL(/\/orders\/[a-z0-9-]+/);
-    await expect(
-      page.getByRole('heading', { name: 'Order Confirmed!' })
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Order Confirmed!' })).toBeVisible();
 
     // Verify order details
     await expect(page.getByText('Order Number:')).toBeVisible();
@@ -137,10 +135,12 @@ test.describe('E-commerce Checkout Flow', () => {
   test('cart persists across page navigation', async ({ page }) => {
     // Add items to cart
     await page.goto('/products');
-    await page.locator('.product-card').first()
-      .getByRole('button', { name: 'Add to Cart' }).click();
-    await page.locator('.product-card').nth(1)
-      .getByRole('button', { name: 'Add to Cart' }).click();
+    await page
+      .locator('.product-card')
+      .first()
+      .getByRole('button', { name: 'Add to Cart' })
+      .click();
+    await page.locator('.product-card').nth(1).getByRole('button', { name: 'Add to Cart' }).click();
 
     // Navigate away
     await page.goto('/dashboard');
@@ -155,8 +155,11 @@ test.describe('E-commerce Checkout Flow', () => {
   test('can update item quantity in cart', async ({ page }) => {
     // Add item to cart
     await page.goto('/products');
-    await page.locator('.product-card').first()
-      .getByRole('button', { name: 'Add to Cart' }).click();
+    await page
+      .locator('.product-card')
+      .first()
+      .getByRole('button', { name: 'Add to Cart' })
+      .click();
 
     // Go to cart
     await page.goto('/cart');
@@ -173,18 +176,19 @@ test.describe('E-commerce Checkout Flow', () => {
   test('can remove item from cart', async ({ page }) => {
     // Add items
     await page.goto('/products');
-    await page.locator('.product-card').first()
-      .getByRole('button', { name: 'Add to Cart' }).click();
-    await page.locator('.product-card').nth(1)
-      .getByRole('button', { name: 'Add to Cart' }).click();
+    await page
+      .locator('.product-card')
+      .first()
+      .getByRole('button', { name: 'Add to Cart' })
+      .click();
+    await page.locator('.product-card').nth(1).getByRole('button', { name: 'Add to Cart' }).click();
 
     // Go to cart
     await page.goto('/cart');
     await expect(page.locator('.cart-item')).toHaveCount(2);
 
     // Remove first item
-    await page.locator('.cart-item').first()
-      .getByRole('button', { name: 'Remove' }).click();
+    await page.locator('.cart-item').first().getByRole('button', { name: 'Remove' }).click();
 
     // Verify item removed
     await expect(page.locator('.cart-item')).toHaveCount(1);
@@ -193,8 +197,11 @@ test.describe('E-commerce Checkout Flow', () => {
   test('shows validation errors for incomplete checkout', async ({ page }) => {
     // Add item and go to checkout
     await page.goto('/products');
-    await page.locator('.product-card').first()
-      .getByRole('button', { name: 'Add to Cart' }).click();
+    await page
+      .locator('.product-card')
+      .first()
+      .getByRole('button', { name: 'Add to Cart' })
+      .click();
     await page.goto('/cart');
     await page.getByRole('button', { name: 'Proceed to Checkout' }).click();
 

@@ -20,16 +20,19 @@ Comprehensive guide to optimizing performance across Next.js, Nuxt, SvelteKit, A
 Focus on three critical metrics:
 
 **Largest Contentful Paint (LCP)** - Loading performance
+
 - Target: < 2.5 seconds
 - Measures: Time to render largest content element
 - Optimize: Reduce server response time, optimize images, eliminate render-blocking resources
 
 **First Input Delay (FID) / Interaction to Next Paint (INP)** - Interactivity
+
 - Target: < 100ms (FID), < 200ms (INP)
 - Measures: Time from user interaction to browser response
 - Optimize: Reduce JavaScript execution time, code splitting, defer non-critical JS
 
 **Cumulative Layout Shift (CLS)** - Visual stability
+
 - Target: < 0.1
 - Measures: Unexpected layout shifts
 - Optimize: Set dimensions for images/videos, avoid injecting content, use CSS transforms
@@ -37,18 +40,22 @@ Focus on three critical metrics:
 ### Additional Metrics
 
 **Time to First Byte (TTFB)**
+
 - Server response time
 - Target: < 600ms
 
 **First Contentful Paint (FCP)**
+
 - First content rendered
 - Target: < 1.8 seconds
 
 **Total Blocking Time (TBT)**
+
 - Main thread blocking time
 - Target: < 200ms
 
 **Speed Index**
+
 - How quickly content is visually displayed
 - Target: < 3.4 seconds
 
@@ -76,9 +83,7 @@ const HeavyComponent = dynamic(() => import('@/components/HeavyComponent'), {
 ```vue
 <script setup lang="ts">
 // Lazy load component
-const HeavyComponent = defineAsyncComponent(
-  () => import('~/components/HeavyComponent.vue')
-)
+const HeavyComponent = defineAsyncComponent(() => import('~/components/HeavyComponent.vue'));
 </script>
 
 <template>
@@ -112,16 +117,16 @@ Ensure imports are tree-shakeable:
 
 ```typescript
 // Bad - imports entire library
-import _ from 'lodash'
-const result = _.debounce(fn, 100)
+import _ from 'lodash';
+const result = _.debounce(fn, 100);
 
 // Good - imports only needed function
-import { debounce } from 'lodash-es'
-const result = debounce(fn, 100)
+import { debounce } from 'lodash-es';
+const result = debounce(fn, 100);
 
 // Better - direct import
-import debounce from 'lodash-es/debounce'
-const result = debounce(fn, 100)
+import debounce from 'lodash-es/debounce';
+const result = debounce(fn, 100);
 ```
 
 ### Bundle Analysis
@@ -148,9 +153,9 @@ ANALYZE=true npm run build
 // nuxt.config.ts
 export default defineNuxtConfig({
   build: {
-    analyze: true
-  }
-})
+    analyze: true,
+  },
+});
 ```
 
 **SvelteKit:**
@@ -259,11 +264,7 @@ import heroImage from '../assets/hero.jpg'
 ```html
 <img
   src="/hero-800.jpg"
-  srcset="
-    /hero-400.jpg 400w,
-    /hero-800.jpg 800w,
-    /hero-1200.jpg 1200w
-  "
+  srcset="/hero-400.jpg 400w, /hero-800.jpg 800w, /hero-1200.jpg 1200w"
   sizes="(max-width: 600px) 400px, (max-width: 1000px) 800px, 1200px"
   alt="Hero"
   loading="lazy"
@@ -301,10 +302,10 @@ async function getData() {
   const [user, posts, comments] = await Promise.all([
     fetch('/api/user').then(r => r.json()),
     fetch('/api/posts').then(r => r.json()),
-    fetch('/api/comments').then(r => r.json())
-  ])
+    fetch('/api/comments').then(r => r.json()),
+  ]);
 
-  return { user, posts, comments }
+  return { user, posts, comments };
 }
 ```
 
@@ -316,16 +317,16 @@ async function getData() {
 // Multiple components fetching same data = single request
 async function getUser() {
   const res = await fetch('/api/user', {
-    cache: 'force-cache'
-  })
-  return res.json()
+    cache: 'force-cache',
+  });
+  return res.json();
 }
 
 // Component A
-const user = await getUser()
+const user = await getUser();
 
 // Component B (same request, deduped)
-const user = await getUser()
+const user = await getUser();
 ```
 
 **Nuxt:**
@@ -333,8 +334,8 @@ const user = await getUser()
 ```typescript
 // Automatic deduplication
 const { data } = await useFetch('/api/user', {
-  key: 'user' // Same key = deduped
-})
+  key: 'user', // Same key = deduped
+});
 ```
 
 ### Streaming and Suspense
@@ -426,13 +427,13 @@ import { Link } from '@remix-run/react'
 ```typescript
 // Next.js Route Handler
 export async function GET() {
-  const data = await fetchData()
+  const data = await fetchData();
 
   return Response.json(data, {
     headers: {
-      'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=30'
-    }
-  })
+      'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=30',
+    },
+  });
 }
 ```
 
@@ -442,13 +443,13 @@ export async function GET() {
 
 ```typescript
 // Revalidate every 60 seconds
-export const revalidate = 60
+export const revalidate = 60;
 
 async function getData() {
   const res = await fetch('/api/data', {
-    next: { revalidate: 60 }
-  })
-  return res.json()
+    next: { revalidate: 60 },
+  });
+  return res.json();
 }
 ```
 
@@ -459,10 +460,10 @@ async function getData() {
 export default defineNuxtConfig({
   routeRules: {
     '/blog/**': {
-      swr: 3600  // Stale-while-revalidate for 1 hour
-    }
-  }
-})
+      swr: 3600, // Stale-while-revalidate for 1 hour
+    },
+  },
+});
 ```
 
 ### CDN Caching
@@ -473,9 +474,9 @@ return new Response(html, {
   headers: {
     'Cache-Control': 'public, max-age=0, s-maxage=3600, stale-while-revalidate=86400',
     'CDN-Cache-Control': 'max-age=3600',
-    'Vercel-CDN-Cache-Control': 'max-age=3600'
-  }
-})
+    'Vercel-CDN-Cache-Control': 'max-age=3600',
+  },
+});
 ```
 
 ### Client-Side Caching
@@ -504,11 +505,11 @@ function Profile() {
 ```typescript
 const { data } = await useFetch('/api/user', {
   key: 'user',
-  getCachedData: (key) => {
+  getCachedData: key => {
     // Custom cache logic
-    return useNuxtData(key).data
-  }
-})
+    return useNuxtData(key).data;
+  },
+});
 ```
 
 ## Runtime Optimization
@@ -520,13 +521,13 @@ const { data } = await useFetch('/api/user', {
 ```typescript
 // Split heavy computations
 async function heavyComputation(data) {
-  const chunks = chunkArray(data, 100)
+  const chunks = chunkArray(data, 100);
 
   for (const chunk of chunks) {
-    await processChunk(chunk)
+    await processChunk(chunk);
 
     // Yield to main thread
-    await new Promise(resolve => setTimeout(resolve, 0))
+    await new Promise(resolve => setTimeout(resolve, 0));
   }
 }
 ```
@@ -535,18 +536,18 @@ async function heavyComputation(data) {
 
 ```typescript
 // worker.ts
-self.onmessage = (e) => {
-  const result = heavyComputation(e.data)
-  self.postMessage(result)
-}
+self.onmessage = e => {
+  const result = heavyComputation(e.data);
+  self.postMessage(result);
+};
 
 // main.ts
-const worker = new Worker('/worker.js')
+const worker = new Worker('/worker.js');
 
-worker.postMessage(data)
-worker.onmessage = (e) => {
-  console.log('Result:', e.data)
-}
+worker.postMessage(data);
+worker.onmessage = e => {
+  console.log('Result:', e.data);
+};
 ```
 
 ### CSS Optimization
@@ -555,13 +556,13 @@ worker.onmessage = (e) => {
 
 ```typescript
 // Extract above-the-fold CSS
-import { getCriticalCSS } from 'critical-css'
+import { getCriticalCSS } from 'critical-css';
 
 const criticalCSS = await getCriticalCSS({
   url: 'https://example.com',
   width: 1300,
-  height: 900
-})
+  height: 900,
+});
 ```
 
 **CSS-in-JS Optimization:**
@@ -597,13 +598,7 @@ export default function RootLayout({ children }) {
 **Manual:**
 
 ```html
-<link
-  rel="preload"
-  href="/fonts/Inter-Regular.woff2"
-  as="font"
-  type="font/woff2"
-  crossorigin
-/>
+<link rel="preload" href="/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin />
 
 <style>
   @font-face {
@@ -621,22 +616,26 @@ export default function RootLayout({ children }) {
 ### Choose the Right Strategy
 
 **Static Site Generation (SSG)** - Best performance
+
 - Marketing pages
 - Documentation
 - Blogs
 - Unchanging content
 
 **Incremental Static Regeneration (ISR)** - Balanced
+
 - E-commerce product pages
 - News sites
 - Content that changes occasionally
 
 **Server-Side Rendering (SSR)** - Always fresh
+
 - Personalized dashboards
 - User-specific content
 - Real-time data
 
 **Client-Side Rendering (CSR)** - Highly interactive
+
 - Admin panels
 - Complex dashboards
 - After authentication
@@ -646,13 +645,13 @@ export default function RootLayout({ children }) {
 ```typescript
 // Next.js - Mix strategies per route
 // app/page.tsx - SSG
-export const dynamic = 'force-static'
+export const dynamic = 'force-static';
 
 // app/dashboard/page.tsx - SSR
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
 // app/blog/[slug]/page.tsx - ISR
-export const revalidate = 3600
+export const revalidate = 3600;
 ```
 
 ```typescript
@@ -660,12 +659,12 @@ export const revalidate = 3600
 // nuxt.config.ts
 export default defineNuxtConfig({
   routeRules: {
-    '/': { prerender: true },              // SSG
-    '/dashboard/**': { ssr: false },       // CSR
-    '/blog/**': { swr: 3600 },             // ISR
-    '/api/**': { cors: true }              // API
-  }
-})
+    '/': { prerender: true }, // SSG
+    '/dashboard/**': { ssr: false }, // CSR
+    '/blog/**': { swr: 3600 }, // ISR
+    '/api/**': { cors: true }, // API
+  },
+});
 ```
 
 ## Monitoring and Debugging
@@ -709,24 +708,24 @@ export default function RootLayout({ children }) {
 
 ```typescript
 // app/_app.tsx (Next.js Pages Router)
-import { getCLS, getFID, getFCP, getLCP, getTTFB } from 'web-vitals'
+import { getCLS, getFID, getFCP, getLCP, getTTFB } from 'web-vitals';
 
 function sendToAnalytics(metric) {
-  const body = JSON.stringify(metric)
-  const url = '/api/analytics'
+  const body = JSON.stringify(metric);
+  const url = '/api/analytics';
 
   if (navigator.sendBeacon) {
-    navigator.sendBeacon(url, body)
+    navigator.sendBeacon(url, body);
   } else {
-    fetch(url, { body, method: 'POST', keepalive: true })
+    fetch(url, { body, method: 'POST', keepalive: true });
   }
 }
 
-getCLS(sendToAnalytics)
-getFID(sendToAnalytics)
-getFCP(sendToAnalytics)
-getLCP(sendToAnalytics)
-getTTFB(sendToAnalytics)
+getCLS(sendToAnalytics);
+getFID(sendToAnalytics);
+getFCP(sendToAnalytics);
+getLCP(sendToAnalytics);
+getTTFB(sendToAnalytics);
 ```
 
 ### Performance Profiling
@@ -753,6 +752,7 @@ function onRenderCallback(
 ```
 
 **Chrome DevTools:**
+
 1. Open DevTools → Performance tab
 2. Record interaction
 3. Analyze flamegraph for bottlenecks
@@ -792,11 +792,11 @@ module.exports = {
         'first-contentful-paint': ['error', { maxNumericValue: 2000 }],
         'largest-contentful-paint': ['error', { maxNumericValue: 2500 }],
         'cumulative-layout-shift': ['error', { maxNumericValue: 0.1 }],
-        'total-blocking-time': ['error', { maxNumericValue: 200 }]
-      }
-    }
-  }
-}
+        'total-blocking-time': ['error', { maxNumericValue: 200 }],
+      },
+    },
+  },
+};
 ```
 
 This comprehensive guide provides strategies to optimize performance across all major SSR/SSG frameworks. Apply techniques relevant to your specific framework and use case for best results.

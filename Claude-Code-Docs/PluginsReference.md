@@ -35,7 +35,7 @@ Plugins can provide specialized subagents for specific tasks that Claude can inv
 ```markdown theme={null}
 ---
 description: What this agent specializes in
-capabilities: ["task1", "task2", "task3"]
+capabilities: ['task1', 'task2', 'task3']
 ---
 
 # Agent Name

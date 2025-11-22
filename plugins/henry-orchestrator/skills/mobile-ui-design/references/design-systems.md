@@ -11,6 +11,7 @@ Material Design 3 is the latest evolution of Material Design, introducing dynami
 #### Color System
 
 **Color Roles:**
+
 - **Primary:** Main brand color, used for primary actions and components
 - **Secondary:** Supporting color for less prominent components
 - **Tertiary:** Accent color for highlights and special elements
@@ -20,12 +21,14 @@ Material Design 3 is the latest evolution of Material Design, introducing dynami
 
 **Dynamic Color:**
 Material You generates color schemes from user's wallpaper or chosen seed color:
+
 - Light and dark schemes auto-generated
 - Maintains 4.5:1 contrast ratio for accessibility
 - Harmonious color relationships
 
 **Color Palette Structure:**
 Each color role has tonal variations (0-100):
+
 - 0: Black
 - 10: Very dark
 - 20-40: Dark variants
@@ -35,6 +38,7 @@ Each color role has tonal variations (0-100):
 - 100: White
 
 **Implementation Example:**
+
 ```kotlin
 // Using Material 3 color scheme
 MaterialTheme(
@@ -59,26 +63,31 @@ val customColorScheme = lightColorScheme(
 Material Design 3 type scale with 15 roles:
 
 **Display (Large headlines):**
+
 - Display Large: 57sp, Regular weight
 - Display Medium: 45sp, Regular weight
 - Display Small: 36sp, Regular weight
 
 **Headline:**
+
 - Headline Large: 32sp, Regular weight
 - Headline Medium: 28sp, Regular weight
 - Headline Small: 24sp, Regular weight
 
 **Title:**
+
 - Title Large: 22sp, Regular weight (400)
 - Title Medium: 16sp, Medium weight (500)
 - Title Small: 14sp, Medium weight (500)
 
 **Body:**
+
 - Body Large: 16sp, Regular weight
 - Body Medium: 14sp, Regular weight
 - Body Small: 12sp, Regular weight
 
 **Label:**
+
 - Label Large: 14sp, Medium weight
 - Label Medium: 12sp, Medium weight
 - Label Small: 11sp, Medium weight
@@ -86,6 +95,7 @@ Material Design 3 type scale with 15 roles:
 **Default Font:** Roboto
 
 **Implementation:**
+
 ```kotlin
 Text(
     text = "Headline",
@@ -101,6 +111,7 @@ Text(
 
 **8dp Grid System:**
 All spacing and sizing should be multiples of 8dp:
+
 - 4dp: Tight spacing (within small components)
 - 8dp: Default small spacing
 - 16dp: Default medium spacing (most common)
@@ -109,16 +120,19 @@ All spacing and sizing should be multiples of 8dp:
 - 48dp: Section spacing
 
 **Screen Margins:**
+
 - Phone portrait: 16dp left/right margins
 - Tablet: 24dp or more
 - Large screens: Use responsive layout with max-width containers
 
 **Component Padding:**
+
 - Buttons: 24dp horizontal, 10dp vertical (40dp height total)
 - Cards: 16dp all around
 - List items: 16dp horizontal, 8-16dp vertical
 
 **Grid Layouts:**
+
 - Use ConstraintLayout or Column/Row with weights
 - Minimum touch target: 48dp × 48dp
 - Space between cards: 8dp-16dp
@@ -128,6 +142,7 @@ All spacing and sizing should be multiples of 8dp:
 Material Design uses elevation (Z-axis) to show hierarchy:
 
 **Elevation Levels:**
+
 - 0dp: Surface level (default background)
 - 1dp: Cards at rest, switches
 - 2dp: Buttons (resting elevation)
@@ -140,6 +155,7 @@ Material Design uses elevation (Z-axis) to show hierarchy:
 - 24dp: Dialog
 
 **Implementation:**
+
 ```kotlin
 Card(
     elevation = CardDefaults.cardElevation(
@@ -159,12 +175,14 @@ In Material 3, elevation is expressed through tonal surface colors rather than j
 ##### App Bars
 
 **Top App Bar:**
+
 - Height: 64dp (regular), 128dp (large), 152dp (medium with image)
 - Horizontal padding: 16dp
 - Title typography: Title Large
 - Icon buttons: 48dp × 48dp touch target
 
 **Types:**
+
 - Small (Center-aligned or leading-aligned)
 - Medium (Collapsing with larger title)
 - Large (Extra large title area)
@@ -209,12 +227,14 @@ NavigationBar {
 ##### Navigation Drawer
 
 **Modal Drawer:**
+
 - Width: 256dp (mobile), 320dp (tablet)
 - Elevation: 16dp
 - Opens from left edge
 - Includes scrim overlay (black at 32% opacity)
 
 **Standard Drawer:**
+
 - Permanent drawer for tablets/desktop
 - Width: 360dp typical
 - No scrim overlay
@@ -245,6 +265,7 @@ ModalNavigationDrawer(
 - Position: 16dp from edges
 
 **Types:**
+
 - FAB: Standard circular
 - Extended FAB: Includes text label
 - Small FAB: Compact version
@@ -273,6 +294,7 @@ ExtendedFloatingActionButton(
 - Minimum touch target for interactive cards: 48dp height
 
 **Types:**
+
 - Filled: Default with subtle elevation
 - Elevated: More prominent elevation
 - Outlined: Border instead of elevation
@@ -295,16 +317,19 @@ Card(
 ##### Buttons
 
 **Filled Button (Primary):**
+
 - Height: 40dp
 - Horizontal padding: 24dp
 - Corner radius: 20dp (fully rounded)
 - Typography: Label Large
 
 **Outlined Button:**
+
 - 1dp border
 - Same dimensions as filled
 
 **Text Button:**
+
 - No background or border
 - Same typography and padding
 
@@ -325,11 +350,13 @@ TextButton(onClick = { /* Action */ }) {
 ##### Lists
 
 **List Item Heights:**
+
 - One line: 56dp
 - Two lines: 72dp
 - Three lines: 88dp
 
 **List Item Padding:**
+
 - Horizontal: 16dp
 - Vertical: 8dp between text lines
 - Icon to text spacing: 16dp
@@ -355,6 +382,7 @@ LazyColumn {
 ##### Dialogs
 
 **Alert Dialog:**
+
 - Min width: 280dp
 - Max width: 560dp
 - Corner radius: 28dp
@@ -381,6 +409,7 @@ AlertDialog(
 ##### Bottom Sheets
 
 **Modal Bottom Sheet:**
+
 - Corner radius: 28dp (top corners)
 - Elevation: 16dp
 - Drag handle: 32dp × 4dp, 12dp from top
@@ -400,6 +429,7 @@ ModalBottomSheet(
 #### Motion and Animation
 
 **Duration Standards:**
+
 - Simple transitions: 100ms
 - Standard transitions: 300ms
 - Complex transitions: 500ms
@@ -407,6 +437,7 @@ ModalBottomSheet(
 - Exiting screen: 200ms
 
 **Easing:**
+
 - Standard: Emphasized easing (cubic bezier)
 - Entering: Decelerate easing
 - Exiting: Accelerate easing
@@ -436,6 +467,7 @@ Apple's Human Interface Guidelines define the iOS platform's design language wit
 iOS provides semantic colors that automatically adapt to light/dark mode:
 
 **UI Element Colors:**
+
 - `systemBackground`: Primary background
 - `secondarySystemBackground`: Grouped content background
 - `tertiarySystemBackground`: Tertiary grouped content
@@ -445,10 +477,12 @@ iOS provides semantic colors that automatically adapt to light/dark mode:
 - `tertiaryLabel`: Tertiary text/placeholders
 
 **Accent Colors:**
+
 - `systemBlue`: Default tint color
 - `systemGreen`, `systemRed`, `systemOrange`, `systemYellow`, `systemPink`, `systemPurple`, `systemTeal`, `systemIndigo`
 
 **Implementation:**
+
 ```swift
 // SwiftUI
 Text("Hello")
@@ -461,6 +495,7 @@ Button("Action") { }
 ```
 
 **Custom Colors:**
+
 ```swift
 // Define colors in asset catalog with light/dark variants
 Color("BrandColor") // Automatically adapts to appearance
@@ -472,6 +507,7 @@ Color("BrandColor") // Automatically adapts to appearance
 Apple's system font, optimized for readability.
 
 **Text Styles (Dynamic Type):**
+
 - Large Title: 34pt (Regular)
 - Title 1: 28pt (Regular)
 - Title 2: 22pt (Regular)
@@ -485,6 +521,7 @@ Apple's system font, optimized for readability.
 - Caption 2: 11pt (Regular)
 
 **Implementation:**
+
 ```swift
 Text("Large Title")
     .font(.largeTitle)
@@ -517,6 +554,7 @@ Text("Fixed size")
 
 **Safe Area:**
 Respect safe area insets for notch, home indicator, and edges:
+
 - Top safe area: Status bar + notch
 - Bottom safe area: Home indicator area
 - Side safe areas: Rounded corners
@@ -532,12 +570,14 @@ VStack {
 ```
 
 **Spacing Guidelines:**
+
 - Minimum: 8pt
 - Standard: 16pt
 - Large: 20pt
 - Section spacing: 32pt+
 
 **Margins:**
+
 - Screen edges: 16pt-20pt (iPhone), 20pt+ (iPad)
 - Reading width: Max 672pt for text-heavy content
 
@@ -546,11 +586,13 @@ VStack {
 ##### Navigation Bar
 
 **Height:**
+
 - Regular: 44pt
 - Large title: 96pt
 - Status bar: 44pt (standard), 47pt (with notch)
 
 **Elements:**
+
 - Leading: Back button or leading buttons
 - Center: Title (standard) or nothing (large title)
 - Trailing: Action buttons (typically 1-2)
@@ -576,12 +618,14 @@ NavigationView {
 ##### Tab Bar
 
 **Dimensions:**
+
 - Height: 49pt (50pt with divider)
 - Icon size: 25pt × 25pt (max 30pt × 30pt)
 - Minimum 2, maximum 5 tabs
 - More than 5: Use "More" tab with list
 
 **Typography:**
+
 - Label: 10pt Regular
 
 ```swift
@@ -605,6 +649,7 @@ TabView {
 
 **SF Symbols:**
 Use SF Symbols for tab bar icons - they're designed for consistency:
+
 ```swift
 Image(systemName: "house.fill")
 Image(systemName: "magnifyingglass")
@@ -614,11 +659,13 @@ Image(systemName: "person.crop.circle")
 ##### Lists
 
 **List Styles:**
+
 - Inset Grouped (iOS 14+): Default, rounded corners
 - Grouped: Full-width sections with headers
 - Plain: Edge-to-edge rows
 
 **Row Heights:**
+
 - Default: 44pt minimum
 - With subtitle: 44pt-60pt
 - Custom: Variable height with constraints
@@ -646,6 +693,7 @@ List {
 ```
 
 **Swipe Actions:**
+
 ```swift
 List {
     ForEach(items) { item in
@@ -672,12 +720,14 @@ List {
 ##### Buttons
 
 **Button Styles:**
+
 - Borderless: Default, tinted text
 - Bordered: Rounded rectangle background
 - Prominent: Filled with accent color
 - Plain: No styling
 
 **Sizing:**
+
 - Minimum touch target: 44pt × 44pt
 - Button padding: 16pt horizontal typical
 - Corner radius: 10pt-13pt for bordered
@@ -700,6 +750,7 @@ Button("Learn More") { }
 ##### Sheets and Modals
 
 **Sheet Presentation:**
+
 - Corner radius: 10pt
 - Detent support: medium, large, custom
 - Drag indicator visible
@@ -730,6 +781,7 @@ Button("Learn More") { }
 ##### Alerts and Dialogs
 
 **Alert:**
+
 - Max width: ~270pt
 - Title: 17pt Semibold
 - Message: 13pt Regular
@@ -747,6 +799,7 @@ Button("Learn More") { }
 ```
 
 **Confirmation Dialog (Action Sheet):**
+
 ```swift
 .confirmationDialog("Choose Action", isPresented: $showDialog) {
     Button("Option 1") { }
@@ -759,6 +812,7 @@ Button("Learn More") { }
 ##### Forms and Controls
 
 **Form Style:**
+
 ```swift
 Form {
     Section(header: Text("Profile")) {
@@ -786,6 +840,7 @@ Form {
 ```
 
 **Control Sizes:**
+
 - Toggle: 51pt × 31pt
 - Slider: 44pt minimum height
 - Stepper: 44pt height
@@ -812,11 +867,13 @@ VStack(alignment: .leading, spacing: 12) {
 #### Motion and Animation
 
 **Animation Duration:**
+
 - Quick: 0.2-0.3 seconds
 - Standard: 0.3-0.4 seconds
 - Slow: 0.5-0.6 seconds
 
 **Easing:**
+
 - Default: Ease in/out
 - Spring: Natural, bouncy feel
 
@@ -835,6 +892,7 @@ Text("Hello")
 ```
 
 **Transitions:**
+
 ```swift
 if showView {
     DetailView()
@@ -851,6 +909,7 @@ if showView {
 #### Gestures
 
 **Standard Gestures:**
+
 - Tap: Primary action
 - Long press: Context menu or secondary action
 - Swipe: Delete, archive, navigate
@@ -905,24 +964,24 @@ Text("Long press for menu")
 
 ## Platform Comparison Quick Reference
 
-| Aspect | iOS (HIG) | Android (Material) |
-|--------|-----------|-------------------|
-| **Primary Navigation** | Tab Bar (bottom) | Bottom Navigation |
-| **Secondary Navigation** | More tab / Sidebar | Navigation Drawer |
-| **App Bar** | Navigation Bar (top) | Top App Bar |
-| **Primary Action** | Prominent Button | FAB (Floating Action Button) |
-| **Touch Target** | 44pt × 44pt | 48dp × 48dp |
-| **Grid System** | 8pt base | 8dp base |
-| **Screen Margins** | 16-20pt | 16dp |
-| **Default Font** | SF Pro | Roboto |
-| **Body Text Size** | 17pt | 16sp |
-| **Corner Radius** | 10-13pt | 12-28dp (varies) |
-| **Cards** | Custom (rounded containers) | Card component with elevation |
-| **Elevation** | Shadows (subtle) | Z-axis with elevation levels |
-| **Icons** | SF Symbols | Material Icons |
-| **Back Navigation** | Swipe from left edge | Back button / gesture |
-| **Modal Sheets** | Sheet with detents | Bottom Sheet |
-| **Destructive Actions** | Red color | Error color (red theme) |
+| Aspect                   | iOS (HIG)                   | Android (Material)            |
+| ------------------------ | --------------------------- | ----------------------------- |
+| **Primary Navigation**   | Tab Bar (bottom)            | Bottom Navigation             |
+| **Secondary Navigation** | More tab / Sidebar          | Navigation Drawer             |
+| **App Bar**              | Navigation Bar (top)        | Top App Bar                   |
+| **Primary Action**       | Prominent Button            | FAB (Floating Action Button)  |
+| **Touch Target**         | 44pt × 44pt                 | 48dp × 48dp                   |
+| **Grid System**          | 8pt base                    | 8dp base                      |
+| **Screen Margins**       | 16-20pt                     | 16dp                          |
+| **Default Font**         | SF Pro                      | Roboto                        |
+| **Body Text Size**       | 17pt                        | 16sp                          |
+| **Corner Radius**        | 10-13pt                     | 12-28dp (varies)              |
+| **Cards**                | Custom (rounded containers) | Card component with elevation |
+| **Elevation**            | Shadows (subtle)            | Z-axis with elevation levels  |
+| **Icons**                | SF Symbols                  | Material Icons                |
+| **Back Navigation**      | Swipe from left edge        | Back button / gesture         |
+| **Modal Sheets**         | Sheet with detents          | Bottom Sheet                  |
+| **Destructive Actions**  | Red color                   | Error color (red theme)       |
 
 ## Best Practices Summary
 

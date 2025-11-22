@@ -27,20 +27,20 @@ const render = Render.create({
     width: 800,
     height: 600,
     wireframes: false,
-    background: '#1a1a1a'
-  }
+    background: '#1a1a1a',
+  },
 });
 
 // Create bodies
 const ground = Bodies.rectangle(400, 580, 810, 60, {
   isStatic: true,
-  render: { fillStyle: '#444' }
+  render: { fillStyle: '#444' },
 });
 
 const ball = Bodies.circle(400, 200, 40, {
   restitution: 0.9,
   friction: 0.001,
-  render: { fillStyle: '#ff0000' }
+  render: { fillStyle: '#ff0000' },
 });
 
 // Add bodies to world
@@ -89,7 +89,7 @@ function gameLoop(timestamp) {
 
 ```javascript
 const wall = Bodies.rectangle(x, y, width, height, {
-  isStatic: true
+  isStatic: true,
 });
 ```
 
@@ -97,11 +97,11 @@ const wall = Bodies.rectangle(x, y, width, height, {
 
 ```javascript
 const player = Bodies.circle(x, y, radius, {
-  density: 1,        // Mass = density * area
-  friction: 0.3,     // Surface friction (0-1)
-  restitution: 0.5,  // Bounciness (0-1)
+  density: 1, // Mass = density * area
+  friction: 0.3, // Surface friction (0-1)
+  restitution: 0.5, // Bounciness (0-1)
   frictionAir: 0.01, // Air resistance
-  inertia: Infinity  // Prevents rotation
+  inertia: Infinity, // Prevents rotation
 });
 ```
 
@@ -138,13 +138,13 @@ Composite.add(car, [body, wheelA, wheelB]);
 const axleA = Constraint.create({
   bodyA: body,
   bodyB: wheelA,
-  stiffness: 0.5
+  stiffness: 0.5,
 });
 
 const axleB = Constraint.create({
   bodyA: body,
   bodyB: wheelB,
-  stiffness: 0.5
+  stiffness: 0.5,
 });
 
 Composite.add(car, [axleA, axleB]);
@@ -160,7 +160,7 @@ const constraint = Constraint.create({
   bodyA: bodyA,
   bodyB: bodyB,
   length: 100,
-  stiffness: 0.5
+  stiffness: 0.5,
 });
 ```
 
@@ -170,7 +170,7 @@ const constraint = Constraint.create({
 const pin = Constraint.create({
   bodyA: body,
   pointB: { x: 300, y: 200 },
-  stiffness: 0.9
+  stiffness: 0.9,
 });
 ```
 
@@ -181,7 +181,7 @@ const spring = Constraint.create({
   bodyA: bodyA,
   bodyB: bodyB,
   stiffness: 0.01,
-  damping: 0.1
+  damping: 0.1,
 });
 ```
 
@@ -192,7 +192,7 @@ const spring = Constraint.create({
 ```javascript
 const { Events } = Matter;
 
-Events.on(engine, 'collisionStart', (event) => {
+Events.on(engine, 'collisionStart', event => {
   const pairs = event.pairs;
 
   for (const pair of pairs) {
@@ -205,11 +205,11 @@ Events.on(engine, 'collisionStart', (event) => {
   }
 });
 
-Events.on(engine, 'collisionActive', (event) => {
+Events.on(engine, 'collisionActive', event => {
   // While bodies are touching
 });
 
-Events.on(engine, 'collisionEnd', (event) => {
+Events.on(engine, 'collisionEnd', event => {
   // When bodies separate
 });
 ```
@@ -224,23 +224,23 @@ const wallCategory = 0x0004;
 const player = Bodies.circle(x, y, radius, {
   collisionFilter: {
     category: playerCategory,
-    mask: enemyCategory | wallCategory // Collides with enemies and walls
-  }
+    mask: enemyCategory | wallCategory, // Collides with enemies and walls
+  },
 });
 
 const enemy = Bodies.circle(x, y, radius, {
   collisionFilter: {
     category: enemyCategory,
-    mask: playerCategory | wallCategory // Collides with player and walls
-  }
+    mask: playerCategory | wallCategory, // Collides with player and walls
+  },
 });
 
 const wall = Bodies.rectangle(x, y, width, height, {
   isStatic: true,
   collisionFilter: {
     category: wallCategory,
-    mask: playerCategory | enemyCategory // Collides with everything
-  }
+    mask: playerCategory | enemyCategory, // Collides with everything
+  },
 });
 ```
 
@@ -249,10 +249,10 @@ const wall = Bodies.rectangle(x, y, width, height, {
 ```javascript
 const trigger = Bodies.rectangle(x, y, width, height, {
   isStatic: true,
-  isSensor: true
+  isSensor: true,
 });
 
-Events.on(engine, 'collisionStart', (event) => {
+Events.on(engine, 'collisionStart', event => {
   for (const pair of event.pairs) {
     if (pair.bodyA === trigger || pair.bodyB === trigger) {
       // Trigger activated
@@ -289,7 +289,7 @@ function limitVelocity(body, maxSpeed) {
     const scale = maxSpeed / speed;
     Body.setVelocity(body, {
       x: vel.x * scale,
-      y: vel.y * scale
+      y: vel.y * scale,
     });
   }
 }
@@ -301,11 +301,11 @@ function limitVelocity(body, maxSpeed) {
 class CharacterController {
   constructor(x, y) {
     this.body = Bodies.rectangle(x, y, 40, 60, {
-      inertia: Infinity,        // Prevent rotation
-      friction: 0,              // No sliding friction
+      inertia: Infinity, // Prevent rotation
+      friction: 0, // No sliding friction
       frictionAir: 0.02,
       restitution: 0,
-      density: 0.002
+      density: 0.002,
     });
 
     this.moveSpeed = 5;
@@ -327,14 +327,14 @@ class CharacterController {
     // Smooth velocity changes
     Body.setVelocity(this.body, {
       x: targetVelocityX,
-      y: this.body.velocity.y
+      y: this.body.velocity.y,
     });
 
     // Jump
     if (keys.space && this.isGrounded) {
       Body.applyForce(this.body, this.body.position, {
         x: 0,
-        y: -this.jumpForce
+        y: -this.jumpForce,
       });
     }
   }
@@ -365,30 +365,30 @@ import planck from 'planck-js';
 
 // Create world with gravity (x, y in m/s²)
 const world = planck.World({
-  gravity: planck.Vec2(0, -10)
+  gravity: planck.Vec2(0, -10),
 });
 
 // Create ground (static body)
 const ground = world.createBody({
-  position: planck.Vec2(0, -10)
+  position: planck.Vec2(0, -10),
 });
 
 ground.createFixture({
   shape: planck.Box(50, 1),
-  friction: 0.3
+  friction: 0.3,
 });
 
 // Create dynamic body
 const dynamicBody = world.createDynamicBody({
   position: planck.Vec2(0, 4),
-  angle: 0
+  angle: 0,
 });
 
 dynamicBody.createFixture({
   shape: planck.Circle(0.5),
   density: 1.0,
   friction: 0.3,
-  restitution: 0.6
+  restitution: 0.6,
 });
 
 // Simulation step
@@ -418,16 +418,17 @@ function pixelsToMeters(pixels) {
 }
 
 // Creating a body at pixel coordinates
-const pixelX = 400, pixelY = 300;
+const pixelX = 400,
+  pixelY = 300;
 const body = world.createDynamicBody({
-  position: planck.Vec2(pixelsToMeters(pixelX), pixelsToMeters(pixelY))
+  position: planck.Vec2(pixelsToMeters(pixelX), pixelsToMeters(pixelY)),
 });
 
 // Rendering a body
 const pos = body.getPosition();
 const pixelPos = {
   x: metersToPixels(pos.x),
-  y: metersToPixels(pos.y)
+  y: metersToPixels(pos.y),
 };
 ```
 
@@ -441,8 +442,8 @@ const body = world.createDynamicBody({
   angle: 0,
   linearDamping: 0.5,
   angularDamping: 0.3,
-  bullet: false,  // Enable continuous collision detection
-  fixedRotation: false
+  bullet: false, // Enable continuous collision detection
+  fixedRotation: false,
 });
 ```
 
@@ -459,7 +460,7 @@ const body = world.createBody({
 
 ```javascript
 const body = world.createKinematicBody({
-  position: planck.Vec2(x, y)
+  position: planck.Vec2(x, y),
 });
 
 // Set velocity (not affected by forces)
@@ -474,35 +475,34 @@ body.createFixture({
   shape: planck.Box(halfWidth, halfHeight),
   density: 1.0,
   friction: 0.3,
-  restitution: 0.5
+  restitution: 0.5,
 });
 
 // Circle
 body.createFixture({
   shape: planck.Circle(radius),
-  density: 1.0
+  density: 1.0,
 });
 
 // Polygon (vertices in counter-clockwise order)
 body.createFixture({
-  shape: planck.Polygon([
-    planck.Vec2(-1, 0),
-    planck.Vec2(1, 0),
-    planck.Vec2(0, 2)
-  ]),
-  density: 1.0
+  shape: planck.Polygon([planck.Vec2(-1, 0), planck.Vec2(1, 0), planck.Vec2(0, 2)]),
+  density: 1.0,
 });
 
 // Chain (for terrain)
 body.createFixture({
-  shape: planck.Chain([
-    planck.Vec2(-10, 0),
-    planck.Vec2(-5, 2),
-    planck.Vec2(0, 0),
-    planck.Vec2(5, -2),
-    planck.Vec2(10, 0)
-  ], false),  // false = open chain, true = closed loop
-  friction: 0.5
+  shape: planck.Chain(
+    [
+      planck.Vec2(-10, 0),
+      planck.Vec2(-5, 2),
+      planck.Vec2(0, 0),
+      planck.Vec2(5, -2),
+      planck.Vec2(10, 0),
+    ],
+    false
+  ), // false = open chain, true = closed loop
+  friction: 0.5,
 });
 ```
 
@@ -511,11 +511,16 @@ body.createFixture({
 **Revolute joint (hinge):**
 
 ```javascript
-const joint = planck.RevoluteJoint({
-  maxMotorTorque: 10.0,
-  motorSpeed: 0.0,
-  enableMotor: true
-}, bodyA, bodyB, anchorPoint);
+const joint = planck.RevoluteJoint(
+  {
+    maxMotorTorque: 10.0,
+    motorSpeed: 0.0,
+    enableMotor: true,
+  },
+  bodyA,
+  bodyB,
+  anchorPoint
+);
 
 world.createJoint(joint);
 ```
@@ -523,10 +528,16 @@ world.createJoint(joint);
 **Distance joint:**
 
 ```javascript
-const joint = planck.DistanceJoint({
-  frequencyHz: 4.0,
-  dampingRatio: 0.5
-}, bodyA, anchorA, bodyB, anchorB);
+const joint = planck.DistanceJoint(
+  {
+    frequencyHz: 4.0,
+    dampingRatio: 0.5,
+  },
+  bodyA,
+  anchorA,
+  bodyB,
+  anchorB
+);
 
 world.createJoint(joint);
 ```
@@ -534,14 +545,20 @@ world.createJoint(joint);
 **Prismatic joint (slider):**
 
 ```javascript
-const joint = planck.PrismaticJoint({
-  enableMotor: true,
-  maxMotorForce: 100.0,
-  motorSpeed: 0.0,
-  enableLimit: true,
-  lowerTranslation: -5.0,
-  upperTranslation: 5.0
-}, bodyA, bodyB, anchor, axis);
+const joint = planck.PrismaticJoint(
+  {
+    enableMotor: true,
+    maxMotorForce: 100.0,
+    motorSpeed: 0.0,
+    enableLimit: true,
+    lowerTranslation: -5.0,
+    upperTranslation: 5.0,
+  },
+  bodyA,
+  bodyB,
+  anchor,
+  axis
+);
 
 world.createJoint(joint);
 ```
@@ -551,7 +568,7 @@ world.createJoint(joint);
 **Contact listener:**
 
 ```javascript
-world.on('begin-contact', (contact) => {
+world.on('begin-contact', contact => {
   const fixtureA = contact.getFixtureA();
   const fixtureB = contact.getFixtureB();
   const bodyA = fixtureA.getBody();
@@ -563,7 +580,7 @@ world.on('begin-contact', (contact) => {
   }
 });
 
-world.on('end-contact', (contact) => {
+world.on('end-contact', contact => {
   // Bodies separated
 });
 
@@ -590,7 +607,7 @@ body.createFixture({
   shape: planck.Circle(radius),
   filterCategoryBits: playerCategory,
   filterMaskBits: enemyCategory | wallCategory,
-  filterGroupIndex: 0
+  filterGroupIndex: 0,
 });
 ```
 
@@ -626,12 +643,9 @@ const hit = world.rayCast(point1, point2, (fixture, point, normal, fraction) => 
 **AABB query (rectangular area):**
 
 ```javascript
-const aabb = planck.AABB(
-  planck.Vec2(lowerX, lowerY),
-  planck.Vec2(upperX, upperY)
-);
+const aabb = planck.AABB(planck.Vec2(lowerX, lowerY), planck.Vec2(upperX, upperY));
 
-world.queryAABB(aabb, (fixture) => {
+world.queryAABB(aabb, fixture => {
   const body = fixture.getBody();
   // Do something with bodies in area
   return true; // Continue query
@@ -647,11 +661,11 @@ Box2D and Matter.js automatically put idle bodies to sleep to save CPU:
 ```javascript
 // Matter.js - adjust sleeping thresholds
 const body = Bodies.circle(x, y, radius, {
-  sleepThreshold: 60 // Frames before sleeping (default: 60)
+  sleepThreshold: 60, // Frames before sleeping (default: 60)
 });
 
 // Box2D - enable/disable sleeping
-body.setAwake(true);  // Wake up body
+body.setAwake(true); // Wake up body
 body.setAwake(false); // Put to sleep
 ```
 
@@ -663,8 +677,8 @@ body.setAwake(false); // Put to sleep
 // Matter.js - use spatial hashing
 const engine = Engine.create({
   broadphase: {
-    controller: Matter.Grid // or Matter.SAP (Sweep and Prune)
-  }
+    controller: Matter.Grid, // or Matter.SAP (Sweep and Prune)
+  },
 });
 ```
 
@@ -748,11 +762,11 @@ const render = Render.create({
   options: {
     width: 800,
     height: 600,
-    wireframes: true,  // Show shapes only
+    wireframes: true, // Show shapes only
     showCollisions: true,
     showVelocity: true,
-    showAngleIndicator: true
-  }
+    showAngleIndicator: true,
+  },
 });
 ```
 
@@ -793,12 +807,14 @@ function debugDraw(ctx, bodies) {
 ## Choosing Between Matter.js and Box2D
 
 **Choose Matter.js when:**
+
 - Building web-based games
 - Want simpler API and setup
 - Need quick prototyping
 - Don't require advanced features
 
 **Choose Box2D when:**
+
 - Need advanced features (CCD, complex joints)
 - Require maximum performance
 - Want industry-standard physics

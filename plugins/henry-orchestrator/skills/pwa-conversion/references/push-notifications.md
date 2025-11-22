@@ -5,6 +5,7 @@ This reference provides comprehensive guidance on implementing push notification
 ## Overview
 
 Push notifications enable re-engagement with users even when the app is not open. They require:
+
 1. Service worker registration
 2. User permission
 3. Push subscription
@@ -64,7 +65,7 @@ async function subscribeToPushNotifications() {
       // Subscribe to push notifications
       subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY)
+        applicationServerKey: urlBase64ToUint8Array(process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY),
       });
     }
 
@@ -72,9 +73,9 @@ async function subscribeToPushNotifications() {
     await fetch('/api/push/subscribe', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(subscription)
+      body: JSON.stringify(subscription),
     });
 
     return subscription;
@@ -86,10 +87,8 @@ async function subscribeToPushNotifications() {
 
 // Helper function to convert VAPID key
 function urlBase64ToUint8Array(base64String) {
-  const padding = '='.repeat((4 - base64String.length % 4) % 4);
-  const base64 = (base64String + padding)
-    .replace(/\-/g, '+')
-    .replace(/_/g, '/');
+  const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
 
   const rawData = window.atob(base64);
   const outputArray = new Uint8Array(rawData.length);
@@ -117,9 +116,9 @@ async function unsubscribeFromPushNotifications() {
       await fetch('/api/push/unsubscribe', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ endpoint: subscription.endpoint })
+        body: JSON.stringify({ endpoint: subscription.endpoint }),
       });
 
       return true;
@@ -138,7 +137,7 @@ async function unsubscribeFromPushNotifications() {
 ```javascript
 // In your service worker (sw.js or public/sw.js)
 
-self.addEventListener('push', (event) => {
+self.addEventListener('push', event => {
   if (!event.data) {
     console.log('Push event has no data');
     return;
@@ -155,20 +154,18 @@ self.addEventListener('push', (event) => {
     data: {
       url: data.url || '/',
       timestamp: Date.now(),
-      ...data.data
+      ...data.data,
     },
     actions: data.actions || [],
     tag: data.tag || 'default-tag',
     requireInteraction: data.requireInteraction || false,
-    silent: data.silent || false
+    silent: data.silent || false,
   };
 
-  event.waitUntil(
-    self.registration.showNotification(data.title || 'Notification', options)
-  );
+  event.waitUntil(self.registration.showNotification(data.title || 'Notification', options));
 });
 
-self.addEventListener('notificationclick', (event) => {
+self.addEventListener('notificationclick', event => {
   event.notification.close();
 
   // Handle action clicks
@@ -188,24 +185,23 @@ self.addEventListener('notificationclick', (event) => {
   } else {
     // Default click behavior - open the app
     event.waitUntil(
-      clients.matchAll({ type: 'window', includeUncontrolled: true })
-        .then((clientList) => {
-          // Check if there's already a window open
-          for (let client of clientList) {
-            if (client.url === event.notification.data.url && 'focus' in client) {
-              return client.focus();
-            }
+      clients.matchAll({ type: 'window', includeUncontrolled: true }).then(clientList => {
+        // Check if there's already a window open
+        for (let client of clientList) {
+          if (client.url === event.notification.data.url && 'focus' in client) {
+            return client.focus();
           }
-          // Open new window
-          if (clients.openWindow) {
-            return clients.openWindow(event.notification.data.url);
-          }
-        })
+        }
+        // Open new window
+        if (clients.openWindow) {
+          return clients.openWindow(event.notification.data.url);
+        }
+      })
     );
   }
 });
 
-self.addEventListener('notificationclose', (event) => {
+self.addEventListener('notificationclose', event => {
   console.log('Notification closed:', event.notification.tag);
   // Track notification dismissal analytics
 });
@@ -253,10 +249,7 @@ export async function POST(request: NextRequest) {
 
     // Validate subscription
     if (!subscription || !subscription.endpoint) {
-      return NextResponse.json(
-        { error: 'Invalid subscription' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Invalid subscription' }, { status: 400 });
     }
 
     // Store subscription (in production, save to database)
@@ -269,17 +262,14 @@ export async function POST(request: NextRequest) {
         title: 'Subscribed!',
         body: 'You will now receive push notifications',
         icon: '/icon-192x192.png',
-        url: '/'
+        url: '/',
       })
     );
 
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error subscribing to push:', error);
-    return NextResponse.json(
-      { error: 'Failed to subscribe' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to subscribe' }, { status: 500 });
   }
 }
 ```
@@ -311,20 +301,19 @@ export async function POST(request: NextRequest) {
       actions: actions || [],
       vibrate: [200, 100, 200],
       tag: `notification-${Date.now()}`,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
 
     // Send to all subscriptions (or specific ones)
     const sendPromises = subscriptions.map((subscription: webpush.PushSubscription) =>
-      webpush.sendNotification(subscription, payload)
-        .catch((error) => {
-          console.error('Error sending push notification:', error);
-          // Handle expired subscriptions
-          if (error.statusCode === 410) {
-            // Remove subscription from database
-            console.log('Subscription expired, removing:', subscription.endpoint);
-          }
-        })
+      webpush.sendNotification(subscription, payload).catch(error => {
+        console.error('Error sending push notification:', error);
+        // Handle expired subscriptions
+        if (error.statusCode === 410) {
+          // Remove subscription from database
+          console.log('Subscription expired, removing:', subscription.endpoint);
+        }
+      })
     );
 
     await Promise.all(sendPromises);
@@ -332,10 +321,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error sending push notifications:', error);
-    return NextResponse.json(
-      { error: 'Failed to send notifications' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to send notifications' }, { status: 500 });
   }
 }
 ```
@@ -356,10 +342,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error unsubscribing from push:', error);
-    return NextResponse.json(
-      { error: 'Failed to unsubscribe' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to unsubscribe' }, { status: 500 });
   }
 }
 ```
@@ -525,10 +508,10 @@ async function unsubscribeFromPushNotifications() {
 
 ```javascript
 // In browser console
-navigator.serviceWorker.ready.then((registration) => {
+navigator.serviceWorker.ready.then(registration => {
   registration.showNotification('Test Notification', {
     body: 'This is a test',
-    icon: '/icon-192x192.png'
+    icon: '/icon-192x192.png',
   });
 });
 ```

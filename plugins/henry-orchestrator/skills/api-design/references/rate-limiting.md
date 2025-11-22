@@ -5,349 +5,370 @@
 ### 1. Fixed Window Counter
 
 **Algorithm:**
+
 - Track request count in fixed time windows (e.g., per minute)
 - Reset counter at window boundary
 - Simple but allows burst at boundaries
 
 **Pros:**
+
 - Simple to implement
 - Low memory usage
 - Easy to understand
 
 **Cons:**
+
 - Allows double the rate at window boundaries
 - Not smooth traffic control
 
 **Implementation (Node.js with Redis):**
+
 ```javascript
-const redis = require('redis')
-const client = redis.createClient()
+const redis = require('redis');
+const client = redis.createClient();
 
 async function fixedWindowRateLimit(userId, limit, windowSeconds) {
-  const key = `rate_limit:${userId}:${Math.floor(Date.now() / (windowSeconds * 1000))}`
+  const key = `rate_limit:${userId}:${Math.floor(Date.now() / (windowSeconds * 1000))}`;
 
-  const current = await client.incr(key)
+  const current = await client.incr(key);
 
   if (current === 1) {
     // First request in window, set expiration
-    await client.expire(key, windowSeconds)
+    await client.expire(key, windowSeconds);
   }
 
   if (current > limit) {
     return {
       allowed: false,
       remaining: 0,
-      resetAt: Math.ceil(Date.now() / (windowSeconds * 1000)) * windowSeconds * 1000
-    }
+      resetAt: Math.ceil(Date.now() / (windowSeconds * 1000)) * windowSeconds * 1000,
+    };
   }
 
   return {
     allowed: true,
     remaining: limit - current,
-    resetAt: Math.ceil(Date.now() / (windowSeconds * 1000)) * windowSeconds * 1000
-  }
+    resetAt: Math.ceil(Date.now() / (windowSeconds * 1000)) * windowSeconds * 1000,
+  };
 }
 ```
 
 **Express Middleware:**
+
 ```javascript
 function rateLimitMiddleware(limit, windowSeconds) {
   return async (req, res, next) => {
-    const userId = req.user?.id || req.ip
+    const userId = req.user?.id || req.ip;
 
-    const result = await fixedWindowRateLimit(userId, limit, windowSeconds)
+    const result = await fixedWindowRateLimit(userId, limit, windowSeconds);
 
     res.set({
       'X-RateLimit-Limit': limit,
       'X-RateLimit-Remaining': result.remaining,
-      'X-RateLimit-Reset': Math.floor(result.resetAt / 1000)
-    })
+      'X-RateLimit-Reset': Math.floor(result.resetAt / 1000),
+    });
 
     if (!result.allowed) {
-      res.set('Retry-After', Math.ceil((result.resetAt - Date.now()) / 1000))
+      res.set('Retry-After', Math.ceil((result.resetAt - Date.now()) / 1000));
       return res.status(429).json({
         error: {
           code: 'RATE_LIMIT_EXCEEDED',
-          message: 'Too many requests. Please retry later.'
-        }
-      })
+          message: 'Too many requests. Please retry later.',
+        },
+      });
     }
 
-    next()
-  }
+    next();
+  };
 }
 
 // Usage
-app.use('/api/', rateLimitMiddleware(100, 60)) // 100 requests per minute
+app.use('/api/', rateLimitMiddleware(100, 60)); // 100 requests per minute
 ```
 
 ### 2. Sliding Window Log
 
 **Algorithm:**
+
 - Store timestamp of each request
 - Count requests within sliding time window
 - More accurate than fixed window
 
 **Pros:**
+
 - No boundary issues
 - Accurate request counting
 - Fair rate limiting
 
 **Cons:**
+
 - Higher memory usage (stores all timestamps)
 - More complex
 
 **Implementation:**
+
 ```javascript
 async function slidingWindowLog(userId, limit, windowSeconds) {
-  const key = `rate_limit:log:${userId}`
-  const now = Date.now()
-  const windowStart = now - (windowSeconds * 1000)
+  const key = `rate_limit:log:${userId}`;
+  const now = Date.now();
+  const windowStart = now - windowSeconds * 1000;
 
   // Remove old entries
-  await client.zremrangebyscore(key, 0, windowStart)
+  await client.zremrangebyscore(key, 0, windowStart);
 
   // Count requests in window
-  const count = await client.zcard(key)
+  const count = await client.zcard(key);
 
   if (count >= limit) {
     return {
       allowed: false,
-      remaining: 0
-    }
+      remaining: 0,
+    };
   }
 
   // Add current request
-  await client.zadd(key, now, `${now}`)
-  await client.expire(key, windowSeconds)
+  await client.zadd(key, now, `${now}`);
+  await client.expire(key, windowSeconds);
 
   return {
     allowed: true,
-    remaining: limit - count - 1
-  }
+    remaining: limit - count - 1,
+  };
 }
 ```
 
 ### 3. Sliding Window Counter
 
 **Algorithm:**
+
 - Hybrid of fixed window and sliding log
 - Interpolate between current and previous window
 - Good balance of accuracy and efficiency
 
 **Pros:**
+
 - More accurate than fixed window
 - Less memory than sliding log
 - Smooth rate limiting
 
 **Cons:**
+
 - Slightly more complex
 - Small inaccuracy at boundaries
 
 **Implementation:**
+
 ```javascript
 async function slidingWindowCounter(userId, limit, windowSeconds) {
-  const now = Date.now()
-  const currentWindow = Math.floor(now / (windowSeconds * 1000))
-  const previousWindow = currentWindow - 1
+  const now = Date.now();
+  const currentWindow = Math.floor(now / (windowSeconds * 1000));
+  const previousWindow = currentWindow - 1;
 
-  const currentKey = `rate_limit:${userId}:${currentWindow}`
-  const previousKey = `rate_limit:${userId}:${previousWindow}`
+  const currentKey = `rate_limit:${userId}:${currentWindow}`;
+  const previousKey = `rate_limit:${userId}:${previousWindow}`;
 
   const [currentCount, previousCount] = await Promise.all([
     client.get(currentKey).then(v => parseInt(v) || 0),
-    client.get(previousKey).then(v => parseInt(v) || 0)
-  ])
+    client.get(previousKey).then(v => parseInt(v) || 0),
+  ]);
 
   // Calculate position in current window (0 to 1)
-  const windowProgress = (now % (windowSeconds * 1000)) / (windowSeconds * 1000)
+  const windowProgress = (now % (windowSeconds * 1000)) / (windowSeconds * 1000);
 
   // Weighted count from previous and current windows
-  const estimatedCount = previousCount * (1 - windowProgress) + currentCount
+  const estimatedCount = previousCount * (1 - windowProgress) + currentCount;
 
   if (estimatedCount >= limit) {
     return {
       allowed: false,
-      remaining: 0
-    }
+      remaining: 0,
+    };
   }
 
   // Increment current window
-  await client.incr(currentKey)
-  await client.expire(currentKey, windowSeconds * 2)
+  await client.incr(currentKey);
+  await client.expire(currentKey, windowSeconds * 2);
 
   return {
     allowed: true,
-    remaining: Math.floor(limit - estimatedCount - 1)
-  }
+    remaining: Math.floor(limit - estimatedCount - 1),
+  };
 }
 ```
 
 ### 4. Token Bucket
 
 **Algorithm:**
+
 - Bucket holds tokens (capacity)
 - Tokens added at constant rate
 - Request consumes a token
 - Allows controlled bursts
 
 **Pros:**
+
 - Allows bursts up to bucket size
 - Smooth rate limiting
 - Industry standard
 
 **Cons:**
+
 - More complex state management
 - Requires atomic operations
 
 **Implementation:**
+
 ```javascript
 async function tokenBucket(userId, capacity, refillRate, tokensPerRequest = 1) {
-  const key = `rate_limit:bucket:${userId}`
+  const key = `rate_limit:bucket:${userId}`;
 
   // Get or initialize bucket state
-  let bucket = await client.get(key)
-  bucket = bucket ? JSON.parse(bucket) : {
-    tokens: capacity,
-    lastRefill: Date.now()
-  }
+  let bucket = await client.get(key);
+  bucket = bucket
+    ? JSON.parse(bucket)
+    : {
+        tokens: capacity,
+        lastRefill: Date.now(),
+      };
 
-  const now = Date.now()
-  const timePassed = (now - bucket.lastRefill) / 1000
+  const now = Date.now();
+  const timePassed = (now - bucket.lastRefill) / 1000;
 
   // Refill tokens based on time passed
-  const tokensToAdd = timePassed * refillRate
-  bucket.tokens = Math.min(capacity, bucket.tokens + tokensToAdd)
-  bucket.lastRefill = now
+  const tokensToAdd = timePassed * refillRate;
+  bucket.tokens = Math.min(capacity, bucket.tokens + tokensToAdd);
+  bucket.lastRefill = now;
 
   if (bucket.tokens < tokensPerRequest) {
     // Not enough tokens
-    await client.setex(key, 60, JSON.stringify(bucket))
+    await client.setex(key, 60, JSON.stringify(bucket));
 
     return {
       allowed: false,
       remaining: Math.floor(bucket.tokens),
-      retryAfter: Math.ceil((tokensPerRequest - bucket.tokens) / refillRate)
-    }
+      retryAfter: Math.ceil((tokensPerRequest - bucket.tokens) / refillRate),
+    };
   }
 
   // Consume tokens
-  bucket.tokens -= tokensPerRequest
+  bucket.tokens -= tokensPerRequest;
 
-  await client.setex(key, 60, JSON.stringify(bucket))
+  await client.setex(key, 60, JSON.stringify(bucket));
 
   return {
     allowed: true,
-    remaining: Math.floor(bucket.tokens)
-  }
+    remaining: Math.floor(bucket.tokens),
+  };
 }
 
 // Usage example: 100 token capacity, refill 10 tokens/second
 app.use('/api/', async (req, res, next) => {
-  const userId = req.user?.id || req.ip
-  const result = await tokenBucket(userId, 100, 10)
+  const userId = req.user?.id || req.ip;
+  const result = await tokenBucket(userId, 100, 10);
 
   res.set({
     'X-RateLimit-Limit': 100,
-    'X-RateLimit-Remaining': result.remaining
-  })
+    'X-RateLimit-Remaining': result.remaining,
+  });
 
   if (!result.allowed) {
-    res.set('Retry-After', result.retryAfter)
+    res.set('Retry-After', result.retryAfter);
     return res.status(429).json({
       error: {
         code: 'RATE_LIMIT_EXCEEDED',
-        message: 'Too many requests.'
-      }
-    })
+        message: 'Too many requests.',
+      },
+    });
   }
 
-  next()
-})
+  next();
+});
 ```
 
 ### 5. Leaky Bucket
 
 **Algorithm:**
+
 - Requests queue in bucket
 - Process at constant rate
 - Overflow requests rejected
 - Smooths traffic spikes
 
 **Pros:**
+
 - Constant output rate
 - Smooths traffic
 - Predictable resource usage
 
 **Cons:**
+
 - Adds latency (queueing)
 - More complex
 - Can delay urgent requests
 
 **Implementation:**
+
 ```javascript
 class LeakyBucket {
   constructor(capacity, leakRate) {
-    this.capacity = capacity
-    this.leakRate = leakRate // requests per second
-    this.queue = []
-    this.processing = false
+    this.capacity = capacity;
+    this.leakRate = leakRate; // requests per second
+    this.queue = [];
+    this.processing = false;
   }
 
   async add(request) {
     if (this.queue.length >= this.capacity) {
-      throw new Error('RATE_LIMIT_EXCEEDED')
+      throw new Error('RATE_LIMIT_EXCEEDED');
     }
 
     return new Promise((resolve, reject) => {
-      this.queue.push({ request, resolve, reject })
-      this.processQueue()
-    })
+      this.queue.push({ request, resolve, reject });
+      this.processQueue();
+    });
   }
 
   async processQueue() {
     if (this.processing || this.queue.length === 0) {
-      return
+      return;
     }
 
-    this.processing = true
+    this.processing = true;
 
     while (this.queue.length > 0) {
-      const item = this.queue.shift()
+      const item = this.queue.shift();
 
       try {
-        const result = await item.request()
-        item.resolve(result)
+        const result = await item.request();
+        item.resolve(result);
       } catch (error) {
-        item.reject(error)
+        item.reject(error);
       }
 
       // Wait based on leak rate
-      await new Promise(resolve =>
-        setTimeout(resolve, 1000 / this.leakRate)
-      )
+      await new Promise(resolve => setTimeout(resolve, 1000 / this.leakRate));
     }
 
-    this.processing = false
+    this.processing = false;
   }
 }
 
 // Usage
-const bucket = new LeakyBucket(100, 10) // capacity: 100, rate: 10 req/s
+const bucket = new LeakyBucket(100, 10); // capacity: 100, rate: 10 req/s
 
 app.use('/api/', async (req, res, next) => {
   try {
-    await bucket.add(() => Promise.resolve())
-    next()
+    await bucket.add(() => Promise.resolve());
+    next();
   } catch (error) {
     res.status(429).json({
       error: {
         code: 'RATE_LIMIT_EXCEEDED',
-        message: 'Too many requests. Queue full.'
-      }
-    })
+        message: 'Too many requests. Queue full.',
+      },
+    });
   }
-})
+});
 ```
 
 ## Tiered Rate Limiting
@@ -357,43 +378,43 @@ Different limits for different user types:
 ```javascript
 function getRateLimitTier(user) {
   if (!user) {
-    return { limit: 10, window: 60 } // Anonymous: 10/min
+    return { limit: 10, window: 60 }; // Anonymous: 10/min
   }
 
   if (user.plan === 'premium') {
-    return { limit: 1000, window: 60 } // Premium: 1000/min
+    return { limit: 1000, window: 60 }; // Premium: 1000/min
   }
 
   if (user.plan === 'pro') {
-    return { limit: 500, window: 60 } // Pro: 500/min
+    return { limit: 500, window: 60 }; // Pro: 500/min
   }
 
-  return { limit: 100, window: 60 } // Free: 100/min
+  return { limit: 100, window: 60 }; // Free: 100/min
 }
 
 function dynamicRateLimitMiddleware() {
   return async (req, res, next) => {
-    const tier = getRateLimitTier(req.user)
-    const userId = req.user?.id || req.ip
+    const tier = getRateLimitTier(req.user);
+    const userId = req.user?.id || req.ip;
 
-    const result = await slidingWindowCounter(userId, tier.limit, tier.window)
+    const result = await slidingWindowCounter(userId, tier.limit, tier.window);
 
     res.set({
       'X-RateLimit-Limit': tier.limit,
-      'X-RateLimit-Remaining': result.remaining
-    })
+      'X-RateLimit-Remaining': result.remaining,
+    });
 
     if (!result.allowed) {
       return res.status(429).json({
         error: {
           code: 'RATE_LIMIT_EXCEEDED',
-          message: 'Rate limit exceeded for your plan.'
-        }
-      })
+          message: 'Rate limit exceeded for your plan.',
+        },
+      });
     }
 
-    next()
-  }
+    next();
+  };
 }
 ```
 
@@ -406,35 +427,35 @@ const rateLimits = {
   'POST /auth/login': { limit: 5, window: 300 }, // 5 per 5 minutes
   'POST /users': { limit: 10, window: 3600 }, // 10 per hour
   'GET /users': { limit: 100, window: 60 }, // 100 per minute
-  'GET /posts': { limit: 1000, window: 60 } // 1000 per minute
-}
+  'GET /posts': { limit: 1000, window: 60 }, // 1000 per minute
+};
 
 function endpointRateLimitMiddleware() {
   return async (req, res, next) => {
-    const endpoint = `${req.method} ${req.route.path}`
-    const limits = rateLimits[endpoint] || { limit: 60, window: 60 }
+    const endpoint = `${req.method} ${req.route.path}`;
+    const limits = rateLimits[endpoint] || { limit: 60, window: 60 };
 
-    const userId = req.user?.id || req.ip
-    const key = `${userId}:${endpoint}`
+    const userId = req.user?.id || req.ip;
+    const key = `${userId}:${endpoint}`;
 
-    const result = await slidingWindowCounter(key, limits.limit, limits.window)
+    const result = await slidingWindowCounter(key, limits.limit, limits.window);
 
     res.set({
       'X-RateLimit-Limit': limits.limit,
-      'X-RateLimit-Remaining': result.remaining
-    })
+      'X-RateLimit-Remaining': result.remaining,
+    });
 
     if (!result.allowed) {
       return res.status(429).json({
         error: {
           code: 'RATE_LIMIT_EXCEEDED',
-          message: `Rate limit exceeded for ${endpoint}`
-        }
-      })
+          message: `Rate limit exceeded for ${endpoint}`,
+        },
+      });
     }
 
-    next()
-  }
+    next();
+  };
 }
 ```
 
@@ -448,38 +469,38 @@ const operationCosts = {
   'GET /users': 2,
   'POST /users': 5,
   'DELETE /users/:id': 5,
-  'POST /reports/generate': 50
-}
+  'POST /reports/generate': 50,
+};
 
 function costBasedRateLimitMiddleware(capacity, refillRate) {
   return async (req, res, next) => {
-    const endpoint = `${req.method} ${req.route.path}`
-    const cost = operationCosts[endpoint] || 1
+    const endpoint = `${req.method} ${req.route.path}`;
+    const cost = operationCosts[endpoint] || 1;
 
-    const userId = req.user?.id || req.ip
-    const result = await tokenBucket(userId, capacity, refillRate, cost)
+    const userId = req.user?.id || req.ip;
+    const result = await tokenBucket(userId, capacity, refillRate, cost);
 
     res.set({
       'X-RateLimit-Limit': capacity,
-      'X-RateLimit-Remaining': result.remaining
-    })
+      'X-RateLimit-Remaining': result.remaining,
+    });
 
     if (!result.allowed) {
-      res.set('Retry-After', result.retryAfter)
+      res.set('Retry-After', result.retryAfter);
       return res.status(429).json({
         error: {
           code: 'RATE_LIMIT_EXCEEDED',
-          message: `Insufficient quota. Operation costs ${cost} tokens.`
-        }
-      })
+          message: `Insufficient quota. Operation costs ${cost} tokens.`,
+        },
+      });
     }
 
-    next()
-  }
+    next();
+  };
 }
 
 // Usage: 1000 token capacity, refill 10 tokens/second
-app.use('/api/', costBasedRateLimitMiddleware(1000, 10))
+app.use('/api/', costBasedRateLimitMiddleware(1000, 10));
 ```
 
 ## Distributed Rate Limiting
@@ -487,13 +508,13 @@ app.use('/api/', costBasedRateLimitMiddleware(1000, 10))
 For multi-server deployments, use Redis:
 
 ```javascript
-const Redis = require('ioredis')
+const Redis = require('ioredis');
 const redis = new Redis({
   host: 'redis-server',
   port: 6379,
   enableReadyCheck: true,
-  maxRetriesPerRequest: 3
-})
+  maxRetriesPerRequest: 3,
+});
 
 // Lua script for atomic rate limiting (sliding window counter)
 const slidingWindowLua = `
@@ -517,15 +538,15 @@ redis.call('incr', current_key)
 redis.call('expire', current_key, window * 2)
 
 return {1, math.floor(limit - estimated_count - 1)}
-`
+`;
 
 async function distributedRateLimit(userId, limit, windowSeconds) {
-  const now = Date.now()
-  const currentWindow = Math.floor(now / (windowSeconds * 1000))
-  const previousWindow = currentWindow - 1
+  const now = Date.now();
+  const currentWindow = Math.floor(now / (windowSeconds * 1000));
+  const previousWindow = currentWindow - 1;
 
-  const currentKey = `rate_limit:${userId}:${currentWindow}`
-  const previousKey = `rate_limit:${userId}:${previousWindow}`
+  const currentKey = `rate_limit:${userId}:${currentWindow}`;
+  const previousKey = `rate_limit:${userId}:${previousWindow}`;
 
   const [allowed, remaining] = await redis.eval(
     slidingWindowLua,
@@ -535,12 +556,12 @@ async function distributedRateLimit(userId, limit, windowSeconds) {
     limit,
     windowSeconds,
     now
-  )
+  );
 
   return {
     allowed: allowed === 1,
-    remaining
-  }
+    remaining,
+  };
 }
 ```
 
@@ -554,13 +575,13 @@ function setRateLimitHeaders(res, limit, remaining, resetAt) {
     'X-RateLimit-Limit': limit,
     'X-RateLimit-Remaining': remaining,
     'X-RateLimit-Reset': Math.floor(resetAt / 1000),
-    'X-RateLimit-Used': limit - remaining
-  })
+    'X-RateLimit-Used': limit - remaining,
+  });
 }
 
 function setRetryAfterHeader(res, resetAt) {
-  const retryAfterSeconds = Math.ceil((resetAt - Date.now()) / 1000)
-  res.set('Retry-After', retryAfterSeconds)
+  const retryAfterSeconds = Math.ceil((resetAt - Date.now()) / 1000);
+  res.set('Retry-After', retryAfterSeconds);
 }
 ```
 
@@ -573,19 +594,19 @@ npm install express-rate-limit redis rate-limit-redis
 ```
 
 ```javascript
-const rateLimit = require('express-rate-limit')
-const RedisStore = require('rate-limit-redis')
-const redis = require('redis')
+const rateLimit = require('express-rate-limit');
+const RedisStore = require('rate-limit-redis');
+const redis = require('redis');
 
 const redisClient = redis.createClient({
   host: 'localhost',
-  port: 6379
-})
+  port: 6379,
+});
 
 const limiter = rateLimit({
   store: new RedisStore({
     client: redisClient,
-    prefix: 'rate_limit:'
+    prefix: 'rate_limit:',
   }),
   windowMs: 60 * 1000, // 1 minute
   max: 100, // 100 requests per windowMs
@@ -595,20 +616,24 @@ const limiter = rateLimit({
     res.status(429).json({
       error: {
         code: 'RATE_LIMIT_EXCEEDED',
-        message: 'Too many requests, please try again later.'
-      }
-    })
-  }
-})
+        message: 'Too many requests, please try again later.',
+      },
+    });
+  },
+});
 
 // Apply to all routes
-app.use('/api/', limiter)
+app.use('/api/', limiter);
 
 // Or specific routes
-app.post('/auth/login', rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 5 // 5 requests per 15 minutes
-}), loginHandler)
+app.post(
+  '/auth/login',
+  rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 5, // 5 requests per 15 minutes
+  }),
+  loginHandler
+);
 ```
 
 ## Monitoring and Analytics
@@ -617,31 +642,35 @@ Track rate limit hits:
 
 ```javascript
 async function trackRateLimitHit(userId, endpoint) {
-  const timestamp = Date.now()
-  const key = `rate_limit:hits:${userId}`
+  const timestamp = Date.now();
+  const key = `rate_limit:hits:${userId}`;
 
-  await redis.zadd(key, timestamp, JSON.stringify({
-    endpoint,
-    timestamp
-  }))
+  await redis.zadd(
+    key,
+    timestamp,
+    JSON.stringify({
+      endpoint,
+      timestamp,
+    })
+  );
 
-  await redis.expire(key, 86400) // Keep for 24 hours
+  await redis.expire(key, 86400); // Keep for 24 hours
 
   // Increment counter for monitoring
-  await redis.incr(`rate_limit:total_hits:${Date.now() / (3600 * 1000)}`)
+  await redis.incr(`rate_limit:total_hits:${Date.now() / (3600 * 1000)}`);
 }
 
 // Dashboard query
 async function getRateLimitStats(userId) {
-  const key = `rate_limit:hits:${userId}`
-  const oneDayAgo = Date.now() - (24 * 60 * 60 * 1000)
+  const key = `rate_limit:hits:${userId}`;
+  const oneDayAgo = Date.now() - 24 * 60 * 60 * 1000;
 
-  const hits = await redis.zrangebyscore(key, oneDayAgo, '+inf')
+  const hits = await redis.zrangebyscore(key, oneDayAgo, '+inf');
 
   return {
     totalHits: hits.length,
-    hits: hits.map(h => JSON.parse(h))
-  }
+    hits: hits.map(h => JSON.parse(h)),
+  };
 }
 ```
 

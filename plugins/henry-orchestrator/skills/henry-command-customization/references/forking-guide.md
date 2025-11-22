@@ -38,11 +38,13 @@ Identify which Henry command best matches your needs:
 - **henry-team:** Custom agent orchestration
 
 List all commands:
+
 ```bash
 ls plugins/henry-orchestrator/commands/
 ```
 
 Review command to understand structure:
+
 ```bash
 cat plugins/henry-orchestrator/commands/henry-feature.md
 ```
@@ -62,6 +64,7 @@ cp plugins/henry-orchestrator/commands/henry-feature.md \
 ```
 
 **Location choice:**
+
 - **`.claude/commands/`**: Project-specific, shared via git
 - **`~/.claude/commands/`**: Personal, not shared
 
@@ -70,11 +73,13 @@ cp plugins/henry-orchestrator/commands/henry-feature.md \
 Update command name in file:
 
 1. Change H1 title:
+
 ```markdown
 # Mobile Feature Development
 ```
 
 2. Update frontmatter description:
+
 ```yaml
 ---
 description: Mobile app feature development for iOS/Android
@@ -83,6 +88,7 @@ argument-hint: [feature-name] [platform]
 ```
 
 3. Update references throughout file:
+
 - Change command name in text
 - Update examples to use new name
 
@@ -96,6 +102,7 @@ Delete phases not needed for your workflow:
 
 ```markdown
 ## Phase 3: Desktop UI Design
+
 [DELETE THIS ENTIRE SECTION]
 ```
 
@@ -109,6 +116,7 @@ Insert phases where needed:
 **Goal**: Test on multiple devices and OS versions
 
 **Actions**:
+
 1. Launch qa-tester for mobile test strategy
 2. Test on iOS devices (iPhone 12-15, iPad)
 3. Test on Android devices (various manufacturers)
@@ -124,23 +132,27 @@ Insert phases where needed:
 Change agent selection or actions:
 
 **Original:**
+
 ```markdown
 ## Phase 2: UI Design
 
 **Agents**: ui-visual-designer
 
 **Actions**:
+
 1. Create high-fidelity mockups
 2. Design component library
 ```
 
 **Modified for mobile:**
+
 ```markdown
 ## Phase 2: Mobile UI Design
 
 **Agents**: mobile-app-engineer, ux-ui-designer
 
 **Actions**:
+
 1. Apply iOS Human Interface Guidelines / Material Design
 2. Design for mobile-specific patterns (navigation, gestures)
 3. Create responsive layouts for different screen sizes
@@ -155,6 +167,7 @@ Revise summary to reflect customized workflow:
 ## Summary
 
 Complete mobile feature ready for app store release:
+
 - Platform-appropriate UX following iOS/Android guidelines
 - Native or cross-platform implementation
 - Tested on multiple devices and OS versions
@@ -173,18 +186,25 @@ Provide concrete examples for your team:
 
 **iOS feature:**
 ```
+
 /mobile-feature offline-notes iOS
+
 ```
 
 **Android feature:**
 ```
+
 /mobile-feature payment-flow Android
+
 ```
 
 **Cross-platform:**
 ```
+
 /mobile-feature user-profile "iOS and Android"
+
 ```
+
 ```
 
 ### Step 7: Test Command
@@ -218,15 +238,19 @@ Run fewer phases than original command:
 Quick prototype without full testing and optimization.
 
 ## Phase 1: Design
+
 [Keep basic design phase]
 
 ## Phase 2: Implementation
+
 [Keep core implementation]
 
 ## Phase 3: Manual Testing
+
 [Skip automated testing, do manual only]
 
 ## Summary
+
 Working prototype for demo purposes. Not production-ready.
 ```
 
@@ -241,24 +265,31 @@ Add phases to original command:
 # Design with User Research
 
 ## Phase 1: Competitive Analysis
+
 [NEW PHASE]
 
 ## Phase 2: User Research
+
 [NEW PHASE]
 
 ## Phase 3: User Research Analysis
+
 [Keep from original]
 
 ## Phase 4: UX Design
+
 [Keep from original]
 
 ## Phase 5: UI Design
+
 [Keep from original]
 
 ## Phase 6: Prototype Testing
+
 [NEW PHASE]
 
 ## Phase 7: Design System Documentation
+
 [NEW PHASE]
 ```
 
@@ -299,18 +330,23 @@ Change execution order:
 # Sequential Audit with Fixes
 
 ## Phase 1: Security Audit
+
 [security-engineer only]
 
 ## Phase 2: Address Security Findings
+
 [Fix critical issues]
 
 ## Phase 3: Performance Audit
+
 [performance-engineer only - now on secure baseline]
 
 ## Phase 4: Address Performance Issues
+
 [Optimize without compromising security]
 
 ## Phase 5: Final Validation
+
 [Re-run both audits to verify]
 ```
 
@@ -325,16 +361,20 @@ Customize for specific platform or technology:
 # React Native Feature Development
 
 ## Phase 1: Cross-Platform Design
+
 [Design once for iOS and Android]
 
 ## Phase 2: React Native Implementation
+
 **Agents**: mobile-app-engineer
 **Actions**:
+
 1. Implement using React Native components
 2. Handle platform-specific code with Platform.select
 3. Optimize bundle size
 
 ## Phase 3: Platform-Specific Testing
+
 [Test on both iOS and Android]
 ```
 
@@ -347,11 +387,12 @@ Add version field to track changes:
 ```yaml
 ---
 description: Mobile feature development for iOS/Android
-version: "1.0.0"
+version: '1.0.0'
 ---
 ```
 
 Update version when making changes:
+
 - **1.0.0 → 1.0.1**: Bug fixes, minor clarifications
 - **1.0.0 → 1.1.0**: New optional phase, additional actions
 - **1.0.0 → 2.0.0**: Breaking changes to command structure
@@ -376,16 +417,19 @@ Add comments explaining customizations:
 When Henry Orchestrator updates:
 
 1. **Check upstream changes:**
+
 ```bash
 git diff HEAD~1 plugins/henry-orchestrator/commands/henry-feature.md
 ```
 
 2. **Review improvements:**
+
 - Better phase structure?
 - New agent capabilities?
 - Improved examples?
 
 3. **Merge beneficial changes:**
+
 ```bash
 # Review upstream command
 cat plugins/henry-orchestrator/commands/henry-feature.md
@@ -395,13 +439,15 @@ nano .claude/commands/mobile-feature.md
 ```
 
 4. **Test after merge:**
+
 ```bash
 /mobile-feature test-sync iOS
 ```
 
 5. **Update version and document:**
+
 ```yaml
-version: "1.1.0"  # Merged upstream improvements
+version: '1.1.0' # Merged upstream improvements
 ```
 
 ### Deprecating Forks
@@ -409,11 +455,13 @@ version: "1.1.0"  # Merged upstream improvements
 When fork no longer needed:
 
 1. **Assess necessity:**
+
 - Is inline customization sufficient now?
 - Does updated upstream command meet needs?
 - Is henry-team more appropriate?
 
 2. **Notify team:**
+
 ```markdown
 <!-- DEPRECATED: This command is deprecated as of 2024-06-01.
 Use /henry-orchestrator:henry-feature with inline customization instead:
@@ -422,9 +470,10 @@ Use /henry-orchestrator:henry-feature with inline customization instead:
 ```
 
 3. **Grace period:**
-Keep command for 2-4 weeks with deprecation notice
+   Keep command for 2-4 weeks with deprecation notice
 
 4. **Remove and document:**
+
 ```bash
 git rm .claude/commands/mobile-feature.md
 git commit -m "Remove deprecated mobile-feature command
@@ -471,6 +520,7 @@ Migration: Use /henry-orchestrator:henry-feature [args] 'mobile-specific: ...'"
 **Issue:** Forked command doesn't show in command list
 
 **Solutions:**
+
 - Verify file location (`.claude/commands/` or `~/.claude/commands/`)
 - Check file has `.md` extension
 - Ensure valid YAML frontmatter (no syntax errors)
@@ -481,6 +531,7 @@ Migration: Use /henry-orchestrator:henry-feature [args] 'mobile-specific: ...'"
 **Issue:** Phases run out of order or agents not invoked
 
 **Solutions:**
+
 - Review phase instructions for clarity
 - Ensure agent names match exactly (check `/agents`)
 - Add explicit "wait for user confirmation" checkpoints
@@ -491,6 +542,7 @@ Migration: Use /henry-orchestrator:henry-feature [args] 'mobile-specific: ...'"
 **Issue:** `$1`, `$2` not substituting correctly
 
 **Solutions:**
+
 - Verify argument syntax: `$1` not `$arg1`
 - Check `argument-hint` matches expected arguments
 - Test invocation: `/your-command arg1 arg2`
@@ -501,6 +553,7 @@ Migration: Use /henry-orchestrator:henry-feature [args] 'mobile-specific: ...'"
 **Issue:** Fork and upstream have same name or conflict
 
 **Solutions:**
+
 - Rename fork to avoid conflicts: `my-feature` not `henry-feature`
 - Use project prefix: `acme-feature` for Acme Corp
 - Document relationship to upstream clearly
@@ -510,6 +563,7 @@ Migration: Use /henry-orchestrator:henry-feature [args] 'mobile-specific: ...'"
 **Issue:** Fork hasn't been updated while upstream improved
 
 **Solutions:**
+
 - Set calendar reminder to review upstream monthly
 - Subscribe to Henry Orchestrator changelog
 - Test fork regularly to catch issues early
@@ -528,6 +582,7 @@ cp plugins/henry-orchestrator/commands/henry-feature.md \
 ```
 
 Customize for APIs:
+
 ```markdown
 ---
 description: API development with OpenAPI spec, implementation, and testing
@@ -542,21 +597,27 @@ Customizations: API-specific phases, added security review, OpenAPI generation
 # API Development Workflow
 
 ## Phase 1: API Design
+
 [Modified: Added OpenAPI specification requirement]
 
 ## Phase 2: Security Review
+
 [NEW: Added security-engineer review of API design]
 
 ## Phase 3: Implementation
+
 [Keep from original]
 
 ## Phase 4: API Testing
+
 [Modified: Added contract testing, removed UI testing]
 
 ## Phase 5: Documentation
+
 [Modified: Auto-generate from OpenAPI spec]
 
 ## Summary
+
 Complete API with spec, security review, tests, and documentation.
 ```
 
@@ -570,11 +631,12 @@ cp plugins/henry-orchestrator/commands/henry-review.md \
 ```
 
 Simplify to single-phase:
+
 ```markdown
 ---
 description: Quick code review focusing on critical issues only
 argument-hint: [pr-number or file-path]
-version: "1.0.0"
+version: '1.0.0'
 ---
 
 <!-- Forked from henry-review v1.0.0
@@ -590,6 +652,7 @@ Rapid review focusing on blocking issues: security, correctness, breaking change
 **Goal**: Identify blocking issues that must be fixed before merge
 
 **Actions**:
+
 1. Launch backend-engineer or frontend-engineer (depending on changes)
 2. Review for security vulnerabilities
 3. Check for breaking changes
@@ -614,7 +677,7 @@ Fork for platform-specific migration workflow:
 ---
 description: React to Next.js migration workflow
 argument-hint: [component-or-page]
-version: "1.0.0"
+version: '1.0.0'
 ---
 
 <!-- Created from henry-feature pattern
@@ -628,6 +691,7 @@ Customized for React → Next.js migrations
 **Goal**: Assess migration complexity and dependencies
 
 **Actions**:
+
 1. Launch frontend-engineer to analyze component
 2. Identify dependencies and hooks
 3. Plan data fetching strategy (SSR, SSG, CSR)
@@ -642,6 +706,7 @@ Customized for React → Next.js migrations
 **Goal**: Migrate component to Next.js
 
 **Actions**:
+
 1. Convert to Next.js page or component structure
 2. Migrate data fetching (useEffect → getServerSideProps/getStaticProps)
 3. Update routing (React Router → Next.js routing)
@@ -656,6 +721,7 @@ Customized for React → Next.js migrations
 **Goal**: Verify migrated component works correctly
 
 **Actions**:
+
 1. Update tests for Next.js environment
 2. Test SSR/SSG rendering
 3. Verify data fetching

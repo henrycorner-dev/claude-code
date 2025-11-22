@@ -108,19 +108,17 @@ const { title } = Astro.props
 
 ```jsx
 // src/components/Counter.jsx (React)
-import { useState } from 'react'
+import { useState } from 'react';
 
 export default function Counter() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
 
   return (
     <div>
       <p>Count: {count}</p>
-      <button onClick={() => setCount(count + 1)}>
-        Increment
-      </button>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
     </div>
-  )
+  );
 }
 ```
 
@@ -150,7 +148,7 @@ Content Collections provide type-safe content management with validation.
 
 ```typescript
 // src/content/config.ts
-import { defineCollection, z } from 'astro:content'
+import { defineCollection, z } from 'astro:content';
 
 const blogCollection = defineCollection({
   type: 'content',
@@ -160,13 +158,13 @@ const blogCollection = defineCollection({
     pubDate: z.date(),
     author: z.string(),
     tags: z.array(z.string()).optional(),
-    image: z.string().optional()
-  })
-})
+    image: z.string().optional(),
+  }),
+});
 
 export const collections = {
-  blog: blogCollection
-}
+  blog: blogCollection,
+};
 ```
 
 ### Creating Content
@@ -174,11 +172,11 @@ export const collections = {
 ```markdown
 ---
 # src/content/blog/first-post.md
-title: "My First Post"
-description: "This is my first blog post"
+title: 'My First Post'
+description: 'This is my first blog post'
 pubDate: 2024-01-01
-author: "John Doe"
-tags: ["astro", "blogging"]
+author: 'John Doe'
+tags: ['astro', 'blogging']
 ---
 
 # My First Post
@@ -314,28 +312,28 @@ const { path } = Astro.params
 
 ```typescript
 // src/pages/api/posts.json.ts
-import type { APIRoute } from 'astro'
+import type { APIRoute } from 'astro';
 
 export const GET: APIRoute = async ({ request }) => {
-  const posts = await fetchPosts()
+  const posts = await fetchPosts();
 
   return new Response(JSON.stringify(posts), {
     status: 200,
     headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-}
+      'Content-Type': 'application/json',
+    },
+  });
+};
 
 export const POST: APIRoute = async ({ request }) => {
-  const data = await request.json()
+  const data = await request.json();
 
-  await createPost(data)
+  await createPost(data);
 
   return new Response(JSON.stringify({ success: true }), {
-    status: 201
-  })
-}
+    status: 201,
+  });
+};
 ```
 
 ## Data Fetching
@@ -401,14 +399,14 @@ npx astro add react vue svelte
 
 ```javascript
 // astro.config.mjs
-import { defineConfig } from 'astro/config'
-import react from '@astrojs/react'
-import vue from '@astrojs/vue'
-import svelte from '@astrojs/svelte'
+import { defineConfig } from 'astro/config';
+import react from '@astrojs/react';
+import vue from '@astrojs/vue';
+import svelte from '@astrojs/svelte';
 
 export default defineConfig({
-  integrations: [react(), vue(), svelte()]
-})
+  integrations: [react(), vue(), svelte()],
+});
 ```
 
 ### Using Multiple Frameworks
@@ -453,40 +451,34 @@ const initialCount = 10
 
 ```jsx
 // src/components/store.js
-import { atom } from 'nanostores'
+import { atom } from 'nanostores';
 
-export const count = atom(0)
+export const count = atom(0);
 ```
 
 ```jsx
 // src/components/ReactCounter.jsx
-import { useStore } from '@nanostores/react'
-import { count } from './store'
+import { useStore } from '@nanostores/react';
+import { count } from './store';
 
 export default function ReactCounter() {
-  const $count = useStore(count)
+  const $count = useStore(count);
 
-  return (
-    <button onClick={() => count.set($count + 1)}>
-      React: {$count}
-    </button>
-  )
+  return <button onClick={() => count.set($count + 1)}>React: {$count}</button>;
 }
 ```
 
 ```vue
 <!-- src/components/VueCounter.vue -->
 <script setup>
-import { useStore } from '@nanostores/vue'
-import { count } from './store'
+import { useStore } from '@nanostores/vue';
+import { count } from './store';
 
-const $count = useStore(count)
+const $count = useStore(count);
 </script>
 
 <template>
-  <button @click="count.set($count + 1)">
-    Vue: {{ $count }}
-  </button>
+  <button @click="count.set($count + 1)">Vue: {{ $count }}</button>
 </template>
 ```
 
@@ -498,15 +490,15 @@ Astro supports mixing static and server-rendered pages.
 
 ```javascript
 // astro.config.mjs
-import { defineConfig } from 'astro/config'
-import node from '@astrojs/node'
+import { defineConfig } from 'astro/config';
+import node from '@astrojs/node';
 
 export default defineConfig({
   output: 'hybrid', // or 'server'
   adapter: node({
-    mode: 'standalone'
-  })
-})
+    mode: 'standalone',
+  }),
+});
 ```
 
 ### Server-Side Rendering
@@ -690,19 +682,19 @@ import { ViewTransitions } from 'astro:transitions'
 export default defineConfig({
   build: {
     inlineStylesheets: 'auto',
-    splitting: true
+    splitting: true,
   },
   vite: {
     build: {
       minify: 'terser',
       terserOptions: {
         compress: {
-          drop_console: true
-        }
-      }
-    }
-  }
-})
+          drop_console: true,
+        },
+      },
+    },
+  },
+});
 ```
 
 This comprehensive guide covers Astro patterns for building fast, content-focused websites with optimal performance and developer experience.

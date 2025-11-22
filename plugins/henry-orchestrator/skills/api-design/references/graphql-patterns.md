@@ -5,6 +5,7 @@
 ### Type Definitions
 
 **Object Types:**
+
 ```graphql
 type User {
   id: ID!
@@ -28,6 +29,7 @@ type Post {
 ```
 
 **Interfaces for Shared Fields:**
+
 ```graphql
 interface Node {
   id: ID!
@@ -56,6 +58,7 @@ type Post implements Node & Timestamped {
 ```
 
 **Unions for Polymorphic Returns:**
+
 ```graphql
 union SearchResult = User | Post | Comment
 
@@ -65,6 +68,7 @@ type Query {
 ```
 
 Query usage:
+
 ```graphql
 query {
   search(query: "api design") {
@@ -147,11 +151,7 @@ type Query {
     sortOrder: SortOrder
   ): UserConnection!
 
-  posts(
-    first: Int
-    after: String
-    filter: PostFilterInput
-  ): PostConnection!
+  posts(first: Int, after: String, filter: PostFilterInput): PostConnection!
 
   # Search
   search(query: String!, types: [SearchType!]): [SearchResult!]!
@@ -184,6 +184,7 @@ type PageInfo {
 ```
 
 Query usage:
+
 ```graphql
 query {
   users(first: 10, after: "cursor123") {
@@ -241,12 +242,10 @@ type UserError {
 ```
 
 Mutation usage:
+
 ```graphql
 mutation {
-  createUser(input: {
-    name: "John Doe"
-    email: "john@example.com"
-  }) {
+  createUser(input: { name: "John Doe", email: "john@example.com" }) {
     user {
       id
       name
@@ -265,6 +264,7 @@ mutation {
 ### Optimistic Updates Support
 
 Return old and new values:
+
 ```graphql
 type UpdateUserPayload {
   user: User
@@ -293,6 +293,7 @@ type Subscription {
 ```
 
 Usage:
+
 ```graphql
 subscription {
   postCreated {
@@ -338,12 +339,13 @@ type CreateUserPayload {
 
 type UserError {
   message: String!
-  field: String  # Which field caused the error
-  code: String!  # Error code for client handling
+  field: String # Which field caused the error
+  code: String! # Error code for client handling
 }
 ```
 
 Example response with errors:
+
 ```json
 {
   "data": {
@@ -386,47 +388,48 @@ Example response with errors:
 ## DataLoader Pattern (N+1 Prevention)
 
 Without DataLoader (N+1 problem):
+
 ```javascript
 // Fetches 1 + N queries
 posts.forEach(post => {
-  fetchAuthor(post.authorId)  // N queries!
-})
+  fetchAuthor(post.authorId); // N queries!
+});
 ```
 
 With DataLoader:
+
 ```javascript
 // Batches into 1 query
-const authorLoader = new DataLoader(async (authorIds) => {
-  return await fetchAuthorsByIds(authorIds)  // Single query
-})
+const authorLoader = new DataLoader(async authorIds => {
+  return await fetchAuthorsByIds(authorIds); // Single query
+});
 
 posts.forEach(post => {
-  authorLoader.load(post.authorId)  // Batched
-})
+  authorLoader.load(post.authorId); // Batched
+});
 ```
 
 Implementation:
-```javascript
-const DataLoader = require('dataloader')
 
-const userLoader = new DataLoader(async (userIds) => {
+```javascript
+const DataLoader = require('dataloader');
+
+const userLoader = new DataLoader(async userIds => {
   const users = await User.findAll({
-    where: { id: userIds }
-  })
+    where: { id: userIds },
+  });
 
   // Return in same order as requested
-  return userIds.map(id =>
-    users.find(user => user.id === id)
-  )
-})
+  return userIds.map(id => users.find(user => user.id === id));
+});
 
 const resolvers = {
   Post: {
     author: (post, args, context) => {
-      return context.loaders.user.load(post.authorId)
-    }
-  }
-}
+      return context.loaders.user.load(post.authorId);
+    },
+  },
+};
 ```
 
 ## Authorization
@@ -443,17 +446,18 @@ type User {
 ```
 
 Resolver implementation:
+
 ```javascript
 const resolvers = {
   User: {
     email: (user, args, context) => {
       if (context.userId !== user.id && !context.isAdmin) {
-        throw new ForbiddenError('Cannot view email')
+        throw new ForbiddenError('Cannot view email');
       }
-      return user.email
-    }
-  }
-}
+      return user.email;
+    },
+  },
+};
 ```
 
 ### Query-Level Authorization
@@ -463,12 +467,12 @@ const resolvers = {
   Query: {
     users: (parent, args, context) => {
       if (!context.isAdmin) {
-        throw new ForbiddenError('Admin access required')
+        throw new ForbiddenError('Admin access required');
       }
-      return User.findAll()
-    }
-  }
-}
+      return User.findAll();
+    },
+  },
+};
 ```
 
 ## Pagination Strategies
@@ -562,14 +566,11 @@ type Query {
 ```
 
 Usage:
+
 ```graphql
 query {
   users(
-    filter: {
-      name: { contains: "john" }
-      status: ACTIVE
-      createdAt: { gte: "2024-01-01" }
-    }
+    filter: { name: { contains: "john" }, status: ACTIVE, createdAt: { gte: "2024-01-01" } }
     sortBy: CREATED_AT
     sortOrder: DESC
     first: 10
@@ -589,6 +590,7 @@ query {
 ### Automatic Persisted Queries (APQ)
 
 Client sends query hash:
+
 ```json
 {
   "extensions": {
@@ -698,18 +700,18 @@ describe('User resolver', () => {
       null,
       { id: '123' },
       { userId: '123', loaders: mockLoaders }
-    )
-    expect(result.id).toBe('123')
-  })
-})
+    );
+    expect(result.id).toBe('123');
+  });
+});
 ```
 
 ### Integration Test Schema
 
 ```javascript
-const { createTestClient } = require('apollo-server-testing')
+const { createTestClient } = require('apollo-server-testing');
 
-const { query } = createTestClient(server)
+const { query } = createTestClient(server);
 
 it('fetches user with posts', async () => {
   const result = await query({
@@ -726,34 +728,36 @@ it('fetches user with posts', async () => {
           }
         }
       }
-    `
-  })
+    `,
+  });
 
-  expect(result.data.user.name).toBe('John Doe')
-})
+  expect(result.data.user.name).toBe('John Doe');
+});
 ```
 
 ## GraphQL vs REST Decision Matrix
 
-| Factor | GraphQL | REST |
-|--------|---------|------|
-| Client flexibility | Excellent | Limited |
-| Multiple resources | Single request | Multiple requests |
-| Over-fetching | Eliminated | Common |
-| Under-fetching | Eliminated | Common |
-| Caching | Complex | Simple (HTTP) |
-| Learning curve | Steep | Gentle |
-| Tooling | Excellent | Mature |
-| Real-time | Built-in (subscriptions) | Requires additional setup |
-| File uploads | Complex | Simple |
+| Factor             | GraphQL                  | REST                      |
+| ------------------ | ------------------------ | ------------------------- |
+| Client flexibility | Excellent                | Limited                   |
+| Multiple resources | Single request           | Multiple requests         |
+| Over-fetching      | Eliminated               | Common                    |
+| Under-fetching     | Eliminated               | Common                    |
+| Caching            | Complex                  | Simple (HTTP)             |
+| Learning curve     | Steep                    | Gentle                    |
+| Tooling            | Excellent                | Mature                    |
+| Real-time          | Built-in (subscriptions) | Requires additional setup |
+| File uploads       | Complex                  | Simple                    |
 
 Use GraphQL when:
+
 - Building client-driven applications
 - Need flexible data fetching
 - Have complex, nested data relationships
 - Want real-time features
 
 Use REST when:
+
 - Building simple CRUD APIs
 - Need HTTP caching
 - Have straightforward data model

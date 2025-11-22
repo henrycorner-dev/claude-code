@@ -55,11 +55,13 @@ Projected with optimization:
 ### Step 1: Performance Analysis
 
 **Command**:
+
 ```bash
 /henry-orchestrator:henry-team performance-engineer backend-engineer - Analyze API and database performance bottlenecks
 ```
 
 **performance-engineer findings**:
+
 ```markdown
 ## Performance Diagnosis Report
 
@@ -93,37 +95,45 @@ Projected with optimization:
 ```
 
 **backend-engineer findings**:
-```markdown
+
+````markdown
 ## Database Analysis
 
 ### Problematic Queries
 
 **Query 1: Dashboard data (N+1)**
+
 ```sql
 -- Executed 15 times per request
 SELECT * FROM users WHERE id = ?;  -- 1 time
 SELECT * FROM projects WHERE user_id = ?;  -- N times (for each user)
 SELECT * FROM tasks WHERE project_id = ?;  -- N times (for each project)
 ```
+````
+
 Impact: 15 queries × 120ms = 1.8s
 Solution: JOIN queries to reduce roundtrips
 
 **Query 2: User activity (Full table scan)**
+
 ```sql
 -- No WHERE clause limit, no index on user_id
 SELECT * FROM activities WHERE user_id = ?;
 ```
+
 Query Plan: Seq Scan on activities (cost=0.00..45000.00 rows=2500000)
 Impact: 2.5s for full table scan
 Solution: Add index on user_id, implement pagination
 
 **Query 3: Search (LIKE on multiple columns)**
+
 ```sql
 SELECT * FROM documents
 WHERE title LIKE '%keyword%'
    OR content LIKE '%keyword%'
    OR author LIKE '%keyword%';
 ```
+
 Query Plan: Seq Scan (cannot use index with leading wildcard)
 Impact: 1.8s for 500K rows
 Solution: Full-text search index (PostgreSQL: `tsvector`, MySQL: `FULLTEXT`)
@@ -131,22 +141,26 @@ Solution: Full-text search index (PostgreSQL: `tsvector`, MySQL: `FULLTEXT`)
 ### Schema Issues
 
 **Missing Indexes**:
+
 - activities.user_id (2.5M rows, frequently queried)
 - tasks.project_id (800K rows)
 - documents.created_at (for date range queries)
 - reports.status (for filtering)
 
 **Inefficient Data Types**:
+
 - VARCHAR(255) for fields that are always small (e.g., status: 'pending', 'complete')
 - TEXT for large JSON blobs (should use JSONB in PostgreSQL)
 - No partitioning on large time-series tables
 
 **Connection Pool**:
+
 - Max connections: 100
 - Active connections: 92 average
 - Idle in transaction: 15 (wasting connections)
 - Long-running queries blocking connections
-```
+
+````
 
 ### Step 2: Create Optimization Plan
 
@@ -192,13 +206,15 @@ async function getDashboard(userId) {
   return {user, projects};
 }
 // Result: 1 + 1 + N queries = 1 + 1 + 12 = 14 queries, ~1.8s
-```
+````
 
 **After**:
+
 ```javascript
 // Single query with JOINs
 async function getDashboard(userId) {
-  const results = await db.query(`
+  const results = await db.query(
+    `
     SELECT
       u.*,
       p.id as project_id,
@@ -212,7 +228,9 @@ async function getDashboard(userId) {
     LEFT JOIN projects p ON p.user_id = u.id
     LEFT JOIN tasks t ON t.project_id = p.id
     WHERE u.id = ?
-  `, [userId]);
+  `,
+    [userId]
+  );
 
   // Transform flat results into nested structure
   const dashboard = {
@@ -254,6 +272,7 @@ async function getDashboard(userId) {
 ```
 
 **Alternative: Use ORM with eager loading**:
+
 ```javascript
 // Using Sequelize with eager loading
 async function getDashboard(userId) {
@@ -274,6 +293,7 @@ async function getDashboard(userId) {
 #### Add Missing Indexes
 
 **Analysis**:
+
 ```sql
 -- Identify missing indexes
 SELECT
@@ -301,6 +321,7 @@ ORDER BY idx_tup_read DESC;
 ```
 
 **Migration**:
+
 ```sql
 -- Add indexes for frequent queries
 CREATE INDEX CONCURRENTLY idx_activities_user_id ON activities(user_id);
@@ -323,6 +344,7 @@ DROP INDEX idx_old_unused_column;
 ```
 
 **Results**:
+
 ```
 Query: SELECT * FROM activities WHERE user_id = 123 LIMIT 50
 
@@ -340,6 +362,7 @@ Improvement: 99.5% faster ✓
 #### Implement API Response Caching
 
 **Before**:
+
 ```javascript
 // No caching
 app.get('/api/dashboard', async (req, res) => {
@@ -350,6 +373,7 @@ app.get('/api/dashboard', async (req, res) => {
 ```
 
 **After**:
+
 ```javascript
 const redis = require('redis');
 const client = redis.createClient();
@@ -370,7 +394,7 @@ async function cacheMiddleware(req, res, next) {
 
     // Override res.json to cache response
     const originalJson = res.json.bind(res);
-    res.json = (data) => {
+    res.json = data => {
       // Cache for 5 minutes
       client.setex(cacheKey, 300, JSON.stringify(data));
       return originalJson(data);
@@ -400,6 +424,7 @@ app.post('/api/tasks', async (req, res) => {
 ```
 
 **Results**:
+
 ```
 Dashboard API:
 - Cache HIT: 12ms (cached response)
@@ -413,12 +438,16 @@ Improvement: 98% faster (2.5s → 49ms avg) ✓
 #### Add Pagination
 
 **Before**:
+
 ```javascript
 // Returns all activities (potentially 100K+ rows)
 app.get('/api/users/:id/activity', async (req, res) => {
-  const activities = await db.query(`
+  const activities = await db.query(
+    `
     SELECT * FROM activities WHERE user_id = ?
-  `, [req.params.id]);
+  `,
+    [req.params.id]
+  );
 
   res.json(activities);
 });
@@ -426,6 +455,7 @@ app.get('/api/users/:id/activity', async (req, res) => {
 ```
 
 **After**:
+
 ```javascript
 // Paginated response
 app.get('/api/users/:id/activity', async (req, res) => {
@@ -434,21 +464,27 @@ app.get('/api/users/:id/activity', async (req, res) => {
   const offset = (page - 1) * limit;
 
   // Get paginated results
-  const activities = await db.query(`
+  const activities = await db.query(
+    `
     SELECT * FROM activities
     WHERE user_id = ?
     ORDER BY created_at DESC
     LIMIT ? OFFSET ?
-  `, [req.params.id, limit, offset]);
+  `,
+    [req.params.id, limit, offset]
+  );
 
   // Get total count (cached for 5 minutes)
   const cacheKey = `count:activities:${req.params.id}`;
   let total = await redis.get(cacheKey);
 
   if (!total) {
-    const result = await db.query(`
+    const result = await db.query(
+      `
       SELECT COUNT(*) as total FROM activities WHERE user_id = ?
-    `, [req.params.id]);
+    `,
+      [req.params.id]
+    );
     total = result[0].total;
     await redis.setex(cacheKey, 300, total);
   }
@@ -467,6 +503,7 @@ app.get('/api/users/:id/activity', async (req, res) => {
 ```
 
 **Cursor-based pagination** (for real-time data):
+
 ```javascript
 // Better for real-time feeds (no offset issues)
 app.get('/api/users/:id/activity', async (req, res) => {
@@ -510,6 +547,7 @@ app.get('/api/users/:id/activity', async (req, res) => {
 #### Full-Text Search
 
 **Before**:
+
 ```sql
 -- Slow LIKE query (cannot use index with leading %)
 SELECT * FROM documents
@@ -520,6 +558,7 @@ WHERE title LIKE '%keyword%'
 ```
 
 **After (PostgreSQL)**:
+
 ```sql
 -- Add tsvector column for full-text search
 ALTER TABLE documents
@@ -558,21 +597,23 @@ ORDER BY ts_rank(search_vector, to_tsquery('english', 'keyword')) DESC;
 ```
 
 **API implementation**:
+
 ```javascript
 app.get('/api/search', async (req, res) => {
   const query = req.query.q;
 
   if (!query) {
-    return res.status(400).json({error: 'Query required'});
+    return res.status(400).json({ error: 'Query required' });
   }
 
   // Sanitize and format query for tsquery
   const tsQuery = query
     .split(/\s+/)
-    .map(word => `${word}:*`)  // Prefix matching
-    .join(' & ');  // AND operator
+    .map(word => `${word}:*`) // Prefix matching
+    .join(' & '); // AND operator
 
-  const results = await db.query(`
+  const results = await db.query(
+    `
     SELECT
       id,
       title,
@@ -583,7 +624,9 @@ app.get('/api/search', async (req, res) => {
     WHERE search_vector @@ to_tsquery('english', $1)
     ORDER BY rank DESC
     LIMIT 50
-  `, [tsQuery]);
+  `,
+    [tsQuery]
+  );
 
   res.json(results);
 });
@@ -593,16 +636,17 @@ app.get('/api/search', async (req, res) => {
 #### Query Result Caching (Redis)
 
 **Implementation**:
+
 ```javascript
 const redis = require('redis');
 const client = redis.createClient();
 
 // Cache decorator for database queries
 function cacheQuery(key, ttl = 300) {
-  return function(target, propertyKey, descriptor) {
+  return function (target, propertyKey, descriptor) {
     const originalMethod = descriptor.value;
 
-    descriptor.value = async function(...args) {
+    descriptor.value = async function (...args) {
       const cacheKey = typeof key === 'function' ? key(...args) : key;
 
       // Try cache first
@@ -629,7 +673,7 @@ function cacheQuery(key, ttl = 300) {
 
 // Usage
 class UserRepository {
-  @cacheQuery(userId => `user:${userId}`, 600)  // 10 minute TTL
+  @cacheQuery(userId => `user:${userId}`, 600) // 10 minute TTL
   async findById(userId) {
     return await db.query('SELECT * FROM users WHERE id = ?', [userId]);
   }
@@ -659,44 +703,46 @@ class UserRepository {
 ### Performance Validation
 
 **Command**:
+
 ```bash
 /henry-orchestrator:henry-team performance-engineer qa-tester - Validate database optimizations and measure improvements
 ```
 
 **Results**:
+
 ```markdown
 ## Validation Report
 
 ### API Performance (After Optimization)
 
-| Endpoint | Before | After | Improvement | Target | Status |
-|----------|--------|-------|-------------|--------|--------|
-| GET /api/dashboard | 3.2s | 48ms | 98.5% | <500ms | ✓ |
-| GET /api/users/:id/activity | 2.8s | 85ms | 97.0% | <500ms | ✓ |
-| POST /api/reports/generate | 8.5s | 420ms* | 95.1% | <500ms | ✓ |
-| GET /api/search | 2.1s | 45ms | 97.9% | <500ms | ✓ |
-| GET /api/analytics | 4.6s | 380ms** | 91.7% | <500ms | ✓ |
+| Endpoint                    | Before | After     | Improvement | Target | Status |
+| --------------------------- | ------ | --------- | ----------- | ------ | ------ |
+| GET /api/dashboard          | 3.2s   | 48ms      | 98.5%       | <500ms | ✓      |
+| GET /api/users/:id/activity | 2.8s   | 85ms      | 97.0%       | <500ms | ✓      |
+| POST /api/reports/generate  | 8.5s   | 420ms\*   | 95.1%       | <500ms | ✓      |
+| GET /api/search             | 2.1s   | 45ms      | 97.9%       | <500ms | ✓      |
+| GET /api/analytics          | 4.6s   | 380ms\*\* | 91.7%       | <500ms | ✓      |
 
-*Async processing implemented, user gets immediate response
-**Materialized views implemented
+\*Async processing implemented, user gets immediate response
+\*\*Materialized views implemented
 
 ### Database Performance
 
-| Metric | Before | After | Improvement |
-|--------|--------|-------|-------------|
-| Average query time | 1.8s | 95ms | 94.7% ✓ |
-| 95th percentile | 4.8s | 280ms | 94.2% ✓ |
-| Connection pool utilization | 92% | 42% | 54% reduction ✓ |
-| Query cache hit rate | 12% | 78% | 550% increase ✓ |
-| Index usage | 38% | 89% | 134% increase ✓ |
+| Metric                      | Before | After | Improvement     |
+| --------------------------- | ------ | ----- | --------------- |
+| Average query time          | 1.8s   | 95ms  | 94.7% ✓         |
+| 95th percentile             | 4.8s   | 280ms | 94.2% ✓         |
+| Connection pool utilization | 92%    | 42%   | 54% reduction ✓ |
+| Query cache hit rate        | 12%    | 78%   | 550% increase ✓ |
+| Index usage                 | 38%    | 89%   | 134% increase ✓ |
 
 ### System Resources
 
-| Resource | Before | After | Improvement |
-|----------|--------|-------|-------------|
-| CPU average | 78% | 32% | 59% reduction ✓ |
-| Memory | 11GB | 9.5GB | 14% reduction ✓ |
-| Disk I/O | High | Low | 70% reduction ✓ |
+| Resource    | Before | After | Improvement     |
+| ----------- | ------ | ----- | --------------- |
+| CPU average | 78%    | 32%   | 59% reduction ✓ |
+| Memory      | 11GB   | 9.5GB | 14% reduction ✓ |
+| Disk I/O    | High   | Low   | 70% reduction ✓ |
 
 All targets met ✓
 ```
@@ -704,6 +750,7 @@ All targets met ✓
 ### Load Testing
 
 **Before optimization**:
+
 ```bash
 # Apache Bench
 ab -n 10000 -c 100 https://dataflow.example.com/api/dashboard
@@ -716,6 +763,7 @@ Results:
 ```
 
 **After optimization**:
+
 ```bash
 ab -n 10000 -c 100 https://dataflow.example.com/api/dashboard
 
@@ -761,12 +809,14 @@ ROI:
 ### Lessons Learned
 
 **What Worked Well**:
+
 1. **N+1 query fixes had immediate impact** - Single biggest improvement
 2. **Indexing was low-hanging fruit** - Major improvements with minimal code changes
 3. **Caching strategy** - 78% cache hit rate reduced database load significantly
 4. **Load testing validated improvements** - Confidence in production deployment
 
 **Challenges**:
+
 1. **Cache invalidation complexity** - Required careful design to avoid stale data
 2. **Migration downtime** - Adding indexes on large tables required careful planning
 3. **Monitoring gaps** - Initial metrics didn't capture full picture, added more instrumentation

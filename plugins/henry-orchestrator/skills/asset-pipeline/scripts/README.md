@@ -9,6 +9,7 @@ This directory contains utility scripts for automating asset processing in game 
 Generates optimized texture atlases from individual sprites.
 
 **Features:**
+
 - Multiple packing algorithms (MaxRects, Guillotine, Shelf)
 - Frame trimming and duplicate removal
 - Edge extrusion padding to prevent bleeding
@@ -16,11 +17,13 @@ Generates optimized texture atlases from individual sprites.
 - JSON metadata generation
 
 **Dependencies:**
+
 ```bash
 pip install Pillow rectpack
 ```
 
 **Usage:**
+
 ```bash
 # Basic usage
 python generate_atlas.py --input sprites/ --output atlas.png --size 2048 --padding 2
@@ -30,6 +33,7 @@ python generate_atlas.py --input sprites/ --output atlas.png --config atlas_conf
 ```
 
 **Example:**
+
 ```bash
 python generate_atlas.py \
   --input ../examples/animation_pipeline/source/character_walk \
@@ -43,17 +47,20 @@ python generate_atlas.py \
 Generates Level of Detail (LOD) meshes using mesh simplification.
 
 **Features:**
+
 - Automatic mesh simplification
 - Configurable LOD levels and ratios
 - Distance recommendations based on object type
 - Metadata generation
 
 **Dependencies:**
+
 ```bash
 pip install trimesh numpy
 ```
 
 **Usage:**
+
 ```bash
 # Basic usage
 python generate_lod.py \
@@ -78,6 +85,7 @@ python generate_lod.py \
 Optimizes audio files for game development with compression and normalization.
 
 **Features:**
+
 - Multiple codec support (OGG Vorbis, MP3, AAC)
 - Category-based processing (music, SFX, voice, ambient)
 - LUFS normalization
@@ -86,6 +94,7 @@ Optimizes audio files for game development with compression and normalization.
 - Batch processing
 
 **Dependencies:**
+
 ```bash
 # FFmpeg required (install via system package manager)
 # macOS: brew install ffmpeg
@@ -94,6 +103,7 @@ Optimizes audio files for game development with compression and normalization.
 ```
 
 **Usage:**
+
 ```bash
 # Single file
 python optimize_audio.py \
@@ -109,6 +119,7 @@ python optimize_audio.py \
 ```
 
 **Example:**
+
 ```bash
 python optimize_audio.py \
   --input source_audio/music/theme.wav \
@@ -121,6 +132,7 @@ python optimize_audio.py \
 Processes sprite animation frames into optimized sprite sheets.
 
 **Features:**
+
 - Frame cropping to minimal bounding box
 - Duplicate frame detection and removal
 - Sprite sheet packing
@@ -129,11 +141,13 @@ Processes sprite animation frames into optimized sprite sheets.
 - Multi-animation support
 
 **Dependencies:**
+
 ```bash
 pip install Pillow rectpack
 ```
 
 **Usage:**
+
 ```bash
 # Single animation
 python process_animation.py \
@@ -148,6 +162,7 @@ python process_animation.py --config animation_pipeline/config.json
 ```
 
 **Example:**
+
 ```bash
 python process_animation.py \
   --input ../examples/animation_pipeline/source/character_walk \
@@ -162,18 +177,21 @@ python process_animation.py \
 Validates assets for common issues.
 
 **Features:**
+
 - Texture validation (power-of-two, size limits, bleeding)
 - Audio validation (clipping, silence, file sizes)
 - Animation metadata validation
 - Batch validation
 
 **Dependencies:**
+
 ```bash
 pip install Pillow
 # FFmpeg optional (for audio analysis)
 ```
 
 **Usage:**
+
 ```bash
 # Validate single file
 python validate_assets.py --input atlas.png --type texture
@@ -186,6 +204,7 @@ python validate_assets.py --input audio/ --type audio
 ```
 
 **Example:**
+
 ```bash
 python validate_assets.py \
   --input ../examples/animation_pipeline/processed/ \

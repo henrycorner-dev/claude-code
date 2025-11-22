@@ -20,6 +20,7 @@ This guide explores common tradeoffs when optimizing for performance, security, 
 **Tradeoff**: Aggressive caching improves performance but can serve stale data or cached sensitive information
 
 **Examples**:
+
 ```javascript
 // High performance, potential security risk
 app.get('/api/user/profile', (req, res) => {
@@ -42,6 +43,7 @@ app.get('/api/user/profile', (req, res) => {
 ```
 
 **Decision criteria**:
+
 - Public data → Aggressive caching OK
 - User-specific non-sensitive → Private caching with short TTL
 - Sensitive data → No caching or very short TTL with private directive
@@ -51,6 +53,7 @@ app.get('/api/user/profile', (req, res) => {
 **Tradeoff**: CDNs improve performance but may conflict with data residency requirements
 
 **Balanced approach**:
+
 - Use CDN for static assets (images, CSS, JS)
 - Keep user data on origin servers in compliant regions
 - Use CDN with data residency controls (e.g., AWS CloudFront with regional edge caches)
@@ -62,24 +65,27 @@ app.get('/api/user/profile', (req, res) => {
 
 ```javascript
 // High compression (slower, more vulnerable to timing attacks)
-app.use(compression({level: 9}));
+app.use(compression({ level: 9 }));
 
 // Moderate compression (balanced)
-app.use(compression({level: 6}));
+app.use(compression({ level: 6 }));
 
 // BALANCED APPROACH WITH SECURITY
-app.use(compression({
-  level: 6,
-  threshold: 1024, // Only compress files > 1KB
-  filter: (req, res) => {
-    // Don't compress responses with sensitive data
-    if (req.path.includes('/api/sensitive')) return false;
-    return compression.filter(req, res);
-  },
-}));
+app.use(
+  compression({
+    level: 6,
+    threshold: 1024, // Only compress files > 1KB
+    filter: (req, res) => {
+      // Don't compress responses with sensitive data
+      if (req.path.includes('/api/sensitive')) return false;
+      return compression.filter(req, res);
+    },
+  })
+);
 ```
 
 **Mitigation**:
+
 - Use moderate compression levels (6)
 - Don't compress responses with sensitive data
 - Add random padding to prevent timing attacks
@@ -90,6 +96,7 @@ app.use(compression({
 **Tradeoff**: localStorage/sessionStorage improves performance but less secure than server-side storage
 
 **Decision matrix**:
+
 ```javascript
 // ❌ NEVER store in localStorage
 - Authentication tokens (use httpOnly cookies or memory)
@@ -127,11 +134,13 @@ function secureRetrieve(key, secretKey) {
 ### Best Practices
 
 **When to prioritize performance**:
+
 - Static public content
 - Non-sensitive user data
 - High-traffic applications where performance directly impacts revenue
 
 **When to prioritize security**:
+
 - Authentication and authorization
 - Payment processing
 - Personal health information
@@ -139,6 +148,7 @@ function secureRetrieve(key, secretKey) {
 - Any regulated data (GDPR, HIPAA, PCI-DSS)
 
 **Balanced approach**:
+
 1. **Classify data sensitivity**: Public, Internal, Confidential, Restricted
 2. **Apply appropriate caching**: Based on sensitivity classification
 3. **Measure impact**: Monitor both performance and security metrics
@@ -155,7 +165,9 @@ function secureRetrieve(key, secretKey) {
 ```javascript
 // Highly optimized (hard to read)
 function fibonacci(n) {
-  let a = 0, b = 1, c;
+  let a = 0,
+    b = 1,
+    c;
   if (n === 0) return a;
   for (let i = 2; i <= n; i++) {
     c = a + b;
@@ -184,6 +196,7 @@ function fibonacci(n, memo = {}) {
 ```
 
 **Decision criteria**:
+
 - Optimize hot paths (10% of code that runs 90% of the time)
 - Keep business logic readable
 - Add comments to explain optimizations
@@ -197,14 +210,14 @@ function fibonacci(n, memo = {}) {
 // Custom implementation (smaller bundle, more maintenance)
 function debounce(fn, delay) {
   let timeoutId;
-  return function(...args) {
+  return function (...args) {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => fn.apply(this, args), delay);
   };
 }
 
 // Library (larger bundle, battle-tested, maintained)
-import {debounce} from 'lodash';
+import { debounce } from 'lodash';
 
 // BALANCED APPROACH
 // Use libraries for complex functionality (date manipulation, i18n, complex algorithms)
@@ -217,6 +230,7 @@ function debounce(fn, delay) {
 ```
 
 **Decision matrix**:
+
 - **Use library**: Complex logic (crypto, date/time, i18n), security-critical, frequently updated
 - **Custom implementation**: Simple utilities, project-specific logic, when bundle size critical
 - **Evaluate**: Bundle size impact, maintenance burden, security implications
@@ -236,8 +250,8 @@ const sum = positiveNumbers.reduce((a, b) => a + b, 0);
 // BALANCED APPROACH
 // Use clear code by default, optimize when profiling shows bottleneck
 const result = arr
-  .filter(n => n > 0)    // Clear filter step
-  .reduce((a, b) => a + b, 0);  // Clear sum step
+  .filter(n => n > 0) // Clear filter step
+  .reduce((a, b) => a + b, 0); // Clear sum step
 
 // If profiling shows this is a bottleneck in production:
 // 1. Add comment explaining optimization
@@ -250,18 +264,21 @@ const result = arr
 ### Best Practices
 
 **When to prioritize performance**:
+
 - Tight loops processing large datasets
 - Real-time or near-real-time processing
 - Mobile applications with limited CPU/memory
 - Functions called thousands of times per second
 
 **When to prioritize maintainability**:
+
 - Business logic that changes frequently
 - Code reviewed by multiple developers
 - Non-performance-critical paths
 - Early-stage projects where requirements are unclear
 
 **Balanced approach**:
+
 1. **Write clear code first**
 2. **Profile to find actual bottlenecks** (measure, don't guess)
 3. **Optimize hot paths only**
@@ -279,9 +296,9 @@ const result = arr
 ```javascript
 // Feature-rich, large bundle
 import React from 'react';
-import {Chart} from 'react-chartjs-2';
-import {Editor} from '@tinymce/tinymce-react';
-import {DatePicker} from 'antd';
+import { Chart } from 'react-chartjs-2';
+import { Editor } from '@tinymce/tinymce-react';
+import { DatePicker } from 'antd';
 
 function Dashboard() {
   return (
@@ -294,7 +311,7 @@ function Dashboard() {
 }
 
 // BALANCED APPROACH: Code splitting and lazy loading
-import React, {lazy, Suspense} from 'react';
+import React, { lazy, Suspense } from 'react';
 
 const Chart = lazy(() => import('react-chartjs-2'));
 const Editor = lazy(() => import('@tinymce/tinymce-react'));
@@ -318,6 +335,7 @@ function Dashboard() {
 ```
 
 **Strategies**:
+
 - **Code splitting**: Load features on demand
 - **Progressive enhancement**: Core experience loads fast, enhancements load after
 - **Feature flags**: Enable/disable features based on user tier or device capability
@@ -363,6 +381,7 @@ if (userIsActivelyInteracting()) {
 ```
 
 **Decision criteria**:
+
 - Critical real-time (trading, gaming) → WebSocket
 - Moderate real-time (chat, notifications) → WebSocket with fallback
 - Infrequent updates (news, social feeds) → Polling or push notifications
@@ -373,12 +392,13 @@ if (userIsActivelyInteracting()) {
 **Tradeoff**: All features available immediately vs. progressive loading
 
 **Strategies**:
+
 ```javascript
 // PROGRESSIVE FEATURE LOADING
 
 // 1. Core features (< 100KB)
-import {AuthForm} from './core/AuthForm';
-import {Navigation} from './core/Navigation';
+import { AuthForm } from './core/AuthForm';
+import { Navigation } from './core/Navigation';
 
 // 2. Common features (load on interaction)
 const SearchModal = lazy(() => import('./features/SearchModal'));
@@ -391,16 +411,14 @@ const AdminPanel = lazy(() => import('./features/AdminPanel'));
 // 4. Optional features (load based on user tier or preference)
 const PremiumFeatures = lazy(() => import('./features/PremiumFeatures'));
 
-function App({user}) {
+function App({ user }) {
   return (
     <div>
       {/* Core: Always available */}
       <Navigation />
 
       {/* Common: Load on interaction */}
-      <Suspense fallback={null}>
-        {showSearch && <SearchModal />}
-      </Suspense>
+      <Suspense fallback={null}>{showSearch && <SearchModal />}</Suspense>
 
       {/* Advanced: Load when user navigates */}
       <Suspense fallback={<Loading />}>
@@ -424,18 +442,21 @@ function App({user}) {
 ### Best Practices
 
 **When to add features despite performance cost**:
+
 - Core value proposition (feature defines the product)
 - High user demand / frequent usage
 - Competitive differentiation
 - Accessibility requirements
 
 **When to defer features for performance**:
+
 - Nice-to-have enhancements
 - Admin/power-user features used by small percentage
 - Features with heavy dependencies
 - Features used infrequently
 
 **Balanced approach**:
+
 1. **Define performance budget** before adding features
 2. **Measure impact** of each new feature on load time
 3. **Progressive loading** for non-critical features
@@ -462,14 +483,14 @@ async function login(username, password) {
   // 4. Security questions
   await validateSecurityAnswers(req.body.answers);
   // Session expires in 15 minutes
-  return createSession({maxAge: 15 * 60 * 1000});
+  return createSession({ maxAge: 15 * 60 * 1000 });
 }
 
 // Minimal security (low friction)
 async function login(username, password) {
   await validatePassword(username, password);
   // Session never expires
-  return createSession({maxAge: Infinity});
+  return createSession({ maxAge: Infinity });
 }
 
 // BALANCED APPROACH: Risk-based authentication
@@ -492,7 +513,7 @@ async function login(username, password, context) {
 
   // 4. Adaptive session duration
   const sessionDuration = riskScore > 0.5 ? 1 * 60 * 60 * 1000 : 7 * 24 * 60 * 60 * 1000;
-  return createSession({maxAge: sessionDuration});
+  return createSession({ maxAge: sessionDuration });
 }
 
 function assessRisk(context) {
@@ -507,6 +528,7 @@ function assessRisk(context) {
 ```
 
 **Strategies**:
+
 - **Device trust**: Remember trusted devices, require MFA for new devices
 - **Risk-based authentication**: Increase security for suspicious activity
 - **Biometric authentication**: Secure and convenient (fingerprint, Face ID)
@@ -543,14 +565,14 @@ const authLimiter = rateLimit({
 
 const apiLimiter = rateLimit({
   windowMs: 60 * 1000,
-  max: (req) => {
+  max: req => {
     // Tiered based on user plan
     if (req.user.plan === 'enterprise') return 1000;
     if (req.user.plan === 'premium') return 300;
     return 60; // Free tier
   },
-  keyGenerator: (req) => req.user.id, // Rate limit per user, not per IP
-  skip: (req) => req.user.isWhitelisted,
+  keyGenerator: req => req.user.id, // Rate limit per user, not per IP
+  skip: req => req.user.isWhitelisted,
 });
 
 app.use('/api/public', publicLimiter);
@@ -559,6 +581,7 @@ app.use('/api', apiLimiter);
 ```
 
 **Strategies**:
+
 - **Different limits** for different endpoints (stricter for auth, generous for public)
 - **User-based limits** instead of IP-based (avoids penalizing shared IPs)
 - **Tiered limits** based on user plan
@@ -568,18 +591,21 @@ app.use('/api', apiLimiter);
 ### Best Practices
 
 **When to prioritize security**:
+
 - Authentication and authorization
 - Payment processing
 - Admin/privileged operations
 - Handling sensitive data
 
 **When to prioritize user experience**:
+
 - Public content browsing
 - First-time user onboarding
 - Low-risk operations
 - Internal tools with trusted users
 
 **Balanced approach**:
+
 1. **Risk-based decisions**: Higher security for higher-risk operations
 2. **Progressive trust**: Build trust over time (device recognition)
 3. **Clear communication**: Explain security measures to users
@@ -643,6 +669,7 @@ describe('User Registration', () => {
 ```
 
 **Risk-based testing strategy**:
+
 - **Critical paths**: 90%+ coverage (authentication, payment, data loss scenarios)
 - **Important features**: 80% coverage (core functionality)
 - **Nice-to-have features**: 60% coverage
@@ -653,28 +680,33 @@ describe('User Registration', () => {
 **Tradeoff**: Thorough code review catches issues but slows down deployment
 
 **Balanced approach**:
+
 ```markdown
 ## Tiered Code Review
 
 ### Tier 1: Auto-merge (automated checks only)
+
 - Documentation updates
 - Copy/text changes
 - Configuration changes (non-security)
 - **Checks**: Linting, formatting, spell check
 
 ### Tier 2: Quick review (< 30 minutes, 1 reviewer)
+
 - Bug fixes (with tests)
 - Small features (< 100 LOC)
 - Refactoring with full test coverage
 - **Checks**: Tests pass, coverage maintained, no security issues
 
 ### Tier 3: Standard review (1-2 hours, 2 reviewers)
+
 - New features (100-500 LOC)
 - API changes
 - Database migrations
 - **Checks**: Design review, tests, documentation, security
 
 ### Tier 4: Thorough review (> 2 hours, 3+ reviewers + architect)
+
 - Major features (> 500 LOC)
 - Architecture changes
 - Security-critical code
@@ -685,18 +717,21 @@ describe('User Registration', () => {
 ### Best Practices
 
 **When to prioritize quality**:
+
 - User-facing production code
 - Security-critical functionality
 - Data integrity operations
 - Refactoring with wide impact
 
 **When to prioritize velocity**:
+
 - Prototypes and experiments
 - Internal tools with limited users
 - Time-sensitive hotfixes
 - Feature flags allowing quick rollback
 
 **Balanced approach**:
+
 1. **Automate quality checks** (linting, formatting, security scanning)
 2. **Risk-based testing** (more tests for critical paths)
 3. **Feature flags** (ship fast, enable gradually)
@@ -789,6 +824,7 @@ Document all significant tradeoff decisions:
 **Context**: Homepage hero image is 2MB, contributing to slow LCP
 
 **Options considered**:
+
 1. Keep original (2MB, high quality)
 2. Moderate compression (500KB, good quality)
 3. Aggressive compression (150KB, acceptable quality)
@@ -796,12 +832,14 @@ Document all significant tradeoff decisions:
 **Decision**: Option 2 (moderate compression)
 
 **Rationale**:
+
 - Performance priority: P1 (LCP currently 4.2s, target <2.5s)
 - Visual quality priority: P1 (hero image is key branding)
 - Option 2 reduces image size 75%, improves LCP by ~1.5s
 - Option 3 saves additional 350KB but quality loss unacceptable to marketing
 
 **Tradeoffs accepted**:
+
 - Slight quality reduction (from 100 to 85 quality score)
 - Acceptable to stakeholders after A/B test showed no impact on conversion
 

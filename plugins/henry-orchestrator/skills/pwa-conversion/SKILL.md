@@ -55,6 +55,7 @@ Create or update `next.config.js` with PWA configuration. Reference the complete
 - Build exclusions
 
 Key configuration options:
+
 - `dest: 'public'` - Output directory for service worker files
 - `register: true` - Auto-register service worker
 - `skipWaiting: true` - Activate new service worker immediately
@@ -66,6 +67,7 @@ Key configuration options:
 Create `public/manifest.json` or `app/manifest.json` (for App Router). Reference `examples/manifest.json` for complete structure including:
 
 **Required fields:**
+
 - `name` - Full application name
 - `short_name` - Name shown on home screen (12 chars max recommended)
 - `start_url` - Entry point when launched from home screen
@@ -73,6 +75,7 @@ Create `public/manifest.json` or `app/manifest.json` (for App Router). Reference
 - `icons` - Array of icon objects with various sizes
 
 **Recommended fields:**
+
 - `background_color` - Splash screen background
 - `theme_color` - Browser UI color
 - `description` - App description for stores
@@ -87,13 +90,16 @@ Create `public/manifest.json` or `app/manifest.json` (for App Router). Reference
 PWAs require multiple icon sizes for different contexts:
 
 **Required sizes:**
+
 - 192x192 - Minimum for "Add to Home Screen"
 - 512x512 - Splash screens and app stores
 
 **Recommended sizes:**
+
 - 72x72, 96x96, 128x128, 144x144, 152x152, 384x384
 
 **Icon purposes:**
+
 - `any` - Standard icons
 - `maskable` - Safe zone for platform-specific masking (192x192 and 512x512 should be maskable)
 
@@ -105,6 +111,7 @@ chmod +x .claude/skills/pwa-conversion/scripts/generate-icons.sh
 ```
 
 **Requirements:**
+
 - ImageMagick must be installed (`brew install imagemagick`)
 - Source image should be square, ideally SVG or high-res PNG
 - For maskable icons, keep important content in center 80% safe zone
@@ -129,14 +136,14 @@ export default function manifest(): MetadataRoute.Manifest {
       {
         src: '/icon-192x192.png',
         sizes: '192x192',
-        type: 'image/png'
+        type: 'image/png',
       },
       {
         src: '/icon-512x512.png',
         sizes: '512x512',
-        type: 'image/png'
-      }
-    ]
+        type: 'image/png',
+      },
+    ],
   };
 }
 ```
@@ -154,21 +161,25 @@ For Pages Router or static HTML, add to `<head>`:
 Service workers enable sophisticated caching. Choose appropriate strategies per resource type:
 
 **Cache First** - Best for static assets (images, fonts, versioned JS/CSS):
+
 - Fastest response
 - Works offline immediately
 - Use for rarely-changing resources
 
 **Network First** - Best for API requests and dynamic content:
+
 - Always tries fresh content
 - Falls back to cache when offline
 - Use for frequently-updated data
 
 **Stale While Revalidate** - Best for balanced freshness and speed:
+
 - Returns cached content immediately
 - Updates cache in background
 - Use for content tolerant of brief staleness
 
 Reference `references/cache-strategies.md` for:
+
 - Detailed strategy implementations
 - Advanced patterns (timeouts, conditional caching, size limits)
 - Workbox configuration examples
@@ -194,7 +205,7 @@ Configure fallback in `next.config.js`:
 
 ```javascript
 fallbacks: {
-  document: '/offline'
+  document: '/offline';
 }
 ```
 
@@ -203,6 +214,7 @@ fallbacks: {
 Enable re-engagement through push notifications. Reference `references/push-notifications.md` for complete implementation including:
 
 **Setup steps:**
+
 1. Generate VAPID keys for authentication
 2. Create subscription API routes
 3. Implement client-side subscription logic
@@ -210,6 +222,7 @@ Enable re-engagement through push notifications. Reference `references/push-noti
 5. Send notifications from server
 
 **Key files:**
+
 - `examples/push-subscription.ts` - Client utilities and React hooks
 - `examples/service-worker.js` - Push event handlers (lines 125-158)
 
@@ -221,6 +234,7 @@ node -e "console.log(require('web-push').generateVAPIDKeys())"
 ```
 
 Add keys to `.env`:
+
 ```
 NEXT_PUBLIC_VAPID_PUBLIC_KEY=your_public_key
 VAPID_PRIVATE_KEY=your_private_key
@@ -233,12 +247,14 @@ Use the `usePushNotifications` hook from `examples/push-subscription.ts` in your
 Ensure critical operations complete even when offline. Reference `references/background-sync.md` for:
 
 **Common use cases:**
+
 - Form submissions
 - Message queuing
 - File uploads
 - Data synchronization
 
 **Implementation pattern:**
+
 1. Store pending operations in IndexedDB
 2. Register sync event when offline
 3. Handle sync event in service worker
@@ -264,17 +280,17 @@ chmod +x .claude/skills/pwa-conversion/scripts/validate-pwa.sh
    - Install and verify standalone mode
 
 2. **Offline functionality**
-   - Open DevTools ’ Application ’ Service Workers
+   - Open DevTools ï¿½ Application ï¿½ Service Workers
    - Check "Offline" in Network tab
    - Navigate app and verify cached content loads
 
 3. **Caching**
-   - Application ’ Cache Storage
+   - Application ï¿½ Cache Storage
    - Verify expected resources are cached
    - Check cache names match configuration
 
 4. **Manifest**
-   - Application ’ Manifest
+   - Application ï¿½ Manifest
    - Verify all fields display correctly
    - Check icons load properly
 
@@ -358,10 +374,10 @@ useEffect(() => {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker
       .register('/sw.js')
-      .then((registration) => {
+      .then(registration => {
         console.log('Service Worker registered:', registration);
       })
-      .catch((error) => {
+      .catch(error => {
         console.error('Service Worker registration failed:', error);
       });
   }
@@ -375,7 +391,7 @@ Prompt users when new version is available:
 ```javascript
 useEffect(() => {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.ready.then((registration) => {
+    navigator.serviceWorker.ready.then(registration => {
       registration.addEventListener('updatefound', () => {
         const newWorker = registration.installing;
 
@@ -406,7 +422,7 @@ useEffect(() => {
 
 5. **Test Offline Scenarios**: Regularly test app with DevTools offline mode enabled
 
-6. **Monitor Cache Size**: Check Application ’ Storage in DevTools to monitor quota usage
+6. **Monitor Cache Size**: Check Application ï¿½ Storage in DevTools to monitor quota usage
 
 7. **Respect User Preferences**: Make push notifications opt-in and easy to disable
 
@@ -423,6 +439,7 @@ useEffect(() => {
 **Symptoms:** Console shows service worker registration errors
 
 **Solutions:**
+
 - Verify HTTPS in production (or localhost in development)
 - Check `next.config.js` PWA configuration
 - Ensure service worker file is accessible at `/sw.js`
@@ -433,6 +450,7 @@ useEffect(() => {
 **Symptoms:** No install banner appears in browser
 
 **Solutions:**
+
 - Verify manifest.json has all required fields
 - Check icon sizes include 192x192 and 512x512
 - Ensure service worker is registered and active
@@ -445,6 +463,7 @@ useEffect(() => {
 **Symptoms:** App shows errors when offline
 
 **Solutions:**
+
 - Verify service worker is active in DevTools
 - Check cache storage contains expected resources
 - Review caching strategies in `next.config.js`
@@ -456,6 +475,7 @@ useEffect(() => {
 **Symptoms:** Subscribe fails or notifications don't appear
 
 **Solutions:**
+
 - Verify VAPID keys are correctly configured
 - Check notification permission status
 - Ensure service worker is active
@@ -468,6 +488,7 @@ useEffect(() => {
 **Symptoms:** Old content persists after deployment
 
 **Solutions:**
+
 - Update cache version in service worker
 - Use `activate` event to delete old caches
 - Implement `skipWaiting` for immediate activation

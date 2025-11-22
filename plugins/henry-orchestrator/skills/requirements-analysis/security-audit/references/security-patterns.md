@@ -124,103 +124,105 @@ const session = require('express-session');
 
 const app = express();
 app.use(express.json());
-app.use(session({
+app.use(
+  session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
-        secure: true,  // HTTPS only
-        httpOnly: true,  // No JS access
-        maxAge: 3600000,  // 1 hour
-        sameSite: 'strict'
-    }
-}));
+      secure: true, // HTTPS only
+      httpOnly: true, // No JS access
+      maxAge: 3600000, // 1 hour
+      sameSite: 'strict',
+    },
+  })
+);
 
 // Middleware for authentication
 function requireAuth(req, res, next) {
-    if (!req.session.userId) {
-        return res.status(401).json({ error: 'Authentication required' });
-    }
-    next();
+  if (!req.session.userId) {
+    return res.status(401).json({ error: 'Authentication required' });
+  }
+  next();
 }
 
 // Registration
 app.post('/register', async (req, res) => {
-    const { username, password } = req.body;
+  const { username, password } = req.body;
 
-    if (!username || !password) {
-        return res.status(400).json({ error: 'Missing credentials' });
-    }
+  if (!username || !password) {
+    return res.status(400).json({ error: 'Missing credentials' });
+  }
 
-    if (password.length < 12) {
-        return res.status(400).json({ error: 'Password too short' });
-    }
+  if (password.length < 12) {
+    return res.status(400).json({ error: 'Password too short' });
+  }
 
-    // Check if user exists
-    const existingUser = await User.findOne({ username });
-    if (existingUser) {
-        return res.status(409).json({ error: 'User already exists' });
-    }
+  // Check if user exists
+  const existingUser = await User.findOne({ username });
+  if (existingUser) {
+    return res.status(409).json({ error: 'User already exists' });
+  }
 
-    // Hash password
-    const saltRounds = 12;
-    const passwordHash = await bcrypt.hash(password, saltRounds);
+  // Hash password
+  const saltRounds = 12;
+  const passwordHash = await bcrypt.hash(password, saltRounds);
 
-    // Create user
-    const user = new User({ username, passwordHash });
-    await user.save();
+  // Create user
+  const user = new User({ username, passwordHash });
+  await user.save();
 
-    res.status(201).json({ message: 'User created' });
+  res.status(201).json({ message: 'User created' });
 });
 
 // Login
 app.post('/login', async (req, res) => {
-    const { username, password } = req.body;
+  const { username, password } = req.body;
 
-    const user = await User.findOne({ username });
+  const user = await User.findOne({ username });
 
-    if (!user) {
-        return res.status(401).json({ error: 'Invalid credentials' });
+  if (!user) {
+    return res.status(401).json({ error: 'Invalid credentials' });
+  }
+
+  const validPassword = await bcrypt.compare(password, user.passwordHash);
+
+  if (!validPassword) {
+    return res.status(401).json({ error: 'Invalid credentials' });
+  }
+
+  if (user.isLocked) {
+    return res.status(403).json({ error: 'Account locked' });
+  }
+
+  // Regenerate session
+  req.session.regenerate(err => {
+    if (err) {
+      return res.status(500).json({ error: 'Session error' });
     }
 
-    const validPassword = await bcrypt.compare(password, user.passwordHash);
-
-    if (!validPassword) {
-        return res.status(401).json({ error: 'Invalid credentials' });
-    }
-
-    if (user.isLocked) {
-        return res.status(403).json({ error: 'Account locked' });
-    }
-
-    // Regenerate session
-    req.session.regenerate((err) => {
-        if (err) {
-            return res.status(500).json({ error: 'Session error' });
-        }
-
-        req.session.userId = user._id;
-        res.json({ message: 'Login successful' });
-    });
+    req.session.userId = user._id;
+    res.json({ message: 'Login successful' });
+  });
 });
 
 // Logout
 app.post('/logout', requireAuth, (req, res) => {
-    req.session.destroy((err) => {
-        if (err) {
-            return res.status(500).json({ error: 'Logout failed' });
-        }
-        res.json({ message: 'Logged out' });
-    });
+  req.session.destroy(err => {
+    if (err) {
+      return res.status(500).json({ error: 'Logout failed' });
+    }
+    res.json({ message: 'Logged out' });
+  });
 });
 
 // Protected route
 app.get('/profile', requireAuth, async (req, res) => {
-    const user = await User.findById(req.session.userId);
-    res.json({
-        username: user.username,
-        email: user.email
-    });
+  const user = await User.findById(req.session.userId);
+  res.json({
+    username: user.username,
+    email: user.email,
+  });
 });
 ```
 

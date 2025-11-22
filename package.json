@@ -1,0 +1,27 @@
+{
+  "name": "claude-code",
+  "version": "1.0.0",
+  "description": "![](https://img.shields.io/badge/Node.js-18%2B-brightgreen?style=flat-square) [![npm]](https://www.npmjs.com/package/@anthropic-ai/claude-code)",
+  "main": "index.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/henrycorner-dev/claude-code.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/henrycorner-dev/claude-code/issues"
+  },
+  "homepage": "https://github.com/henrycorner-dev/claude-code#readme",
+  "devDependencies": {
+    "prettier": "^3.6.2"
+  }
+}

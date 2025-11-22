@@ -1,7 +1,7 @@
 ---
 description: Generates/runs full test suite; coverage reports.
 argument-hint: Optional test framework preference or specific test path
-allowed-tools: ["Read", "Write", "Edit", "Grep", "Glob", "Bash", "TodoWrite", "AskUserQuestion"]
+allowed-tools: ['Read', 'Write', 'Edit', 'Grep', 'Glob', 'Bash', 'TodoWrite', 'AskUserQuestion']
 ---
 
 # Test Suite Generation & Coverage Analysis
@@ -48,7 +48,7 @@ Guide the user through setting up, running, and analyzing comprehensive test sui
 
    **Python Projects**:
    - Check for pytest (pytest.ini, setup.cfg with pytest section)
-   - Check for unittest (test_*.py files)
+   - Check for unittest (test\_\*.py files)
    - Check for nose (nose in requirements)
    - Check for coverage.py (.coveragerc, coverage in requirements)
 
@@ -58,7 +58,7 @@ Guide the user through setting up, running, and analyzing comprehensive test sui
    - Check for JaCoCo (jacoco in build configuration)
 
    **Go Projects**:
-   - Check for built-in testing (*_test.go files)
+   - Check for built-in testing (\*\_test.go files)
    - Check for testify (go.mod with testify)
    - Check for coverage tools
 
@@ -81,7 +81,7 @@ Guide the user through setting up, running, and analyzing comprehensive test sui
 
 4. Determine test structure:
    - Location of test files
-   - Naming conventions (*.test.js, *_test.py, etc.)
+   - Naming conventions (_.test.js, _\_test.py, etc.)
    - Test organization (by feature, by type, etc.)
 
 5. Check for existing test configuration:
@@ -111,6 +111,7 @@ Guide the user through setting up, running, and analyzing comprehensive test sui
 3. **JavaScript/TypeScript** - Install dependencies:
 
    **Jest**:
+
    ```bash
    npm install --save-dev jest @types/jest
    # For TypeScript
@@ -122,6 +123,7 @@ Guide the user through setting up, running, and analyzing comprehensive test sui
    ```
 
    **Vitest**:
+
    ```bash
    npm install --save-dev vitest @vitest/ui
    # For coverage
@@ -131,6 +133,7 @@ Guide the user through setting up, running, and analyzing comprehensive test sui
    ```
 
    **Mocha + Chai**:
+
    ```bash
    npm install --save-dev mocha chai
    # For coverage
@@ -140,6 +143,7 @@ Guide the user through setting up, running, and analyzing comprehensive test sui
 4. **Python** - Install dependencies:
 
    **pytest**:
+
    ```bash
    pip install pytest pytest-cov pytest-html
    # For async tests
@@ -151,6 +155,7 @@ Guide the user through setting up, running, and analyzing comprehensive test sui
 5. **Java** - Verify dependencies in pom.xml or build.gradle:
 
    **Maven (pom.xml)**:
+
    ```xml
    <dependency>
        <groupId>junit</groupId>
@@ -166,12 +171,14 @@ Guide the user through setting up, running, and analyzing comprehensive test sui
    ```
 
    **Gradle (build.gradle)**:
+
    ```gradle
    testImplementation 'junit:junit:4.13.2'
    testImplementation 'org.mockito:mockito-core:5.3.1'
    ```
 
 6. **Go** - Install test dependencies:
+
    ```bash
    # Built-in testing requires no installation
    # For coverage visualization
@@ -209,10 +216,7 @@ Guide the user through setting up, running, and analyzing comprehensive test sui
      testEnvironment: 'node', // or 'jsdom' for browser-like tests
 
      // Test file patterns
-     testMatch: [
-       '**/__tests__/**/*.[jt]s?(x)',
-       '**/?(*.)+(spec|test).[jt]s?(x)'
-     ],
+     testMatch: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
 
      // Coverage configuration
      collectCoverage: true,
@@ -220,7 +224,7 @@ Guide the user through setting up, running, and analyzing comprehensive test sui
        'src/**/*.{js,jsx,ts,tsx}',
        '!src/**/*.d.ts',
        '!src/**/*.stories.{js,jsx,ts,tsx}',
-       '!src/**/__tests__/**'
+       '!src/**/__tests__/**',
      ],
      coverageDirectory: 'coverage',
      coverageReporters: ['text', 'lcov', 'html', 'json-summary'],
@@ -229,8 +233,8 @@ Guide the user through setting up, running, and analyzing comprehensive test sui
          branches: 80,
          functions: 80,
          lines: 80,
-         statements: 80
-       }
+         statements: 80,
+       },
      },
 
      // TypeScript support
@@ -238,11 +242,11 @@ Guide the user through setting up, running, and analyzing comprehensive test sui
 
      // Module paths
      moduleNameMapper: {
-       '^@/(.*)$': '<rootDir>/src/$1'
+       '^@/(.*)$': '<rootDir>/src/$1',
      },
 
      // Setup files
-     setupFilesAfterEnv: ['<rootDir>/jest.setup.js']
+     setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
    };
    ```
 
@@ -266,27 +270,27 @@ Guide the user through setting up, running, and analyzing comprehensive test sui
            'node_modules/',
            'src/**/*.d.ts',
            'src/**/*.spec.{js,ts,jsx,tsx}',
-           'src/**/__tests__/**'
+           'src/**/__tests__/**',
          ],
          all: true,
          lines: 80,
          functions: 80,
          branches: 80,
-         statements: 80
+         statements: 80,
        },
 
        // Test file patterns
        include: ['**/*.{test,spec}.{js,ts,jsx,tsx}'],
 
        // Setup files
-       setupFiles: ['./vitest.setup.ts']
+       setupFiles: ['./vitest.setup.ts'],
      },
 
      resolve: {
        alias: {
-         '@': path.resolve(__dirname, './src')
-       }
-     }
+         '@': path.resolve(__dirname, './src'),
+       },
+     },
    });
    ```
 
@@ -319,6 +323,7 @@ Guide the user through setting up, running, and analyzing comprehensive test sui
    ```
 
    Create `.coveragerc`:
+
    ```ini
    [run]
    source = src
@@ -379,6 +384,7 @@ Guide the user through setting up, running, and analyzing comprehensive test sui
    ```
 
    Or for Vitest:
+
    ```json
    {
      "scripts": {
@@ -394,6 +400,7 @@ Guide the user through setting up, running, and analyzing comprehensive test sui
 7. Create test setup file if needed:
 
    **Jest Setup** (`jest.setup.js`):
+
    ```javascript
    // Add custom matchers
    import '@testing-library/jest-dom';
@@ -429,6 +436,7 @@ Guide the user through setting up, running, and analyzing comprehensive test sui
 2. Run tests based on detected framework:
 
    **JavaScript/TypeScript (Jest)**:
+
    ```bash
    # Run all tests with coverage
    npm test -- --coverage --verbose
@@ -438,6 +446,7 @@ Guide the user through setting up, running, and analyzing comprehensive test sui
    ```
 
    **JavaScript/TypeScript (Vitest)**:
+
    ```bash
    # Run tests with coverage
    npm run test:coverage
@@ -447,6 +456,7 @@ Guide the user through setting up, running, and analyzing comprehensive test sui
    ```
 
    **Python (pytest)**:
+
    ```bash
    # Run all tests with coverage
    pytest --cov=src --cov-report=html --cov-report=term-missing -v
@@ -457,18 +467,21 @@ Guide the user through setting up, running, and analyzing comprehensive test sui
    ```
 
    **Java (Maven)**:
+
    ```bash
    # Run tests with coverage
    mvn clean test jacoco:report
    ```
 
    **Java (Gradle)**:
+
    ```bash
    # Run tests with coverage
    ./gradlew test jacocoTestReport
    ```
 
    **Go**:
+
    ```bash
    # Run tests with coverage
    go test -v -race -coverprofile=coverage.out -covermode=atomic ./...
@@ -478,12 +491,14 @@ Guide the user through setting up, running, and analyzing comprehensive test sui
    ```
 
    **Ruby (RSpec)**:
+
    ```bash
    # Run tests with coverage
    bundle exec rspec --format documentation
    ```
 
    **Rust**:
+
    ```bash
    # Run tests with coverage
    cargo tarpaulin --out Html --out Lcov --output-dir coverage
@@ -537,6 +552,7 @@ Guide the user through setting up, running, and analyzing comprehensive test sui
 3. Generate additional coverage formats if needed:
 
    **Convert coverage to different formats**:
+
    ```bash
    # Jest/Vitest - Already generates multiple formats
 
@@ -553,6 +569,7 @@ Guide the user through setting up, running, and analyzing comprehensive test sui
 4. Read and parse coverage summary:
 
    **JavaScript/TypeScript** - Read `coverage/coverage-summary.json`:
+
    ```javascript
    {
      "total": {
@@ -569,6 +586,7 @@ Guide the user through setting up, running, and analyzing comprehensive test sui
 5. Create coverage summary document:
 
    Create `TEST_COVERAGE_REPORT.md`:
+
    ```markdown
    # Test Coverage Report
 
@@ -578,12 +596,12 @@ Guide the user through setting up, running, and analyzing comprehensive test sui
 
    ## Overall Coverage
 
-   | Metric      | Coverage | Target | Status |
-   |-------------|----------|--------|--------|
-   | Lines       | XX.XX%   | 80%    | ✅/❌  |
-   | Statements  | XX.XX%   | 80%    | ✅/❌  |
-   | Functions   | XX.XX%   | 80%    | ✅/❌  |
-   | Branches    | XX.XX%   | 80%    | ✅/❌  |
+   | Metric     | Coverage | Target | Status |
+   | ---------- | -------- | ------ | ------ |
+   | Lines      | XX.XX%   | 80%    | ✅/❌  |
+   | Statements | XX.XX%   | 80%    | ✅/❌  |
+   | Functions  | XX.XX%   | 80%    | ✅/❌  |
+   | Branches   | XX.XX%   | 80%    | ✅/❌  |
 
    ## Test Results
 
@@ -596,7 +614,7 @@ Guide the user through setting up, running, and analyzing comprehensive test sui
    ## Coverage by Directory
 
    | Directory    | Lines  | Statements | Functions | Branches |
-   |--------------|--------|------------|-----------|----------|
+   | ------------ | ------ | ---------- | --------- | -------- |
    | src/utils    | XX.XX% | XX.XX%     | XX.XX%    | XX.XX%   |
    | src/services | XX.XX% | XX.XX%     | XX.XX%    | XX.XX%   |
    | src/models   | XX.XX% | XX.XX%     | XX.XX%    | XX.XX%   |
@@ -632,7 +650,6 @@ Guide the user through setting up, running, and analyzing comprehensive test sui
 1. Update TodoWrite: Mark "Analyze coverage results and provide recommendations" as in_progress
 
 2. Analyze coverage metrics:
-
    - Identify files with low coverage (< 80%)
    - Find uncovered critical paths
    - Detect untested functions/methods
@@ -642,6 +659,7 @@ Guide the user through setting up, running, and analyzing comprehensive test sui
 3. Generate recommendations based on analysis:
 
    **Low coverage areas**:
+
    ```
    Priority: HIGH
    - File: src/auth/authentication.ts (Coverage: 45%)
@@ -654,6 +672,7 @@ Guide the user through setting up, running, and analyzing comprehensive test sui
    ```
 
    **Untested functions**:
+
    ```
    Priority: MEDIUM
    - Function: validateEmail() in src/utils/validators.ts
@@ -664,6 +683,7 @@ Guide the user through setting up, running, and analyzing comprehensive test sui
    ```
 
    **Missing branch coverage**:
+
    ```
    Priority: HIGH
    - File: src/services/userService.ts
@@ -734,8 +754,7 @@ Guide the user through setting up, running, and analyzing comprehensive test sui
 
        it('should throw error for malformed token', async () => {
          const token = 'invalid-token';
-         await expect(authService.validateToken(token))
-           .rejects.toThrow('Invalid token format');
+         await expect(authService.validateToken(token)).rejects.toThrow('Invalid token format');
        });
      });
    });
@@ -747,33 +766,39 @@ Guide the user through setting up, running, and analyzing comprehensive test sui
    ## Tips for Improving Test Coverage
 
    ### 1. Focus on Critical Paths
+
    - Prioritize testing business logic and critical features
    - Ensure error handling is thoroughly tested
    - Cover edge cases and boundary conditions
 
    ### 2. Use Test-Driven Development (TDD)
+
    - Write tests before implementing features
    - Ensures all new code has corresponding tests
    - Improves code design and testability
 
    ### 3. Test Different Scenarios
+
    - Happy path (expected behavior)
    - Error cases (invalid input, failures)
    - Edge cases (boundaries, null/undefined)
    - Integration scenarios (component interactions)
 
    ### 4. Mock External Dependencies
+
    - Use mocks for APIs, databases, external services
    - Isolate unit tests from external factors
    - Speed up test execution
 
    ### 5. Maintain Test Quality
+
    - Keep tests simple and focused
    - Use descriptive test names
    - Avoid test interdependencies
    - Regular test maintenance and refactoring
 
    ### 6. Monitor Coverage Trends
+
    - Track coverage over time
    - Set coverage gates in CI/CD
    - Review coverage in code reviews
@@ -783,6 +808,7 @@ Guide the user through setting up, running, and analyzing comprehensive test sui
 7. Set up coverage monitoring:
 
    **Add coverage badge to README.md**:
+
    ```markdown
    # Project Name
 
@@ -792,6 +818,7 @@ Guide the user through setting up, running, and analyzing comprehensive test sui
    **Configure CI/CD coverage gates**:
 
    GitHub Actions example (`.github/workflows/test.yml`):
+
    ```yaml
    name: Tests
 
@@ -881,16 +908,19 @@ Guide the user through setting up, running, and analyzing comprehensive test sui
 ### Test Types
 
 **Unit Tests**:
+
 - Test individual functions/methods in isolation
 - Fast execution, no external dependencies
 - High code coverage focus
 
 **Integration Tests**:
+
 - Test component interactions
 - May use real or mocked external services
 - Verify system integration points
 
 **End-to-End Tests**:
+
 - Test complete user workflows
 - Use real environment (or staging)
 - Slower but provide high confidence
@@ -915,16 +945,19 @@ Guide the user through setting up, running, and analyzing comprehensive test sui
 ### Common Issues
 
 **Coverage not collected**:
+
 - Verify coverage configuration in test config
 - Check file patterns include all source files
 - Ensure test files are properly discovered
 
 **Low branch coverage**:
+
 - Add tests for all conditional paths
 - Test error handling scenarios
 - Cover edge cases and boundary conditions
 
 **Slow test execution**:
+
 - Optimize database/API mocks
 - Run tests in parallel
 - Use test.only during development
@@ -932,6 +965,7 @@ Guide the user through setting up, running, and analyzing comprehensive test sui
 ### CI/CD Integration
 
 Set up automated testing:
+
 - Run tests on every commit/PR
 - Enforce coverage thresholds
 - Block merges if tests fail
