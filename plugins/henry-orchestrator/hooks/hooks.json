@@ -1,0 +1,93 @@
+{
+  "description": "Security and quality validation hooks - test coverage checks, dependency vulnerability scanning, bundle size guards, auto-formatting, accessibility auditing, performance profiling, asset optimization, and commit-guard to remind about staged changes. Plus dev-reminder for suggesting relevant commands/agents.",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "Analyze the user's prompt to detect if they mention 'web', 'mobile', or 'game' development. If detected, provide a helpful suggestion:\n\n- If 'web' is mentioned: Suggest 'Consider using /henry-web or the henry-web agent for faster web project setup.'\n- If 'mobile' is mentioned: Suggest 'Consider using /henry-mobile or the henry-mobile agent for faster mobile project setup.'\n- If 'game' is mentioned: Suggest 'Consider using /henry-game or the henry-game agent for faster game development setup.'\n\nUser prompt: $USER_PROMPT\n\nIf any keywords are detected, return a systemMessage with the suggestion. If no keywords are detected, return an empty systemMessage. Output JSON format: {\"systemMessage\": \"your suggestion or empty string\"}",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/scripts/auto-lint-format.sh",
+            "timeout": 60
+          },
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/scripts/accessibility-audit.sh",
+            "timeout": 60
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/scripts/performance-profile.sh",
+            "timeout": 120
+          }
+        ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/scripts/asset-optimizer.sh",
+            "timeout": 60
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/scripts/test-coverage-check.sh",
+            "timeout": 60
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/scripts/security-scan.sh",
+            "timeout": 120
+          },
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/scripts/bundle-size-guard.sh",
+            "timeout": 90
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/scripts/commit-guard.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

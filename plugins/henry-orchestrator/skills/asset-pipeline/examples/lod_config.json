@@ -1,0 +1,142 @@
+{
+  "algorithm": "edge_collapse",
+  "lod_levels": 4,
+  "lod_ratios": [1.0, 0.5, 0.25, 0.1],
+  "lod_distances": {
+    "small_props": {
+      "size_range": [0.5, 2.0],
+      "distances": [0, 8, 25, 50]
+    },
+    "medium_props": {
+      "size_range": [2.0, 5.0],
+      "distances": [0, 12, 35, 80]
+    },
+    "large_props": {
+      "size_range": [5.0, 10.0],
+      "distances": [0, 20, 60, 150]
+    },
+    "characters": {
+      "size_range": [1.5, 2.5],
+      "distances": [0, 15, 40, 100]
+    },
+    "buildings": {
+      "size_range": [10.0, 100.0],
+      "distances": [0, 50, 150, 500]
+    }
+  },
+  "simplification": {
+    "preserve_boundaries": true,
+    "preserve_normals": true,
+    "preserve_material_boundaries": true,
+    "preserve_uv_seams": true,
+    "target_error": 0.01,
+    "aggressiveness": 7
+  },
+  "texture_lod": {
+    "enabled": true,
+    "resolutions": {
+      "lod0": 2048,
+      "lod1": 1024,
+      "lod2": 512,
+      "lod3": 256
+    },
+    "bake_normal_maps": true,
+    "bake_ao_maps": true
+  },
+  "material_lod": {
+    "enabled": true,
+    "lod0": {
+      "shader_complexity": "full_pbr",
+      "normal_mapping": true,
+      "detail_maps": true,
+      "parallax_mapping": true
+    },
+    "lod1": {
+      "shader_complexity": "standard_pbr",
+      "normal_mapping": true,
+      "detail_maps": false,
+      "parallax_mapping": false
+    },
+    "lod2": {
+      "shader_complexity": "simplified",
+      "normal_mapping": false,
+      "detail_maps": false,
+      "parallax_mapping": false
+    },
+    "lod3": {
+      "shader_complexity": "unlit_or_simple",
+      "normal_mapping": false,
+      "detail_maps": false,
+      "parallax_mapping": false
+    }
+  },
+  "transition": {
+    "type": "dithered",
+    "duration_frames": 2,
+    "hysteresis": 0.1,
+    "description": "Hysteresis of 0.1 means LOD switches back at 90% of forward distance"
+  },
+  "impostor": {
+    "enabled": true,
+    "distance_threshold": 200,
+    "view_angles": 8,
+    "texture_resolution": 512,
+    "type": "billboard"
+  },
+  "bone_lod": {
+    "enabled": true,
+    "lod0_bones": 100,
+    "lod1_bones": 50,
+    "lod2_bones": 30,
+    "lod3_bones": 15,
+    "preserve_hierarchy": true
+  },
+  "platform_overrides": {
+    "mobile": {
+      "lod_ratios": [1.0, 0.4, 0.15],
+      "lod_distances_multiplier": 0.6,
+      "texture_lod_resolutions": {
+        "lod0": 1024,
+        "lod1": 512,
+        "lod2": 256
+      }
+    },
+    "pc_high_end": {
+      "lod_distances_multiplier": 1.5,
+      "texture_lod_resolutions": {
+        "lod0": 4096,
+        "lod1": 2048,
+        "lod2": 1024,
+        "lod3": 512
+      }
+    },
+    "console_current_gen": {
+      "lod_distances_multiplier": 1.2,
+      "texture_lod_resolutions": {
+        "lod0": 2048,
+        "lod1": 1024,
+        "lod2": 512,
+        "lod3": 256
+      }
+    },
+    "vr": {
+      "lod_distances_multiplier": 1.3,
+      "comment": "Objects appear larger in VR, extend LOD distances"
+    }
+  },
+  "source": {
+    "directory": "assets_source/models",
+    "formats": ["fbx", "obj", "gltf"]
+  },
+  "output": {
+    "directory": "assets_processed/lods",
+    "naming_convention": "{model_name}_LOD{level}.{extension}",
+    "export_format": "fbx"
+  },
+  "validation": {
+    "check_silhouette_preservation": true,
+    "check_triangle_count_targets": true,
+    "check_uv_preservation": true,
+    "check_material_consistency": true
+  }
+}

@@ -1,0 +1,600 @@
+# GraphQL Schema Example with Best Practices
+
+"""
+Represents a user in the system.
+Users can create posts and follow other users.
+"""
+type User implements Node & Timestamped {
+  "Unique identifier"
+  id: ID!
+
+  "User's display name"
+  name: String!
+
+  """
+  User's email address.
+  Only visible to the user themselves and admins.
+  """
+  email: String!
+
+  "Short biography"
+  bio: String
+
+  "User's profile picture URL"
+  avatar: String
+
+  "User's role in the system"
+  role: UserRole!
+
+  "Account status"
+  status: UserStatus!
+
+  "When the user was created"
+  createdAt: DateTime!
+
+  "When the user was last updated"
+  updatedAt: DateTime!
+
+  "Posts created by this user"
+  posts(
+    "Number of posts to return"
+    first: Int
+    "Cursor for pagination"
+    after: String
+    "Filter by post status"
+    status: PostStatus
+  ): PostConnection!
+
+  "Users that this user follows"
+  following(first: Int, after: String): UserConnection!
+
+  "Users that follow this user"
+  followers(first: Int, after: String): UserConnection!
+
+  "Total number of posts"
+  postCount: Int!
+
+  "Total number of followers"
+  followerCount: Int!
+
+  "Total number of users being followed"
+  followingCount: Int!
+}
+
+"""
+Represents a blog post.
+Posts can have multiple tags and comments.
+"""
+type Post implements Node & Timestamped {
+  id: ID!
+
+  "Post title"
+  title: String!
+
+  "Post content (markdown)"
+  content: String!
+
+  "Post excerpt for previews"
+  excerpt: String
+
+  "Featured image URL"
+  featuredImage: String
+
+  "Post author"
+  author: User!
+
+  "Publication status"
+  status: PostStatus!
+
+  "Post tags"
+  tags: [String!]!
+
+  "When the post was published"
+  publishedAt: DateTime
+
+  createdAt: DateTime!
+  updatedAt: DateTime!
+
+  "Comments on this post"
+  comments(first: Int, after: String): CommentConnection!
+
+  "Number of comments"
+  commentCount: Int!
+
+  "Number of views"
+  viewCount: Int!
+
+  "Users who liked this post"
+  likedBy(first: Int, after: String): UserConnection!
+
+  "Number of likes"
+  likeCount: Int!
+}
+
+"""
+Represents a comment on a post.
+"""
+type Comment implements Node & Timestamped {
+  id: ID!
+
+  "Comment text"
+  text: String!
+
+  "Comment author"
+  author: User!
+
+  "Post this comment belongs to"
+  post: Post!
+
+  "Parent comment (for nested comments)"
+  parent: Comment
+
+  "Replies to this comment"
+  replies(first: Int, after: String): CommentConnection!
+
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+# Interfaces
+
+"""
+Interface for nodes with an ID.
+Implements the Relay Node interface pattern.
+"""
+interface Node {
+  id: ID!
+}
+
+"""
+Interface for entities with timestamps.
+"""
+interface Timestamped {
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+# Enums
+
+enum UserRole {
+  USER
+  MODERATOR
+  ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum SortOrder {
+  ASC
+  DESC
+}
+
+enum UserSortField {
+  NAME
+  CREATED_AT
+  POST_COUNT
+}
+
+enum PostSortField {
+  TITLE
+  CREATED_AT
+  PUBLISHED_AT
+  VIEW_COUNT
+  LIKE_COUNT
+}
+
+# Input Types
+
+"""
+Input for creating a new user.
+"""
+input CreateUserInput {
+  "User's display name"
+  name: String!
+
+  "User's email address"
+  email: String!
+
+  "User's password (min 8 characters)"
+  password: String!
+
+  "Optional biography"
+  bio: String
+}
+
+"""
+Input for updating a user.
+"""
+input UpdateUserInput {
+  name: String
+  email: String
+  bio: String
+  avatar: String
+}
+
+"""
+Input for creating a new post.
+"""
+input CreatePostInput {
+  title: String!
+  content: String!
+  excerpt: String
+  featuredImage: String
+  tags: [String!]
+  status: PostStatus = DRAFT
+}
+
+"""
+Input for updating a post.
+"""
+input UpdatePostInput {
+  title: String
+  content: String
+  excerpt: String
+  featuredImage: String
+  tags: [String!]
+  status: PostStatus
+}
+
+"""
+Input for creating a comment.
+"""
+input CreateCommentInput {
+  "Comment text"
+  text: String!
+
+  "ID of the post to comment on"
+  postId: ID!
+
+  "Optional parent comment ID for nested comments"
+  parentId: ID
+}
+
+"""
+Input for filtering users.
+"""
+input UserFilter {
+  "Filter by name (contains)"
+  nameContains: String
+
+  "Filter by email (contains)"
+  emailContains: String
+
+  "Filter by role"
+  role: UserRole
+
+  "Filter by status"
+  status: UserStatus
+
+  "Filter by creation date"
+  createdAfter: DateTime
+  createdBefore: DateTime
+}
+
+"""
+Input for filtering posts.
+"""
+input PostFilter {
+  "Filter by title (contains)"
+  titleContains: String
+
+  "Filter by author ID"
+  authorId: ID
+
+  "Filter by status"
+  status: PostStatus
+
+  "Filter by tag"
+  tag: String
+
+  "Filter by publication date"
+  publishedAfter: DateTime
+  publishedBefore: DateTime
+}
+
+# Connection Types (Relay-style pagination)
+
+type UserConnection {
+  edges: [UserEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type UserEdge {
+  node: User!
+  cursor: String!
+}
+
+type PostConnection {
+  edges: [PostEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type PostEdge {
+  node: Post!
+  cursor: String!
+}
+
+type CommentConnection {
+  edges: [CommentEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type CommentEdge {
+  node: Comment!
+  cursor: String!
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+# Union Types
+
+"""
+Union type for search results.
+Search can return users, posts, or comments.
+"""
+union SearchResult = User | Post | Comment
+
+# Payload Types
+
+"""
+Payload for user mutations.
+"""
+type UserPayload {
+  "The created/updated user"
+  user: User
+
+  "List of errors, if any"
+  errors: [UserError!]!
+
+  "Whether the operation succeeded"
+  success: Boolean!
+}
+
+"""
+Payload for post mutations.
+"""
+type PostPayload {
+  "The created/updated post"
+  post: Post
+
+  errors: [UserError!]!
+  success: Boolean!
+}
+
+"""
+Payload for comment mutations.
+"""
+type CommentPayload {
+  "The created/updated comment"
+  comment: Comment
+
+  errors: [UserError!]!
+  success: Boolean!
+}
+
+"""
+Payload for delete operations.
+"""
+type DeletePayload {
+  "ID of the deleted resource"
+  deletedId: ID
+
+  errors: [UserError!]!
+  success: Boolean!
+}
+
+"""
+User-facing error with field-level details.
+"""
+type UserError {
+  "Error message"
+  message: String!
+
+  "Field that caused the error"
+  field: String
+
+  "Error code for programmatic handling"
+  code: String!
+}
+
+# Custom Scalars
+
+"""
+ISO 8601 date-time string.
+"""
+scalar DateTime
+
+"""
+Email address.
+"""
+scalar Email
+
+"""
+URL string.
+"""
+scalar URL
+
+# Root Query Type
+
+type Query {
+  # Single resource queries
+  "Get current authenticated user"
+  me: User
+
+  "Get user by ID"
+  user(id: ID!): User
+
+  "Get post by ID"
+  post(id: ID!): Post
+
+  "Get comment by ID"
+  comment(id: ID!): Comment
+
+  # List queries with pagination
+  "List users with filtering and pagination"
+  users(
+    first: Int
+    after: String
+    filter: UserFilter
+    sortBy: UserSortField
+    sortOrder: SortOrder
+  ): UserConnection!
+
+  "List posts with filtering and pagination"
+  posts(
+    first: Int
+    after: String
+    filter: PostFilter
+    sortBy: PostSortField
+    sortOrder: SortOrder
+  ): PostConnection!
+
+  "List comments for a post"
+  comments(
+    postId: ID!
+    first: Int
+    after: String
+  ): CommentConnection!
+
+  # Search
+  "Search across users, posts, and comments"
+  search(
+    "Search query"
+    query: String!
+
+    "Types to search (default: all)"
+    types: [String!]
+
+    "Number of results"
+    first: Int
+
+    after: String
+  ): [SearchResult!]!
+
+  # Relay Node interface
+  "Fetch any node by ID"
+  node(id: ID!): Node
+}
+
+# Root Mutation Type
+
+type Mutation {
+  # User mutations
+  "Create a new user"
+  createUser(input: CreateUserInput!): UserPayload!
+
+  "Update current user"
+  updateUser(input: UpdateUserInput!): UserPayload!
+
+  "Delete current user"
+  deleteUser: DeletePayload!
+
+  # Post mutations
+  "Create a new post"
+  createPost(input: CreatePostInput!): PostPayload!
+
+  "Update a post"
+  updatePost(id: ID!, input: UpdatePostInput!): PostPayload!
+
+  "Delete a post"
+  deletePost(id: ID!): DeletePayload!
+
+  "Publish a draft post"
+  publishPost(id: ID!): PostPayload!
+
+  # Comment mutations
+  "Create a comment"
+  createComment(input: CreateCommentInput!): CommentPayload!
+
+  "Update a comment"
+  updateComment(id: ID!, text: String!): CommentPayload!
+
+  "Delete a comment"
+  deleteComment(id: ID!): DeletePayload!
+
+  # Social mutations
+  "Follow a user"
+  followUser(userId: ID!): UserPayload!
+
+  "Unfollow a user"
+  unfollowUser(userId: ID!): UserPayload!
+
+  "Like a post"
+  likePost(postId: ID!): PostPayload!
+
+  "Unlike a post"
+  unlikePost(postId: ID!): PostPayload!
+}
+
+# Root Subscription Type
+
+type Subscription {
+  "Subscribe to new posts"
+  postCreated: Post!
+
+  "Subscribe to updates on a specific post"
+  postUpdated(id: ID!): Post!
+
+  "Subscribe to new comments on a post"
+  commentCreated(postId: ID!): Comment!
+
+  "Subscribe to user notifications"
+  notificationReceived(userId: ID!): Notification!
+}
+
+# Notification Type
+
+type Notification implements Node & Timestamped {
+  id: ID!
+  type: NotificationType!
+  title: String!
+  message: String!
+  read: Boolean!
+  actionUrl: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum NotificationType {
+  NEW_FOLLOWER
+  NEW_COMMENT
+  POST_LIKED
+  MENTION
+}
+
+# Schema Directives
+
+"""
+Indicates that a field requires authentication.
+"""
+directive @auth on FIELD_DEFINITION
+
+"""
+Indicates that a field requires specific role.
+"""
+directive @requiresRole(role: UserRole!) on FIELD_DEFINITION
+
+"""
+Marks a field as deprecated with migration guidance.
+"""
+directive @deprecated(
+  reason: String = "No longer supported"
+) on FIELD_DEFINITION | ENUM_VALUE

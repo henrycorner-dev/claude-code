@@ -1,0 +1,17 @@
+{
+  "enabled": true,
+  "enforce": true,
+  "limits": {
+    "web": 1,
+    "mobile": 2,
+    "game": 50
+  },
+  "description": "Bundle size limits in MB (gzipped). Adjust values based on your project requirements.",
+  "notes": {
+    "web": "Web bundles should typically be < 1MB gzipped for good performance",
+    "mobile": "Mobile bundles can be slightly larger (< 2MB) but should remain minimal",
+    "game": "Game builds are typically much larger (< 50MB for web games, adjust as needed)",
+    "enforce": "Set to false to warn only without blocking builds",
+    "enabled": "Set to false to completely disable the bundle size guard"
+  }
+}

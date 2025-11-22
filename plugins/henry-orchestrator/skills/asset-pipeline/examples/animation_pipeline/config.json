@@ -1,0 +1,81 @@
+{
+  "animations": {
+    "character_walk": {
+      "source_directory": "source/character_walk",
+      "frame_duration": 0.1,
+      "loop": true,
+      "frame_range": [1, 8],
+      "trim_frames": true,
+      "remove_duplicates": true,
+      "pivot_point": "bottom_center"
+    },
+    "character_idle": {
+      "source_directory": "source/character_idle",
+      "frame_duration": 0.5,
+      "loop": true,
+      "frame_range": [1, 4],
+      "trim_frames": true,
+      "remove_duplicates": true,
+      "pivot_point": "bottom_center"
+    },
+    "character_jump": {
+      "source_directory": "source/character_jump",
+      "frame_durations": [0.1, 0.05, 0.15, 0.1, 0.15, 0.1],
+      "loop": false,
+      "trim_frames": true,
+      "remove_duplicates": false,
+      "pivot_point": "bottom_center"
+    },
+    "character_attack": {
+      "source_directory": "source/character_attack",
+      "frame_duration": 0.08,
+      "loop": false,
+      "frame_range": [1, 6],
+      "trim_frames": true,
+      "remove_duplicates": false,
+      "pivot_point": "bottom_center"
+    }
+  },
+  "output": {
+    "directory": "processed",
+    "texture_size": 2048,
+    "power_of_two": true,
+    "padding": 2,
+    "padding_type": "edge_extrusion",
+    "multi_resolution": true,
+    "resolutions": {
+      "@1x": 1024,
+      "@2x": 2048,
+      "@3x": 4096
+    },
+    "naming_convention": "{animation_name}.{extension}",
+    "metadata_format": "json"
+  },
+  "optimization": {
+    "trim_frames": true,
+    "remove_duplicates": true,
+    "consistent_pivot_points": true,
+    "share_frames_across_animations": false,
+    "crop_to_minimal_bounds": true
+  },
+  "packing": {
+    "algorithm": "maxrects",
+    "heuristic": "best_short_side_fit",
+    "allow_rotation": false,
+    "separate_atlases_per_animation": false,
+    "max_atlas_size": 4096
+  },
+  "compression": {
+    "enabled": true,
+    "format_pc": "DXT5",
+    "format_mobile_ios": "ASTC_6x6",
+    "format_mobile_android": "ETC2",
+    "format_web": "PNG"
+  },
+  "validation": {
+    "check_consistent_dimensions": true,
+    "check_frame_count": true,
+    "warn_on_large_frame_sizes": true,
+    "max_frame_dimension": 512
+  }
+}

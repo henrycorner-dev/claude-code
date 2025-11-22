@@ -1,0 +1,10 @@
+{
+  "name": "henry-orchestrator",
+  "version": "1.0.0",
+  "description": "Henry Orchestrator: Coordinates complex multi-agent workflows for development tasks, similar to feature-dev and ralph-wiggum.",
+  "author": {
+    "name": "Henry Nguyen",
+    "email": "henry@example.com"
+  },
+  "keywords": ["orchestrator", "workflow", "multi-agent", "coordination"]
+}

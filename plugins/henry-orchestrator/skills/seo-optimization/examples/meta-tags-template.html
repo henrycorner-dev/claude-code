@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- ========================================
+       Essential Meta Tags
+       ======================================== -->
+
+  <!-- Character Encoding (must be first) -->
+  <meta charset="UTF-8">
+
+  <!-- Viewport for Responsive Design -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- ========================================
+       Primary SEO Meta Tags
+       ======================================== -->
+
+  <!-- Title: 50-60 characters optimal -->
+  <title>Page Title | Brand Name</title>
+
+  <!-- Meta Description: 150-160 characters optimal -->
+  <meta name="description" content="Compelling page description that accurately summarizes the content and includes target keywords naturally. Make it unique for each page.">
+
+  <!-- Keywords (less important now, but harmless to include) -->
+  <meta name="keywords" content="keyword1, keyword2, keyword3, keyword4">
+
+  <!-- Author -->
+  <meta name="author" content="Author Name">
+
+  <!-- Canonical URL (prevent duplicate content issues) -->
+  <link rel="canonical" href="https://www.example.com/page">
+
+  <!-- Robots directives -->
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+
+  <!-- Alternatively, for specific search engines -->
+  <!-- <meta name="googlebot" content="index, follow"> -->
+  <!-- <meta name="bingbot" content="index, follow"> -->
+
+  <!-- ========================================
+       Open Graph / Facebook Meta Tags
+       ======================================== -->
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.example.com/page">
+  <meta property="og:title" content="Page Title for Social Sharing">
+  <meta property="og:description" content="Description for social media shares. Can be different from meta description.">
+  <meta property="og:image" content="https://www.example.com/images/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Description of image for accessibility">
+  <meta property="og:site_name" content="Brand Name">
+  <meta property="og:locale" content="en_US">
+
+  <!-- For Article type pages -->
+  <!-- <meta property="og:type" content="article"> -->
+  <!-- <meta property="article:published_time" content="2025-01-15T08:00:00+00:00"> -->
+  <!-- <meta property="article:modified_time" content="2025-01-20T10:30:00+00:00"> -->
+  <!-- <meta property="article:author" content="Author Name"> -->
+  <!-- <meta property="article:section" content="Technology"> -->
+  <!-- <meta property="article:tag" content="SEO"> -->
+
+  <!-- ========================================
+       Twitter Card Meta Tags
+       ======================================== -->
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://www.example.com/page">
+  <meta name="twitter:title" content="Page Title for Twitter">
+  <meta name="twitter:description" content="Description for Twitter shares.">
+  <meta name="twitter:image" content="https://www.example.com/images/twitter-image.jpg">
+  <meta name="twitter:image:alt" content="Description of image for accessibility">
+  <meta name="twitter:site" content="@brandhandle">
+  <meta name="twitter:creator" content="@authorhandle">
+
+  <!-- Alternative card types -->
+  <!-- Summary card (smaller image, 1:1 ratio): -->
+  <!-- <meta name="twitter:card" content="summary"> -->
+
+  <!-- Player card (for video/audio): -->
+  <!-- <meta name="twitter:card" content="player"> -->
+  <!-- <meta name="twitter:player" content="https://example.com/player.html"> -->
+  <!-- <meta name="twitter:player:width" content="1280"> -->
+  <!-- <meta name="twitter:player:height" content="720"> -->
+
+  <!-- ========================================
+       Favicon and App Icons
+       ======================================== -->
+
+  <!-- Standard favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+
+  <!-- PNG favicons (multiple sizes) -->
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+
+  <!-- Apple Touch Icon -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <!-- Android Chrome -->
+  <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png">
+
+  <!-- Web App Manifest -->
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- ========================================
+       Apple iOS Meta Tags
+       ======================================== -->
+
+  <!-- Make web app capable (hides Safari UI when added to home screen) -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
+  <!-- Status bar style -->
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <!-- App title on home screen -->
+  <meta name="apple-mobile-web-app-title" content="App Name">
+
+  <!-- ========================================
+       Microsoft / Windows Meta Tags
+       ======================================== -->
+
+  <meta name="msapplication-TileColor" content="#3367D6">
+  <meta name="msapplication-TileImage" content="/mstile-144x144.png">
+  <meta name="msapplication-config" content="/browserconfig.xml">
+
+  <!-- ========================================
+       Theme and UI Meta Tags
+       ======================================== -->
+
+  <!-- Theme color for mobile browsers -->
+  <meta name="theme-color" content="#3367D6">
+
+  <!-- Dark mode support -->
+  <meta name="theme-color" content="#3367D6" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)">
+
+  <!-- ========================================
+       Language and Regional Meta Tags
+       ======================================== -->
+
+  <!-- Alternate language versions (hreflang) -->
+  <link rel="alternate" hreflang="en" href="https://example.com/en/">
+  <link rel="alternate" hreflang="es" href="https://example.com/es/">
+  <link rel="alternate" hreflang="fr" href="https://example.com/fr/">
+  <link rel="alternate" hreflang="x-default" href="https://example.com/">
+
+  <!-- Regional targeting -->
+  <!-- <link rel="alternate" hreflang="en-US" href="https://example.com/us/"> -->
+  <!-- <link rel="alternate" hreflang="en-GB" href="https://example.com/uk/"> -->
+
+  <!-- ========================================
+       Additional Meta Tags
+       ======================================== -->
+
+  <!-- Referrer policy -->
+  <meta name="referrer" content="origin-when-cross-origin">
+
+  <!-- Format detection (disable automatic linking) -->
+  <meta name="format-detection" content="telephone=no">
+  <meta name="format-detection" content="email=no">
+  <meta name="format-detection" content="address=no">
+
+  <!-- Copyright -->
+  <meta name="copyright" content="© 2025 Brand Name">
+
+  <!-- ========================================
+       Structured Data (JSON-LD)
+       ======================================== -->
+
+  <!-- Article structured data example -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Page Title",
+    "description": "Page description",
+    "image": "https://www.example.com/images/article-image.jpg",
+    "author": {
+      "@type": "Person",
+      "name": "Author Name",
+      "url": "https://www.example.com/authors/author-name"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Brand Name",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://www.example.com/logo.png"
+      }
+    },
+    "datePublished": "2025-01-15T08:00:00+00:00",
+    "dateModified": "2025-01-20T10:30:00+00:00",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://www.example.com/page"
+    }
+  }
+  </script>
+
+  <!-- Breadcrumb structured data example -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://www.example.com"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Category",
+        "item": "https://www.example.com/category"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "Page Title",
+        "item": "https://www.example.com/page"
+      }
+    ]
+  }
+  </script>
+
+  <!-- Organization structured data (for home page) -->
+  <!-- <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Brand Name",
+    "url": "https://www.example.com",
+    "logo": "https://www.example.com/logo.png",
+    "description": "Company description",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+1-555-123-4567",
+      "contactType": "Customer Service",
+      "email": "support@example.com"
+    },
+    "sameAs": [
+      "https://www.facebook.com/brand",
+      "https://www.twitter.com/brand",
+      "https://www.linkedin.com/company/brand",
+      "https://www.instagram.com/brand"
+    ]
+  }
+  </script> -->
+
+  <!-- ========================================
+       CSS and Fonts (Performance)
+       ======================================== -->
+
+  <!-- Preconnect to external domains -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- Preload critical assets -->
+  <link rel="preload" href="/fonts/main-font.woff2" as="font" type="font/woff2" crossorigin>
+
+  <!-- DNS prefetch for external resources -->
+  <link rel="dns-prefetch" href="https://www.google-analytics.com">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="/css/styles.css">
+
+  <!-- ========================================
+       Additional Resources
+       ======================================== -->
+
+  <!-- RSS/Atom Feed -->
+  <link rel="alternate" type="application/rss+xml" title="Blog RSS Feed" href="/feed.xml">
+
+  <!-- Sitemap (optional, usually in robots.txt) -->
+  <!-- <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml"> -->
+
+</head>
+<body>
+
+  <!-- ========================================
+       Page Content
+       ======================================== -->
+
+  <main>
+    <h1>Page Heading</h1>
+    <p>Page content goes here...</p>
+  </main>
+
+  <!-- ========================================
+       NOTES AND BEST PRACTICES
+       ========================================
+
+  1. Title Tag:
+     - Keep between 50-60 characters
+     - Include primary keyword near beginning
+     - Make unique for each page
+     - Use format: "Page Title | Brand Name"
+
+  2. Meta Description:
+     - Keep between 150-160 characters
+     - Include target keywords naturally
+     - Write compelling, actionable copy
+     - Make unique for each page
+
+  3. Open Graph Images:
+     - Minimum size: 1200 x 630 pixels (1.91:1 ratio)
+     - Maximum file size: 8 MB
+     - Formats: JPG, PNG (PNG for transparency)
+     - Include multiple aspect ratios when possible
+
+  4. Twitter Card Images:
+     - Summary: 144 x 144 pixels minimum (1:1)
+     - Large image: 1200 x 628 pixels recommended (1.91:1)
+     - Maximum file size: 5 MB
+
+  5. Canonical URL:
+     - Use absolute URLs (include protocol and domain)
+     - Point to preferred version of page
+     - Include on all pages, even originals (self-reference)
+
+  6. Structured Data:
+     - Use JSON-LD format (recommended by Google)
+     - Validate with Google Rich Results Test
+     - Only include content visible on page
+     - Use specific schema types when available
+
+  7. Testing:
+     - Facebook Sharing Debugger: https://developers.facebook.com/tools/debug/
+     - Twitter Card Validator: https://cards-dev.twitter.com/validator
+     - Google Rich Results Test: https://search.google.com/test/rich-results
+     - Lighthouse SEO Audit in Chrome DevTools
+
+  8. Performance:
+     - Minimize number of tags (only include what's needed)
+     - Use preconnect/dns-prefetch for external resources
+     - Optimize image sizes for social sharing
+     - Test page load speed regularly
+
+  ======================================== -->
+
+</body>
+</html>

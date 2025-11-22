@@ -1,0 +1,224 @@
+{
+  "categories": {
+    "music": {
+      "codec": "ogg_vorbis",
+      "bitrate": 160,
+      "bitrate_unit": "kbps",
+      "sample_rate": 44100,
+      "channels": "stereo",
+      "streaming": true,
+      "normalize_lufs": -14,
+      "apply_limiter": true,
+      "limiter_ceiling_db": -0.5,
+      "description": "High-quality streaming music"
+    },
+    "music_ambient": {
+      "codec": "ogg_vorbis",
+      "bitrate": 96,
+      "bitrate_unit": "kbps",
+      "sample_rate": 44100,
+      "channels": "stereo",
+      "streaming": true,
+      "normalize_lufs": -18,
+      "apply_limiter": true,
+      "limiter_ceiling_db": -0.5,
+      "description": "Lower-quality ambient background music"
+    },
+    "sfx": {
+      "codec": "ogg_vorbis",
+      "bitrate": 64,
+      "bitrate_unit": "kbps",
+      "sample_rate": 44100,
+      "channels": "mono",
+      "streaming": false,
+      "normalize_lufs": -16,
+      "apply_limiter": true,
+      "limiter_ceiling_db": -0.5,
+      "trim_silence": true,
+      "silence_threshold_db": -50,
+      "description": "Short sound effects loaded into memory"
+    },
+    "sfx_3d": {
+      "codec": "ogg_vorbis",
+      "bitrate": 64,
+      "bitrate_unit": "kbps",
+      "sample_rate": 44100,
+      "channels": "mono",
+      "streaming": false,
+      "normalize_lufs": -16,
+      "apply_limiter": true,
+      "limiter_ceiling_db": -0.5,
+      "trim_silence": true,
+      "force_mono": true,
+      "description": "3D positioned sounds (must be mono)"
+    },
+    "voice": {
+      "codec": "ogg_vorbis",
+      "bitrate": 96,
+      "bitrate_unit": "kbps",
+      "sample_rate": 22050,
+      "channels": "mono",
+      "streaming": false,
+      "normalize_lufs": -18,
+      "apply_limiter": true,
+      "limiter_ceiling_db": -0.5,
+      "apply_compression": true,
+      "compression_ratio": 3.0,
+      "compression_threshold_db": -20,
+      "trim_silence": true,
+      "description": "Voice dialogue and barks"
+    },
+    "voice_cutscene": {
+      "codec": "ogg_vorbis",
+      "bitrate": 128,
+      "bitrate_unit": "kbps",
+      "sample_rate": 44100,
+      "channels": "mono",
+      "streaming": true,
+      "normalize_lufs": -18,
+      "apply_limiter": true,
+      "limiter_ceiling_db": -0.5,
+      "description": "Long dialogue in cutscenes (streamed)"
+    },
+    "ambient": {
+      "codec": "ogg_vorbis",
+      "bitrate": 80,
+      "bitrate_unit": "kbps",
+      "sample_rate": 44100,
+      "channels": "stereo",
+      "streaming": true,
+      "normalize_lufs": -20,
+      "apply_limiter": true,
+      "limiter_ceiling_db": -0.5,
+      "loop": true,
+      "loop_crossfade_ms": 50,
+      "description": "Ambient loops and soundscapes"
+    },
+    "ui": {
+      "codec": "ogg_vorbis",
+      "bitrate": 64,
+      "bitrate_unit": "kbps",
+      "sample_rate": 44100,
+      "channels": "stereo",
+      "streaming": false,
+      "normalize_lufs": -14,
+      "apply_limiter": true,
+      "limiter_ceiling_db": -0.5,
+      "trim_silence": true,
+      "description": "UI sounds (buttons, menus)"
+    }
+  },
+  "platform_overrides": {
+    "mobile": {
+      "music": {
+        "bitrate": 128,
+        "sample_rate": 44100
+      },
+      "sfx": {
+        "bitrate": 48,
+        "sample_rate": 22050
+      },
+      "voice": {
+        "bitrate": 64,
+        "sample_rate": 22050
+      },
+      "apply_highpass_filter": true,
+      "highpass_cutoff_hz": 100,
+      "description": "Mobile devices have weak speakers, remove sub-bass"
+    },
+    "web": {
+      "music": {
+        "bitrate": 96,
+        "codec": "ogg_vorbis"
+      },
+      "sfx": {
+        "bitrate": 48
+      },
+      "provide_fallback_formats": true,
+      "fallback_formats": ["ogg", "mp3"],
+      "audio_sprite_sheets": true,
+      "description": "Optimize for download size, provide multiple formats"
+    },
+    "pc_high_end": {
+      "music": {
+        "bitrate": 192,
+        "codec": "ogg_vorbis"
+      },
+      "optional_flac": true,
+      "description": "High-quality audio for audiophiles"
+    },
+    "console": {
+      "music": {
+        "codec": "platform_native",
+        "comment": "Use platform-specific codec (ADPCM, Opus, etc.)"
+      },
+      "sfx": {
+        "codec": "platform_native"
+      }
+    }
+  },
+  "source": {
+    "directory": "assets_source/audio",
+    "formats": ["wav", "aiff", "flac"],
+    "subdirectories": {
+      "music": "assets_source/audio/music",
+      "sfx": "assets_source/audio/sfx",
+      "voice": "assets_source/audio/voice",
+      "ambient": "assets_source/audio/ambient",
+      "ui": "assets_source/audio/ui"
+    }
+  },
+  "output": {
+    "directory": "assets_processed/audio",
+    "naming_convention": "{category}/{filename}.{extension}",
+    "preserve_directory_structure": true
+  },
+  "audio_banks": {
+    "enabled": true,
+    "banks": [
+      {
+        "name": "UI_Bank",
+        "category": "ui",
+        "load_on_startup": true,
+        "description": "UI sounds always loaded"
+      },
+      {
+        "name": "Gameplay_Bank",
+        "category": "sfx",
+        "filter": "gameplay_*",
+        "load_on_demand": true,
+        "description": "Gameplay SFX loaded per level"
+      },
+      {
+        "name": "Character_Voice_Bank",
+        "category": "voice",
+        "filter": "character_*",
+        "load_on_demand": true,
+        "description": "Character voice lines"
+      },
+      {
+        "name": "Environment_Bank",
+        "category": "ambient",
+        "load_on_demand": true,
+        "description": "Environmental ambience"
+      }
+    ]
+  },
+  "validation": {
+    "check_clipping": true,
+    "check_silence": true,
+    "check_sample_rate_consistency": true,
+    "check_file_size_targets": true,
+    "max_sfx_size_kb": 500,
+    "max_music_size_mb": 10,
+    "warn_on_stereo_3d_sounds": true
+  },
+  "advanced": {
+    "use_variable_bitrate": true,
+    "vbr_quality_ogg": 5,
+    "apply_eq": false,
+    "eq_preset": null,
+    "dithering": true,
+    "dithering_type": "triangular"
+  }
+}

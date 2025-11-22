@@ -1,0 +1,510 @@
+openapi: 3.0.3
+info:
+  title: API with Multiple Authentication Methods
+  description: |
+    Example API demonstrating various authentication strategies:
+    - JWT Bearer tokens
+    - API Keys
+    - OAuth 2.0
+    - Basic authentication
+  version: 1.0.0
+
+servers:
+  - url: https://api.example.com/v1
+
+paths:
+  /public:
+    get:
+      summary: Public endpoint
+      description: No authentication required
+      security: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /protected/jwt:
+    get:
+      summary: JWT protected endpoint
+      description: Requires valid JWT Bearer token
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      email:
+                        type: string
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /protected/apikey:
+    get:
+      summary: API key protected endpoint
+      description: Requires API key in header
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          description: Success
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /protected/oauth:
+    get:
+      summary: OAuth protected endpoint
+      description: Requires OAuth 2.0 token with read scope
+      security:
+        - oauth2:
+            - read
+      responses:
+        '200':
+          description: Success
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: Insufficient scopes
+
+  /protected/oauth-write:
+    post:
+      summary: OAuth write endpoint
+      description: Requires OAuth token with write scope
+      security:
+        - oauth2:
+            - write
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: string
+      responses:
+        '201':
+          description: Created
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: Insufficient scopes
+
+  /protected/basic:
+    get:
+      summary: Basic auth protected endpoint
+      description: Requires Basic authentication
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: Success
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /protected/multiple:
+    get:
+      summary: Multiple auth options
+      description: Accepts JWT OR API key (either one is valid)
+      security:
+        - bearerAuth: []
+        - apiKey: []
+      responses:
+        '200':
+          description: Success
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /auth/login:
+    post:
+      summary: Login with credentials
+      description: Authenticate and receive JWT tokens
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                    description: JWT access token (expires in 15 minutes)
+                  refreshToken:
+                    type: string
+                    description: Refresh token (expires in 7 days)
+                  expiresIn:
+                    type: integer
+                    description: Access token expiration in seconds
+                  tokenType:
+                    type: string
+                    example: Bearer
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /auth/refresh:
+    post:
+      summary: Refresh access token
+      description: Get new access token using refresh token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - refreshToken
+              properties:
+                refreshToken:
+                  type: string
+      responses:
+        '200':
+          description: Token refreshed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                  refreshToken:
+                    type: string
+                  expiresIn:
+                    type: integer
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /auth/logout:
+    post:
+      summary: Logout
+      description: Revoke refresh token
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refreshToken:
+                  type: string
+      responses:
+        '204':
+          description: Logout successful
+
+  /oauth/authorize:
+    get:
+      summary: OAuth authorization endpoint
+      description: Initiate OAuth 2.0 authorization flow
+      security: []
+      parameters:
+        - name: response_type
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [code]
+        - name: client_id
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: redirect_uri
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uri
+        - name: scope
+          in: query
+          schema:
+            type: string
+        - name: state
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '302':
+          description: Redirect to login page
+        '400':
+          description: Invalid request
+
+  /oauth/token:
+    post:
+      summary: OAuth token endpoint
+      description: Exchange authorization code for access token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - grant_type
+                - code
+                - redirect_uri
+                - client_id
+              properties:
+                grant_type:
+                  type: string
+                  enum: [authorization_code, refresh_token]
+                code:
+                  type: string
+                  description: Authorization code (for authorization_code grant)
+                redirect_uri:
+                  type: string
+                client_id:
+                  type: string
+                client_secret:
+                  type: string
+                refresh_token:
+                  type: string
+                  description: Refresh token (for refresh_token grant)
+      responses:
+        '200':
+          description: Token issued
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                  token_type:
+                    type: string
+                    example: Bearer
+                  expires_in:
+                    type: integer
+                  refresh_token:
+                    type: string
+                  scope:
+                    type: string
+        '400':
+          description: Invalid request
+
+  /apikeys:
+    post:
+      summary: Create API key
+      description: Generate new API key for the authenticated user
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Friendly name for the API key
+                scopes:
+                  type: array
+                  items:
+                    type: string
+                  description: Scopes granted to this API key
+      responses:
+        '201':
+          description: API key created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  key:
+                    type: string
+                    description: API key (only shown once)
+                  name:
+                    type: string
+                  scopes:
+                    type: array
+                    items:
+                      type: string
+                  createdAt:
+                    type: string
+                    format: date-time
+
+    get:
+      summary: List API keys
+      description: Get all API keys for the authenticated user
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+                    scopes:
+                      type: array
+                      items:
+                        type: string
+                    createdAt:
+                      type: string
+                      format: date-time
+                    lastUsedAt:
+                      type: string
+                      format: date-time
+                      nullable: true
+
+  /apikeys/{keyId}:
+    delete:
+      summary: Revoke API key
+      description: Delete an API key
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: keyId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: API key revoked
+        '404':
+          description: API key not found
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        JWT Bearer token authentication.
+
+        Include the token in the Authorization header:
+        ```
+        Authorization: Bearer <token>
+        ```
+
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: |
+        API key authentication.
+
+        Include your API key in the X-API-Key header:
+        ```
+        X-API-Key: your_api_key_here
+        ```
+
+    basicAuth:
+      type: http
+      scheme: basic
+      description: |
+        Basic authentication using username and password.
+
+        The client sends credentials as:
+        ```
+        Authorization: Basic <base64(username:password)>
+        ```
+
+    oauth2:
+      type: oauth2
+      description: |
+        OAuth 2.0 authentication with authorization code flow.
+
+        Supports the following scopes:
+        - `read`: Read access to resources
+        - `write`: Create and update resources
+        - `admin`: Full administrative access
+      flows:
+        authorizationCode:
+          authorizationUrl: https://api.example.com/v1/oauth/authorize
+          tokenUrl: https://api.example.com/v1/oauth/token
+          refreshUrl: https://api.example.com/v1/oauth/token
+          scopes:
+            read: Read access to resources
+            write: Create and update resources
+            admin: Full administrative access
+
+  responses:
+    Unauthorized:
+      description: Unauthorized - Authentication required or failed
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    enum:
+                      - AUTHENTICATION_REQUIRED
+                      - AUTHENTICATION_FAILED
+                      - TOKEN_EXPIRED
+                      - INVALID_TOKEN
+                  message:
+                    type: string
+          examples:
+            noToken:
+              summary: No token provided
+              value:
+                error:
+                  code: AUTHENTICATION_REQUIRED
+                  message: No authentication token provided
+            invalidToken:
+              summary: Invalid token
+              value:
+                error:
+                  code: INVALID_TOKEN
+                  message: The provided token is invalid
+            expiredToken:
+              summary: Expired token
+              value:
+                error:
+                  code: TOKEN_EXPIRED
+                  message: The authentication token has expired
+
+# Default security (applies to all endpoints unless overridden)
+security:
+  - bearerAuth: []

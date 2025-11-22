@@ -1,0 +1,667 @@
+/**
+ * Custom Media Queries & Responsive Patterns
+ * Demonstrates advanced responsive design techniques
+ */
+
+/* ============================================
+   1. CUSTOM BREAKPOINT SYSTEM
+   ============================================ */
+
+/* Mobile-first base styles */
+:root {
+  /* Breakpoint values */
+  --bp-xs: 320px;
+  --bp-sm: 576px;
+  --bp-md: 768px;
+  --bp-lg: 1024px;
+  --bp-xl: 1280px;
+  --bp-xxl: 1536px;
+
+  /* Spacing scale */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-xxl: 3rem;
+
+  /* Fluid typography */
+  --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+  --text-sm: clamp(0.875rem, 0.8rem + 0.375vw, 1rem);
+  --text-base: clamp(1rem, 0.9rem + 0.5vw, 1.125rem);
+  --text-lg: clamp(1.125rem, 1rem + 0.625vw, 1.25rem);
+  --text-xl: clamp(1.25rem, 1.1rem + 0.75vw, 1.5rem);
+  --text-2xl: clamp(1.5rem, 1.3rem + 1vw, 2rem);
+  --text-3xl: clamp(1.875rem, 1.5rem + 1.875vw, 2.5rem);
+  --text-4xl: clamp(2.25rem, 1.8rem + 2.25vw, 3rem);
+}
+
+/* ============================================
+   2. MEDIA QUERY MIXINS (CSS Custom Media)
+   ============================================ */
+
+/* Note: @custom-media is not yet widely supported
+   Use these as reference for preprocessors like PostCSS */
+
+/*
+@custom-media --xs (min-width: 320px);
+@custom-media --sm (min-width: 576px);
+@custom-media --md (min-width: 768px);
+@custom-media --lg (min-width: 1024px);
+@custom-media --xl (min-width: 1280px);
+@custom-media --xxl (min-width: 1536px);
+
+@custom-media --max-sm (max-width: 575px);
+@custom-media --max-md (max-width: 767px);
+@custom-media --max-lg (max-width: 1023px);
+
+@custom-media --tablet (min-width: 768px) and (max-width: 1023px);
+@custom-media --desktop (min-width: 1024px);
+*/
+
+/* ============================================
+   3. RESPONSIVE CONTAINER PATTERNS
+   ============================================ */
+
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--space-md);
+  padding-right: var(--space-md);
+}
+
+@media (min-width: 576px) {
+  .container {
+    max-width: 540px;
+    padding-left: var(--space-lg);
+    padding-right: var(--space-lg);
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 720px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 960px;
+    padding-left: var(--space-xl);
+    padding-right: var(--space-xl);
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1140px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .container {
+    max-width: 1320px;
+  }
+}
+
+/* Fluid container (no max-width) */
+.container-fluid {
+  width: 100%;
+  padding-left: var(--space-md);
+  padding-right: var(--space-md);
+}
+
+@media (min-width: 768px) {
+  .container-fluid {
+    padding-left: var(--space-xl);
+    padding-right: var(--space-xl);
+  }
+}
+
+/* ============================================
+   4. RESPONSIVE GRID SYSTEM
+   ============================================ */
+
+.grid {
+  display: grid;
+  gap: var(--space-md);
+  grid-template-columns: 1fr;
+}
+
+/* 2 columns on tablet and up */
+@media (min-width: 768px) {
+  .grid-md-2 {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-lg);
+  }
+
+  .grid-md-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .grid-md-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* 3+ columns on desktop */
+@media (min-width: 1024px) {
+  .grid-lg-3 {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-xl);
+  }
+
+  .grid-lg-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .grid-lg-6 {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+/* Auto-fit grid (no media queries needed) */
+.grid-auto-fit {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--space-md);
+}
+
+@media (min-width: 768px) {
+  .grid-auto-fit {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-lg);
+  }
+}
+
+/* ============================================
+   5. RESPONSIVE FLEXBOX PATTERNS
+   ============================================ */
+
+.flex {
+  display: flex;
+  gap: var(--space-md);
+}
+
+/* Stack on mobile, row on tablet+ */
+.flex-responsive {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+@media (min-width: 768px) {
+  .flex-responsive {
+    flex-direction: row;
+    gap: var(--space-lg);
+  }
+}
+
+/* Reverse order on mobile */
+.flex-reverse-mobile {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+@media (min-width: 768px) {
+  .flex-reverse-mobile {
+    flex-direction: row;
+  }
+}
+
+/* ============================================
+   6. RESPONSIVE TYPOGRAPHY
+   ============================================ */
+
+body {
+  font-size: var(--text-base);
+  line-height: 1.6;
+}
+
+h1, .h1 {
+  font-size: var(--text-3xl);
+  line-height: 1.2;
+  margin-bottom: var(--space-lg);
+}
+
+h2, .h2 {
+  font-size: var(--text-2xl);
+  line-height: 1.3;
+  margin-bottom: var(--space-md);
+}
+
+h3, .h3 {
+  font-size: var(--text-xl);
+  line-height: 1.4;
+  margin-bottom: var(--space-md);
+}
+
+p {
+  margin-bottom: var(--space-md);
+}
+
+/* Large display text */
+.display-1 {
+  font-size: var(--text-4xl);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+/* Responsive line clamp */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .line-clamp-md-3 {
+    -webkit-line-clamp: 3;
+  }
+}
+
+/* ============================================
+   7. RESPONSIVE SPACING
+   ============================================ */
+
+.section {
+  padding-top: var(--space-xl);
+  padding-bottom: var(--space-xl);
+}
+
+@media (min-width: 768px) {
+  .section {
+    padding-top: var(--space-xxl);
+    padding-bottom: var(--space-xxl);
+  }
+}
+
+@media (min-width: 1024px) {
+  .section {
+    padding-top: calc(var(--space-xxl) * 1.5);
+    padding-bottom: calc(var(--space-xxl) * 1.5);
+  }
+}
+
+/* ============================================
+   8. RESPONSIVE IMAGES
+   ============================================ */
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.img-responsive {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+/* Aspect ratio containers */
+.aspect-ratio-16-9 {
+  aspect-ratio: 16 / 9;
+}
+
+.aspect-ratio-4-3 {
+  aspect-ratio: 4 / 3;
+}
+
+.aspect-ratio-1-1 {
+  aspect-ratio: 1 / 1;
+}
+
+/* Responsive aspect ratios */
+.aspect-responsive {
+  aspect-ratio: 1 / 1;
+}
+
+@media (min-width: 768px) {
+  .aspect-responsive {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+@media (min-width: 1024px) {
+  .aspect-responsive {
+    aspect-ratio: 16 / 9;
+  }
+}
+
+/* ============================================
+   9. RESPONSIVE DISPLAY UTILITIES
+   ============================================ */
+
+/* Hide on mobile */
+.hide-mobile {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .hide-mobile {
+    display: block;
+  }
+}
+
+/* Hide on desktop */
+.hide-desktop {
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .hide-desktop {
+    display: none;
+  }
+}
+
+/* Show only on specific breakpoints */
+.show-md-only {
+  display: none;
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .show-md-only {
+    display: block;
+  }
+}
+
+/* ============================================
+   10. RESPONSIVE NAVIGATION
+   ============================================ */
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+@media (min-width: 768px) {
+  .nav {
+    flex-direction: row;
+    gap: var(--space-lg);
+    align-items: center;
+  }
+}
+
+.nav-link {
+  padding: var(--space-sm) var(--space-md);
+  text-decoration: none;
+  color: inherit;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.nav-link:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Mobile menu */
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  left: -100%;
+  width: 80%;
+  max-width: 300px;
+  height: 100vh;
+  background: white;
+  transition: left 0.3s;
+  z-index: 1000;
+}
+
+.mobile-menu.open {
+  left: 0;
+}
+
+@media (min-width: 768px) {
+  .mobile-menu {
+    position: static;
+    width: auto;
+    max-width: none;
+    height: auto;
+    background: transparent;
+    transition: none;
+  }
+}
+
+/* ============================================
+   11. TOUCH-FRIENDLY SIZING
+   ============================================ */
+
+/* Minimum touch target size: 44x44px */
+button,
+a,
+input[type="checkbox"],
+input[type="radio"] {
+  min-width: 44px;
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-md);
+}
+
+/* Larger tap targets on touch devices */
+@media (pointer: coarse) {
+  button,
+  a {
+    min-width: 48px;
+    min-height: 48px;
+    padding: var(--space-md) var(--space-lg);
+  }
+}
+
+/* ============================================
+   12. HOVER STATES (ONLY ON HOVER-CAPABLE DEVICES)
+   ============================================ */
+
+/* Only apply hover effects on devices that support hover */
+@media (hover: hover) {
+  .button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .card:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+}
+
+/* ============================================
+   13. REDUCED MOTION
+   ============================================ */
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================
+   14. DARK MODE
+   ============================================ */
+
+/* Respect system dark mode preference */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-color: #1a1a1a;
+    --text-color: #e0e0e0;
+    --border-color: #333;
+  }
+
+  body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+  }
+
+  .card {
+    background-color: #2a2a2a;
+    border-color: var(--border-color);
+  }
+}
+
+/* ============================================
+   15. PRINT STYLES
+   ============================================ */
+
+@media print {
+  /* Hide navigation and interactive elements */
+  nav,
+  button,
+  .no-print {
+    display: none !important;
+  }
+
+  /* Optimize for print */
+  body {
+    font-size: 12pt;
+    line-height: 1.5;
+    color: black;
+    background: white;
+  }
+
+  /* Ensure links are visible */
+  a[href]::after {
+    content: " (" attr(href) ")";
+  }
+
+  /* Page breaks */
+  h1, h2, h3 {
+    page-break-after: avoid;
+  }
+
+  img {
+    page-break-inside: avoid;
+  }
+}
+
+/* ============================================
+   16. CONTAINER QUERIES (MODERN)
+   ============================================ */
+
+/* Container query example - requires browser support */
+.card-container {
+  container-type: inline-size;
+  container-name: card;
+}
+
+/* Style changes based on container width, not viewport */
+@container card (min-width: 400px) {
+  .card {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .card-image {
+    width: 40%;
+  }
+
+  .card-content {
+    width: 60%;
+  }
+}
+
+@container card (min-width: 600px) {
+  .card-title {
+    font-size: 1.5rem;
+  }
+}
+
+/* ============================================
+   17. UTILITY CLASSES
+   ============================================ */
+
+/* Responsive text alignment */
+.text-center {
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .text-md-left {
+    text-align: left;
+  }
+
+  .text-md-center {
+    text-align: center;
+  }
+
+  .text-md-right {
+    text-align: right;
+  }
+}
+
+/* Responsive widths */
+.w-100 {
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .w-md-50 {
+    width: 50%;
+  }
+
+  .w-md-33 {
+    width: 33.333%;
+  }
+}
+
+/* ============================================
+   18. ADVANCED PATTERNS
+   ============================================ */
+
+/* Responsive card layout with CSS Grid */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-md);
+}
+
+@media (min-width: 768px) {
+  .card-grid {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: var(--space-lg);
+  }
+}
+
+/* Responsive sidebar layout */
+.layout-with-sidebar {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-lg);
+}
+
+@media (min-width: 1024px) {
+  .layout-with-sidebar {
+    grid-template-columns: 300px 1fr;
+    gap: var(--space-xl);
+  }
+}
+
+/* Sticky header on desktop only */
+@media (min-width: 768px) {
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+}
+
+/* Full viewport height sections */
+.hero {
+  min-height: 100vh;
+  min-height: 100dvh; /* Dynamic viewport height for mobile browsers */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (min-width: 768px) {
+  .hero {
+    min-height: 80vh;
+  }
+}

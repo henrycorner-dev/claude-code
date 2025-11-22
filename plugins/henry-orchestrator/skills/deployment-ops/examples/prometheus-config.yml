@@ -1,0 +1,239 @@
+# Prometheus configuration with alerting and service discovery
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    cluster: 'production'
+    region: 'us-east-1'
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+      - alertmanager:9093
+
+# Load alerting rules
+rule_files:
+  - /etc/prometheus/alerts/*.yml
+  - /etc/prometheus/recording-rules/*.yml
+
+# Scrape configurations
+scrape_configs:
+  # Prometheus itself
+  - job_name: 'prometheus'
+    static_configs:
+    - targets:
+      - 'localhost:9090'
+
+  # Node exporter for system metrics
+  - job_name: 'node-exporter'
+    static_configs:
+    - targets:
+      - 'node1:9100'
+      - 'node2:9100'
+      - 'node3:9100'
+    relabel_configs:
+    - source_labels: [__address__]
+      target_label: instance
+      regex: '([^:]+):\d+'
+      replacement: '${1}'
+
+  # Kubernetes API server
+  - job_name: 'kubernetes-apiservers'
+    kubernetes_sd_configs:
+    - role: endpoints
+    scheme: https
+    tls_config:
+      ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+    bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+    relabel_configs:
+    - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+      action: keep
+      regex: default;kubernetes;https
+
+  # Kubernetes nodes
+  - job_name: 'kubernetes-nodes'
+    kubernetes_sd_configs:
+    - role: node
+    scheme: https
+    tls_config:
+      ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+    bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+    relabel_configs:
+    - action: labelmap
+      regex: __meta_kubernetes_node_label_(.+)
+
+  # Kubernetes pods with prometheus.io/scrape annotation
+  - job_name: 'kubernetes-pods'
+    kubernetes_sd_configs:
+    - role: pod
+
+    relabel_configs:
+    # Only scrape pods with prometheus.io/scrape annotation
+    - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+      action: keep
+      regex: true
+
+    # Use custom port if specified
+    - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+      action: replace
+      regex: ([^:]+)(?::\d+)?;(\d+)
+      replacement: $1:$2
+      target_label: __address__
+
+    # Use custom path if specified
+    - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+      action: replace
+      target_label: __metrics_path__
+      regex: (.+)
+
+    # Add pod labels as metric labels
+    - action: labelmap
+      regex: __meta_kubernetes_pod_label_(.+)
+
+    # Add namespace
+    - source_labels: [__meta_kubernetes_namespace]
+      action: replace
+      target_label: kubernetes_namespace
+
+    # Add pod name
+    - source_labels: [__meta_kubernetes_pod_name]
+      action: replace
+      target_label: kubernetes_pod_name
+
+    # Add container name
+    - source_labels: [__meta_kubernetes_pod_container_name]
+      action: replace
+      target_label: kubernetes_container_name
+
+  # Kubernetes services with prometheus.io/scrape annotation
+  - job_name: 'kubernetes-services'
+    kubernetes_sd_configs:
+    - role: service
+
+    metrics_path: /probe
+    params:
+      module: [http_2xx]
+
+    relabel_configs:
+    - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_probe]
+      action: keep
+      regex: true
+    - source_labels: [__address__]
+      target_label: __param_target
+    - target_label: __address__
+      replacement: blackbox-exporter:9115
+    - source_labels: [__param_target]
+      target_label: instance
+    - action: labelmap
+      regex: __meta_kubernetes_service_label_(.+)
+    - source_labels: [__meta_kubernetes_namespace]
+      target_label: kubernetes_namespace
+    - source_labels: [__meta_kubernetes_service_name]
+      target_label: kubernetes_name
+
+  # ServiceMonitor resources (if using Prometheus Operator)
+  - job_name: 'kubernetes-service-monitors'
+    kubernetes_sd_configs:
+    - role: endpoints
+
+    relabel_configs:
+    - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scrape]
+      action: keep
+      regex: true
+    - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_port]
+      action: replace
+      target_label: __address__
+      regex: ([^:]+)(?::\d+)?;(\d+)
+      replacement: $1:$2
+    - action: labelmap
+      regex: __meta_kubernetes_service_label_(.+)
+
+---
+# Alert rules file (alerts/application.yml)
+groups:
+- name: application_alerts
+  interval: 30s
+  rules:
+  # High error rate
+  - alert: HighErrorRate
+    expr: |
+      (
+        sum by (job, namespace) (rate(http_requests_total{status=~"5.."}[5m]))
+        /
+        sum by (job, namespace) (rate(http_requests_total[5m]))
+      ) > 0.05
+    for: 5m
+    labels:
+      severity: critical
+      team: backend
+    annotations:
+      summary: "High error rate detected"
+      description: "{{ $labels.namespace }}/{{ $labels.job }} has {{ $value | humanizePercentage }} error rate"
+
+  # High latency
+  - alert: HighLatency
+    expr: |
+      histogram_quantile(0.95,
+        sum by (job, namespace, le) (rate(http_request_duration_seconds_bucket[5m]))
+      ) > 1
+    for: 5m
+    labels:
+      severity: warning
+      team: backend
+    annotations:
+      summary: "High latency detected"
+      description: "{{ $labels.namespace }}/{{ $labels.job }} p95 latency is {{ $value }}s"
+
+  # Pod crash looping
+  - alert: PodCrashLooping
+    expr: rate(kube_pod_container_status_restarts_total[15m]) > 0
+    for: 5m
+    labels:
+      severity: critical
+      team: sre
+    annotations:
+      summary: "Pod is crash looping"
+      description: "Pod {{ $labels.namespace }}/{{ $labels.pod }} is crash looping"
+
+---
+# Recording rules file (recording-rules/application.yml)
+groups:
+- name: application_recording_rules
+  interval: 30s
+  rules:
+  # Request rate
+  - record: job:http_requests:rate5m
+    expr: sum by (job, namespace) (rate(http_requests_total[5m]))
+
+  # Error rate
+  - record: job:http_errors:rate5m
+    expr: sum by (job, namespace) (rate(http_requests_total{status=~"5.."}[5m]))
+
+  # Error ratio
+  - record: job:http_errors:ratio5m
+    expr: |
+      job:http_errors:rate5m
+      /
+      job:http_requests:rate5m
+
+  # Latency percentiles
+  - record: job:http_request_duration:p50
+    expr: |
+      histogram_quantile(0.5,
+        sum by (job, namespace, le) (rate(http_request_duration_seconds_bucket[5m]))
+      )
+
+  - record: job:http_request_duration:p95
+    expr: |
+      histogram_quantile(0.95,
+        sum by (job, namespace, le) (rate(http_request_duration_seconds_bucket[5m]))
+      )
+
+  - record: job:http_request_duration:p99
+    expr: |
+      histogram_quantile(0.99,
+        sum by (job, namespace, le) (rate(http_request_duration_seconds_bucket[5m]))
+      )

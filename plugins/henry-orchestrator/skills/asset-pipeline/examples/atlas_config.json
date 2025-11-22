@@ -1,0 +1,68 @@
+{
+  "algorithm": "maxrects",
+  "heuristic": "best_short_side_fit",
+  "texture_size": {
+    "width": 2048,
+    "height": 2048,
+    "power_of_two": true
+  },
+  "padding": {
+    "pixels": 2,
+    "type": "edge_extrusion",
+    "description": "Edge extrusion duplicates edge pixels to prevent bleeding"
+  },
+  "allow_rotation": false,
+  "trim_sprites": true,
+  "remove_duplicates": true,
+  "output": {
+    "texture_format": "png",
+    "metadata_format": "json",
+    "metadata_schema": "texturepacker"
+  },
+  "compression": {
+    "enabled": true,
+    "format_pc": "DXT5",
+    "format_mobile_ios": "ASTC_6x6",
+    "format_mobile_android": "ETC2",
+    "format_web": "WebP"
+  },
+  "mipmaps": {
+    "enabled": true,
+    "filter": "kaiser"
+  },
+  "sprites": {
+    "source_directory": "assets_source/sprites",
+    "output_atlas": "assets_processed/atlases/sprites_atlas.png",
+    "output_metadata": "assets_processed/atlases/sprites_atlas.json"
+  },
+  "multi_resolution": {
+    "enabled": true,
+    "resolutions": ["@1x", "@2x", "@3x"],
+    "sizes": [1024, 2048, 4096]
+  },
+  "atlas_grouping": {
+    "enabled": true,
+    "groups": [
+      {
+        "name": "ui",
+        "source": "assets_source/sprites/ui/",
+        "output": "assets_processed/atlases/ui_atlas.png"
+      },
+      {
+        "name": "characters",
+        "source": "assets_source/sprites/characters/",
+        "output": "assets_processed/atlases/characters_atlas.png"
+      },
+      {
+        "name": "environment",
+        "source": "assets_source/sprites/environment/",
+        "output": "assets_processed/atlases/environment_atlas.png"
+      }
+    ]
+  },
+  "validation": {
+    "check_bleeding": true,
+    "check_power_of_two": true,
+    "max_atlas_size": 4096
+  }
+}
