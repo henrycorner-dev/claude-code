@@ -1,6 +1,7 @@
 ---
 description: Product strategy session with market analysis and roadmapping
 argument-hint: Product idea, market, goals
+allowed-tools: ["Glob", "Read", "Grep", "Bash", "Task", "TodoWrite", "WebFetch", "WebSearch"]
 ---
 
 # Henry Product Strategy

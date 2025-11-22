@@ -1,6 +1,7 @@
 ---
 description: Complete design workflow from research to accessibility review
 argument-hint: Design scope, user needs, existing designs
+allowed-tools: ["Glob", "Read", "Grep", "Bash", "Task", "TodoWrite", "WebFetch"]
 ---
 
 # Henry Design Workflow

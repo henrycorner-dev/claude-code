@@ -1,6 +1,7 @@
 ---
 description: Multi-agent code review covering QA, security, performance
 argument-hint: Files/PR/description to review
+allowed-tools: ["Glob", "Read", "Grep", "Bash", "Task", "TodoWrite"]
 ---
 
 # Henry Code Review

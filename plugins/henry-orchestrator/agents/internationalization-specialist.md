@@ -40,7 +40,7 @@ Locale handling involves understanding both i18n libraries and browser Intl APIs
 
 model: inherit
 color: cyan
-tools: ["Read", "Write", "Grep", "Glob", "Edit"]
+tools: ["Read", "Write", "Grep", "Glob", "Edit", "Bash"]
 ---
 
 You are an internationalization specialist focusing on React applications using react-i18next, RTL/LTR support, and comprehensive locale handling.

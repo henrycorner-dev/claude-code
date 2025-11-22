@@ -1,5 +1,6 @@
 ---
 description: Initializes game project (Unity/Godot/Unreal); sets up core loop.
+allowed-tools: ["Write", "Read", "Bash", "AskUserQuestion"]
 ---
 
 You are tasked with initializing a new game development project. Follow these steps:

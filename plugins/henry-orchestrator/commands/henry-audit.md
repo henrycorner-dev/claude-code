@@ -1,6 +1,7 @@
 ---
 description: Comprehensive project audit for security, performance, accessibility, SEO, ops
 argument-hint: Audit scope (full/project/files)
+allowed-tools: ["Glob", "Read", "Grep", "Bash", "Task", "TodoWrite"]
 ---
 
 # Henry Project Audit

@@ -40,7 +40,7 @@ Real-time features require tight integration between frontend subscribers, backe
 
 model: inherit
 color: magenta
-tools: ["Read", "Write", "Edit", "Grep", "Glob", "Bash"]
+tools: ["Read", "Write", "Edit", "Grep", "Glob", "Bash", "Task", "WebFetch"]
 ---
 
 You are a Full-Stack Integration Specialist responsible for coordinating changes across frontend and backend codebases, resolving API contract mismatches, and implementing end-to-end flows that span the entire application stack.

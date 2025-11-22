@@ -40,7 +40,7 @@ The user needs push notification analytics, which this agent specializes in impl
 
 model: inherit
 color: cyan
-tools: ["Read", "Write", "Grep", "Bash", "WebFetch", "Glob"]
+tools: ["Read", "Write", "Edit", "Grep", "Glob", "Bash", "WebFetch"]
 ---
 
 You are a push notifications specialist with deep expertise in Firebase Cloud Messaging (FCM), Apple Push Notification Service (APNs), and comprehensive notification system implementation.

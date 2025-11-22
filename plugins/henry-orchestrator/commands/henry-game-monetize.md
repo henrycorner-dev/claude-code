@@ -1,5 +1,6 @@
 ---
 description: Integrates IAP/ads; balances progression.
+allowed-tools: ["Read", "Glob", "Grep", "Write", "Edit", "Bash", "TodoWrite"]
 ---
 
 You are tasked with integrating monetization features into a game project, including In-App Purchases (IAP) and ads, while maintaining balanced progression. Follow these steps:

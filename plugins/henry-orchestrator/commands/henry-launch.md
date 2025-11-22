@@ -1,6 +1,7 @@
 ---
 description: Product launch preparation with DevOps, SEO, analytics, QA, security
-argument-hint: Launch type (beta/prod), platform
+argument-hint: Launch date, type (beta/full), platform
+allowed-tools: ["Glob", "Read", "Grep", "Bash", "Task", "TodoWrite", "Write"]
 ---
 
 # Henry Launch Preparation

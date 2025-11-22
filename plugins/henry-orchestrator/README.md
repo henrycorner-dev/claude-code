@@ -7,18 +7,21 @@ A comprehensive Claude Code plugin that orchestrates complex multi-agent workflo
 ## Features
 
 ### Multi-Agent Orchestration
+
 - **30 Specialized Agents** covering frontend, backend, mobile, game development, DevOps, security, and more
 - **23 Workflow Commands** for end-to-end development processes
 - **33 Auto-Activating Skills** providing domain expertise when needed
 - **Intelligent Agent Selection** based on task context and requirements
 
 ### Automated Quality & Security
+
 - **Pre-Commit Validation**: Security scanning, test coverage checks, bundle size guards
 - **Post-Edit Automation**: Auto-formatting, accessibility audits, asset optimization
 - **Performance Profiling**: Lighthouse integration, Unity profiling, Core Web Vitals monitoring
 - **Continuous Quality**: Real-time feedback during development
 
 ### Development Workflows
+
 - **Full-Stack Web Apps**: React, Next.js, Vue, Nuxt, Angular, Svelte with Node/Express/NestJS backends
 - **Mobile Development**: React Native, Flutter, iOS/Android native development
 - **Game Development**: Unity, Unreal Engine, multiplayer systems, game monetization
@@ -27,11 +30,13 @@ A comprehensive Claude Code plugin that orchestrates complex multi-agent workflo
 ## Installation
 
 ### From Claude Code Marketplace
+
 ```bash
 # Coming soon to Claude Code marketplace
 ```
 
 ### Local Installation
+
 ```bash
 # Clone or copy the plugin to your Claude Code plugins directory
 mkdir -p ~/.claude/plugins
@@ -43,21 +48,25 @@ cp -r path/to/henry-orchestrator ~/.claude/plugins/
 ## Quick Start
 
 ### Get Help
+
 ```
 /henry-orchestrator:help
 ```
 
 ### Start a Web Project
+
 ```
 /henry-orchestrator:henry-web MyAwesomeApp
 ```
 
 ### Start a Mobile Project
+
 ```
 /henry-orchestrator:henry-mobile MyMobileApp
 ```
 
 ### Build a Complete Feature
+
 ```
 /henry-orchestrator:henry-feature Build user authentication with OAuth
 ```
@@ -66,62 +75,63 @@ cp -r path/to/henry-orchestrator ~/.claude/plugins/
 
 ### 🚀 Core Workflows
 
-| Command | Description |
-|---------|-------------|
-| `/help` | Complete guide to all commands, agents, and usage examples |
-| `/henry-feature` | End-to-end feature development from strategy to deployment |
-| `/henry-web` | Scaffold full-stack web application (auto-selects React/Next/Vue/etc.) |
-| `/henry-mobile` | Scaffold mobile app (React Native, Flutter, or native iOS/Android) |
-| `/henry-game` | Scaffold game project (Unity, Unreal, or custom engine) |
+| Command          | Description                                                            |
+| ---------------- | ---------------------------------------------------------------------- |
+| `/help`          | Complete guide to all commands, agents, and usage examples             |
+| `/henry-feature` | End-to-end feature development from strategy to deployment             |
+| `/henry-web`     | Scaffold full-stack web application (auto-selects React/Next/Vue/etc.) |
+| `/henry-mobile`  | Scaffold mobile app (React Native, Flutter, or native iOS/Android)     |
+| `/henry-game`    | Scaffold game project (Unity, Unreal, or custom engine)                |
 
 ### 🎨 Design & UX
 
-| Command | Description |
-|---------|-------------|
+| Command         | Description                                             |
+| --------------- | ------------------------------------------------------- |
 | `/henry-design` | Complete design workflow from research to accessibility |
 | `/henry-review` | Comprehensive code and design review across all aspects |
 
 ### 🔧 Development & Integration
 
-| Command | Description |
-|---------|-------------|
-| `/henry-integrate` | Backend/frontend integration, API design, data flow |
-| `/henry-app-build` | Native app build configuration (iOS/Android) |
-| `/henry-test-suite` | Comprehensive testing strategy and implementation |
+| Command             | Description                                         |
+| ------------------- | --------------------------------------------------- |
+| `/henry-integrate`  | Backend/frontend integration, API design, data flow |
+| `/henry-app-build`  | Native app build configuration (iOS/Android)        |
+| `/henry-test-suite` | Comprehensive testing strategy and implementation   |
 
 ### 🎯 Specialized Features
 
-| Command | Description |
-|---------|-------------|
-| `/henry-pwa` | Convert web app to Progressive Web App |
-| `/henry-seo` | SEO optimization and search engine visibility |
-| `/henry-localize` | Internationalization (i18n) and localization (l10n) |
-| `/henry-push` | Push notification setup (mobile & web) |
-| `/henry-multiplayer` | Multiplayer game architecture and netcode |
+| Command                | Description                                          |
+| ---------------------- | ---------------------------------------------------- |
+| `/henry-pwa`           | Convert web app to Progressive Web App               |
+| `/henry-seo`           | SEO optimization and search engine visibility        |
+| `/henry-localize`      | Internationalization (i18n) and localization (l10n)  |
+| `/henry-push`          | Push notification setup (mobile & web)               |
+| `/henry-multiplayer`   | Multiplayer game architecture and netcode            |
 | `/henry-game-monetize` | Game monetization strategy (IAP, ads, subscriptions) |
 
 ### 📊 Optimization & Scaling
 
-| Command | Description |
-|---------|-------------|
+| Command           | Description                                               |
+| ----------------- | --------------------------------------------------------- |
 | `/henry-optimize` | Performance optimization across frontend, backend, mobile |
-| `/henry-scale` | Scaling architecture (load balancing, caching, CDN) |
-| `/henry-audit` | Security, performance, and accessibility audits |
+| `/henry-scale`    | Scaling architecture (load balancing, caching, CDN)       |
+| `/henry-audit`    | Security, performance, and accessibility audits           |
 
 ### 🚢 Launch & Operations
 
-| Command | Description |
-|---------|-------------|
-| `/henry-deploy` | Deployment orchestration (CI/CD, infrastructure, monitoring) |
-| `/henry-launch` | Pre-launch checklist and go-live coordination |
-| `/henry-product` | Product strategy, roadmap, and metrics |
-| `/henry-team` | Team assembly and agent coordination |
+| Command          | Description                                                  |
+| ---------------- | ------------------------------------------------------------ |
+| `/henry-deploy`  | Deployment orchestration (CI/CD, infrastructure, monitoring) |
+| `/henry-launch`  | Pre-launch checklist and go-live coordination                |
+| `/henry-product` | Product strategy, roadmap, and metrics                       |
+| `/henry-team`    | Team assembly and agent coordination                         |
 
 ## Specialized Agents
 
 The plugin includes 30 specialized agents that can be invoked directly or automatically selected based on task context:
 
 ### Engineering
+
 - `frontend-engineer` - Modern web frameworks, performance, accessibility
 - `backend-engineer` - APIs, databases, microservices, serverless
 - `mobile-app-engineer` - React Native, Flutter, native iOS/Android
@@ -129,29 +139,34 @@ The plugin includes 30 specialized agents that can be invoked directly or automa
 - `nextjs-nuxt-specialist` - SSR/ISR frameworks and optimization
 
 ### Game Development
+
 - `unity-unreal-developer` - Game engine expertise
 - `game-systems-designer` - Gameplay mechanics and systems
 - `multiplayer-architect` - Netcode, synchronization, matchmaking
 - `game-monetization-designer` - IAP, ads, economy design
 
 ### Design & UX
+
 - `ux-researcher` - User research, personas, journey mapping
 - `ux-ui-designer` - User experience and interface design
 - `ui-visual-designer` - Visual design and branding
 - `a11y-specialist` - Accessibility (WCAG 2.1 AA compliance)
 
 ### Quality & Security
+
 - `qa-tester` - Test strategy, automation, quality assurance
 - `security-engineer` - Security audits, penetration testing, compliance
 - `web-security-hardener` - Web-specific security (CSP, XSS, CSRF)
 - `ios-android-tester` - Mobile testing and quality
 
 ### DevOps & Infrastructure
+
 - `devops-sre-architect` - Infrastructure, CI/CD, monitoring
 - `ci-cd-orchestrator` - Build pipelines and automation
 - `cloud-infrastructure-engineer` - AWS, Azure, GCP deployment
 
 ### Specialized Features
+
 - `seo-specialist` - Search optimization and visibility
 - `internationalization-specialist` - i18n/l10n implementation
 - `push-notifications-specialist` - Push notification systems
@@ -167,6 +182,7 @@ The plugin includes 30 specialized agents that can be invoked directly or automa
 33 skills automatically activate when relevant to the current task:
 
 ### Core Development
+
 - `frontend-design` - Production-grade UI with modern libraries
 - `backend-development` - API design, database patterns
 - `mobile-ui-design` - Mobile-first design patterns
@@ -176,11 +192,13 @@ The plugin includes 30 specialized agents that can be invoked directly or automa
 - `api-design` - REST, GraphQL, gRPC design
 
 ### Testing & Quality
+
 - `testing-strategy` - Comprehensive test planning
 - `performance-optimization` - Performance tuning and monitoring
 - `advanced-henry-debugging` - Advanced debugging techniques
 
 ### Game Development
+
 - `game-engine-setup` - Unity/Unreal configuration
 - `gameplay-mechanics` - Game systems and mechanics
 - `game-ui-design` - Game interface and HUD design
@@ -188,11 +206,13 @@ The plugin includes 30 specialized agents that can be invoked directly or automa
 - `asset-pipeline` - Game asset optimization
 
 ### DevOps & Deployment
+
 - `deployment-ops` - Deployment strategies and automation
 - `workflow-orchestration-patterns` - Complex workflow management
 - `performance-optimization-orchestration` - Multi-layer optimization
 
 ### Features & Integration
+
 - `pwa-conversion` - Progressive Web App transformation
 - `seo-optimization` - SEO best practices
 - `offline-sync` - Offline-first architecture
@@ -201,12 +221,14 @@ The plugin includes 30 specialized agents that can be invoked directly or automa
 - `nextjs-nuxt-specialist` - SSR framework expertise
 
 ### Business & Product
+
 - `product-development-lifecycle` - Product development process
 - `requirements-analysis` - Requirements gathering and analysis
 - `documentation-gen` - Technical documentation generation
 - `app-store-optimization` - App store presence optimization
 
 ### Orchestration
+
 - `henry-agent-selection` - Optimal agent selection logic
 - `henry-team-assembly` - Team composition strategies
 - `henry-command-customization` - Command workflow customization
@@ -217,23 +239,27 @@ The plugin includes 30 specialized agents that can be invoked directly or automa
 Henry Orchestrator includes automated quality and security hooks that run during development:
 
 ### Pre-Tool Use Hooks (Before Actions)
+
 - **Test Coverage Check** - Ensures 80% minimum test coverage before file modifications
 - **Security Scan** - Validates dependencies for vulnerabilities before npm/pip installations
 - **Bundle Size Guard** - Enforces bundle size limits for web, mobile, and game builds
 
 ### Post-Tool Use Hooks (After Actions)
+
 - **Auto-Lint-Format** - Automatically formats code after Write/Edit operations
 - **Accessibility Audit** - Checks WCAG compliance after UI changes
 - **Performance Profile** - Runs Lighthouse/Unity profiling after builds
 - **Asset Optimizer** - Optimizes images and assets after Write operations
 
 ### Session Hooks
+
 - **Commit Guard** - Reminds about unstaged changes on session end
 - **Dev Reminder** - Suggests relevant commands based on user prompts (web/mobile/game keywords)
 
 ### Hook Configuration
 
 Hooks can be customized or disabled by editing:
+
 ```
 plugins/henry-orchestrator/hooks/hooks.json
 ```
@@ -470,21 +496,25 @@ This ensures the plugin works regardless of installation location.
 ## Best Practices
 
 ### 1. Let Auto-Selection Work
+
 - Commands automatically select appropriate agents and skills
 - Trust the orchestration logic for complex workflows
 - Override only when you need specific expertise
 
 ### 2. Use Specific Commands
+
 - Use targeted commands (`/henry-web`, `/henry-mobile`) for focused tasks
 - Use `/henry-feature` for comprehensive end-to-end workflows
 - Use `/help` to discover the right command for your task
 
 ### 3. Leverage Hooks
+
 - Hooks provide real-time quality feedback
 - Don't disable hooks unless necessary
 - Adjust thresholds in config files rather than disabling
 
 ### 4. Review Automated Changes
+
 - Auto-formatting and optimization hooks modify code
 - Review changes before committing
 - Use git to track hook-generated changes
@@ -494,18 +524,22 @@ This ensures the plugin works regardless of installation location.
 ### Extending the Plugin
 
 **Add a new command:**
+
 1. Create `commands/henry-newfeature.md` with YAML frontmatter
 2. Command auto-discovers on next session
 
 **Add a new agent:**
+
 1. Create `agents/specialized-expert.md` with description
 2. Agent becomes available immediately
 
 **Add a new skill:**
+
 1. Create `skills/new-skill/SKILL.md`
 2. Skill auto-activates when description matches task
 
 **Add a new hook:**
+
 1. Add hook configuration to `hooks/hooks.json`
 2. Create script in `hooks/scripts/` if needed
 3. Use `${CLAUDE_PLUGIN_ROOT}` for all paths
@@ -523,6 +557,7 @@ See LICENSE file for details.
 ## Author
 
 **Henry Nguyen**
+
 - Email: henry@example.com
 
 ---

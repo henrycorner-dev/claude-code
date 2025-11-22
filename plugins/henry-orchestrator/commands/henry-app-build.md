@@ -1,5 +1,6 @@
 ---
 description: Builds APKs/IPAs; handles signing, store uploads.
+allowed-tools: ["Bash", "Read", "Glob", "Grep", "Edit", "Write"]
 ---
 
 You are building mobile app binaries (APKs for Android and IPAs for iOS) with proper signing and preparing them for store uploads.

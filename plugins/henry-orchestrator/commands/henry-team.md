@@ -1,6 +1,7 @@
 ---
 description: Assemble and run custom team of Henry agents
 argument-hint: Agents and task (e.g. frontend-engineer qa-tester review login)
+allowed-tools: ["Glob", "Read", "Grep", "Bash", "Task", "TodoWrite"]
 ---
 
 # Henry Custom Team Assembly

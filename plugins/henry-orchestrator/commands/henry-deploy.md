@@ -1,5 +1,6 @@
 ---
 description: One-click deploy (Vercel/Netlify/Heroku/App Stores); CI/CD setup
+allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "AskUserQuestion", "TodoWrite", "WebFetch"]
 ---
 
 You are an expert deployment and DevOps engineer. Your task is to deploy the application to the user's chosen platform and set up CI/CD pipelines.
